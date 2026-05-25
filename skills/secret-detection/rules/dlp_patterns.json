@@ -1,0 +1,1179 @@
+{
+  "schema_version": "1.0",
+  "patterns": [
+    {
+      "name": "AWS Access Key",
+      "regex": "AKIA[0-9A-Z]{16}",
+      "prefix": "AKIA",
+      "severity": "critical",
+      "score_weight": 1,
+      "denylist_substrings": [
+        "EXAMPLE",
+        "AKIAIOSFODNN7"
+      ],
+      "hotwords": [
+        "aws",
+        "access_key",
+        "credentials",
+        "iam",
+        "secret"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "AWS Secret Access Key",
+      "regex": "(?i)aws[_\\-]?secret[_\\-]?access[_\\-]?key\\s*[:=]\\s*['\"]?[A-Za-z0-9/+=]{40}['\"]?",
+      "prefix": "aws_secret",
+      "severity": "critical",
+      "score_weight": 2,
+      "hotwords": [
+        "aws",
+        "secret",
+        "access_key"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Generic API Key",
+      "regex": "(?i)(api[_-]?key|apikey)\\s*[:=]\\s*['\"]?[A-Za-z0-9_\\-]{20,}",
+      "prefix": "api",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "api",
+        "key",
+        "token",
+        "secret"
+      ],
+      "hotword_window": 50,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 3.0
+    },
+    {
+      "name": "GitHub Personal Access Token",
+      "regex": "ghp_[A-Za-z0-9_]{36}",
+      "prefix": "ghp_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "github",
+        "token",
+        "auth"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "GitHub OAuth Token",
+      "regex": "gho_[A-Za-z0-9_]{36}",
+      "prefix": "gho_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "github",
+        "oauth",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "GitHub Fine-Grained PAT",
+      "regex": "github_pat_[A-Za-z0-9_]{82}",
+      "prefix": "github_pat_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "github",
+        "pat",
+        "token",
+        "auth"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "OpenAI API Key",
+      "regex": "sk-[A-Za-z0-9]{48}",
+      "prefix": "sk-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "openai",
+        "api",
+        "key",
+        "gpt"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Anthropic API Key",
+      "regex": "sk-ant-api03-[A-Za-z0-9_\\-]{95}",
+      "prefix": "sk-ant-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "anthropic",
+        "claude",
+        "api",
+        "key"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Slack Token",
+      "regex": "xox[baprs]-[A-Za-z0-9-]{10,}",
+      "prefix": "xox",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "slack",
+        "token",
+        "webhook"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Stripe Live API Key",
+      "regex": "sk_live_[A-Za-z0-9]{24,}",
+      "prefix": "sk_live_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "stripe",
+        "payment",
+        "live",
+        "secret"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Google API Key",
+      "regex": "AIza[0-9A-Za-z\\-_]{35}",
+      "prefix": "AIza",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "google",
+        "gcp",
+        "firebase",
+        "api"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Azure AD Client Secret",
+      "regex": "(?i)(azure|aad|microsoft)[^\\n]{0,40}[a-zA-Z0-9~_\\-\\.]{34,40}",
+      "prefix": "azure",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "azure",
+        "client_secret",
+        "aad",
+        "tenant",
+        "microsoft"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 3,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Databricks Token",
+      "regex": "dapi[a-f0-9]{32}",
+      "prefix": "dapi",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "databricks",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.0
+    },
+    {
+      "name": "Datadog API Key",
+      "regex": "[a-f0-9]{32}",
+      "prefix": "",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "datadog",
+        "dd_api_key",
+        "ddog"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 3,
+      "require_hotword": true,
+      "entropy_min": 3.0
+    },
+    {
+      "name": "Twilio API Key",
+      "regex": "SK[a-f0-9]{32}",
+      "prefix": "SK",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "twilio",
+        "sk",
+        "sid"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.0
+    },
+    {
+      "name": "SendGrid API Key",
+      "regex": "SG\\.[A-Za-z0-9_\\-]{22}\\.[A-Za-z0-9_\\-]{43}",
+      "prefix": "SG.",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "sendgrid",
+        "smtp",
+        "email"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "npm Access Token",
+      "regex": "npm_[A-Za-z0-9]{36}",
+      "prefix": "npm_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "npm",
+        "registry",
+        "publish"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "PyPI Upload Token",
+      "regex": "pypi-AgEI[A-Za-z0-9_\\-]{50,}",
+      "prefix": "pypi-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "pypi",
+        "twine",
+        "upload"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Heroku API Key",
+      "regex": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+      "prefix": "",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "heroku",
+        "api_key",
+        "platform"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 3,
+      "require_hotword": true,
+      "entropy_min": 3.0
+    },
+    {
+      "name": "DigitalOcean Personal Access Token",
+      "regex": "dop_v1_[a-f0-9]{64}",
+      "prefix": "dop_v1_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "digitalocean",
+        "do",
+        "droplet"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "HashiCorp Vault Token",
+      "regex": "hvs\\.[A-Za-z0-9_\\-]{24,}",
+      "prefix": "hvs.",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "vault",
+        "hashicorp",
+        "hvs"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Supabase Service Key",
+      "regex": "sbp_[a-f0-9]{40}",
+      "prefix": "sbp_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "supabase",
+        "service_role",
+        "anon"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Linear API Key",
+      "regex": "lin_api_[A-Za-z0-9]{40}",
+      "prefix": "lin_api_",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "linear",
+        "issue",
+        "tracker"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Private Key Block",
+      "regex": "-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----",
+      "prefix": "-----BEGIN",
+      "severity": "critical",
+      "score_weight": 2,
+      "hotwords": [],
+      "hotword_window": 0,
+      "hotword_boost": 0,
+      "require_hotword": false,
+      "entropy_min": 0
+    },
+    {
+      "name": "JWT Token",
+      "regex": "eyJ[A-Za-z0-9_\\-]+\\.eyJ[A-Za-z0-9_\\-]+\\.[A-Za-z0-9_\\-]+",
+      "prefix": "eyJ",
+      "severity": "medium",
+      "score_weight": 1,
+      "hotwords": [
+        "jwt",
+        "bearer",
+        "auth",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Generic High-Entropy Secret",
+      "regex": "(?i)(secret|password|passwd|pwd)\\s*[:=]\\s*['\"][^'\"\\s]{16,}['\"]",
+      "prefix": "secret",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "secret",
+        "password",
+        "credential"
+      ],
+      "hotword_window": 50,
+      "hotword_boost": 1,
+      "require_hotword": true,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Grafana Service Account Token",
+      "regex": "glsa_[A-Za-z0-9_]{32}_[A-Fa-f0-9]{8}",
+      "prefix": "glsa_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "grafana",
+        "token",
+        "service_account"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Grafana Cloud API Key",
+      "regex": "glc_[A-Za-z0-9+/]{32,}={0,2}",
+      "prefix": "glc_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "grafana",
+        "cloud",
+        "api"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Shopify Access Token",
+      "regex": "shpat_[a-fA-F0-9]{32}",
+      "prefix": "shpat_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "shopify",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.8
+    },
+    {
+      "name": "Shopify Shared Secret",
+      "regex": "shpss_[a-fA-F0-9]{32}",
+      "prefix": "shpss_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "shopify",
+        "shared",
+        "secret"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.8
+    },
+    {
+      "name": "Vercel Token",
+      "regex": "vercel_[A-Za-z0-9]{24}",
+      "prefix": "vercel_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "vercel",
+        "token",
+        "deploy"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.8
+    },
+    {
+      "name": "Railway Token",
+      "regex": "railway_[A-Za-z0-9_-]{32,}",
+      "prefix": "railway_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "railway",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.8
+    },
+    {
+      "name": "PlanetScale Service Token",
+      "regex": "pscale_tkn_[A-Za-z0-9_-]{40,}",
+      "prefix": "pscale_tkn_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "planetscale",
+        "pscale",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "PlanetScale OAuth Token",
+      "regex": "pscale_oauth_[A-Za-z0-9_-]{40,}",
+      "prefix": "pscale_oauth_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "planetscale",
+        "oauth"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Doppler CLI Token",
+      "regex": "dp\\.(st|sa|pt|ct)\\.[A-Za-z0-9_-]{40,}",
+      "prefix": "dp.",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "doppler",
+        "token",
+        "secret"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Postman API Key",
+      "regex": "PMAK-[a-f0-9]{24}-[a-f0-9]{34}",
+      "prefix": "PMAK-",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "postman",
+        "api",
+        "key"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Fly.io Token",
+      "regex": "fo1_[A-Za-z0-9_-]{40,}",
+      "prefix": "fo1_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "fly",
+        "flyio",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Netlify Personal Access Token",
+      "regex": "nfp_[A-Za-z0-9]{40}",
+      "prefix": "nfp_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "netlify",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Clerk Secret Key",
+      "regex": "sk_(live|test)_[A-Za-z0-9]{32,}",
+      "prefix": "sk_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "clerk"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 3.8
+    },
+    {
+      "name": "MongoDB Atlas Private API Key",
+      "regex": "\\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\\b",
+      "prefix": "mongodb",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "mongodb",
+        "atlas"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0,
+      "denylist_substrings": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    },
+    {
+      "name": "Snyk API Token",
+      "regex": "\\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\\b",
+      "prefix": "snyk",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "snyk"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Terraform Cloud Team Token",
+      "regex": "[A-Za-z0-9]{14}\\.atlasv1\\.[A-Za-z0-9_-]{60,}",
+      "prefix": "atlasv1",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "terraform",
+        "tfc",
+        "atlas"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.5
+    },
+    {
+      "name": "Airtable API Key",
+      "regex": "\\bkey[A-Za-z0-9]{14}\\b",
+      "prefix": "key",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "airtable"
+      ],
+      "hotword_window": 60,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Notion Integration Token",
+      "regex": "secret_[A-Za-z0-9]{43}",
+      "prefix": "secret_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "notion",
+        "integration"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Figma Personal Access Token",
+      "regex": "figd_[A-Za-z0-9_-]{40,}",
+      "prefix": "figd_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "figma",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Okta API Token",
+      "regex": "\\b00[A-Za-z0-9_-]{40}\\b",
+      "prefix": "00",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "okta"
+      ],
+      "hotword_window": 80,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "New Relic User API Key",
+      "regex": "NRAK-[A-Z0-9]{27}",
+      "prefix": "NRAK-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "newrelic",
+        "new_relic",
+        "nrak"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Buildkite Agent Token",
+      "regex": "bkua_[A-Za-z0-9]{40}",
+      "prefix": "bkua_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "buildkite",
+        "agent"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Slack Webhook URL",
+      "regex": "https://hooks\\.slack\\.com/services/T[A-Z0-9]{8,}/B[A-Z0-9]{8,}/[A-Za-z0-9]{20,}",
+      "prefix": "https://hooks.slack.com/services/",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "slack",
+        "webhook"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Discord Webhook URL",
+      "regex": "https://discord(app)?\\.com/api/webhooks/\\d{17,21}/[A-Za-z0-9_-]{60,}",
+      "prefix": "discord.com/api/webhooks",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "discord",
+        "webhook"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Stripe Restricted Key",
+      "regex": "rk_live_[A-Za-z0-9]{24,}",
+      "prefix": "rk_live_",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "stripe",
+        "restricted"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "OpenAI Project Key",
+      "regex": "sk-proj-[A-Za-z0-9_-]{40,}",
+      "prefix": "sk-proj-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "openai",
+        "project"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Pulumi Access Token",
+      "regex": "pul-[A-Fa-f0-9]{40}",
+      "prefix": "pul-",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "pulumi",
+        "token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Google OAuth Access Token",
+      "regex": "ya29\\.[0-9A-Za-z\\-_]{20,}",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "google",
+        "oauth",
+        "ya29",
+        "access_token",
+        "gws",
+        "workspace"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "ya29.",
+      "denylist_substrings": [
+        "EXAMPLE"
+      ],
+      "entropy_min": 3.5
+    },
+    {
+      "name": "Google OAuth Refresh Token",
+      "regex": "1//0[0-9A-Za-z\\-_]{30,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "google",
+        "oauth",
+        "refresh_token",
+        "gws"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "1//0",
+      "denylist_substrings": [
+        "EXAMPLE"
+      ],
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Google Service Account JSON (private_key)",
+      "regex": "\"type\":\\s*\"service_account\"[\\s\\S]{0,400}?\"private_key\":\\s*\"-----BEGIN PRIVATE KEY-----",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "service_account",
+        "private_key",
+        "google",
+        "gws",
+        "delegation"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Google Chat Webhook URL",
+      "regex": "https://chat\\.googleapis\\.com/v1/spaces/[A-Za-z0-9_\\-]+/messages\\?key=[A-Za-z0-9_\\-]+",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "chat.googleapis.com",
+        "webhook",
+        "google",
+        "chat"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Atlassian API Token (ATATT)",
+      "regex": "ATATT3xFfGF0[A-Za-z0-9_\\-]{180,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "atlassian",
+        "jira",
+        "confluence",
+        "api_token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "ATATT3xFfGF0",
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Atlassian API Token (ATCTT \u2014 scoped)",
+      "regex": "ATCTT3xFfGF0[A-Za-z0-9_\\-]{180,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "atlassian",
+        "jira",
+        "confluence",
+        "api_token",
+        "scoped"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "ATCTT3xFfGF0",
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Notion Integration Token (ntn \u2014 current)",
+      "regex": "ntn_[A-Za-z0-9]{36,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "notion",
+        "integration",
+        "ntn_"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "ntn_",
+      "entropy_min": 4.0
+    },
+    {
+      "name": "HubSpot Private App Token",
+      "regex": "pat-(na1|na2|eu1|eu2|ap1|au1)-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "hubspot",
+        "pat",
+        "private_app"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "pat-"
+    },
+    {
+      "name": "Salesforce Session ID",
+      "regex": "00D[A-Za-z0-9]{12,15}![A-Za-z0-9._\\-]{96,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "salesforce",
+        "session",
+        "sid",
+        "00D"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "00D"
+    },
+    {
+      "name": "Salesforce Frontdoor URL",
+      "regex": "https://[A-Za-z0-9.\\-]+\\.(my\\.salesforce|salesforce|force)\\.com/secur/frontdoor\\.jsp\\?sid=[A-Za-z0-9._\\-!]+",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "salesforce",
+        "frontdoor",
+        "sid"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "BambooHR API Key (40 hex)",
+      "regex": "(?i)(bamboohr[_\\-]?api[_\\-]?key|x-api-key)[\\\"'\\s:=]+[A-Za-z0-9]{40}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "bamboohr",
+        "api_key",
+        "hris"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "Workday RaaS Endpoint",
+      "regex": "https://wd[0-9]+(?:-services|-impl-services)?\\.myworkday\\.com/ccx/service/customreport2/[A-Za-z0-9_\\-]+/[A-Za-z0-9_\\-/]+\\?format=(json|xml|csv)",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "myworkday.com",
+        "customreport2",
+        "raas"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Microsoft Teams Incoming Webhook URL",
+      "regex": "https://[A-Za-z0-9\\-]+\\.webhook\\.office\\.com/webhookb2/[a-f0-9\\-]{36}@[a-f0-9\\-]{36}/IncomingWebhook/[a-f0-9]{32}/[a-f0-9\\-]{36}",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "webhook.office.com",
+        "teams",
+        "incomingwebhook"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Slack App-Level Token (xapp)",
+      "regex": "xapp-1-[A-Z0-9]{8,}-[0-9]{10,}-[A-Fa-f0-9]{64}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "slack",
+        "xapp",
+        "app_token",
+        "socket_mode"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "xapp-"
+    },
+    {
+      "name": "Slack Config-Access Token (xoxe)",
+      "regex": "xoxe\\.xoxp-[0-9]+-[A-Za-z0-9\\-]+",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "slack",
+        "xoxe",
+        "config",
+        "manifest"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "xoxe."
+    },
+    {
+      "name": "Lark/Feishu Bot Webhook URL",
+      "regex": "https://open\\.(?:larksuite\\.com|feishu\\.cn)/open-apis/bot/v2/hook/[a-f0-9\\-]{16,}",
+      "severity": "high",
+      "score_weight": 1,
+      "hotwords": [
+        "larksuite",
+        "feishu",
+        "bot",
+        "webhook"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Lark/Feishu App ID",
+      "regex": "cli_[a-z0-9]{16}",
+      "severity": "medium",
+      "score_weight": 1,
+      "hotwords": [
+        "larksuite",
+        "feishu",
+        "app_id"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false,
+      "prefix": "cli_"
+    },
+    {
+      "name": "Zoom Meeting Join URL with embedded passcode",
+      "regex": "https://[A-Za-z0-9\\-]+\\.zoom\\.us/j/[0-9]+\\?pwd=[A-Za-z0-9.]+",
+      "severity": "medium",
+      "score_weight": 1,
+      "hotwords": [
+        "zoom.us",
+        "pwd",
+        "join_url"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": false
+    },
+    {
+      "name": "Calendly Personal Access Token (JWT-shaped)",
+      "regex": "(?i)calendly[_\\-]?(api[_\\-]?key|token|pat)[\\\"'\\s:=]+eyJ[A-Za-z0-9_\\-]{20,}\\.[A-Za-z0-9_\\-]{20,}\\.[A-Za-z0-9_\\-]{20,}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "calendly",
+        "pat",
+        "personal_access_token"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "NetSuite TBA Consumer Key (64 hex)",
+      "regex": "(?i)netsuite[_\\-]?(consumer[_\\-]?key|client[_\\-]?id)[\\\"'\\s:=]+[A-Fa-f0-9]{64}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "netsuite",
+        "tba",
+        "consumer_key",
+        "client_id"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    },
+    {
+      "name": "NetSuite TBA Token Secret (64 hex)",
+      "regex": "(?i)netsuite[_\\-]?(token[_\\-]?secret|tba[_\\-]?secret)[\\\"'\\s:=]+[A-Fa-f0-9]{64}",
+      "severity": "critical",
+      "score_weight": 1,
+      "hotwords": [
+        "netsuite",
+        "tba",
+        "token_secret"
+      ],
+      "hotword_window": 200,
+      "hotword_boost": 2,
+      "require_hotword": true,
+      "entropy_min": 4.0
+    }
+  ]
+}

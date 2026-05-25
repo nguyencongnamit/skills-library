@@ -1,0 +1,31 @@
+schema_version: "1.0"
+framework: "CIS Docker Benchmark + OWASP Docker Security Cheat Sheet"
+last_updated: "2026-05-12"
+controls:
+  - id: docker-user
+    severity: high
+    requirement: "Dockerfile contains USER directive with non-root user before CMD/ENTRYPOINT"
+  - id: docker-base-pin
+    severity: high
+    requirement: "FROM line pins base image by digest (image@sha256:...) for production"
+  - id: docker-no-secrets-in-env
+    severity: critical
+    requirement: "No ENV directive sets secret-looking values; use --secret mount or runtime env"
+  - id: docker-multi-stage
+    severity: medium
+    requirement: "Multi-stage build used so final image contains only runtime artifacts"
+  - id: docker-no-add-from-url
+    severity: medium
+    requirement: "Prefer COPY of pinned files over ADD with remote URLs"
+  - id: docker-no-update-no-pin
+    severity: medium
+    requirement: "RUN apt-get update is paired with apt-get install with pinned versions and --no-install-recommends"
+  - id: docker-healthcheck
+    severity: low
+    requirement: "HEALTHCHECK directive present for long-running services"
+  - id: docker-no-curl-pipe-sh
+    severity: high
+    requirement: "No RUN curl | sh pattern from untrusted sources"
+  - id: docker-no-secrets-in-build-args
+    severity: critical
+    requirement: "Secrets are not passed via ARG (visible in image history)"

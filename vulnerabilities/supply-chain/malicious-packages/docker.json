@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "ecosystem": "docker",
+  "last_updated": "2026-05-13T00:00:00Z",
+  "description": "Documented malicious or compromised Docker Hub images and container supply-chain incidents. Major themes: cryptominer images, typosquats of official images, TeamTNT-era credential-stealer images, and shared-cache layer poisoning.",
+  "entries": [
+    {
+      "name": "xmrig-cryptominer-cluster",
+      "versions_affected": [
+        "multiple"
+      ],
+      "type": "cryptomining",
+      "severity": "high",
+      "discovered": "2018-06-13",
+      "description": "Aqua Security found 30+ Docker Hub images pulling XMRig cryptominers on `docker run`. Several were typosquats of `xmrig/xmrig`, `docker`, `ubuntu`, etc. Total downloads in the millions before takedowns.",
+      "references": [
+        "https://blog.aquasec.com/container-security-cryptomining-docker-hub",
+        "https://blog.sysdig.com/docker-hub-cryptominer-supply-chain/"
+      ],
+      "indicators": [
+        "XMRig cryptominer"
+      ],
+      "attack_type": "cryptomining"
+    },
+    {
+      "name": "mysqlserver",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2020-06-22",
+      "description": "Typosquat of the official `mysql` image. Carried an XMRig miner that auto-started on container run. Pulled 1.4M+ times before removal.",
+      "references": [
+        "https://blog.aquasec.com/container-security-cryptomining-docker-hub"
+      ],
+      "indicators": [
+        "mysql typosquat",
+        "XMRig miner"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "sysdig-2023-malicious-image-cluster",
+      "versions_affected": [
+        "1,652 images"
+      ],
+      "type": "malicious_image",
+      "severity": "critical",
+      "discovered": "2023-12-19",
+      "description": "Sysdig 2023 analysis found 1,652 malicious Docker images on Docker Hub: cryptominers, reverse shells, web shells, and TeamTNT-style cloud-credential stealers. Average lifetime ~1 week before takedown.",
+      "references": [
+        "https://sysdig.com/blog/analysis-of-supply-chain-attacks-through-public-docker-images/"
+      ],
+      "indicators": [
+        "mass malicious campaign"
+      ],
+      "attack_type": "malicious_image"
+    },
+    {
+      "name": "teamtnt-credstealer",
+      "versions_affected": [
+        "various"
+      ],
+      "type": "malicious_image",
+      "severity": "critical",
+      "discovered": "2021-05-24",
+      "description": "TeamTNT pushed dozens of Docker images carrying AWS credential stealers (kubelet/kube-config grep), XMRig miners, and lateral-movement tooling. Targeted exposed Docker APIs and misconfigured Kubernetes clusters.",
+      "references": [
+        "https://www.trendmicro.com/en_us/research/21/e/teamtnt-operations-continue-to-evolve.html",
+        "https://blog.aquasec.com/teamtnt-cloud-cryptojacking-docker"
+      ],
+      "indicators": [
+        "AWS credential theft",
+        "XMRig miner",
+        "TeamTNT"
+      ],
+      "attack_type": "malicious_image"
+    },
+    {
+      "name": "alpine-typosquat-cluster",
+      "versions_affected": [
+        "various"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2022-09-08",
+      "description": "Cluster of Alpine-base typosquats (e.g. `alpinex`, `alp1ne`, `alphine`) carrying reverse shells and cryptominers. Particularly dangerous in CI: dockerfile `FROM alpinex:latest` slips past visual review.",
+      "references": [
+        "https://blog.aquasec.com/dockerhub-typosquatting-supply-chain",
+        "https://blog.sonatype.com/dockerhub-typosquatting-trends"
+      ],
+      "indicators": [
+        "FROM alpinex",
+        "CI typosquat"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "docker-build-cache-poisoning-pattern",
+      "versions_affected": [
+        "pattern"
+      ],
+      "type": "build_cache_poisoning",
+      "severity": "high",
+      "discovered": "2024-04-30",
+      "description": "Pattern: Docker Build Cloud / BuildKit shared remote cache, when not scoped per-namespace, allows one tenant's malicious layer to be reused by another tenant's build. Documented as a class of supply-chain attack against shared CI caches.",
+      "references": [
+        "https://docs.docker.com/build/cache/",
+        "https://blog.aquasec.com/docker-buildkit-cache-poisoning"
+      ],
+      "indicators": [
+        "shared cache",
+        "BuildKit"
+      ],
+      "attack_type": "build_cache_poisoning"
+    },
+    {
+      "name": "nginx-typosquat-image",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2022-03-11",
+      "description": "Typosquats of the official `nginx` image (e.g. `nginx-alpine` posted by an unverified publisher, `n1ginx`, `nginxserver`) carrying cryptominers and reverse shells. Triggered Docker Verified Publisher tightening.",
+      "references": [
+        "https://blog.aquasec.com/dockerhub-typosquatting-supply-chain"
+      ],
+      "indicators": [
+        "nginx typosquat",
+        "Verified Publisher"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "kinsing-xmrig-image-family",
+      "versions_affected": [
+        "various"
+      ],
+      "type": "malicious_image",
+      "severity": "critical",
+      "discovered": "2020-08-25",
+      "description": "Kinsing malware family operated several Docker Hub images targeting exposed Docker daemons (port 2375). Combined XMRig mining, AWS credential theft, and lateral movement into Kubernetes.",
+      "references": [
+        "https://www.trendmicro.com/en_us/research/20/i/kinsing-cryptocurrency-mining-malware-targets-exposed-docker.html"
+      ],
+      "indicators": [
+        "Kinsing",
+        "exposed Docker daemon"
+      ],
+      "attack_type": "malicious_image"
+    }
+  ]
+}

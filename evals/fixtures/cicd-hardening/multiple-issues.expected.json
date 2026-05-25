@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-15",
+  "fixture": "multiple-issues.yml",
+  "description": "Compound fixture deliberately stacking four anti-patterns: (1) no top-level `permissions:` block, (2) `actions/checkout@v4` pinned by tag, (3) a `curl ... | sh` step, (4) `${{ github.event.comment.body }}` interpolated into a shell command. Five findings expected: gha-default-permissions-read, gha-no-untrusted-script-injection (regex), gha-no-curl-pipe-bash (regex), gha-ast-unpinned-action (AST), gha-ast-expression-injection (AST). The regex `gha-pin-actions-by-sha` is intentionally absent because its checklist pattern uses a `(?!...)` negative lookahead, which Go's RE2 engine does not support — so the regex compile silently fails and only the AST pass (`gha-ast-unpinned-action`) covers the tag-pinned action. The discrepancy is a scanner bug tracked separately and called out here so the eval harness does not mask it.",
+  "expected_findings": [
+    {"rule": "gha-default-permissions-read", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-no-untrusted-script-injection", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-no-curl-pipe-bash", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-ast-unpinned-action", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-ast-expression-injection", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"}
+  ]
+}

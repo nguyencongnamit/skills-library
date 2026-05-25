@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-15",
+  "fixture": "unpinned-action.yml",
+  "description": "The fixture uses `actions/checkout@v4` (tag, not SHA) and lacks a top-level `permissions:` block, so both the AST unpinned-action detector and the default-permissions advisory are expected to fire.",
+  "expected_findings": [
+    {
+      "rule": "gha-default-permissions-read",
+      "ecosystem": "github-actions",
+      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+    },
+    {
+      "rule": "gha-ast-unpinned-action",
+      "ecosystem": "github-actions",
+      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+    }
+  ]
+}

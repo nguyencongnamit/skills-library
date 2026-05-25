@@ -1,0 +1,393 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-15",
+  "_ai_authored_disclosure": "Every translation below was drafted by an AI assistant (Devin / Cognition) under direct prompt from @kennguy3n. AGENTS.md prohibits AI-authored DLP-pattern content; this file is shipped under an explicit override from the project owner. EACH ROW MUST BE REVIEWED BY A NATIVE SPEAKER BEFORE PRODUCTION USE. Concretely: every translation is a single dictionary-grade choice — there is no native-speaker register check, no code-corpus check that confirms developers in that locale actually use that exact token in variable / config / secret names, and no false-positive sweep for collisions with common non-secret words in that locale. A wrong translation here directly affects scanner precision/recall on non-English code. Post-review correction: `secret` was originally translated as `密钥` for zh-Hans, which collides with `key` (cryptographic key). The `secret` row was changed to `秘密` on review feedback so `secret` and `key` no longer share a translation in zh-Hans.",
+  "description": "Sidecar for skills/secret-detection/rules/dlp_patterns.json. The loader merges every translation listed in `hotword_translations` into the matching pattern's `hotwords` array at compile time so the secret-detection scoring works on non-English codebases (e.g. a Spanish developer writing `clave_acceso = \"AKIA...\"`). Scope decision: only the subset of English hotwords that are meaningful generic concepts is translated here. Brand names (aws, slack, stripe, ...), technology abbreviations (jwt, oauth, iam, ...), and identifier prefixes (ya29, xoxe, hvs, ...) are listed under `skipped_hotwords` with a `preserve` rationale — those tokens stay English in every locale because real-world code keeps them unchanged.",
+  "locales": ["es", "fr", "de", "ar", "zh-Hans", "pt-BR"],
+  "hotword_translations": {
+    "password": {
+      "es": "contraseña",
+      "fr": "mot_de_passe",
+      "de": "passwort",
+      "ar": "كلمة_المرور",
+      "zh-Hans": "密码",
+      "pt-BR": "senha"
+    },
+    "pwd": {
+      "es": "contraseña",
+      "fr": "mdp",
+      "de": "passwort",
+      "ar": "كلمة_المرور",
+      "zh-Hans": "密码",
+      "pt-BR": "senha"
+    },
+    "secret": {
+      "es": "secreto",
+      "fr": "secret",
+      "de": "geheimnis",
+      "ar": "سر",
+      "zh-Hans": "秘密",
+      "pt-BR": "segredo"
+    },
+    "key": {
+      "es": "clave",
+      "fr": "clé",
+      "de": "schlüssel",
+      "ar": "مفتاح",
+      "zh-Hans": "密钥",
+      "pt-BR": "chave"
+    },
+    "token": {
+      "es": "ficha",
+      "fr": "jeton",
+      "de": "token",
+      "ar": "رمز",
+      "zh-Hans": "令牌",
+      "pt-BR": "token"
+    },
+    "credential": {
+      "es": "credencial",
+      "fr": "identifiant",
+      "de": "anmeldedaten",
+      "ar": "اعتماد",
+      "zh-Hans": "凭证",
+      "pt-BR": "credencial"
+    },
+    "credentials": {
+      "es": "credenciales",
+      "fr": "identifiants",
+      "de": "anmeldedaten",
+      "ar": "بيانات_الاعتماد",
+      "zh-Hans": "凭证",
+      "pt-BR": "credenciais"
+    },
+    "auth": {
+      "es": "autenticación",
+      "fr": "authentification",
+      "de": "authentifizierung",
+      "ar": "مصادقة",
+      "zh-Hans": "认证",
+      "pt-BR": "autenticação"
+    },
+    "session": {
+      "es": "sesión",
+      "fr": "session",
+      "de": "sitzung",
+      "ar": "جلسة",
+      "zh-Hans": "会话",
+      "pt-BR": "sessão"
+    },
+    "config": {
+      "es": "configuración",
+      "fr": "configuration",
+      "de": "konfiguration",
+      "ar": "تكوين",
+      "zh-Hans": "配置",
+      "pt-BR": "configuração"
+    },
+    "email": {
+      "es": "correo",
+      "fr": "courriel",
+      "de": "email",
+      "ar": "بريد",
+      "zh-Hans": "电子邮件",
+      "pt-BR": "email"
+    },
+    "webhook": {
+      "es": "webhook",
+      "fr": "webhook",
+      "de": "webhook",
+      "ar": "webhook",
+      "zh-Hans": "网络钩子",
+      "pt-BR": "webhook"
+    },
+    "project": {
+      "es": "proyecto",
+      "fr": "projet",
+      "de": "projekt",
+      "ar": "مشروع",
+      "zh-Hans": "项目",
+      "pt-BR": "projeto"
+    },
+    "workspace": {
+      "es": "espacio_de_trabajo",
+      "fr": "espace_de_travail",
+      "de": "arbeitsbereich",
+      "ar": "مساحة_عمل",
+      "zh-Hans": "工作区",
+      "pt-BR": "espaço_de_trabalho"
+    },
+    "tenant": {
+      "es": "inquilino",
+      "fr": "locataire",
+      "de": "mandant",
+      "ar": "مستأجر",
+      "zh-Hans": "租户",
+      "pt-BR": "inquilino"
+    },
+    "shared": {
+      "es": "compartido",
+      "fr": "partagé",
+      "de": "gemeinsam",
+      "ar": "مشترك",
+      "zh-Hans": "共享",
+      "pt-BR": "compartilhado"
+    },
+    "restricted": {
+      "es": "restringido",
+      "fr": "restreint",
+      "de": "beschränkt",
+      "ar": "مقيد",
+      "zh-Hans": "受限",
+      "pt-BR": "restrito"
+    },
+    "scoped": {
+      "es": "con_alcance",
+      "fr": "délimité",
+      "de": "umfangen",
+      "ar": "محدد_النطاق",
+      "zh-Hans": "范围限定",
+      "pt-BR": "com_escopo"
+    },
+    "registry": {
+      "es": "registro",
+      "fr": "registre",
+      "de": "registry",
+      "ar": "سجل",
+      "zh-Hans": "注册表",
+      "pt-BR": "registro"
+    },
+    "payment": {
+      "es": "pago",
+      "fr": "paiement",
+      "de": "zahlung",
+      "ar": "دفع",
+      "zh-Hans": "支付",
+      "pt-BR": "pagamento"
+    },
+    "deploy": {
+      "es": "desplegar",
+      "fr": "déployer",
+      "de": "bereitstellen",
+      "ar": "نشر",
+      "zh-Hans": "部署",
+      "pt-BR": "implantar"
+    },
+    "publish": {
+      "es": "publicar",
+      "fr": "publier",
+      "de": "veröffentlichen",
+      "ar": "نشر",
+      "zh-Hans": "发布",
+      "pt-BR": "publicar"
+    },
+    "upload": {
+      "es": "subir",
+      "fr": "téléverser",
+      "de": "hochladen",
+      "ar": "تحميل",
+      "zh-Hans": "上传",
+      "pt-BR": "upload"
+    },
+    "integration": {
+      "es": "integración",
+      "fr": "intégration",
+      "de": "integration",
+      "ar": "تكامل",
+      "zh-Hans": "集成",
+      "pt-BR": "integração"
+    },
+    "issue": {
+      "es": "incidencia",
+      "fr": "ticket",
+      "de": "vorgang",
+      "ar": "قضية",
+      "zh-Hans": "议题",
+      "pt-BR": "incidência"
+    },
+    "manifest": {
+      "es": "manifiesto",
+      "fr": "manifeste",
+      "de": "manifest",
+      "ar": "بيان",
+      "zh-Hans": "清单",
+      "pt-BR": "manifesto"
+    },
+    "agent": {
+      "es": "agente",
+      "fr": "agent",
+      "de": "agent",
+      "ar": "وكيل",
+      "zh-Hans": "代理",
+      "pt-BR": "agente"
+    },
+    "bot": {
+      "es": "bot",
+      "fr": "bot",
+      "de": "bot",
+      "ar": "روبوت",
+      "zh-Hans": "机器人",
+      "pt-BR": "bot"
+    },
+    "chat": {
+      "es": "chat",
+      "fr": "chat",
+      "de": "chat",
+      "ar": "دردشة",
+      "zh-Hans": "聊天",
+      "pt-BR": "chat"
+    },
+    "cloud": {
+      "es": "nube",
+      "fr": "cloud",
+      "de": "cloud",
+      "ar": "سحابة",
+      "zh-Hans": "云",
+      "pt-BR": "nuvem"
+    },
+    "service_account": {
+      "es": "cuenta_de_servicio",
+      "fr": "compte_de_service",
+      "de": "dienstkonto",
+      "ar": "حساب_خدمة",
+      "zh-Hans": "服务账户",
+      "pt-BR": "conta_de_serviço"
+    },
+    "service_role": {
+      "es": "rol_de_servicio",
+      "fr": "rôle_de_service",
+      "de": "dienstrolle",
+      "ar": "دور_خدمة",
+      "zh-Hans": "服务角色",
+      "pt-BR": "função_de_serviço"
+    },
+    "private_key": {
+      "es": "clave_privada",
+      "fr": "clé_privée",
+      "de": "privater_schlüssel",
+      "ar": "مفتاح_خاص",
+      "zh-Hans": "私钥",
+      "pt-BR": "chave_privada"
+    },
+    "api_key": {
+      "es": "clave_api",
+      "fr": "clé_api",
+      "de": "api_schlüssel",
+      "ar": "مفتاح_api",
+      "zh-Hans": "api密钥",
+      "pt-BR": "chave_api"
+    },
+    "api_token": {
+      "es": "ficha_api",
+      "fr": "jeton_api",
+      "de": "api_token",
+      "ar": "رمز_api",
+      "zh-Hans": "api令牌",
+      "pt-BR": "token_api"
+    },
+    "app_id": {
+      "es": "id_aplicación",
+      "fr": "id_application",
+      "de": "app_id",
+      "ar": "معرف_تطبيق",
+      "zh-Hans": "应用id",
+      "pt-BR": "id_aplicativo"
+    },
+    "app_token": {
+      "es": "ficha_aplicación",
+      "fr": "jeton_application",
+      "de": "app_token",
+      "ar": "رمز_تطبيق",
+      "zh-Hans": "应用令牌",
+      "pt-BR": "token_aplicativo"
+    },
+    "access_key": {
+      "es": "clave_de_acceso",
+      "fr": "clé_d_accès",
+      "de": "zugriffsschlüssel",
+      "ar": "مفتاح_الوصول",
+      "zh-Hans": "访问密钥",
+      "pt-BR": "chave_de_acesso"
+    },
+    "access_token": {
+      "es": "ficha_de_acceso",
+      "fr": "jeton_d_accès",
+      "de": "zugriffstoken",
+      "ar": "رمز_الوصول",
+      "zh-Hans": "访问令牌",
+      "pt-BR": "token_de_acesso"
+    },
+    "refresh_token": {
+      "es": "ficha_de_actualización",
+      "fr": "jeton_de_rafraîchissement",
+      "de": "erneuerungs_token",
+      "ar": "رمز_تحديث",
+      "zh-Hans": "刷新令牌",
+      "pt-BR": "token_de_atualização"
+    },
+    "personal_access_token": {
+      "es": "ficha_de_acceso_personal",
+      "fr": "jeton_d_accès_personnel",
+      "de": "persönliches_zugriffstoken",
+      "ar": "رمز_وصول_شخصي",
+      "zh-Hans": "个人访问令牌",
+      "pt-BR": "token_de_acesso_pessoal"
+    },
+    "client_id": {
+      "es": "id_cliente",
+      "fr": "id_client",
+      "de": "client_id",
+      "ar": "معرف_العميل",
+      "zh-Hans": "客户端id",
+      "pt-BR": "id_cliente"
+    },
+    "client_secret": {
+      "es": "secreto_cliente",
+      "fr": "secret_client",
+      "de": "client_geheimnis",
+      "ar": "سر_العميل",
+      "zh-Hans": "客户端密钥",
+      "pt-BR": "segredo_cliente"
+    },
+    "consumer_key": {
+      "es": "clave_consumidor",
+      "fr": "clé_consommateur",
+      "de": "verbraucherschlüssel",
+      "ar": "مفتاح_المستهلك",
+      "zh-Hans": "消费者密钥",
+      "pt-BR": "chave_consumidor"
+    },
+    "token_secret": {
+      "es": "secreto_ficha",
+      "fr": "secret_jeton",
+      "de": "token_geheimnis",
+      "ar": "سر_الرمز",
+      "zh-Hans": "令牌密钥",
+      "pt-BR": "segredo_token"
+    }
+  },
+  "skipped_hotwords": {
+    "policy": "Preserve verbatim across all locales. Real-world non-English codebases keep these tokens in English/Latin script because they are either proper nouns (brand names), industry-standard acronyms, or vendor-issued identifier prefixes that do not have meaningful translations.",
+    "brand_names": [
+      "airtable", "anthropic", "atlas", "atlassian", "aws", "azure", "bamboohr",
+      "buildkite", "calendly", "claude", "clerk", "confluence", "databricks",
+      "datadog", "dd_api_key", "ddog", "digitalocean", "discord", "do", "doppler",
+      "droplet", "feishu", "figma", "firebase", "fly", "flyio", "frontdoor", "gcp",
+      "github", "google", "gpt", "grafana", "gws", "hashicorp", "heroku", "hubspot",
+      "jira", "larksuite", "linear", "microsoft", "mongodb", "myworkday.com",
+      "netlify", "netsuite", "new_relic", "newrelic", "notion", "npm", "okta",
+      "openai", "planetscale", "postman", "pulumi", "pypi", "raas", "railway",
+      "salesforce", "sendgrid", "shopify", "slack", "snyk", "stripe", "supabase",
+      "teams", "terraform", "twilio", "twine", "vault", "vercel"
+    ],
+    "tech_acronyms": [
+      "aad", "api", "bearer", "iam", "jwt", "oauth", "pat", "smtp"
+    ],
+    "vendor_prefixes_or_codes": [
+      "00d", "anon", "chat.googleapis.com", "customreport2", "delegation", "hris",
+      "hvs", "incomingwebhook", "join_url", "live", "nrak", "ntn_", "platform",
+      "private_app", "pscale", "sid", "sk", "socket_mode", "tba", "tfc", "tracker",
+      "webhook.office.com", "xapp", "xoxe", "ya29", "zoom.us"
+    ]
+  }
+}

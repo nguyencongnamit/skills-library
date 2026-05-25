@@ -1,0 +1,87 @@
+schema_version: "1.0"
+last_updated: "2026-05-13"
+framework: github-actions
+description: >
+  Concrete hardening checks for GitHub Actions workflows. Mirrors OpenSSF
+  Scorecard's Token-Permissions / Pinned-Dependencies / Dangerous-Workflow
+  checks plus class-of-attack mitigations (pwn requests, script injection,
+  tj-actions style mass exfiltration).
+references:
+  - "https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions"
+  - "https://securitylab.github.com/research/github-actions-preventing-pwn-requests/"
+  - "https://www.stepsecurity.io/blog/tj-actions-changed-files-attack-analysis"
+  - "https://github.com/ossf/scorecard/blob/main/docs/checks.md"
+checks:
+  - id: gha-pin-actions-by-sha
+    severity: critical
+    title: Pin third-party actions by full 40-char commit SHA
+    rationale: >
+      Tags can be re-pushed silently. The tj-actions/changed-files March 2025
+      incident exfiltrated workflow secrets from ~23,000 repositories pinned
+      to floating tags such as @v1 or @v35.
+    pattern: "uses:\\s+[^@\\s]+@(?!([a-f0-9]{40}))"
+    fix: "Replace @vN with @<40-char-commit-sha> and add a comment with the human-readable tag."
+  - id: gha-default-permissions-read
+    severity: high
+    title: Default `permissions:` to read-only at the workflow level
+    rationale: >
+      The default GitHub token has write access to many APIs. Setting
+      `permissions: { contents: read }` at the workflow level and granting
+      job-level write scopes selectively reduces blast radius.
+    pattern: "^on:[\\s\\S]+?\\njobs:"
+    require: "permissions:\\s*\\n\\s*contents:\\s*read"
+  - id: gha-no-untrusted-script-injection
+    severity: critical
+    title: Never interpolate untrusted GitHub Actions expressions into `run:` bodies
+    rationale: >
+      `run: echo "${{ github.event.pull_request.title }}"` is a shell
+      injection sink. Route the expression through an `env:` variable and
+      reference it as $TITLE inside the script.
+    pattern: "run:[\\s\\S]+?\\$\\{\\{\\s*github\\.event\\.[a-z_.]+"
+    fix: "Set 'env: TITLE: ${{ github.event.pull_request.title }}' and reference $TITLE inside the run body."
+  - id: gha-pr-target-no-untrusted-checkout
+    severity: critical
+    title: pull_request_target / workflow_run must not check out untrusted PR code with secrets
+    rationale: >
+      Combining pull_request_target with `actions/checkout@... ref: ${{ github.event.pull_request.head.ref }}`
+      is the canonical pwn-request pattern — attacker code runs in the trusted context.
+    pattern: "pull_request_target[\\s\\S]+?checkout[\\s\\S]+?ref:\\s*\\$\\{\\{\\s*github\\.event\\.pull_request\\.head\\."
+    fix: "Run untrusted PR code only under pull_request (no secrets, no write tokens), or split into a safe label-bot plus a separate downstream workflow_run that does not touch the PR ref."
+  - id: gha-oidc-cloud-credentials
+    severity: high
+    title: Use OIDC for AWS / GCP / Azure cloud credentials, not stored long-lived keys
+    rationale: >
+      Short-lived OIDC-issued tokens cannot be replayed. Stored AWS_ACCESS_KEY_ID
+      / GCP service account JSON in GitHub Secrets has been the source of every
+      major CI cloud-key exfiltration incident.
+    pattern: "secrets\\.(AWS_SECRET_ACCESS_KEY|GCP_SA_KEY|AZURE_CLIENT_SECRET)"
+    fix: "Add permissions.id-token: write and use aws-actions/configure-aws-credentials (or the cloud equivalent) with role-to-assume."
+  - id: gha-no-curl-pipe-bash
+    severity: critical
+    title: Never `curl | bash` in CI
+    rationale: >
+      Codecov bash-uploader 2021 (CVE-2021-32699) exfiltrated env vars for
+      ~10 weeks via a remote-script substitution attack on CDN.
+    pattern: "(curl|wget)[^|]*\\|\\s*(ba)?sh"
+    fix: "Download, verify a known SHA-256, then execute. Prefer a vendor-supplied binary or container image."
+  - id: gha-harden-runner
+    severity: medium
+    title: Use Harden-Runner (or equivalent egress firewall) on workflows that touch secrets
+    rationale: >
+      Egress allowlisting detects exfiltration like the tj-actions DNS callback within seconds.
+    fix: "Add step-security/harden-runner@<sha> as the first step with disable-sudo and egress-policy=audit, then tighten to egress-policy=block."
+  - id: gha-cache-key-scope
+    severity: medium
+    title: Cache keys must include a lockfile hash, not just `os`
+    rationale: >
+      Loose cache keys allow cross-tenant / cross-branch cache reuse. Build-cache
+      poisoning works through unscoped reuse.
+    pattern: "cache@[\\s\\S]+?key:\\s*\\$\\{\\{\\s*runner\\.os\\s*\\}\\}"
+    require: "hashFiles\\("
+  - id: gha-artifact-verify-source
+    severity: medium
+    title: Verify provenance before downloading artifacts from other workflows
+    rationale: >
+      `actions/download-artifact` from arbitrary workflow runs can be tricked into pulling attacker-controlled artifacts.
+    pattern: "download-artifact@[\\s\\S]+?workflow:\\s*[a-zA-Z0-9_-]+"
+    fix: "Pin both the source workflow file and the commit SHA, and verify a SLSA provenance attestation before extraction."

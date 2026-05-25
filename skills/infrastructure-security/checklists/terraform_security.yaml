@@ -1,0 +1,34 @@
+schema_version: "1.0"
+framework: "HashiCorp Terraform Security Best Practices + CIS AWS Foundations"
+last_updated: "2026-05-12"
+controls:
+  - id: tf-state-encryption
+    severity: critical
+    requirement: "Terraform state stored in encrypted remote backend (S3 + KMS, GCS + CMEK, Azure Storage + CMK)"
+  - id: tf-state-locking
+    severity: high
+    requirement: "State locking enabled (DynamoDB for S3, native locking for GCS/Azure)"
+  - id: tf-s3-block-public
+    severity: critical
+    requirement: "Every aws_s3_bucket has aws_s3_bucket_public_access_block with all four blocks set to true"
+  - id: tf-s3-encryption
+    severity: high
+    requirement: "Every aws_s3_bucket has server_side_encryption_configuration"
+  - id: tf-iam-no-wildcards
+    severity: high
+    requirement: "IAM policies do not use Resource: \"*\" + Action: \"*\" combination outside intentional admin roles"
+  - id: tf-security-group-no-open
+    severity: critical
+    requirement: "No security group rule allows 0.0.0.0/0 ingress on ports 22, 3389, 3306, 5432, 6379, 27017"
+  - id: tf-rds-encryption
+    severity: high
+    requirement: "RDS instances have storage_encrypted = true"
+  - id: tf-rds-not-public
+    severity: high
+    requirement: "RDS instances have publicly_accessible = false unless intentionally exposed via documented design"
+  - id: tf-no-hardcoded-creds
+    severity: critical
+    requirement: "No access_key, secret_key, or password values hardcoded in .tf files; use variables and tfvars or workload identity"
+  - id: tf-cloudtrail-enabled
+    severity: high
+    requirement: "CloudTrail enabled in all regions with log validation"

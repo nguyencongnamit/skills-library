@@ -1,0 +1,44 @@
+schema_version: "1.0"
+framework: "NSA/CISA Kubernetes Hardening Guidance"
+last_updated: "2026-05-12"
+controls:
+  - id: k8s-pod-security-1
+    title: "runAsNonRoot"
+    severity: high
+    requirement: "Pod securityContext sets runAsNonRoot: true and runAsUser is non-zero"
+  - id: k8s-pod-security-2
+    title: "readOnlyRootFilesystem"
+    severity: high
+    requirement: "Container filesystem is read-only unless write-access is documented"
+  - id: k8s-pod-security-3
+    title: "drop all capabilities"
+    severity: high
+    requirement: "Container drops ALL Linux capabilities and re-adds only those required"
+  - id: k8s-pod-security-4
+    title: "no privileged"
+    severity: critical
+    requirement: "Container does not run as privileged"
+  - id: k8s-pod-security-5
+    title: "no host namespaces"
+    severity: critical
+    requirement: "hostPID, hostIPC, hostNetwork are all false"
+  - id: k8s-pod-security-6
+    title: "no host paths"
+    severity: high
+    requirement: "Container does not mount sensitive host paths (/var/run/docker.sock, /etc, /var/lib/kubelet)"
+  - id: k8s-resource-limits
+    title: "explicit requests and limits"
+    severity: medium
+    requirement: "Every container declares cpu/memory requests AND limits"
+  - id: k8s-network-policies
+    title: "default-deny NetworkPolicy"
+    severity: high
+    requirement: "Namespace has a default-deny NetworkPolicy; explicit allowlists per workload"
+  - id: k8s-image-pin
+    title: "image digest pinning"
+    severity: medium
+    requirement: "Production manifests pin images by digest, not tag"
+  - id: k8s-image-pull-policy
+    title: "imagePullPolicy: Always for floating tags"
+    severity: medium
+    requirement: "Use imagePullPolicy: Always when not pinned by digest"

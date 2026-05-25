@@ -1,0 +1,4671 @@
+{
+  "schema_version": "1.0",
+  "ecosystem": "pypi",
+  "last_updated": "2026-05-14T16:01:45Z",
+  "entries": [
+    {
+      "name": "ctx",
+      "versions_affected": [
+        "0.1.2",
+        "0.2.2",
+        "0.2.6"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-05-24",
+      "description": "Attacker took over abandoned package and uploaded versions that exfiltrate AWS credentials from environment variables",
+      "references": [
+        "https://medium.com/@m.s.miettinen/ctx-pypi-hijack-on-may-2022-c4a86a8acec5",
+        "https://www.zdnet.com/article/malicious-pypi-packages-caught-stealing-developer-data-and-sending-to-public-endpoints/"
+      ],
+      "indicators": [
+        "sends AWS credentials to remote endpoint"
+      ],
+      "attack_type": "maintainer_compromise"
+    },
+    {
+      "name": "phpass",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-05-24",
+      "description": "Companion malicious PyPI package alongside ctx hijack; exfiltrates AWS credentials",
+      "references": [
+        "https://medium.com/@m.s.miettinen/ctx-pypi-hijack-on-may-2022-c4a86a8acec5"
+      ],
+      "indicators": [
+        "AWS credential exfiltration"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "colorsama",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-08-23",
+      "description": "Typosquat of colorama; exfiltrates Discord tokens, browser cookies, system info",
+      "references": [
+        "https://blog.checkpoint.com/2022/08/23/check-point-research-detects-12-malicious-python-packages-in-pypi/"
+      ],
+      "indicators": [
+        "typosquat of colorama"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "djanga",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-11-15",
+      "description": "Typosquat of django; installs information stealer",
+      "references": [
+        "https://blog.phylum.io/malicious-pypi-package/"
+      ],
+      "indicators": [
+        "typosquat of django"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "pip-helper",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2023-02-10",
+      "description": "Dependency confusion attack package masquerading as internal Python utility; collects host data and posts to attacker URL",
+      "references": [
+        "https://blog.phylum.io/typosquats-and-dependency-confusion-attacks/"
+      ],
+      "indicators": [
+        "setup.py exfiltration"
+      ],
+      "attack_type": "dependency_confusion"
+    },
+    {
+      "name": "ultralytics",
+      "versions_affected": [
+        "8.3.41",
+        "8.3.42"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2024-12-04",
+      "description": "GitHub Actions cache poisoning combined with a script-injection in the release workflow pushed two malicious versions of the popular YOLO/object-detection package to PyPI; users were dropped XMRig cryptominer on install.",
+      "references": [
+        "https://blog.yossarian.net/2024/12/06/zizmor-ultralytics-injection",
+        "https://github.com/ultralytics/ultralytics/security/advisories/GHSA-wfq8-x6r6-rg6q"
+      ],
+      "indicators": [
+        "XMRig miner dropped on install",
+        "compromised GitHub Actions release pipeline"
+      ],
+      "attack_type": "build_pipeline_compromise"
+    },
+    {
+      "name": "torchtriton",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-12-30",
+      "description": "Dependency-confusion attack against the PyTorch nightly channel: an attacker uploaded a malicious `torchtriton` to public PyPI, which `pip` resolved in preference to PyTorch's private index. The package exfiltrated ~/.ssh, /etc/hosts, and environment vars.",
+      "references": [
+        "https://pytorch.org/blog/compromised-nightly-dependency/",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-45907"
+      ],
+      "indicators": [
+        "`triton` binary that posts ~/.ssh to h4ck.cfd",
+        "dependency-confusion on private index"
+      ],
+      "attack_type": "dependency_confusion"
+    },
+    {
+      "name": "aiocpa",
+      "versions_affected": [
+        "0.1.13"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2024-11-21",
+      "description": "Backdoor added to a previously-clean async CryptoPay client; new release shipped an obfuscated payload that stole wallet keys. Detected by Phylum.",
+      "references": [
+        "https://blog.phylum.io/pypi-package-aiocpa-found-exfiltrating-data"
+      ],
+      "indicators": [
+        "obfuscated `__init__.py` payload",
+        "crypto wallet exfiltration"
+      ],
+      "attack_type": "maintainer_compromise"
+    },
+    {
+      "name": "request",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2020-11-30",
+      "description": "Long-running typosquat of `requests`; one of the most-installed accidental imports on PyPI. Various authors have used the name to push installer-stage payloads.",
+      "references": [
+        "https://snyk.io/advisor/python/request",
+        "https://blog.sonatype.com/typosquatting-pypi"
+      ],
+      "indicators": [
+        "typosquat of requests"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "python-requests",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2020-11-30",
+      "description": "Typosquat of `requests` using the obvious `python-` prefix; multiple malicious uploads under this name historically.",
+      "references": [
+        "https://blog.sonatype.com/typosquatting-pypi"
+      ],
+      "indicators": [
+        "typosquat of requests"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "requests3",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "medium",
+      "discovered": "2018-09-25",
+      "description": "Originally a legitimate experimental fork, the name is repeatedly registered by attackers between abandoned periods. Treat as suspicious unless installed from the canonical author.",
+      "references": [
+        "https://pypi.org/project/requests3/",
+        "https://snyk.io/advisor/python/requests3"
+      ],
+      "indicators": [
+        "abandoned namesquat"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "colourama",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2018-12-04",
+      "description": "British-spelling typosquat of `colorama`; published a clipboard hijacker that replaced cryptocurrency addresses in copied text.",
+      "references": [
+        "https://www.bleepingcomputer.com/news/security/malicious-python-libraries-target-windows-users/",
+        "https://medium.com/@bertusk/cryptocurrency-clipboard-hijacker-discovered-in-pypi-repository-b66b8a534a8"
+      ],
+      "indicators": [
+        "clipboard hijacker",
+        "replaces BTC/ETH addresses"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "python-colorama",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2023-09-04",
+      "description": "Persistent typosquat of `colorama` using the `python-` prefix; ESET tracked dozens of uploads dropping `cstealer`-style infostealers.",
+      "references": [
+        "https://www.welivesecurity.com/en/eset-research/malicious-package-pypi-impersonates-popular-colorama-library/"
+      ],
+      "indicators": [
+        "typosquat of colorama",
+        "infostealer payload"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "ssh-decorator",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2018-05-09",
+      "description": "Early PyPI malware: a Python SSH-wrapper decorator that exfiltrated SSH connection credentials (host/user/key/password) to an attacker host. Among the first publicly documented PyPI supply-chain incidents.",
+      "references": [
+        "https://www.nbu.gov.sk/skcsirt-sa-20170909-pypi/",
+        "https://github.com/uetchy/awesome-malicious-packages"
+      ],
+      "indicators": [
+        "SSH credential exfil"
+      ],
+      "attack_type": "malicious_code"
+    },
+    {
+      "name": "diango",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2017-09-09",
+      "description": "Typosquat of django from the original SK-CSIRT 10-package PyPI malware discovery. PyPI mirrored package payloads to attacker host at install time.",
+      "references": [
+        "https://www.nbu.gov.sk/skcsirt-sa-20170909-pypi/",
+        "https://www.bleepingcomputer.com/news/security/ten-malicious-libraries-found-on-pypi-python-package-index/"
+      ],
+      "indicators": [
+        "SK-CSIRT 2017 wave"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "djago",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2017-09-09",
+      "description": "Another Django typosquat from the SK-CSIRT 2017 disclosure. Same payload as diango.",
+      "references": [
+        "https://www.nbu.gov.sk/skcsirt-sa-20170909-pypi/"
+      ],
+      "indicators": [
+        "SK-CSIRT 2017 wave"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "urllib",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2017-09-09",
+      "description": "Typosquat of urllib3 from the SK-CSIRT 2017 wave. PyPI removed the package shortly after disclosure.",
+      "references": [
+        "https://www.nbu.gov.sk/skcsirt-sa-20170909-pypi/",
+        "https://www.bleepingcomputer.com/news/security/ten-malicious-libraries-found-on-pypi-python-package-index/"
+      ],
+      "indicators": [
+        "SK-CSIRT 2017 wave"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "setup-tools",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2017-09-09",
+      "description": "Typosquat of setuptools from the SK-CSIRT 2017 wave. Same payload pattern as ssh-decorator.",
+      "references": [
+        "https://www.nbu.gov.sk/skcsirt-sa-20170909-pypi/"
+      ],
+      "indicators": [
+        "SK-CSIRT 2017 wave"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "python3-dateutil",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2019-12-02",
+      "description": "Typosquat of python-dateutil that exfiltrated arbitrary files and SSH keys to an attacker server. Published alongside the jeIlyfish typosquat.",
+      "references": [
+        "https://snyk.io/blog/malicious-packages-found-to-be-typo-squatting-in-pypi/",
+        "https://github.com/dateutil/dateutil/issues/984"
+      ],
+      "indicators": [
+        "paired with jeIlyfish",
+        "SSH key exfil"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "jeIlyfish",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2019-12-02",
+      "description": "Typosquat of jellyfish using a capital I in place of a lowercase l. Stole SSH keys and env vars; the second-stage payload was retrieved from a remote host on first import.",
+      "references": [
+        "https://snyk.io/blog/malicious-packages-found-to-be-typo-squatting-in-pypi/"
+      ],
+      "indicators": [
+        "homoglyph attack",
+        "SSH key exfil"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "cupy",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2020-07-23",
+      "description": "Homoglyph / case-variant typosquat of the legitimate CuPy CUDA Python package. Exfiltrated environment variables on import; targeted ML developers.",
+      "references": [
+        "https://blog.reversinglabs.com/blog/discovered-malicious-pypi-packages-targeting-popular-ml-frameworks"
+      ],
+      "indicators": [
+        "ML developer targeting"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "importlib_metadata",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2021-08-12",
+      "description": "Underscore variant of `importlib-metadata`. Member of a 2021 typosquat campaign that targeted high-traffic Python stdlib-adjacent packages.",
+      "references": [
+        "https://jfrog.com/blog/pypi-malware-attack-targets-python-developers/",
+        "https://snyk.io/blog/typosquat-attack-discovered-on-popular-pypi-package/"
+      ],
+      "indicators": [
+        "importlib campaign"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "httpslib",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-11-01",
+      "description": "Part of the W4SP Stealer campaign. Hundreds of related PyPI packages bundled a Python info-stealer that collected Discord tokens, browser cookies, and saved passwords, exfiltrating to anonymous file hosts.",
+      "references": [
+        "https://www.reversinglabs.com/blog/w4sp-stealer-discovered-in-multiple-pypi-packages",
+        "https://checkmarx.com/blog/wasp-attack-on-python-supply-chain/"
+      ],
+      "indicators": [
+        "W4SP Stealer",
+        "Discord token theft",
+        "browser cookie theft"
+      ],
+      "attack_type": "malicious_code"
+    },
+    {
+      "name": "libhttps",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2022-11-01",
+      "description": "Member of the W4SP Stealer family alongside httpslib and httpserver-python; identical info-stealer payload.",
+      "references": [
+        "https://www.reversinglabs.com/blog/w4sp-stealer-discovered-in-multiple-pypi-packages"
+      ],
+      "indicators": [
+        "W4SP Stealer"
+      ],
+      "attack_type": "malicious_code"
+    },
+    {
+      "name": "langchain-core-utils",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2024-02-20",
+      "description": "Typosquat targeting the LangChain ecosystem to capitalize on the LLM-tooling boom. Carried an info-stealer that exfiltrated OpenAI API keys and other developer secrets from environment variables.",
+      "references": [
+        "https://blog.phylum.io/typosquatting-attack-targets-langchain-developers",
+        "https://socket.dev/blog/langchain-typosquat-malware"
+      ],
+      "indicators": [
+        "AI developer targeting",
+        "OPENAI_API_KEY theft"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "chatgpt-python",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2023-07-25",
+      "description": "Typosquat of `openai` and unofficial chatgpt clients. Exfiltrated environment variables and a list of installed Python packages to an attacker server.",
+      "references": [
+        "https://blog.phylum.io/malicious-pypi-packages-target-ai-developers",
+        "https://socket.dev/blog/chatgpt-pypi-malware"
+      ],
+      "indicators": [
+        "AI hype squatting"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "pycord-self",
+      "versions_affected": [
+        "2.7.0"
+      ],
+      "type": "malicious_code",
+      "severity": "critical",
+      "discovered": "2024-03-20",
+      "description": "Backdoored Discord self-bot library. The 2.7.0 release added an obfuscated payload that posted Discord tokens, billing info, and machine fingerprints to an attacker webhook on import.",
+      "references": [
+        "https://blog.phylum.io/pycord-self-supply-chain-attack"
+      ],
+      "indicators": [
+        "Discord self-bot",
+        "billing exfil"
+      ],
+      "attack_type": "malicious_code"
+    },
+    {
+      "name": "huggingface-cli",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "ai_hallucination_squat",
+      "severity": "high",
+      "discovered": "2024-03-28",
+      "description": "Squatted on a name LLMs frequently hallucinate when asked for the Hugging Face CLI install command (the real one is `huggingface_hub`). Once-popular typosquat name attackers can use as a slop-squat landing page.",
+      "references": [
+        "https://blog.lasso.security/ai-package-hallucinations/",
+        "https://socket.dev/blog/huggingface-cli-typosquat"
+      ],
+      "indicators": [
+        "AI hallucination squat",
+        "Hugging Face"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "aiohttp-socks3",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "ai_hallucination_squat",
+      "severity": "high",
+      "discovered": "2024-06-10",
+      "description": "Slop-squat: published under a name LLMs commonly hallucinate when asked for a SOCKS-capable aiohttp transport. Followed the Lasso 'AI package hallucinations' research that documented the slop-squat attack class.",
+      "references": [
+        "https://blog.lasso.security/ai-package-hallucinations/",
+        "https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/"
+      ],
+      "indicators": [
+        "AI hallucination squat"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "coloredtxt",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2023-04-26",
+      "description": "Typosquat of colorama / colorlog. Exfiltrated saved browser passwords, Discord tokens, and crypto wallet keys via a Python-side info-stealer on every import.",
+      "references": [
+        "https://blog.phylum.io/multi-stage-pypi-malware-coloredtxt",
+        "https://socket.dev/blog/coloredtxt-typosquat"
+      ],
+      "indicators": [
+        "colorama typosquat",
+        "Discord token theft"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "0-8",
+      "versions_affected": [
+        "0.0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-28",
+      "description": "Malicious code in 0-8 (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2925"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2925"
+    },
+    {
+      "name": "adgame",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in adgame (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2482"
+    },
+    {
+      "name": "afriton",
+      "versions_affected": [
+        "1.5",
+        "1.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-12-09",
+      "description": "Malicious code in afriton (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-11514"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11514"
+    },
+    {
+      "name": "aiohttp-util",
+      "versions_affected": [
+        "0.68.253"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-05-13",
+      "description": "Malicious code in aiohttp-util (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/aiohttp-util"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3699"
+    },
+    {
+      "name": "alksdjpureranser",
+      "versions_affected": [
+        "3.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-26",
+      "description": "Malicious code in alksdjpureranser (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/alksdjpureranser"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-6430"
+    },
+    {
+      "name": "aphisher",
+      "versions_affected": [
+        "4.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-07-31",
+      "description": "Malicious code in aphisher (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-6434"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-6434"
+    },
+    {
+      "name": "artifact-lab-3-package-438d82fc",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-08-10",
+      "description": "Malicious code in artifact-lab-3-package-438d82fc (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/artifact-lab-3-package-438d82fc"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12200"
+    },
+    {
+      "name": "async-http-tools",
+      "versions_affected": [
+        "0.70.125"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-05-13",
+      "description": "Malicious code in async-http-tools (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/async-http-tools"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3702"
+    },
+    {
+      "name": "audit-themis-i18n",
+      "versions_affected": [
+        "2.3.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-08-22",
+      "description": "Malicious code in audit-themis-i18n (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/audit-themis-i18n"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12210"
+    },
+    {
+      "name": "barcodegeneratorqr",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-07-12",
+      "description": "Malicious code in barcodegeneratorqr (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-1354"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1354"
+    },
+    {
+      "name": "beautifulsou4",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in beautifulsou4 (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1618"
+    },
+    {
+      "name": "beuatifulsoup",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in beuatifulsoup (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1645"
+    },
+    {
+      "name": "bitcionlib",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in bitcionlib (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1654"
+    },
+    {
+      "name": "blank-lib",
+      "versions_affected": [
+        "0.0.8",
+        "0.0.9",
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-07",
+      "description": "Malicious code in blank-lib (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/blank-lib"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-192364"
+    },
+    {
+      "name": "browser-web",
+      "versions_affected": [
+        "1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in browser-web (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-4833"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4833"
+    },
+    {
+      "name": "byted-tbs",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-08-22",
+      "description": "Malicious code in byted-tbs (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/byted-tbs"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-9957"
+    },
+    {
+      "name": "caas-jupyter-tools",
+      "versions_affected": [
+        "0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-19",
+      "description": "Malicious code in caas-jupyter-tools (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/caas-jupyter-tools"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191697"
+    },
+    {
+      "name": "capmonsstercloudcliennt",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in capmonsstercloudcliennt (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/pypi-is-under-attack-project-creation-and-user-registration-suspended-heres-the-details-c3b6291d4579",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-CAPMONSSTERCLOUDCLIENNT-6513243"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4846",
+      "aliases": [
+        "SNYK-PYTHON-CAPMONSSTERCLOUDCLIENNT-6513243"
+      ]
+    },
+    {
+      "name": "catme",
+      "versions_affected": [
+        "1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-11-29",
+      "description": "Malicious code in catme (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/catme"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12230"
+    },
+    {
+      "name": "ccxt-bullish",
+      "versions_affected": [
+        "1.0.0",
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-02-08",
+      "description": "Malicious code in ccxt-bullish (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/ccxt-bullish"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-809"
+    },
+    {
+      "name": "checkscrapeinfo",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in checkscrapeinfo (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-4888"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4888"
+    },
+    {
+      "name": "cloud-datasets",
+      "versions_affected": [
+        "9.9.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-20",
+      "description": "Malicious code in cloud-datasets (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/cloud-datasets"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-1986"
+    },
+    {
+      "name": "collorama",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in collorama (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1688"
+    },
+    {
+      "name": "colorate-raimbow",
+      "versions_affected": [
+        "0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in colorate-raimbow (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-4944"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4944"
+    },
+    {
+      "name": "colors5",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in colors5 (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-4978"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4978"
+    },
+    {
+      "name": "connector-bsb",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-19",
+      "description": "Malicious code in connector-bsb (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2602"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2602"
+    },
+    {
+      "name": "coreloader",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-24",
+      "description": "Malicious code in coreloader (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/coreloader"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2140"
+    },
+    {
+      "name": "cra-template-snap",
+      "versions_affected": [
+        "99.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in cra-template-snap (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-4999"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-4999"
+    },
+    {
+      "name": "crptofeed",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in crptofeed (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1699"
+    },
+    {
+      "name": "cryptocomppare",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in cryptocomppare (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1726"
+    },
+    {
+      "name": "ctf-aio-tool",
+      "versions_affected": [
+        "0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-02",
+      "description": "Malicious code in ctf-aio-tool (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/ctf-aio-tool"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2952"
+    },
+    {
+      "name": "cvad",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in cvad (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2662"
+    },
+    {
+      "name": "d5e54nc32y1337",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-26",
+      "description": "Malicious code in d5e54nc32y1337 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/d5e54nc32y1337"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1968"
+    },
+    {
+      "name": "ddim",
+      "versions_affected": [
+        "9.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-11-06",
+      "description": "Malicious code in ddim (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/ddim"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11570"
+    },
+    {
+      "name": "devilpy",
+      "versions_affected": [
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-12-09",
+      "description": "Malicious code in devilpy (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-11574"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11574"
+    },
+    {
+      "name": "discord-client",
+      "versions_affected": [
+        "1.5.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in discord-client (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5058"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5058"
+    },
+    {
+      "name": "discordbotpresence",
+      "versions_affected": [
+        "0.6.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-12-17",
+      "description": "Malicious code in discordbotpresence (PyPI)",
+      "references": [
+        "https://www.virustotal.com/gui/file/85d1f3ef084cc8ce90585965e287f0f14f87cbc744c25aafa5557074ddd9c70a",
+        "https://bad-packages.kam193.eu/pypi/package/discordbotpresence"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-919"
+    },
+    {
+      "name": "django-aerospike-sessions",
+      "versions_affected": [
+        "5.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-21",
+      "description": "Malicious code in django-aerospike-sessions (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/django-aerospike-sessions"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-47758"
+    },
+    {
+      "name": "dziplib",
+      "versions_affected": [
+        "1.0.0",
+        "1.2.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-03",
+      "description": "Malicious code in dziplib (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/dziplib"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-41668"
+    },
+    {
+      "name": "ef323refefeffe",
+      "versions_affected": [
+        "1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ef323refefeffe (PyPI)",
+      "references": [
+        "https://socket.dev/blog/blank-grabber-python-package-steals-info-from-discord-and-telegram"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5107"
+    },
+    {
+      "name": "erc20-scanner",
+      "versions_affected": [
+        "1.0.1",
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in erc20-scanner (PyPI)",
+      "references": [
+        "https://www.reversinglabs.com/blog/bipclip-malicious-pypi-packages-target-crypto-wallet-recovery-passwords"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5112"
+    },
+    {
+      "name": "esqccping",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqccping (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2759"
+    },
+    {
+      "name": "esqcrafted",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqcrafted (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2803"
+    },
+    {
+      "name": "esqedstringver",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqedstringver (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2848"
+    },
+    {
+      "name": "esqgetinfoping",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in esqgetinfoping (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2892"
+    },
+    {
+      "name": "esqguipywhttp",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqguipywhttp (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2937"
+    },
+    {
+      "name": "esqinfokillinfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in esqinfokillinfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2982"
+    },
+    {
+      "name": "esqkillloadload",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqkillloadload (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3026"
+    },
+    {
+      "name": "esqloadrandsplit",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in esqloadrandsplit (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3071"
+    },
+    {
+      "name": "esqminecv",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqminecv (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3115"
+    },
+    {
+      "name": "esqosintsuperosint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in esqosintsuperosint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3160"
+    },
+    {
+      "name": "esqpingvercraft",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqpingvercraft (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3204"
+    },
+    {
+      "name": "esqproofpongint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-03-07",
+      "description": "Malicious code in esqproofpongint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3249"
+    },
+    {
+      "name": "esqpymask",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqpymask (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3294"
+    },
+    {
+      "name": "esqrandomhydrainfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqrandomhydrainfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3338"
+    },
+    {
+      "name": "esqrere",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqrere (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3383"
+    },
+    {
+      "name": "esqstringpushload",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqstringpushload (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3427"
+    },
+    {
+      "name": "esqsupertool",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in esqsupertool (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3472"
+    },
+    {
+      "name": "esqverinfomask",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in esqverinfomask (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3517"
+    },
+    {
+      "name": "esqvmgetram",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-26",
+      "description": "Malicious code in esqvmgetram (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3561"
+    },
+    {
+      "name": "ethereuum",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-28",
+      "description": "Malicious code in ethereuum (PyPI)",
+      "references": [
+        "https://www.cert.at/en/blog/2024/3/hobby-hunter-notes-pypi-under-attack",
+        "https://blog.phylum.io/typosquatting-campaign-targets-python-developers/",
+        "https://bad-packages.kam193.eu/pypi/package/ethereuum"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-9992"
+    },
+    {
+      "name": "evil-pkg",
+      "versions_affected": [
+        "0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-08-23",
+      "description": "Malicious code in evil-pkg (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/evil-pkg"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2959"
+    },
+    {
+      "name": "fake-usreagant",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-10-08",
+      "description": "Malicious code in fake-usreagant (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/fake-usreagant"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12270"
+    },
+    {
+      "name": "ferqtrade",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in ferqtrade (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1830"
+    },
+    {
+      "name": "flexponlib",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in flexponlib (PyPI)",
+      "references": [
+        "https://blog.virustotal.com/2023/06/inside-of-wasps-nest-deep-dive-into.html",
+        "https://research.jfrog.com/malicious-packages/"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5145"
+    },
+    {
+      "name": "freqrtade",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in freqrtade (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1835"
+    },
+    {
+      "name": "gamecraft",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in gamecraft (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3582"
+    },
+    {
+      "name": "genesis-1p-tools-rpm-bundle",
+      "versions_affected": [
+        "9.0.0",
+        "9.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-07",
+      "description": "Malicious code in genesis-1p-tools-rpm-bundle (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/genesis-1p-tools-rpm-bundle"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2503"
+    },
+    {
+      "name": "getultra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in getultra (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3632"
+    },
+    {
+      "name": "gogogolokl",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-06-06",
+      "description": "Malicious code in gogogolokl (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/attacker-hidden-in-plain-sight-for-nearly-six-months-targeting-python-developers-3712f0f107e0"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-8565"
+    },
+    {
+      "name": "grandpy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in grandpy (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3659"
+    },
+    {
+      "name": "guicc",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in guicc (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3673"
+    },
+    {
+      "name": "habboapp",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in habboapp (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5192"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5192"
+    },
+    {
+      "name": "hekamhelp",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-07-19",
+      "description": "Malicious code in hekamhelp (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/hekamhelp"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191750"
+    },
+    {
+      "name": "hllm",
+      "versions_affected": [
+        "912.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-11-06",
+      "description": "Malicious code in hllm (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/hllm"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10451"
+    },
+    {
+      "name": "httpload",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in httpload (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3735"
+    },
+    {
+      "name": "httpxc",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in httpxc (PyPI)",
+      "references": [
+        "https://github.com/DataDog/malicious-software-packages-dataset"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5238"
+    },
+    {
+      "name": "hydraping",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in hydraping (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3767"
+    },
+    {
+      "name": "image2hex",
+      "versions_affected": [
+        "0.1.0",
+        "0.1.1",
+        "0.1.2",
+        "0.1.3",
+        "0.1.4",
+        "0.1.5",
+        "0.1.6",
+        "0.1.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-10-23",
+      "description": "Malicious code in image2hex (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-48893"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-48893"
+    },
+    {
+      "name": "infosys",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in infosys (PyPI)",
+      "references": [
+        "https://github.com/DataDog/malicious-software-packages-dataset",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-INFOSYS-3177762",
+        "https://www.bleepingcomputer.com/news/security/hackers-bombard-pypi-platform-with-information-stealing-malware"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5260",
+      "aliases": [
+        "SNYK-PYTHON-INFOSYS-3177762"
+      ]
+    },
+    {
+      "name": "interwebz",
+      "versions_affected": [
+        "99.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-29",
+      "description": "Malicious code in interwebz (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/interwebz"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2283"
+    },
+    {
+      "name": "javascan",
+      "versions_affected": [
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-01-10",
+      "description": "Malicious code in javascan (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/javascan"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1978"
+    },
+    {
+      "name": "karma-jasmine-sinon",
+      "versions_affected": [
+        "2.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-07-31",
+      "description": "Malicious code in karma-jasmine-sinon (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-6532"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-6532"
+    },
+    {
+      "name": "kjfgjsfgj12345678",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in kjfgjsfgj12345678 (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5300"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5300"
+    },
+    {
+      "name": "lastweb3toolzbro",
+      "versions_affected": [
+        "1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in lastweb3toolzbro (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5305"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5305"
+    },
+    {
+      "name": "libaryscraper",
+      "versions_affected": [
+        "0.9.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in libaryscraper (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5309"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5309"
+    },
+    {
+      "name": "libcontrolpyinfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libcontrolpyinfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3912"
+    },
+    {
+      "name": "libcvencode",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libcvencode (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3956"
+    },
+    {
+      "name": "libgamevisamask",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libgamevisamask (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-3999"
+    },
+    {
+      "name": "libguipushreplace",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-26",
+      "description": "Malicious code in libguipushreplace (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4043"
+    },
+    {
+      "name": "libhydraregame",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libhydraregame (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4087"
+    },
+    {
+      "name": "libintelurllgtb",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libintelurllgtb (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4123"
+    },
+    {
+      "name": "liblgtbpong",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in liblgtbpong (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4165"
+    },
+    {
+      "name": "libmasklibosint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libmasklibosint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4209"
+    },
+    {
+      "name": "libnvidiagrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libnvidiagrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4253"
+    },
+    {
+      "name": "libpeplgtbinfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-26",
+      "description": "Malicious code in libpeplgtbinfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4296"
+    },
+    {
+      "name": "libpongpyw",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libpongpyw (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4339"
+    },
+    {
+      "name": "libpullpull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libpullpull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4383"
+    },
+    {
+      "name": "libpywvisavirtual",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-03-12",
+      "description": "Malicious code in libpywvisavirtual (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4427"
+    },
+    {
+      "name": "libregame",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libregame (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4471"
+    },
+    {
+      "name": "libstringpaypalrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libstringpaypalrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4512"
+    },
+    {
+      "name": "libsupervisa",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in libsupervisa (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4557"
+    },
+    {
+      "name": "liburlultra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in liburlultra (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4599"
+    },
+    {
+      "name": "libvisaintrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in libvisaintrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4644"
+    },
+    {
+      "name": "lixxyly",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-17",
+      "description": "Malicious code in lixxyly (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/lixxyly"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2841"
+    },
+    {
+      "name": "logghelper",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-07-16",
+      "description": "Malicious code in logghelper (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/logghelper"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-6538"
+    },
+    {
+      "name": "machaque",
+      "versions_affected": [
+        "99.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-11-06",
+      "description": "Malicious code in machaque (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/machaque"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10418"
+    },
+    {
+      "name": "maskad",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in maskad (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4700"
+    },
+    {
+      "name": "matplotlibp",
+      "versions_affected": [
+        "0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-26",
+      "description": "Malicious code in matplotlibp (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/matplotlibp"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11631"
+    },
+    {
+      "name": "mcultra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in mcultra (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4749"
+    },
+    {
+      "name": "minecpu",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in minecpu (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4758"
+    },
+    {
+      "name": "mlc-ai-nightly-rocm62",
+      "versions_affected": [
+        "9.9.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-01-21",
+      "description": "Malicious code in mlc-ai-nightly-rocm62 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/mlc-ai-nightly-rocm62"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1982"
+    },
+    {
+      "name": "multicolored",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-12-25",
+      "description": "Malicious code in multicolored (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-8765"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-8765"
+    },
+    {
+      "name": "nageir",
+      "versions_affected": [
+        "0.1.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in nageir (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5394"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5394"
+    },
+    {
+      "name": "newpackagetest2024",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-11-30",
+      "description": "Malicious code in newpackagetest2024 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/newpackagetest2024"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12312"
+    },
+    {
+      "name": "nspacercesolve",
+      "versions_affected": [
+        "0.0.7",
+        "0.0.6",
+        "0.0.5",
+        "0.0.4",
+        "0.0.3",
+        "0.0.2",
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-22",
+      "description": "Malicious code in nspacercesolve (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/nspacercesolve"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191805"
+    },
+    {
+      "name": "obfuscater",
+      "versions_affected": [
+        "2.0.0",
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in obfuscater (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-evolutionary-tale-of-a-persistent-python-threat-d19196d4ed15",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-OBFUSCATER-5932280"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5430",
+      "aliases": [
+        "SNYK-PYTHON-OBFUSCATER-5932280"
+      ]
+    },
+    {
+      "name": "openai-py3",
+      "versions_affected": [
+        "1.35.10"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-09",
+      "description": "Malicious code in openai-py3 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/openai-py3"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12319"
+    },
+    {
+      "name": "openypxl",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in openypxl (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1928"
+    },
+    {
+      "name": "oslana",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in oslana (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1933"
+    },
+    {
+      "name": "paquete-5",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-08-05",
+      "description": "Malicious code in paquete-5 (PyPI)",
+      "references": [
+        "https://github.com/thegoodhackertv/malpip",
+        "https://bad-packages.kam193.eu/pypi/package/paquete-5"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12321"
+    },
+    {
+      "name": "pephttp",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in pephttp (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4832"
+    },
+    {
+      "name": "pilloa",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pilloa (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/pypi-is-under-attack-project-creation-and-user-registration-suspended-heres-the-details-c3b6291d4579",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PILLOA-6513387"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5473",
+      "aliases": [
+        "SNYK-PYTHON-PILLOA-6513387"
+      ]
+    },
+    {
+      "name": "pipcolouringskits",
+      "versions_affected": [
+        "1.1.0",
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pipcolouringskits (PyPI)",
+      "references": [
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PIPCOLOURINGSKITS-5932286",
+        "https://medium.com/checkmarx-security/the-evolutionary-tale-of-a-persistent-python-threat-d19196d4ed15"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5501",
+      "aliases": [
+        "SNYK-PYTHON-PIPCOLOURINGSKITS-5932286"
+      ]
+    },
+    {
+      "name": "piplgtb",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in piplgtb (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4867"
+    },
+    {
+      "name": "piynstaller",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in piynstaller (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1947"
+    },
+    {
+      "name": "popyquests",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in popyquests (PyPI)",
+      "references": [
+        "https://github.com/DataDog/malicious-software-packages-dataset",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-POPYQUESTS-5885058"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5560",
+      "aliases": [
+        "SNYK-PYTHON-POPYQUESTS-5885058"
+      ]
+    },
+    {
+      "name": "pplgdfhuighsdfyisfdty2",
+      "versions_affected": [
+        "1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-10-22",
+      "description": "Malicious code in pplgdfhuighsdfyisfdty2 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/pplgdfhuighsdfyisfdty2"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11662"
+    },
+    {
+      "name": "proggressbar2",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in proggressbar2 (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1973"
+    },
+    {
+      "name": "prompt-toolkkit",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in prompt-toolkkit (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2004"
+    },
+    {
+      "name": "proto-google-cloud-dlp-v2beta1",
+      "versions_affected": [
+        "0.15.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-09-06",
+      "description": "Malicious code in proto-google-cloud-dlp-v2beta1 (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/proto-google-cloud-dlp-v2beta1"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-4666"
+    },
+    {
+      "name": "pullpip",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in pullpip (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4964"
+    },
+    {
+      "name": "py-adtool",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-adtool (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-4998"
+    },
+    {
+      "name": "py-coerd",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in py-coerd (PyPI)",
+      "references": [
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYCOERD-6513676",
+        "https://medium.com/checkmarx-security/pypi-is-under-attack-project-creation-and-user-registration-suspended-heres-the-details-c3b6291d4579"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5594",
+      "aliases": [
+        "SNYK-PYTHON-PYCOERD-6513676"
+      ]
+    },
+    {
+      "name": "py-cowrd",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in py-cowrd (PyPI)",
+      "references": [
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYCOWRD-6513663",
+        "https://medium.com/checkmarx-security/pypi-is-under-attack-project-creation-and-user-registration-suspended-heres-the-details-c3b6291d4579"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5622",
+      "aliases": [
+        "SNYK-PYTHON-PYCOWRD-6513663"
+      ]
+    },
+    {
+      "name": "py-cvvmreplace",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-cvvmreplace (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5080"
+    },
+    {
+      "name": "py-getcvad",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-getcvad (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5120"
+    },
+    {
+      "name": "py-hackedpushtool",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-hackedpushtool (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5165"
+    },
+    {
+      "name": "py-infointelpost",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-infointelpost (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5210"
+    },
+    {
+      "name": "py-intvisa",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-intvisa (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5254"
+    },
+    {
+      "name": "py-libstring",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-libstring (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5298"
+    },
+    {
+      "name": "py-mcrandom",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-mcrandom (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5342"
+    },
+    {
+      "name": "py-osintsuperintel",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-osintsuperintel (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5386"
+    },
+    {
+      "name": "py-pinggrandping",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-pinggrandping (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5431"
+    },
+    {
+      "name": "py-postrelib",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-postrelib (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5475"
+    },
+    {
+      "name": "py-pushpullsuper",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-pushpullsuper (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5519"
+    },
+    {
+      "name": "py-randintel",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-randintel (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5563"
+    },
+    {
+      "name": "py-replacestringcandy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-03-09",
+      "description": "Malicious code in py-replacestringcandy (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5608"
+    },
+    {
+      "name": "py-strpongint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in py-strpongint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5650"
+    },
+    {
+      "name": "py-toolkill",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-toolkill (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5692"
+    },
+    {
+      "name": "py-vernvidia",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-vernvidia (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5737"
+    },
+    {
+      "name": "py-vmgrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in py-vmgrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5781"
+    },
+    {
+      "name": "pychaosvm",
+      "versions_affected": [
+        "0.0.0.1",
+        "0.0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-28",
+      "description": "Malicious code in pychaosvm (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2988"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2988"
+    },
+    {
+      "name": "pycolorv3",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pycolorv3 (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-evolutionary-tale-of-a-persistent-python-threat-d19196d4ed15",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYCOLORV3-5932307"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5665",
+      "aliases": [
+        "SNYK-PYTHON-PYCOLORV3-5932307"
+      ]
+    },
+    {
+      "name": "pydisk",
+      "versions_affected": [
+        "0.0.0",
+        "1.0.0",
+        "1.0.1",
+        "1.0.2",
+        "1.0.3",
+        "1.0.4",
+        "2.0.0",
+        "3.0.0",
+        "4.0.0",
+        "5.0.0",
+        "6.0.0",
+        "7.0.0",
+        "8.0.0",
+        "9.0.0",
+        "9.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pydisk (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5699"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5699"
+    },
+    {
+      "name": "pyhjdddo",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-09-24",
+      "description": "Malicious code in pyhjdddo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/attacker-hidden-in-plain-sight-for-nearly-six-months-targeting-python-developers-3712f0f107e0",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYHJDDDO-6069617",
+        "https://checkmarx.com/blog/attacker-hidden-in-plain-sight-for-nearly-six-months-targeting-python-developers/"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-8572",
+      "aliases": [
+        "SNYK-PYTHON-PYHJDDDO-6069617"
+      ]
+    },
+    {
+      "name": "pylibarys",
+      "versions_affected": [
+        "0.9.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pylibarys (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5729"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5729"
+    },
+    {
+      "name": "pyou",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pyou (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5755"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5755"
+    },
+    {
+      "name": "pysigner",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-10-16",
+      "description": "Malicious code in pysigner (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-10121"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10121"
+    },
+    {
+      "name": "pythn-binance",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in pythn-binance (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2102"
+    },
+    {
+      "name": "python-dateutil-malicious",
+      "versions_affected": [
+        "2.5.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-26",
+      "description": "Malicious code in python-dateutil-malicious (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/python-dateutil-malicious"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2992"
+    },
+    {
+      "name": "pythoncolorv4",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pythoncolorv4 (PyPI)",
+      "references": [
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYTHONCOLORV4-5932148",
+        "https://medium.com/checkmarx-security/the-evolutionary-tale-of-a-persistent-python-threat-d19196d4ed15"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5799",
+      "aliases": [
+        "SNYK-PYTHON-PYTHONCOLORV4-5932148"
+      ]
+    },
+    {
+      "name": "pytoch",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in pytoch (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2127"
+    },
+    {
+      "name": "pywgrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in pywgrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5808"
+    },
+    {
+      "name": "pyzelf",
+      "versions_affected": [
+        "2.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-10-16",
+      "description": "Malicious code in pyzelf (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-10149"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10149"
+    },
+    {
+      "name": "ramhttp",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in ramhttp (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5848"
+    },
+    {
+      "name": "randomhydra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in randomhydra (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5886"
+    },
+    {
+      "name": "realtek",
+      "versions_affected": [
+        "1.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in realtek (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-5855"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5855"
+    },
+    {
+      "name": "repull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in repull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5924"
+    },
+    {
+      "name": "requeits",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in requeits (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/pypi-is-under-attack-project-creation-and-user-registration-suspended-heres-the-details-c3b6291d4579",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-REQUEITS-6513290"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-5875",
+      "aliases": [
+        "SNYK-PYTHON-REQUEITS-6513290"
+      ]
+    },
+    {
+      "name": "requests-beta",
+      "versions_affected": [
+        "2.26.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-28",
+      "description": "Malicious code in requests-beta (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-41745"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-41745"
+    },
+    {
+      "name": "requests-wiki",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-28",
+      "description": "Malicious code in requests-wiki (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2995"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2995"
+    },
+    {
+      "name": "requsts-toolbelt",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in requsts-toolbelt (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2182"
+    },
+    {
+      "name": "rich-util",
+      "versions_affected": [
+        "0.218.10"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-05-13",
+      "description": "Malicious code in rich-util (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/rich-util"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3659"
+    },
+    {
+      "name": "roboat",
+      "versions_affected": [
+        "0.0.1",
+        "1.1.0",
+        "2.0.0",
+        "2.1.0",
+        "2.20"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-23",
+      "description": "Malicious code in roboat (PyPI)",
+      "references": [
+        "https://www.virustotal.com/gui/file/7853783660953f032d117c78eb627fa7a22bdd828b161a58f2abc7405905bce2/detection",
+        "https://www.virustotal.com/gui/file/fa7d6114e0d7f164122f7080d19c83ffbfa8e2f3b56a9c7ba95bf5663f72b97c",
+        "https://bad-packages.kam193.eu/pypi/package/roboat"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2121"
+    },
+    {
+      "name": "rtcplogin",
+      "versions_affected": [
+        "1.6.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-26",
+      "description": "Malicious code in rtcplogin (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/rtcplogin"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191858"
+    },
+    {
+      "name": "saywhu",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-09-27",
+      "description": "Malicious code in saywhu (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-9002"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-9002"
+    },
+    {
+      "name": "scrrapy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-10",
+      "description": "Malicious code in scrrapy (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2229"
+    },
+    {
+      "name": "selfadpepgame",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfadpepgame (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5941"
+    },
+    {
+      "name": "selfcpuinfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfcpuinfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-5986"
+    },
+    {
+      "name": "selfcvvisaping",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfcvvisaping (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6030"
+    },
+    {
+      "name": "selfgamepingurl",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfgamepingurl (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6075"
+    },
+    {
+      "name": "selfgrandproof",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfgrandproof (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6120"
+    },
+    {
+      "name": "selfhttpinfocv",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfhttpinfocv (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6164"
+    },
+    {
+      "name": "selfinfopynvidia",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfinfopynvidia (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6209"
+    },
+    {
+      "name": "selfkillvirtual",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfkillvirtual (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6253"
+    },
+    {
+      "name": "selfloadvisa",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfloadvisa (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6298"
+    },
+    {
+      "name": "selfminepong",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfminepong (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6342"
+    },
+    {
+      "name": "selfpaypalencodeget",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfpaypalencodeget (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6387"
+    },
+    {
+      "name": "selfpingram",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfpingram (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6432"
+    },
+    {
+      "name": "selfpostponghydra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfpostponghydra (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6476"
+    },
+    {
+      "name": "selfpushurlosint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfpushurlosint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6521"
+    },
+    {
+      "name": "selfrandlgtb",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in selfrandlgtb (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6565"
+    },
+    {
+      "name": "selfreplacetoolreplace",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfreplacetoolreplace (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6610"
+    },
+    {
+      "name": "selfstrultrapush",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfstrultrapush (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6655"
+    },
+    {
+      "name": "selftoolvirtualpep",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-26",
+      "description": "Malicious code in selftoolvirtualpep (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6699"
+    },
+    {
+      "name": "selfverproofkill",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfverproofkill (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6744"
+    },
+    {
+      "name": "selfvisavmgame",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in selfvisavmgame (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6788"
+    },
+    {
+      "name": "sfnt2woff-zopfli",
+      "versions_affected": [
+        "0.0.0",
+        "17.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-01-01",
+      "description": "Malicious code in sfnt2woff-zopfli (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/sfnt2woff-zopfli"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-1"
+    },
+    {
+      "name": "simple-api-py",
+      "versions_affected": [
+        "1.2.0",
+        "1.2.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in simple-api-py (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-6011"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6011"
+    },
+    {
+      "name": "smsobfuscate",
+      "versions_affected": [
+        "1.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-05-10",
+      "description": "Malicious code in smsobfuscate (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-1409"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1409"
+    },
+    {
+      "name": "solana-wallet-utils",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-05-08",
+      "description": "Malicious code in solana-wallet-utils (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/solana-wallet-utils"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3382"
+    },
+    {
+      "name": "spatialmedia",
+      "versions_affected": [
+        "9.9.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-20",
+      "description": "Malicious code in spatialmedia (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/spatialmedia"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-1994"
+    },
+    {
+      "name": "squeezieontop",
+      "versions_affected": [
+        "5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in squeezieontop (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-6036"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6036"
+    },
+    {
+      "name": "strreplace",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in strreplace (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6827"
+    },
+    {
+      "name": "superpull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in superpull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6856"
+    },
+    {
+      "name": "syschecker",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-10-26",
+      "description": "Malicious code in syschecker (PyPI)",
+      "references": [
+        "https://www.virustotal.com/gui/file/7b54915ac4e6d820bec7782cb02adb0d9ef7a3e9532a7e45d9e29bb220f3d079/detection",
+        "https://www.virustotal.com/gui/file/ac5ce135f96d67e8cc61887a9343468f72cd034af266ae65da2d5f1797ca28e7/detection",
+        "https://bad-packages.kam193.eu/pypi/package/syschecker"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191663"
+    },
+    {
+      "name": "szn-zbozi-ab-testing-fulltext",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-26",
+      "description": "Malicious code in szn-zbozi-ab-testing-fulltext (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/szn-zbozi-ab-testing-fulltext"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-12358"
+    },
+    {
+      "name": "telebot-infee",
+      "versions_affected": [
+        "0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-02-18",
+      "description": "Malicious code in telebot-infee (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/telebot-infee",
+        "https://www.getsafety.com/blog-posts/telegrem-bot-malware"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-937"
+    },
+    {
+      "name": "terminalbrush",
+      "versions_affected": [
+        "0.1",
+        "0.2.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-01-21",
+      "description": "Malicious code in terminalbrush (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/terminalbrush"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-444"
+    },
+    {
+      "name": "testingpy",
+      "versions_affected": [
+        "0.1.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-01-06",
+      "description": "Malicious code in testingpy (PyPI)",
+      "references": [
+        "https://dmpdump.github.io/posts/NorthKorea_Backdoor_Stealer/",
+        "https://www.virustotal.com/gui/file-analysis/NTk2Y2FiNTBmM2QxODI2NDRlZGM0OTA2OGVjYzUxOTk6MTc2NzYzMzkzMA==",
+        "https://www.virustotal.com/gui/file/d02d6a5da3cff57d78e260961526420c172a46f4a07d18a3865fecbf5dfebc1d/detection"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-99"
+    },
+    {
+      "name": "tgeffect",
+      "versions_affected": [
+        "1.1.3",
+        "1.1.2",
+        "1.1.0",
+        "1.2.1",
+        "1.3.1",
+        "1.4.1",
+        "1.4.2",
+        "1.4.3",
+        "1.4.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-22",
+      "description": "Malicious code in tgeffect (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/tgeffect"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191897"
+    },
+    {
+      "name": "time-server-test",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-02-25",
+      "description": "Malicious code in time-server-test (PyPI)",
+      "references": [
+        "https://github.com/pypi-data/pypi-mirror-238/blob/code/packages/snapshot-photo/snapshot_photo-0.0.3-py3-none-any.whl/snapshot_photo/date_format.py",
+        "https://x.com/ReversingLabs/status/1900198602242204003",
+        "https://thehackernews.com/2025/03/malicious-pypi-packages-stole-cloud.html"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191904"
+    },
+    {
+      "name": "tkcalndar",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in tkcalndar (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2331"
+    },
+    {
+      "name": "toolinfo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in toolinfo (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6880"
+    },
+    {
+      "name": "tpadsuperpy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpadsuperpy (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6914"
+    },
+    {
+      "name": "tpcpuadpaypal",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpcpuadpaypal (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-6959"
+    },
+    {
+      "name": "tpedpeposint",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in tpedpeposint (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7003"
+    },
+    {
+      "name": "tpgetlibget",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-26",
+      "description": "Malicious code in tpgetlibget (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7048"
+    },
+    {
+      "name": "tphackeded",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tphackeded (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7092"
+    },
+    {
+      "name": "tpinfokillpull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpinfokillpull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7137"
+    },
+    {
+      "name": "tpkillcchacked",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpkillcchacked (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7181"
+    },
+    {
+      "name": "tploadguistring",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tploadguistring (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7226"
+    },
+    {
+      "name": "tpminecc",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpminecc (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7271"
+    },
+    {
+      "name": "tposintpywcraft",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in tposintpywcraft (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7315"
+    },
+    {
+      "name": "tppiphackedad",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tppiphackedad (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7360"
+    },
+    {
+      "name": "tpproofedpull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpproofedpull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7404"
+    },
+    {
+      "name": "tppushpullvisa",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tppushpullvisa (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7449"
+    },
+    {
+      "name": "tppywrandompull",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in tppywrandompull (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7494"
+    },
+    {
+      "name": "tprandstringpep",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in tprandstringpep (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7538"
+    },
+    {
+      "name": "tpsplitgui",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpsplitgui (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7582"
+    },
+    {
+      "name": "tpstrposturl",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-27",
+      "description": "Malicious code in tpstrposturl (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7626"
+    },
+    {
+      "name": "tpultragui",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpultragui (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7671"
+    },
+    {
+      "name": "tpvirtualstudyproof",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in tpvirtualstudyproof (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7716"
+    },
+    {
+      "name": "tronapihelper",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-10",
+      "description": "Malicious code in tronapihelper (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/tronapihelper"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191911"
+    },
+    {
+      "name": "tronyx",
+      "versions_affected": [
+        "0.0.1",
+        "0.0.2",
+        "0.0.3",
+        "0.0.4",
+        "0.0.5",
+        "0.0.6",
+        "0.0.7",
+        "0.0.8",
+        "0.0.9",
+        "0.0.10",
+        "0.0.11",
+        "0.0.12",
+        "0.0.13",
+        "0.0.15",
+        "0.0.16",
+        "0.0.17",
+        "0.0.18",
+        "0.5.0",
+        "0.5.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-03",
+      "description": "Malicious code in tronyx (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2005"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2005"
+    },
+    {
+      "name": "ultragrand",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in ultragrand (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7753"
+    },
+    {
+      "name": "urlcandy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-23",
+      "description": "Malicious code in urlcandy (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7777"
+    },
+    {
+      "name": "urz",
+      "versions_affected": [
+        "0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in urz (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-6189"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6189"
+    },
+    {
+      "name": "vernvidia",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-25",
+      "description": "Malicious code in vernvidia (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7809"
+    },
+    {
+      "name": "visaget",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in visaget (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7846"
+    },
+    {
+      "name": "vmpep",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-24",
+      "description": "Malicious code in vmpep (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/the-skeleton-squad-tracing-the-origins-and-scope-of-5000-malicious-packages-on-pypi-7516c16e4da9"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-7885"
+    },
+    {
+      "name": "walletdecoders",
+      "versions_affected": [
+        "1.5",
+        "1.5.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-10-16",
+      "description": "Malicious code in walletdecoders (PyPI)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-10190"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10190"
+    },
+    {
+      "name": "web3-p6",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-28",
+      "description": "Malicious code in web3-p6 (PyPI)",
+      "references": [
+        "https://www.cert.at/en/blog/2024/3/hobby-hunter-notes-pypi-under-attack",
+        "https://blog.phylum.io/typosquatting-campaign-targets-python-developers/",
+        "https://bad-packages.kam193.eu/pypi/package/web3-p6"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-10201"
+    },
+    {
+      "name": "webscket-client",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in webscket-client (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2368"
+    },
+    {
+      "name": "websoockets",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-09",
+      "description": "Malicious code in websoockets (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2410"
+    },
+    {
+      "name": "wisecloudsecrets",
+      "versions_affected": [
+        "1.4.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-02",
+      "description": "Malicious code in wisecloudsecrets (PyPI)",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/wisecloudsecrets"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-1143"
+    },
+    {
+      "name": "xlsxwrriter",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in xlsxwrriter (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2436"
+    },
+    {
+      "name": "xwormclient",
+      "versions_affected": [
+        "0.1.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-03",
+      "description": "Malicious code in xwormclient (PyPI)",
+      "references": [
+        "https://www.virustotal.com/gui/file/b72c29249dee7744ef350444177c65cf34ae8543295dc0b45d20154f564e6c4c/detection",
+        "https://www.virustotal.com/gui/file/243dcfb04a7d3729ccdd58bf7e764ff1b39a8d8f886528d633cca2230797e799/detection",
+        "https://www.virustotal.com/gui/file/7146846de021736051dd919b0b6ab35a64b50fae1c9cca60d301f72795bafaec/detection"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191938"
+    },
+    {
+      "name": "ysocks",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-02-11",
+      "description": "Malicious code in ysocks (PyPI)",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-2469"
+    }
+  ],
+  "sources": {
+    "ossf-malicious-packages": {
+      "url": "https://github.com/ossf/malicious-packages",
+      "commit": "aa66cb2d5ed2b95be1e33d08777b34264b5e0354",
+      "ingested_at": "2026-05-14T16:01:45Z",
+      "entries_from_source": 250
+    }
+  }
+}

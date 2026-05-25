@@ -1,0 +1,393 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish (must already exist)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  # Cross-compile every target on a single Linux runner. The resulting
+  # binaries are uploaded as `raw-<goos>-<goarch>` artifacts and handed
+  # off to platform-specific jobs below for signing + checksumming.
+  build:
+    name: Cross-compile skills-check ${{ matrix.goos }}/${{ matrix.goarch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.22"
+          cache: true
+
+      - name: Verify go.sum is intact
+        run: go mod verify
+
+      - name: Reproducible build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+          SOURCE_DATE_EPOCH: "0"
+          SKILLS_LIBRARY_PUBKEY_B64: ${{ secrets.SKILLS_LIBRARY_PUBKEY_B64 }}
+          SKILLS_LIBRARY_PUBKEY_ID: ${{ secrets.SKILLS_LIBRARY_PUBKEY_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="skills-check-${GOOS}-${GOARCH}"
+          if [ "$GOOS" = "windows" ]; then
+            out="${out}.exe"
+          fi
+          mkdir -p dist-build
+          go build \
+            -trimpath \
+            -ldflags "-s -w \
+              -X github.com/kennguy3n/skills-library/cmd/skills-check/cmd.CLIVersion=${GITHUB_REF_NAME:-dev} \
+              -X github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKey=${SKILLS_LIBRARY_PUBKEY_B64:-} \
+              -X github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKeyID=${SKILLS_LIBRARY_PUBKEY_ID:-} \
+            " \
+            -o "dist-build/${out}" \
+            ./cmd/skills-check
+
+      - name: Upload unsigned binary
+        uses: actions/upload-artifact@v5
+        with:
+          name: raw-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist-build/
+
+  # Linux binaries are not code-signed. This job just computes checksums
+  # and re-uploads the artifact under the canonical name that `publish`
+  # consumes.
+  finalize-linux:
+    name: Checksum Linux ${{ matrix.goarch }}
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        goarch: [amd64, arm64]
+    steps:
+      - name: Download unsigned binary
+        uses: actions/download-artifact@v5
+        with:
+          name: raw-linux-${{ matrix.goarch }}
+          path: dist-build/
+
+      - name: SHA-256 of binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist-build
+          sha256sum skills-check-linux-${{ matrix.goarch }} \
+            > checksums-linux-${{ matrix.goarch }}.txt
+
+      - name: Upload final binary artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: skills-check-linux-${{ matrix.goarch }}
+          path: dist-build/
+
+  # macOS Developer ID signing + notarization. Runs on `macos-latest`
+  # so the Apple toolchain (`security`, `codesign`, `ditto`,
+  # `xcrun notarytool`) is available. When `secrets.APPLE_DEVELOPER_ID`
+  # is not configured the binary is passed through unsigned and the
+  # release still succeeds (with a `shasum` step on the unsigned bytes).
+  sign-macos:
+    name: Sign macOS ${{ matrix.goarch }}
+    needs: build
+    runs-on: macos-latest
+    env:
+      APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+    strategy:
+      fail-fast: false
+      matrix:
+        goarch: [amd64, arm64]
+    steps:
+      - name: Download unsigned binary
+        uses: actions/download-artifact@v5
+        with:
+          name: raw-darwin-${{ matrix.goarch }}
+          path: dist-build/
+
+      - name: Sign and notarize (Developer ID + notarytool)
+        if: env.APPLE_DEVELOPER_ID != ''
+        env:
+          APPLE_DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+          APPLE_DEVELOPER_ID_CERT_P12_BASE64: ${{ secrets.APPLE_DEVELOPER_ID_CERT_P12_BASE64 }}
+          APPLE_DEVELOPER_ID_CERT_PASSWORD: ${{ secrets.APPLE_DEVELOPER_ID_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_NOTARY_PASSWORD: ${{ secrets.APPLE_NOTARY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="skills-check-darwin-${{ matrix.goarch }}"
+          echo "$APPLE_DEVELOPER_ID_CERT_P12_BASE64" | base64 -d > /tmp/cert.p12
+          security create-keychain -p actions build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p actions build.keychain
+          security import /tmp/cert.p12 -k build.keychain -P "$APPLE_DEVELOPER_ID_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k actions build.keychain
+          codesign --force --options runtime --timestamp \
+            --sign "$APPLE_DEVELOPER_ID" "dist-build/${out}"
+          ditto -c -k --keepParent "dist-build/${out}" "/tmp/${out}.zip"
+          xcrun notarytool submit "/tmp/${out}.zip" \
+            --apple-id "$APPLE_ID" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_NOTARY_PASSWORD" \
+            --wait
+          codesign --verify --strict --verbose=2 "dist-build/${out}"
+
+      # `shasum -a 256` is the macOS-native equivalent of `sha256sum`
+      # and produces identical output (lowercase hex + two spaces + name).
+      - name: SHA-256 of binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist-build
+          shasum -a 256 skills-check-darwin-${{ matrix.goarch }} \
+            > checksums-darwin-${{ matrix.goarch }}.txt
+
+      - name: Upload final binary artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: skills-check-darwin-${{ matrix.goarch }}
+          path: dist-build/
+
+  # Windows Authenticode signing. Runs on `windows-latest` so
+  # `signtool.exe` (shipped with the Windows SDK) is available. When
+  # `secrets.WINDOWS_CERT_PFX` is not configured the binary is passed
+  # through unsigned.
+  sign-windows:
+    name: Sign Windows amd64
+    needs: build
+    runs-on: windows-latest
+    env:
+      WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX }}
+    steps:
+      - name: Download unsigned binary
+        uses: actions/download-artifact@v5
+        with:
+          name: raw-windows-amd64
+          path: dist-build/
+
+      - name: Sign (Authenticode)
+        if: env.WINDOWS_CERT_PFX != ''
+        env:
+          WINDOWS_CERT_PFX: ${{ secrets.WINDOWS_CERT_PFX }}
+          WINDOWS_CERT_PFX_PASSWORD: ${{ secrets.WINDOWS_CERT_PFX_PASSWORD }}
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $bin = "dist-build/skills-check-windows-amd64.exe"
+          $pfxPath = Join-Path $env:RUNNER_TEMP 'cert.pfx'
+          [System.IO.File]::WriteAllBytes($pfxPath, [System.Convert]::FromBase64String($env:WINDOWS_CERT_PFX))
+          $signtool = (Get-ChildItem 'C:/Program Files (x86)/Windows Kits/10/bin' -Recurse -Filter signtool.exe `
+            | Where-Object { $_.FullName -match '\\x64\\' } `
+            | Sort-Object FullName -Descending `
+            | Select-Object -First 1).FullName
+          if (-not $signtool) { throw 'signtool.exe not found on runner' }
+          & $signtool sign `
+            /f $pfxPath `
+            /p $env:WINDOWS_CERT_PFX_PASSWORD `
+            /tr 'http://timestamp.digicert.com' `
+            /td sha256 `
+            /fd sha256 `
+            $bin
+          & $signtool verify /pa $bin
+
+      - name: SHA-256 of binary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Set-Location dist-build
+          $hash = (Get-FileHash skills-check-windows-amd64.exe -Algorithm SHA256).Hash.ToLower()
+          # Match the `sha256sum` output format: "<hash>  <filename>\n".
+          # Use UTF-8 without BOM so the file reads cleanly on Unix tooling.
+          $line = "$hash  skills-check-windows-amd64.exe`n"
+          [System.IO.File]::WriteAllText("checksums-windows-amd64.txt", $line, (New-Object System.Text.UTF8Encoding $false))
+
+      - name: Upload final binary artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: skills-check-windows-amd64
+          path: dist-build/
+
+  publish:
+    name: Compute manifest and publish release assets
+    needs: [finalize-linux, sign-macos, sign-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.22"
+          cache: true
+
+      - name: Build local skills-check (for manifest tooling)
+        run: go build -trimpath -ldflags "-s -w" -o /tmp/skills-check ./cmd/skills-check
+
+      - name: Compute manifest checksums
+        run: /tmp/skills-check manifest compute --path . --write
+
+      - name: Verify manifest checksums
+        run: /tmp/skills-check manifest verify --path . --checksums-only
+
+      - name: Compute delta against previous version (best effort)
+        shell: bash
+        run: |
+          set -e
+          mkdir -p deltas
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            echo "no previous tag; skipping delta"
+            exit 0
+          fi
+          PREV_MANIFEST=$(mktemp)
+          if git show "$PREV_TAG:manifest.json" > "$PREV_MANIFEST" 2>/dev/null; then
+            /tmp/skills-check manifest delta --from "$PREV_MANIFEST" --to manifest.json --out deltas || true
+          fi
+
+      - name: Download every binary artifact
+        uses: actions/download-artifact@v5
+        with:
+          path: artifacts/
+          # Only pull the signed/finalized artifacts; the `raw-*`
+          # artifacts are intermediate and must not appear in the
+          # release.
+          pattern: skills-check-*
+
+      - name: Build full OSV cache from upstream
+        # The committed `vulnerabilities/osv/` tree is a small
+        # latest-first sample (see scripts/ingest-osv.py:DEFAULT_PER_ECO);
+        # the release additionally ships the full upstream archive as a
+        # standalone asset so `skills-check fetch-vulns --from-release`
+        # can populate the user cache without hitting osv.dev directly.
+        shell: bash
+        run: |
+          set -e
+          mkdir -p osv-full-build/osv
+          python3 scripts/ingest-osv.py \
+            --per-ecosystem 0 \
+            --ordering latest-first \
+            --severity-priority \
+            --output-dir osv-full-build/osv
+
+      - name: Stage release assets
+        shell: bash
+        run: |
+          set -e
+          mkdir -p release
+          # Flatten binary artifacts.
+          find artifacts -type f \( -name 'skills-check-*' -o -name 'checksums-*.txt' \) -exec cp {} release/ \;
+          cp manifest.json release/
+          # Bundle the distributable library tree into a single tarball so
+          # `skills-check update` (default --source) can pull the whole
+          # library in one HTTP request. Individual files under skills/,
+          # vulnerabilities/, dictionaries/, and dist/ are NOT published
+          # as separate release assets — this bundle is the canonical
+          # channel for them. Include manifest.json inside the tarball so
+          # NewHTTPTarballSource → NewTarballSource → NewDirSource finds
+          # it after extraction.
+          tar -czf release/skills-library-data.tar.gz \
+            manifest.json \
+            skills \
+            vulnerabilities \
+            dictionaries \
+            dist \
+            rules \
+            compliance \
+            profiles \
+            locales
+          # Pack the full upstream OSV cache as a separate asset. The
+          # archive's top-level entry is `osv/`, so `fetch-vulns
+          # --from-release` can extract it directly into the user's
+          # cache root and end up with `<cache>/osv/<eco>/...` — the
+          # same layout the scanner consults.
+          tar -C osv-full-build -czf release/osv-cache.tar.gz osv
+          if [ -d deltas ]; then
+            tar -C deltas -czf release/deltas.tar.gz . || true
+          fi
+          (cd release && sha256sum * > SHA256SUMS.txt)
+
+      - name: Tag-resolved release name
+        id: tag
+        shell: bash
+        env:
+          TAG_INPUT: ${{ inputs.tag }}
+        run: |
+          if [ -n "$TAG_INPUT" ]; then
+            echo "tag=$TAG_INPUT" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish GitHub Release (draft)
+        # The release is created as a DRAFT so that consumers cannot
+        # download it via `skills-check update` (which follows the
+        # "latest" pointer) before the manifest has been signed
+        # offline and re-verified by `sign-and-publish.yml`. The
+        # draft → sign → verify → publish flow is documented in
+        # SIGNING.md. Running `sign-and-publish.yml` after the
+        # release manager re-uploads a signed manifest.json marks
+        # the release as non-draft.
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          files: |
+            release/*
+          fail_on_unmatched_files: true
+          draft: true
+          body: |
+            Automated Skills Library release for tag ${{ steps.tag.outputs.tag }}.
+
+            > ⚠️ This release is a **draft**. The bundled `manifest.json`
+            > still contains `"signature": "TBD"` and is not consumable by
+            > `skills-check update`. The release manager must sign the
+            > manifest offline per [SIGNING.md](../SIGNING.md), re-upload
+            > it to the draft, and then run the `Sign & publish` workflow
+            > (`.github/workflows/sign-and-publish.yml`) to mark this
+            > release as published.
+
+            **Assets:**
+            - `skills-check-<goos>-<goarch>[.exe]` — CLI binary (reproducible build).
+            - `checksums-<goos>-<goarch>.txt` — SHA-256 of each binary.
+            - `manifest.json` — library manifest (signed out-of-band before publish).
+            - `skills-library-data.tar.gz` — library payload (skills, vulnerabilities, dictionaries, dist, rules, compliance, profiles, locales, manifest.json). This is what `skills-check update` downloads by default. The bundled `vulnerabilities/osv/` tree is a small latest-first sample.
+            - `osv-cache.tar.gz` — full upstream OSV catalogue (`osv/<eco>/...`). Consumed by `skills-check fetch-vulns --from-release` to populate the user cache with complete coverage without hitting osv.dev.
+            - `deltas.tar.gz` — patch set against the previous release (best effort).
+            - `SHA256SUMS.txt` — checksum of every asset above.
+
+            **Verification (post-publish):**
+            - Verify the binary with the matching `checksums-<goos>-<goarch>.txt` file.
+            - Verify `manifest.json` with `skills-check manifest verify --path .`.
+            - The `Sign & publish` workflow runs the same verification in CI
+              before flipping the draft to public.

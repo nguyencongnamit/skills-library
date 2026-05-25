@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-15",
+  "fixture": "curl-pipe-sh.yml",
+  "description": "The fixture has no top-level `permissions:` block and one `curl ... | sh` step, so the scanner is expected to fire on both rules. Known residual FP: the regex-only `gha-no-curl-pipe-bash` pass also matches the `# 'curl ... | sh'` and `# 'curl-pipe-sh'` comment lines (lines 1 and 5). The duplicate is tracked but not added here because it is a scanner-side miss, not a legitimate finding.",
+  "expected_findings": [
+    {
+      "rule": "gha-default-permissions-read",
+      "ecosystem": "github-actions",
+      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+    },
+    {
+      "rule": "gha-no-curl-pipe-bash",
+      "ecosystem": "github-actions",
+      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+    }
+  ]
+}

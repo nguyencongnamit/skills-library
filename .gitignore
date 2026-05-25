@@ -1,0 +1,33 @@
+# Build artifacts
+/skills-check
+/skills-check.exe
+/skills-mcp
+/skills-mcp.exe
+/dist-bin/
+/build/
+*.test
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local config (private-repo)
+.skills-check.yaml
+
+# Editor scratch
+.vscode/
+.idea/
+*.swp
+
+# Python build/test
+__pycache__/
+*.pyc
+.pytest_cache/
+sdk/python/*.egg-info/
+sdk/python/build/
+sdk/python/dist/
+
+# TypeScript build
+sdk/typescript/node_modules/
+sdk/typescript/dist/
+/.osv-tmp/

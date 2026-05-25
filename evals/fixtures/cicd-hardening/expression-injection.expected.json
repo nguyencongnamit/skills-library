@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-15",
+  "fixture": "expression-injection.yml",
+  "description": "Fixture reproduces the canonical GitHub Actions script-injection sink: `${{ github.event.issue.title }}` interpolated directly into a `run:` block. The workflow also lacks a top-level `permissions:` block, so three findings are expected — the regex pass (gha-no-untrusted-script-injection), the AST pass (gha-ast-expression-injection), and the default-permissions advisory.",
+  "expected_findings": [
+    {"rule": "gha-default-permissions-read", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-no-untrusted-script-injection", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"},
+    {"rule": "gha-ast-expression-injection", "ecosystem": "github-actions", "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"}
+  ]
+}

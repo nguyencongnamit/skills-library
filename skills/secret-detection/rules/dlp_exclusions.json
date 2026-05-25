@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "exclusions": [
+    {
+      "applies_to": "AWS Access Key",
+      "type": "dictionary",
+      "words": ["AKIAIOSFODNN7EXAMPLE"],
+      "match_type": "exact"
+    },
+    {
+      "applies_to": "AWS Secret Access Key",
+      "type": "dictionary",
+      "words": ["wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"],
+      "match_type": "exact"
+    },
+    {
+      "applies_to": "*",
+      "type": "dictionary",
+      "words": [
+        "placeholder",
+        "example",
+        "test",
+        "dummy",
+        "sample",
+        "xxx",
+        "your-",
+        "CHANGEME",
+        "REPLACE_ME",
+        "TODO",
+        "FIXME",
+        "your-key-here",
+        "your-secret-here",
+        "your-token-here"
+      ],
+      "window": 50
+    },
+    {
+      "applies_to": "*",
+      "type": "regex",
+      "pattern": "(test|spec|fixture|mock|fake|stub)\\.(go|py|js|ts|rs|java|rb)$",
+      "match_target": "file_path"
+    },
+    {
+      "applies_to": "Generic API Key",
+      "type": "regex",
+      "pattern": "(?i)(example|test|placeholder|dummy)[_\\-]?api[_\\-]?key"
+    },
+    {
+      "applies_to": "JWT Token",
+      "type": "dictionary",
+      "words": [
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+      ],
+      "match_type": "prefix"
+    }
+  ]
+}

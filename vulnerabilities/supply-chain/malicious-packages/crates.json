@@ -1,0 +1,302 @@
+{
+  "schema_version": "1.0",
+  "ecosystem": "crates",
+  "last_updated": "2026-05-14T16:01:45Z",
+  "entries": [
+    {
+      "name": "rustdecimal",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2022-05-10",
+      "description": "Typosquat of the legitimate rust_decimal crate. The malicious version contained code that downloaded and executed a binary payload designed to steal credentials and target Linux systems.",
+      "references": [
+        "https://blog.rust-lang.org/2022/05/10/cve-2022-36315.html",
+        "https://blog.phylum.io/typosquatting-malware-found-in-rust-crate"
+      ],
+      "indicators": [
+        "name differs from rust_decimal by a single character",
+        "build.rs invokes external command",
+        "downloads payload from attacker-controlled URL"
+      ],
+      "cve": "CVE-2022-36315",
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "anyhow_ext",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2023-07-19",
+      "description": "Typosquat of the popular anyhow crate. The package contained no legitimate functionality and was published in an attempt to lure developers into a malicious dependency tree.",
+      "references": [
+        "https://blog.phylum.io/rust-cargo-supply-chain-attack-research-summer-2023/"
+      ],
+      "indicators": [
+        "name superficially extends anyhow",
+        "empty or trivial src/lib.rs",
+        "publisher has no other reputable crates"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "postgress",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2023-07-19",
+      "description": "Double-s typosquat of the postgres crate. Used in a coordinated campaign of squat crates published in mid-2023.",
+      "references": [
+        "https://blog.phylum.io/rust-cargo-supply-chain-attack-research-summer-2023/"
+      ],
+      "indicators": [
+        "name differs from postgres by one duplicated character",
+        "published by short-lived account",
+        "no meaningful source"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "serde_derive_internals_typo",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "medium",
+      "discovered": "2023-08-22",
+      "description": "Squat of the internal serde_derive_internals crate. Removed from crates.io after disclosure; recorded here so coding assistants flag any reappearance.",
+      "references": [
+        "https://blog.phylum.io/rust-cargo-supply-chain-attack-research-summer-2023/"
+      ],
+      "indicators": [
+        "name appends `_typo` to legitimate crate",
+        "publishes faster than legitimate maintainers"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "tokei-pretty",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "medium",
+      "discovered": "2023-08-22",
+      "description": "Variation on the popular tokei crate name. Part of the Phylum-disclosed cargo typosquat wave of 2023. Did not contain a live payload but established a foothold name.",
+      "references": [
+        "https://blog.phylum.io/rust-cargo-supply-chain-attack-research-summer-2023/"
+      ],
+      "indicators": [
+        "name suffix `-pretty` on popular crate",
+        "metadata mimics legitimate package description"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "openssh-key-parser",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-09-13",
+      "description": "Crate name suggesting SSH key handling. Removed by crates.io security team after being identified as part of a credential-harvesting campaign.",
+      "references": [
+        "https://blog.phylum.io/rust-cargo-supply-chain-attack-research-summer-2023/"
+      ],
+      "indicators": [
+        "claims to parse SSH keys",
+        "reads files outside crate working directory",
+        "network call during build"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "fast_log_async",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "medium",
+      "discovered": "2024-02-14",
+      "description": "Suffix-style typosquat of fast_log. Squatters used the package to test crates.io's takedown response time.",
+      "references": [
+        "https://blog.phylum.io/cargo-typosquat-roundup-q1-2024/"
+      ],
+      "indicators": [
+        "name suffix `_async` on popular crate",
+        "build.rs writes outside OUT_DIR"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "actix_web_extras",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "medium",
+      "discovered": "2024-02-14",
+      "description": "Squat of actix-web with `_extras` suffix. AI coding assistants must not suggest this name; the canonical extension is `actix-web-extras` (hyphen, not underscore) and that namespace is currently empty.",
+      "references": [
+        "https://blog.phylum.io/cargo-typosquat-roundup-q1-2024/"
+      ],
+      "indicators": [
+        "underscore where canonical name uses hyphen",
+        "extras namespace claimed without permission"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "amzn-codewhisperer-streaming-client",
+      "versions_affected": [
+        "99.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-27",
+      "description": "Malicious code in amzn_codewhisperer_streaming_client (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-3103"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3103"
+    },
+    {
+      "name": "amzn-consolas-client",
+      "versions_affected": [
+        "99.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-27",
+      "description": "Malicious code in amzn_consolas_client (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-3101"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3101"
+    },
+    {
+      "name": "littest",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-11-03",
+      "description": "Malicious code in littest (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-8429"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-8429"
+    },
+    {
+      "name": "lsh",
+      "versions_affected": [
+        "99.0.1",
+        "99.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-28",
+      "description": "Malicious code in lsh (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-3126"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3126"
+    },
+    {
+      "name": "mysten-metrics",
+      "versions_affected": [
+        "9.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-20",
+      "description": "Malicious code in mysten_metrics (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-2958"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2958"
+    },
+    {
+      "name": "replit_ruspty",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-04",
+      "description": "Malicious code in replit_ruspty (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-49350"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-49350"
+    },
+    {
+      "name": "semantic-search-client",
+      "versions_affected": [
+        "99.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-27",
+      "description": "Malicious code in semantic_search_client (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-3102"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3102"
+    },
+    {
+      "name": "supertag",
+      "versions_affected": [
+        "99.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-28",
+      "description": "Malicious code in supertag (crates.io)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-3129"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3129"
+    }
+  ],
+  "sources": {
+    "ossf-malicious-packages": {
+      "url": "https://github.com/ossf/malicious-packages",
+      "commit": "aa66cb2d5ed2b95be1e33d08777b34264b5e0354",
+      "ingested_at": "2026-05-14T16:01:45Z",
+      "entries_from_source": 8
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "infrastructure-security",
+  "version": "1.0.0",
+  "title": "Infrastructure Security",
+  "description": "Apply hardening rules for Kubernetes, Docker, and Terraform infrastructure-as-code",
+  "category": "hardening",
+  "severity": "high",
+  "applies_to": [
+    "when generating Dockerfile content",
+    "when generating Kubernetes manifests or Helm charts",
+    "when generating Terraform or CloudFormation",
+    "when reviewing IaC PRs"
+  ],
+  "languages": [
+    "yaml",
+    "hcl",
+    "dockerfile"
+  ],
+  "token_budget": {
+    "minimal": 650,
+    "compact": 950,
+    "full": 2500
+  },
+  "rules_path": "checklists/",
+  "related_skills": [
+    "api-security",
+    "compliance-awareness"
+  ],
+  "last_updated": "2026-05-12",
+  "sources": [
+    "CIS Kubernetes Benchmark",
+    "CIS Docker Benchmark",
+    "NSA/CISA Kubernetes Hardening Guidance",
+    "HashiCorp Terraform Security Best Practices"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.0",
+  "description": "Skills Library CLI for AI-assisted coding tools.",
+  "homepage": "https://github.com/kennguy3n/skills-library",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/kennguy3n/skills-library/releases/download/v0.0.0/skills-check-windows-amd64.exe#/skills-check.exe",
+      "hash": "REPLACE_WITH_WINDOWS_AMD64_SHA256"
+    }
+  },
+  "bin": "skills-check.exe",
+  "checkver": {
+    "github": "https://github.com/kennguy3n/skills-library"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/kennguy3n/skills-library/releases/download/v$version/skills-check-windows-amd64.exe#/skills-check.exe"
+      }
+    }
+  }
+}

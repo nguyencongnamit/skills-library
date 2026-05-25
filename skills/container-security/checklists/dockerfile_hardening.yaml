@@ -1,0 +1,44 @@
+schema_version: "1.0"
+framework: "CIS Docker Benchmark v1.6 + NIST SP 800-190"
+last_updated: "2026-05-13"
+patterns:
+  - id: dkr-multi-stage
+    severity: high
+    rule: "Dockerfile uses multi-stage builds; final stage doesn't carry build toolchain"
+  - id: dkr-pinned-base-digest
+    severity: high
+    rule: "Final FROM is pinned by @sha256:<digest>"
+    cwe: 1357
+  - id: dkr-non-root-user
+    severity: critical
+    rule: "Dockerfile ends with USER <numeric-uid>; uid >= 10000 to satisfy K8s runAsNonRoot policies"
+    cwe: 250
+  - id: dkr-dockerignore-exists
+    severity: high
+    rule: "A .dockerignore file exists and excludes .git, node_modules, .env*, *.pem, *.key, dist/, coverage/"
+  - id: dkr-no-secrets-in-env
+    severity: critical
+    rule: "No ENV/ARG sets API keys, DB credentials, or tokens; use --secret mounts or runtime injection"
+    cwe: 798
+  - id: dkr-healthcheck-defined
+    severity: medium
+    rule: "Long-running services have HEALTHCHECK"
+  - id: dkr-no-add-remote
+    severity: medium
+    rule: "ADD is not used to fetch http(s) resources; use RUN curl --fail with checksum verify"
+  - id: dkr-no-curl-pipe-sh
+    severity: critical
+    rule: "Build does not run curl|sh, wget -O-|sh, or similar pipes from untrusted hosts"
+    cwe: 829
+  - id: dkr-no-secret-leak-in-layers
+    severity: critical
+    rule: "Secrets are mounted with RUN --mount=type=secret, not COPY'd or ENV'd"
+  - id: dkr-image-scan-required
+    severity: high
+    rule: "CI runs Trivy/Grype/Snyk on the built image and fails on CRITICAL"
+  - id: dkr-sbom-emitted
+    severity: medium
+    rule: "Build emits an SBOM (syft / docker sbom) and attaches it to the image"
+  - id: dkr-build-with-buildkit
+    severity: low
+    rule: "BuildKit is enabled to get secret-mount support and better cache isolation"

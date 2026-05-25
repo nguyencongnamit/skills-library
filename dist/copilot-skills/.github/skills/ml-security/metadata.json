@@ -1,0 +1,38 @@
+{
+  "id": "ml-security",
+  "version": "1.0.0",
+  "title": "ML / LLM Security",
+  "description": "Prompt injection, model poisoning, deserialization attacks, PII in training data, secret leaks in notebooks",
+  "category": "prevention",
+  "severity": "high",
+  "applies_to": [
+    "when generating code that calls an LLM API or builds an LLM-driven agent",
+    "when generating code that loads ML models from disk / Hub / S3",
+    "when generating data pipelines that ingest user content for fine-tuning"
+  ],
+  "languages": [
+    "python",
+    "javascript",
+    "typescript",
+    "jupyter",
+    "go"
+  ],
+  "token_budget": {
+    "minimal": 1000,
+    "compact": 1200,
+    "full": 2700
+  },
+  "rules_path": "rules/",
+  "related_skills": [
+    "secret-detection",
+    "supply-chain-security",
+    "api-security"
+  ],
+  "last_updated": "2026-05-13",
+  "sources": [
+    "OWASP Top 10 for LLM Applications 2025",
+    "NIST AI 100-2 (Adversarial Machine Learning)",
+    "MITRE ATLAS (Adversarial Threat Landscape for AI Systems)",
+    "CWE-502, CWE-1039, CWE-1426"
+  ]
+}
