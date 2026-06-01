@@ -80,6 +80,87 @@ func TestCheckDependencyEventStreamNpm(t *testing.T) {
 	}
 }
 
+// TestCheckDependencyDoesNotLeakCrossEcosystemCVEs guards the ecosystem
+// filter added to CheckDependency: an npm query for "express" must not
+// surface Apache Struts2 Java CVEs whose description happens to contain
+// the word "expressions". Prior to the filter, four Java CVEs leaked
+// through as false positives because the matcher only did a substring
+// check on entry.Name + entry.Description.
+func TestCheckDependencyDoesNotLeakCrossEcosystemCVEs(t *testing.T) {
+	lib := newLibrary(t)
+	res, err := lib.CheckDependency("express", "4.18.0", "npm")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range res.CVEs {
+		for _, lang := range c.Languages {
+			if lang == "java" || lang == "kotlin" || lang == "scala" || lang == "groovy" {
+				t.Errorf("CheckDependency(express, npm) leaked %s/%s CVE %s (%s); ecosystem filter regressed",
+					c.CVE, lang, c.CVE, c.Name)
+			}
+		}
+	}
+}
+
+// TestCheckDependencyKeepsSameLanguageCVEs ensures the ecosystem filter
+// is not over-tight: a maven query for "spring" must still surface the
+// Java/Kotlin Spring CVEs in cve_patterns.json.
+func TestCheckDependencyKeepsSameLanguageCVEs(t *testing.T) {
+	lib := newLibrary(t)
+	res, err := lib.CheckDependency("spring", "", "maven")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(res.CVEs) == 0 {
+		t.Fatal("CheckDependency(spring, maven) returned 0 CVE; expected Spring CVEs from cve_patterns.json")
+	}
+	// Every CVE returned must declare at least one JVM language, otherwise
+	// the filter is admitting unrelated entries.
+	jvm := map[string]bool{"java": true, "kotlin": true, "scala": true, "groovy": true}
+	for _, c := range res.CVEs {
+		matched := false
+		for _, l := range c.Languages {
+			if jvm[strings.ToLower(l)] {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			t.Errorf("CheckDependency(spring, maven) returned %s with non-JVM languages %v", c.CVE, c.Languages)
+		}
+	}
+}
+
+// TestCveAppliesToEcosystem exercises the helper directly, covering the
+// three "yes" paths (entry wildcard, ecosystem wildcard, overlap), the
+// "no" path (disjoint sets), and the permissive unknown-ecosystem default.
+func TestCveAppliesToEcosystem(t *testing.T) {
+	cases := []struct {
+		name      string
+		langs     []string
+		ecosystem string
+		want      bool
+	}{
+		{"entry wildcard applies to npm", []string{"*"}, "npm", true},
+		{"entry wildcard applies to maven", []string{"*"}, "maven", true},
+		{"docker accepts java entry", []string{"java"}, "docker", true},
+		{"github-actions accepts python entry", []string{"python"}, "github-actions", true},
+		{"java entry rejected by npm", []string{"java"}, "npm", false},
+		{"kotlin entry accepted by maven", []string{"kotlin"}, "maven", true},
+		{"javascript entry accepted by npm", []string{"javascript", "typescript"}, "npm", true},
+		{"python entry rejected by maven", []string{"python"}, "maven", false},
+		{"case-insensitive overlap", []string{"JavaScript"}, "npm", true},
+		{"unknown ecosystem is permissive", []string{"java"}, "made-up", true},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if got := cveAppliesToEcosystem(c.langs, c.ecosystem); got != c.want {
+				t.Errorf("cveAppliesToEcosystem(%v, %q) = %v, want %v", c.langs, c.ecosystem, got, c.want)
+			}
+		})
+	}
+}
+
 func TestCheckTyposquatLodash(t *testing.T) {
 	lib := newLibrary(t)
 	res, err := lib.CheckTyposquat("lodash", "")
