@@ -148,6 +148,70 @@ type CheckDependencyResult struct {
 	OSVAdvisories []OSVAdvisory     `json:"osv_advisories"`
 }
 
+// ecosystemLanguages maps each package ecosystem to the programming languages
+// it hosts. CheckDependency uses it to filter cve_patterns.json entries by
+// language overlap, so an npm query does not surface Java CVEs that happened
+// to substring-match the package name (e.g. "express" appearing inside the
+// word "expressions" in an Apache Struts2 description).
+//
+// Ecosystems whose containers may run any runtime ("docker", "github-actions"
+// — actions can be JavaScript, composite shell, Docker, etc.) are intentionally
+// wildcarded so language-tagged CVEs still surface for those targets.
+//
+// Keep in sync with knownEcosystems in library.go.
+var ecosystemLanguages = map[string][]string{
+	"npm":            {"javascript", "typescript"},
+	"pypi":           {"python"},
+	"crates":         {"rust"},
+	"go":             {"go"},
+	"rubygems":       {"ruby"},
+	"maven":          {"java", "kotlin", "scala", "groovy"},
+	"nuget":          {"csharp", "c#", ".net", "fsharp"},
+	"composer":       {"php"},
+	"pub":            {"dart"},
+	"swift":          {"swift"},
+	"docker":         {"*"},
+	"github-actions": {"*"},
+}
+
+// cveAppliesToEcosystem reports whether a CVE entry with the given declared
+// languages is relevant to the named ecosystem. An entry applies when:
+//   - the entry's Languages list contains "*" (network appliances and other
+//     language-agnostic CVEs), or
+//   - the ecosystem's expected languages contain "*" (multi-runtime targets
+//     such as docker images or GitHub Actions), or
+//   - the two language sets overlap (case-insensitive).
+//
+// Unknown ecosystems are treated permissively — returning true — so callers
+// see data rather than silent filtering when a new ecosystem is added to
+// knownEcosystems without a corresponding ecosystemLanguages entry.
+func cveAppliesToEcosystem(entryLanguages []string, ecosystem string) bool {
+	for _, l := range entryLanguages {
+		if l == "*" {
+			return true
+		}
+	}
+	ecoLangs, ok := ecosystemLanguages[ecosystem]
+	if !ok {
+		return true
+	}
+	for _, l := range ecoLangs {
+		if l == "*" {
+			return true
+		}
+	}
+	entrySet := make(map[string]struct{}, len(entryLanguages))
+	for _, l := range entryLanguages {
+		entrySet[strings.ToLower(l)] = struct{}{}
+	}
+	for _, l := range ecoLangs {
+		if _, ok := entrySet[strings.ToLower(l)]; ok {
+			return true
+		}
+	}
+	return false
+}
+
 // CheckDependency unifies lookup_vulnerability with CVE-pattern matching
 // keyed off the package name. A required ecosystem keeps the answer
 // scoped — installers are always ecosystem-specific.
@@ -185,6 +249,14 @@ func (l *Library) CheckDependency(pkg, version, ecosystem string) (*CheckDepende
 		for _, entry := range cve.Entries {
 			hay := strings.ToLower(entry.Name + " " + entry.Description)
 			if !strings.Contains(hay, needle) {
+				continue
+			}
+			// Filter by ecosystem/language overlap. Without this, a substring
+			// match on the package name in an unrelated CVE description (e.g.
+			// "express" inside "OGNL expressions") surfaces CVEs from a
+			// different language family. See cveAppliesToEcosystem for the
+			// matching rules.
+			if !cveAppliesToEcosystem(entry.Languages, eco) {
 				continue
 			}
 			out.CVEs = append(out.CVEs, CVEPatternMatch{
