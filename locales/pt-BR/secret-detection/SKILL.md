@@ -1,7 +1,7 @@
 ---
 id: secret-detection
 language: pt-BR
-source_revision: "9808b0fa"
+source_revision: "1f1b8c7"
 version: "1.4.0"
 title: "Detecção de segredos"
 description: "Detectar e prevenir segredos hardcoded, API keys, tokens e credenciais no código"

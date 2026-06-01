@@ -2,7 +2,7 @@
 id: error-handling-security
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن معالجة الأخطاء"
 description: "لا تتبّعات للمكدس / SQL / مسارات / إصدارات إطار في ردود العميل؛ أخطاء عامّة للخارج وأخطاء مُهيكَلة في السجلات"

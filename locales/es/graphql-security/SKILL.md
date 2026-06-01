@@ -1,7 +1,7 @@
 ---
 id: graphql-security
 language: es
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de GraphQL"
 description: "Defender APIs GraphQL: límites de profundidad/complejidad, introspection en producción, abuso de batching/aliasing, autorización a nivel de campo, persisted queries"

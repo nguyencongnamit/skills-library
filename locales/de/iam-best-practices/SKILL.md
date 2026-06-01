@@ -1,7 +1,7 @@
 ---
 id: iam-best-practices
 language: de
-source_revision: "6de0becf"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Best Practices für Identity & Access Management"
 description: "Least-Privilege-IAM-Design, Key-Rotation, MFA-Enforcement, Role-Assumption und Cross-Account-Access-Muster für AWS / GCP / Azure / Kubernetes"

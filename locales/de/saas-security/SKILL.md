@@ -1,7 +1,7 @@
 ---
 id: saas-security
 language: de
-source_revision: "f231fd47"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "SaaS-Anwendungssicherheit"
 description: "Tokens, Fehlkonfigurationen und Admin-Red-Flags der wichtigsten SaaS-Plattformen erkennen (GWS, Atlassian, Notion, HubSpot, Salesforce, BambooHR, Workday, Odoo, Chat-Plattformen, Zoom, Calendly, NetSuite)"

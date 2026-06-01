@@ -1,7 +1,7 @@
 ---
 id: ssrf-prevention
 language: pt-BR
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Prevenção de SSRF"
 description: "Defesa contra Server-Side Request Forgery: bloqueio de metadata cloud, filtragem de IPs internas, defesa contra DNS rebinding, fetching de URL baseado em allowlist"

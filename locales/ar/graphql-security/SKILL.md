@@ -2,7 +2,7 @@
 id: graphql-security
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن GraphQL"
 description: "الدفاع عن واجهات GraphQL البرمجيّة: حدود العمق/التعقيد، وintrospection في الإنتاج، وإساءة استخدام batching/aliasing، والتفويض على مستوى الحقل، وpersisted queries"

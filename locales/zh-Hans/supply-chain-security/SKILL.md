@@ -1,7 +1,7 @@
 ---
 id: supply-chain-security
 language: zh-Hans
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "供应链安全"
 description: "防御 typosquat、依赖混淆(dependency confusion)和恶意软件包贡献"

@@ -1,7 +1,7 @@
 ---
 id: file-upload-security
 language: fr
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité de l'upload de fichiers"
 description: "Valider les uploads utilisateur : magic bytes MIME, assainissement de filename, limites de taille, domaine de service séparé, scan AV, détection de polyglottes"

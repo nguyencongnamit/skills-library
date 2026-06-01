@@ -2,7 +2,7 @@
 id: ssrf-prevention
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "منع SSRF"
 description: "الدفاع ضدّ Server-Side Request Forgery: حَجب metadata السحابيّة، وتصفية IPs الداخليّة، والدفاع ضدّ DNS rebinding، وجَلب URL بِناءً على allowlist"

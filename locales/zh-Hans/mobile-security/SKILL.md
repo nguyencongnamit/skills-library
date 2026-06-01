@@ -1,7 +1,7 @@
 ---
 id: mobile-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "移动应用安全"
 description: "Android 和 iOS 加固:exported 组件、ATS、keychain、certificate pinning、root/jailbreak 检测"

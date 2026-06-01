@@ -2,7 +2,7 @@
 id: websocket-security
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن WebSocket"
 description: "تأمين endpoints الـ WebSocket: التحقّق من Origin، والمصادقة عند المُصافحة، وحدود حجم / معدّل الرسائل، وwss فقط، والتراجع عند إعادة الاتّصال"

@@ -2,7 +2,7 @@
 id: cicd-security
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن خطوط CI/CD"
 description: "تصليب GitHub Actions و GitLab CI وما يماثلها ضد هجمات سلسلة التوريد، وتسريب الأسرار، وإساءة الاستخدام من نمط pwn-request"

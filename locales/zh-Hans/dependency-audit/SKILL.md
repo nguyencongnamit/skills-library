@@ -1,7 +1,7 @@
 ---
 id: dependency-audit
 language: zh-Hans
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "依赖审计"
 description: "审计项目依赖中的已知漏洞、恶意包和供应链风险"

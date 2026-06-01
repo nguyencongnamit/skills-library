@@ -1,7 +1,7 @@
 ---
 id: cors-security
 language: es
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad CORS"
 description: "Configuración CORS estricta: nada de wildcard con credenciales, allowlist de orígenes, caché de preflight razonable, cabeceras expuestas mínimas"

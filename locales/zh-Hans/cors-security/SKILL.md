@@ -1,7 +1,7 @@
 ---
 id: cors-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "CORS 安全"
 description: "严格 CORS 配置:带凭据时不允许通配符,来源走 allowlist,合理的 preflight 缓存,最小化的暴露 header"

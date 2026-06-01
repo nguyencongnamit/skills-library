@@ -1,7 +1,7 @@
 ---
 id: supply-chain-security
 language: pt-BR
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Segurança de cadeia de suprimentos"
 description: "Defesa contra typosquats, dependency confusion e contribuições de pacote maliciosas"

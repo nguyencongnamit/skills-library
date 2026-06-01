@@ -44,6 +44,20 @@ jobs:
           set -e
           fail=0
           while IFS= read -r f; do
+            # mkdocs.yml legitimately uses MkDocs Material's Python-tag
+            # extension syntax — e.g.
+            #   pymdownx.emoji:
+            #     emoji_index: !!python/name:material.extensions.emoji.twemoji
+            # which is the documented Material extension pattern. The
+            # tag's resolver requires `material.extensions.emoji` to be
+            # importable, which it only is inside the MkDocs build
+            # container. Validating this file here would force us to
+            # install MkDocs Material on the CI runner just to syntax-check
+            # one file, so we skip it. The docs.yml workflow runs a real
+            # `mkdocs build` and catches structural problems there.
+            if [ "$(basename "$f")" = "mkdocs.yml" ]; then
+              continue
+            fi
             if ! python -c "import yaml,sys; yaml.safe_load(open(sys.argv[1]))" "$f"; then
               echo "::error file=$f::Invalid YAML"
               fail=1

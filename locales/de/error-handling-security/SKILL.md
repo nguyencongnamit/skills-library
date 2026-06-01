@@ -1,7 +1,7 @@
 ---
 id: error-handling-security
 language: de
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sicherheit beim Error-Handling"
 description: "Keine Stack-Traces / SQL / Pfade / Framework-Versionen in Client-Responses; generische Fehler nach aussen, strukturierte Fehler in den Logs"

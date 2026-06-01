@@ -1,7 +1,7 @@
 ---
 id: api-security
 language: es
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de API"
 description: "Aplicar los patrones del OWASP API Top 10 para autenticación, autorización y validación de entrada"

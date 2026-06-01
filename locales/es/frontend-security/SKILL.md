@@ -1,7 +1,7 @@
 ---
 id: frontend-security
 language: es
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de frontend"
 description: "Endurecimiento en el navegador: XSS, CSP, CORS, SRI, DOM clobbering, sandboxing de iframe, Trusted Types"

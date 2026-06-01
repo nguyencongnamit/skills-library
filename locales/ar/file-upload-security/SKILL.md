@@ -2,7 +2,7 @@
 id: file-upload-security
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن رفع الملفات"
 description: "التحقّق من رفع المستخدمين: magic bytes لـ MIME، وتنظيف أسماء الملفات، وحدود الحجم، ونطاق تقديم منفصل، وفحص مضاد للفيروسات، وكشف polyglot"

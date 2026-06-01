@@ -1,7 +1,7 @@
 ---
 id: frontend-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "前端安全"
 description: "浏览器侧加固:XSS、CSP、CORS、SRI、DOM clobbering、iframe 沙箱、Trusted Types"

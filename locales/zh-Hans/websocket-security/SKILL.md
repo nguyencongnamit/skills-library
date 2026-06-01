@@ -1,7 +1,7 @@
 ---
 id: websocket-security
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "WebSocket 安全"
 description: "WebSocket endpoint 加固:Origin 校验、握手时认证、消息大小 / 速率限制、wss-only、重连退避"
