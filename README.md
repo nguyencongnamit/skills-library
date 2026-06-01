@@ -487,6 +487,38 @@ The server registers fifteen tools on `tools/list`:
 The library root is resolved from `--path`, then `$SKILLS_LIBRARY_PATH`, then the
 directory containing the binary.
 
+### Same tools, from the terminal
+
+The eight tools that operate on packages or files are also exposed as
+top-level `skills-check` subcommands so they fit into shell scripts,
+pre-commit hooks, and CI steps without anyone having to speak JSON-RPC.
+Both surfaces share the same Go library, so a finding from
+`skills-check scan-dockerfile foo.Dockerfile` is bit-identical to the
+corresponding `scan_dockerfile` MCP tool response.
+
+```bash
+# Package lookups
+skills-check check-dependency  --package axios   --version 0.21.1 --ecosystem npm --vuln-source hybrid
+skills-check check-typosquat   --package lodahs  --ecosystem npm
+skills-check lookup-vulnerability --package event-stream --ecosystem npm
+
+# File scanners
+skills-check scan-secrets         src/server.js
+skills-check scan-dependencies    package-lock.json
+skills-check scan-dockerfile      Dockerfile
+skills-check scan-github-actions  .github/workflows/ci.yml
+
+# CI gate — non-zero exit when findings meet --severity-floor
+skills-check policy-check Dockerfile --severity-floor high
+```
+
+Every scan-/check- subcommand accepts `--format text` (default,
+human-readable), `--format json` (matches the MCP server's response
+schema field-for-field), and where the underlying scanner supports it,
+`--format sarif` for CI ingestion. The `--vuln-source` flag is
+threaded through to the same `local | external | hybrid` modes
+documented in [Live OSV.dev lookups](#live-osvdev-lookups-via---vuln-source-opt-in-enrichment).
+
 ## Building and running tests
 
 ```bash
