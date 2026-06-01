@@ -199,6 +199,14 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "scan_dockerfile_engines",
+			"description": "List Dockerfile scanner engines this server knows about, with per-engine availability (whether the binary is on PATH) and an install hint when missing. Engines are declared in `skills/*/SKILL.md` via `<!-- engine: { ... } -->` markers (see CONTRIBUTING.md for the schema). Call this before `scan_dockerfile` to let the user pick which engine(s) to run; `scan_dockerfile` will accept an `engines` array in a follow-up PR.",
+			"inputSchema": map[string]interface{}{
+				"type":       "object",
+				"properties": map[string]interface{}{},
+			},
+		},
+		{
 			"name":        "explain_finding",
 			"description": "Map a CWE ID, CVE ID, or free-text finding description to the relevant Skills Library skills and CVE-pattern entries. Returns the matching skills (with id, title, category, severity, and a short excerpt of the body) plus any CVE rows whose name or description mentions the query. Use this to attach remediation guidance to a SAST / SCA finding from another scanner.",
 			"inputSchema": map[string]interface{}{

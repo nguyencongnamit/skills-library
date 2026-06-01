@@ -198,21 +198,22 @@ func TestToolsListReturnsExpectedTools(t *testing.T) {
 	result := resp.Result.(map[string]interface{})
 	tools := result["tools"].([]map[string]interface{})
 	want := map[string]bool{
-		"lookup_vulnerability":   false,
-		"check_secret_pattern":   false,
-		"get_skill":              false,
-		"search_skills":          false,
-		"scan_secrets":           false,
-		"check_dependency":       false,
-		"check_typosquat":        false,
-		"map_compliance_control": false,
-		"get_sigma_rule":         false,
-		"version_status":         false,
-		"scan_dependencies":      false,
-		"scan_github_actions":    false,
-		"scan_dockerfile":        false,
-		"explain_finding":        false,
-		"policy_check":           false,
+		"lookup_vulnerability":    false,
+		"check_secret_pattern":    false,
+		"get_skill":               false,
+		"search_skills":           false,
+		"scan_secrets":            false,
+		"check_dependency":        false,
+		"check_typosquat":         false,
+		"map_compliance_control":  false,
+		"get_sigma_rule":          false,
+		"version_status":          false,
+		"scan_dependencies":       false,
+		"scan_github_actions":     false,
+		"scan_dockerfile":         false,
+		"scan_dockerfile_engines": false,
+		"explain_finding":         false,
+		"policy_check":            false,
 	}
 	if len(tools) != len(want) {
 		t.Fatalf("expected %d tools, got %d", len(want), len(tools))
