@@ -1,7 +1,7 @@
 ---
 id: dependency-audit
 language: pt-BR
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Auditoria de dependências"
 description: "Auditar dependências do projeto em busca de vulnerabilidades conhecidas, pacotes maliciosos e riscos de supply chain"

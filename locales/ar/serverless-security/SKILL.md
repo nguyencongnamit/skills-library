@@ -2,7 +2,7 @@
 id: serverless-security
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن serverless"
 description: "تَقسية Lambda / Cloud Functions / Azure Functions: IAM، ومُهَل، وأسرار، وحَقن أحداث"

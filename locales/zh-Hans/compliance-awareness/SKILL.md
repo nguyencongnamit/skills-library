@@ -1,7 +1,7 @@
 ---
 id: compliance-awareness
 language: zh-Hans
-source_revision: "8e503523"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "合规意识"
 description: "把生成的代码映射到 OWASP、CWE 与 SANS Top 25 控制项,实现可追溯"

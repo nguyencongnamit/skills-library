@@ -2,7 +2,7 @@
 id: iam-best-practices
 language: ar
 dir: rtl
-source_revision: "6de0becf"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أفضل ممارسات إدارة الهويّة والوصول"
 description: "تصميم IAM بأقلّ امتياز، وتدوير المفاتيح، وفرض MFA، وتولّي الأدوار، وأنماط الوصول عبر الحسابات لـ AWS / GCP / Azure / Kubernetes"

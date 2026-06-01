@@ -1,7 +1,7 @@
 ---
 id: container-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "容器安全"
 description: "Dockerfile、OCI 镜像、Kubernetes manifest 和 Helm chart 的加固规则"

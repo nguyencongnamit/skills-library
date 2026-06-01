@@ -1,7 +1,7 @@
 ---
 id: supply-chain-security
 language: es
-source_revision: "fbb3a823a2a0"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de la cadena de suministro"
 description: "Detectar paquetes maliciosos, typosquats, confusión de dependencias y compromisos del registro"

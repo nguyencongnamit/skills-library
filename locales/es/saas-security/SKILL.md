@@ -1,7 +1,7 @@
 ---
 id: saas-security
 language: es
-source_revision: "f231fd47"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de aplicaciones SaaS"
 description: "Detectar tokens, misconfiguraciones y red flags de admin en las plataformas SaaS principales (GWS, Atlassian, Notion, HubSpot, Salesforce, BambooHR, Workday, Odoo, plataformas de chat, Zoom, Calendly, NetSuite)"

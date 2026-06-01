@@ -1,7 +1,7 @@
 ---
 id: secure-code-review
 language: de
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sichere Code-Review"
 description: "OWASP Top 10 und CWE Top 25 Patterns bei Codegenerierung und Review anwenden"

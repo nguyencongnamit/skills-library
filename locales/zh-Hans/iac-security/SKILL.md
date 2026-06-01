@@ -1,7 +1,7 @@
 ---
 id: iac-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Infrastructure-as-Code 安全"
 description: "Terraform、CloudFormation 和 Pulumi 的加固规则:state、provider、drift、secret"

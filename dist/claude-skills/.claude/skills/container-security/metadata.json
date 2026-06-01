@@ -17,9 +17,9 @@
     "python"
   ],
   "token_budget": {
-    "minimal": 1000,
-    "compact": 1100,
-    "full": 2500
+    "minimal": 1200,
+    "compact": 1450,
+    "full": 2800
   },
   "rules_path": "checklists/",
   "related_skills": [
@@ -27,7 +27,7 @@
     "iac-security",
     "secret-detection"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-01",
   "sources": [
     "CIS Docker Benchmark v1.6",
     "CIS Kubernetes Benchmark v1.9",

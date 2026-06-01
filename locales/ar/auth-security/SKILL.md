@@ -2,7 +2,7 @@
 id: auth-security
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن المصادقة والتفويض"
 description: "JWT و OAuth 2.0 / OIDC وإدارة الجلسات و CSRF وتجزئة كلمات المرور وإلزام MFA"

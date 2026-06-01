@@ -1,7 +1,7 @@
 ---
 id: crypto-misuse
 language: de
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Krypto-Fehlbenutzung"
 description: "Schwache Cipher, vorhersagbare RNG, zu kleine Keys, Slow-Hash-Misbrauch und non-constant-time Vergleiche blockieren"

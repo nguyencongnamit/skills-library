@@ -2,7 +2,7 @@
 id: ml-security
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن ML / LLM"
 description: "حقن prompt، وتسميم النماذج، وهجمات إلغاء التسلسل، وPII في بيانات التدريب، وتسرّبات أسرار في notebooks"

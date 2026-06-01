@@ -18,8 +18,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/tools/semver"
 	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/kennguy3n/skills-library/internal/tools/semver"
 )
 
 // knownEcosystems whitelists the ecosystem identifiers that may flow into

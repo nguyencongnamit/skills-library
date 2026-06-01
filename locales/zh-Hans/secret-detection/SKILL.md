@@ -1,7 +1,7 @@
 ---
 id: secret-detection
 language: zh-Hans
-source_revision: "9808b0fa"
+source_revision: "1f1b8c7"
 version: "1.4.0"
 title: "秘密检测"
 description: "在代码里检测并阻止硬编码的 secret、API key、token 和凭据"

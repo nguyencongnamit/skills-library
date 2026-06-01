@@ -41,7 +41,7 @@ import (
 	"strings"
 
 	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/mcp"
-	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/tools"
+	"github.com/kennguy3n/skills-library/internal/tools"
 )
 
 func main() {

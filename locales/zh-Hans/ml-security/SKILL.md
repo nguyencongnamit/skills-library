@@ -1,7 +1,7 @@
 ---
 id: ml-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "ML / LLM 安全"
 description: "prompt injection、模型 poisoning、反序列化攻击、训练数据中的 PII、notebook 中的 secret 泄漏"

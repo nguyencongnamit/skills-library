@@ -1,7 +1,7 @@
 ---
 id: iam-best-practices
 language: zh-Hans
-source_revision: "6de0becf"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Identity & Access Management 最佳实践"
 description: "面向 AWS / GCP / Azure / Kubernetes 的最小权限 IAM 设计、密钥轮换、MFA 强制、role 假冒(assume)与跨账户访问模式"

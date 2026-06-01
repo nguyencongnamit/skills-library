@@ -1,7 +1,7 @@
 ---
 id: compliance-awareness
 language: es
-source_revision: "8e503523"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Conciencia de cumplimiento"
 description: "Mapear el código generado contra controles de OWASP, CWE y SANS Top 25 para trazabilidad"

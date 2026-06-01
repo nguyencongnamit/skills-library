@@ -1,7 +1,7 @@
 ---
 id: deserialization-security
 language: fr
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité de la désérialisation"
 description: "Bloquer la désérialisation non sûre en Java, Python, .NET, PHP, Ruby, Node.js — chaînes de gadgets, allowlist de types, alternatives plus sûres"

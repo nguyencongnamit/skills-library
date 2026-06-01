@@ -1,7 +1,7 @@
 ---
 id: api-security
 language: zh-Hans
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "API 安全"
 description: "将 OWASP API Top 10 模式应用于身份认证、授权与输入校验"

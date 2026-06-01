@@ -2,7 +2,7 @@
 id: deserialization-security
 language: ar
 dir: rtl
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن إلغاء التسلسل"
 description: "حظر إلغاء التسلسل غير الآمن في Java و Python و .NET و PHP و Ruby و Node.js — سلاسل gadget، وقوائم سماح للأنواع، وبدائل أكثر أمانًا"
