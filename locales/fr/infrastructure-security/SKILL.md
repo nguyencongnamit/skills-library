@@ -1,7 +1,7 @@
 ---
 id: infrastructure-security
 language: fr
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité de l'infrastructure"
 description: "Appliquer des règles de durcissement pour Kubernetes, Docker et l'infrastructure-as-code Terraform"

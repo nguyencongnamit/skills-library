@@ -1,7 +1,7 @@
 ---
 id: frontend-security
 language: de
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Frontend-Sicherheit"
 description: "Browserseitige Härtung: XSS, CSP, CORS, SRI, DOM-Clobbering, iframe-Sandboxing, Trusted Types"

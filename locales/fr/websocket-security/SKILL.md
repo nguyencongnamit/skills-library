@@ -1,7 +1,7 @@
 ---
 id: websocket-security
 language: fr
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité WebSocket"
 description: "Endpoints WebSocket sécurisés : validation d'Origin, auth au handshake, limites de taille/débit de message, wss-only, backoff de reconnexion"

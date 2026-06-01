@@ -1,7 +1,7 @@
 ---
 id: crypto-misuse
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "密码学误用"
 description: "拦截弱算法、可预测 RNG、密钥过短、slow-hash 误用以及非常量时间的比较"

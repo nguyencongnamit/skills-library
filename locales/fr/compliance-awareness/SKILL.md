@@ -1,7 +1,7 @@
 ---
 id: compliance-awareness
 language: fr
-source_revision: "8e503523"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Conscience de conformité"
 description: "Mapper le code généré sur les contrôles OWASP, CWE et SANS Top 25 pour la traçabilité"

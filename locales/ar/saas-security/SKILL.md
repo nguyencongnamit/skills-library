@@ -2,7 +2,7 @@
 id: saas-security
 language: ar
 dir: rtl
-source_revision: "f231fd47"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن تطبيقات SaaS"
 description: "كشف الـ tokens والإعدادات الخاطئة والرايات الحمراء الإداريّة لِأبرز منصّات SaaS (GWS، وAtlassian، وNotion، وHubSpot، وSalesforce، وBambooHR، وWorkday، وOdoo، ومنصّات الدردشة، وZoom، وCalendly، وNetSuite)"

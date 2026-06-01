@@ -2,7 +2,7 @@
 id: secure-code-review
 language: ar
 dir: rtl
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "مراجعة كود آمنة"
 description: "تطبيق أنماط OWASP Top 10 وCWE Top 25 أثناء توليد الكود ومراجعته"

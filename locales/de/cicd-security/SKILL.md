@@ -1,7 +1,7 @@
 ---
 id: cicd-security
 language: de
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "CI/CD-Pipeline-Sicherheit"
 description: "GitHub Actions, GitLab CI und ähnliche Pipelines gegen Supply-Chain-Angriffe, Secret-Exfiltration und pwn-request-artige Missbräuche härten"

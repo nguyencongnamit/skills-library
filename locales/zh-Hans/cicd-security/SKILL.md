@@ -1,7 +1,7 @@
 ---
 id: cicd-security
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "CI/CD 流水线安全"
 description: "加固 GitHub Actions、GitLab CI 及类似流水线,使其能抵御供应链攻击、密钥外泄以及 pwn-request 类滥用"

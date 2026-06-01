@@ -2,7 +2,7 @@
 id: dependency-audit
 language: ar
 dir: rtl
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "تدقيق التبعيات"
 description: "تدقيق تبعيات المشروع بحثًا عن ثغرات معروفة وحزم خبيثة ومخاطر سلسلة التوريد"

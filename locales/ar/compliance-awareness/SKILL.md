@@ -2,7 +2,7 @@
 id: compliance-awareness
 language: ar
 dir: rtl
-source_revision: "8e503523"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "الوعي بالامتثال"
 description: "مطابقة الشيفرة المولَّدة مع ضوابط OWASP و CWE و SANS Top 25 من أجل التتبع"

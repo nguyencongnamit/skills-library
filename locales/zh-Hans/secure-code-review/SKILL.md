@@ -1,7 +1,7 @@
 ---
 id: secure-code-review
 language: zh-Hans
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "安全代码审查"
 description: "在代码生成与 review 过程中应用 OWASP Top 10 和 CWE Top 25 模式"

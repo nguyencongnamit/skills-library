@@ -1,7 +1,7 @@
 ---
 id: dependency-audit
 language: fr
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Audit des dépendances"
 description: "Auditer les dépendances du projet pour vulnérabilités connues, paquets malveillants et risques supply-chain"

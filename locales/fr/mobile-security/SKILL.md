@@ -1,7 +1,7 @@
 ---
 id: mobile-security
 language: fr
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité des applications mobiles"
 description: "Hardening Android et iOS : composants exported, ATS, keychain, certificate pinning, détection de root/jailbreak"

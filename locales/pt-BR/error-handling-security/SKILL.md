@@ -1,7 +1,7 @@
 ---
 id: error-handling-security
 language: pt-BR
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Segurança no tratamento de erros"
 description: "Sem stack traces / SQL / paths / versões de framework nas respostas ao cliente; erros genéricos para fora, erros estruturados nos logs"

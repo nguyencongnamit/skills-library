@@ -1,7 +1,7 @@
 ---
 id: auth-security
 language: fr
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité d'authentification et d'autorisation"
 description: "JWT, OAuth 2.0 / OIDC, gestion de session, CSRF, hachage de mots de passe et imposition de MFA"

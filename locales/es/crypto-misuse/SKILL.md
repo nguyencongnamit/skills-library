@@ -1,7 +1,7 @@
 ---
 id: crypto-misuse
 language: es
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Mal uso criptográfico"
 description: "Bloquear cifrados débiles, RNG predecibles, claves de tamaño insuficiente, mal uso de slow-hash y comparaciones no constantes en tiempo"

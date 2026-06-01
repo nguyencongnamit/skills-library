@@ -2,7 +2,7 @@
 id: crypto-misuse
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "سوء استخدام التشفير"
 description: "حظر الخوارزميات الضعيفة، RNG قابل للتنبؤ، مفاتيح صغيرة، سوء استخدام slow-hash، والمقارنات غير ثابتة الزمن"

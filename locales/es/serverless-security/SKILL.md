@@ -1,7 +1,7 @@
 ---
 id: serverless-security
 language: es
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad serverless"
 description: "Endurecimiento de Lambda / Cloud Functions / Azure Functions: IAM, timeouts, secrets, event injection"

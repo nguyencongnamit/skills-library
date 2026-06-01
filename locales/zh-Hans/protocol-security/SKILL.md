@@ -1,7 +1,7 @@
 ---
 id: protocol-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "协议安全"
 description: "TLS 1.2+、mTLS、证书校验、HSTS、gRPC 通道凭据、WebSocket Origin 校验"

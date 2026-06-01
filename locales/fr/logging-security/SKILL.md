@@ -1,7 +1,7 @@
 ---
 id: logging-security
 language: fr
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité du logging"
 description: "Prévenir les fuites de secrets/PII dans les logs, les attaques de log-injection, l'absence d'audit trail et la rétention faible"

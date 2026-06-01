@@ -1,7 +1,7 @@
 ---
 id: supply-chain-security
 language: de
-source_revision: "fbb3a823a2a0"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Lieferkettensicherheit"
 description: "Bösartige Pakete, Typosquats, Dependency-Confusion und Registry-Kompromittierungen erkennen"

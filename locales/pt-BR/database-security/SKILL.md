@@ -1,7 +1,7 @@
 ---
 id: database-security
 language: pt-BR
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Segurança de banco de dados"
 description: "Prevenir SQL injection, mau uso de ORM, vazamento de credenciais; exigir usuários de DB com privilégio mínimo e migrations seguras"

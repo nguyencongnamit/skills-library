@@ -2,7 +2,7 @@
 id: infrastructure-security
 language: ar
 dir: rtl
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن البنية التحتيّة"
 description: "تطبيق قواعد تصليب لـ Kubernetes وDocker وinfrastructure-as-code لـ Terraform"

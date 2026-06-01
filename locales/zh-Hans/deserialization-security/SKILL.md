@@ -1,7 +1,7 @@
 ---
 id: deserialization-security
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "反序列化安全"
 description: "在 Java、Python、.NET、PHP、Ruby、Node.js 中阻止不安全反序列化 —— gadget 链、类型 allowlist、更安全的替代方案"

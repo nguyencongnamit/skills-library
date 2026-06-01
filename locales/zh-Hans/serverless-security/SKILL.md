@@ -1,7 +1,7 @@
 ---
 id: serverless-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Serverless 安全"
 description: "Lambda / Cloud Functions / Azure Functions 加固:IAM、超时、secret、event injection"

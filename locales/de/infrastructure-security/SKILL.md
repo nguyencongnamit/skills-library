@@ -1,7 +1,7 @@
 ---
 id: infrastructure-security
 language: de
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Infrastruktur-Sicherheit"
 description: "Härtungsregeln für Kubernetes, Docker und Terraform-Infrastructure-as-Code anwenden"
