@@ -41,6 +41,31 @@ Scheduler) that pulls signed updates every 6 hours and regenerates the IDE
 files in place. No data leaves the workstation other than `GET` requests
 for public release artifacts.
 
+### Optional: live OSV enrichment on developer laptops
+
+For teams whose developer workstations have outbound HTTPS to
+`api.osv.dev`, launching `skills-mcp` with `--vuln-source hybrid` adds
+a live-enrichment path on top of the scheduled fetch:
+
+```bash
+# Drop into the team-shared shell init (or claude/cursor MCP config)
+skills-mcp --vuln-source hybrid
+```
+
+In hybrid mode, `lookup_vulnerability` / `check_dependency` query
+`api.osv.dev` first (cached in-process for 5 minutes) and fall back to
+the locally-fetched cache when the API is unreachable or returns no
+data. The default remains `local` so air-gapped CI and regulated
+workstations behave exactly as before.
+
+Recommend hybrid for **developer laptops** (latest data while typing) and
+keep `local` (with `fetch-vulns` scheduled) on **CI runners** so build
+behaviour is deterministic and survives an osv.dev outage without
+turning red. Internal package names should not appear on osv.dev under
+either mode, but hybrid does emit each scanned package name to the API
+— review with your legal / security team before enabling on any
+machine that handles names you would not paste into a public search box.
+
 ## 4. Wire skills-check validate into CI
 
 Add a job that asserts the committed IDE files match the current skills

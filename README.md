@@ -248,6 +248,59 @@ incomplete — so populating it is purely additive and does not require
 changes to skill content. Re-run weekly (or wire up the
 `skills-check scheduler` to do it for you) to stay current with osv.dev.
 
+### Live OSV.dev lookups via `--vuln-source` (opt-in enrichment)
+
+The local cache stays **the default** because secure-code is offline-first
+by design — air-gapped CI, regulated environments, signed reproducible
+data, and zero leakage of internal package names to a third-party API
+all depend on the bundled-data model. The `--vuln-source` flag on
+`skills-mcp` adds a *parallel* path for operators who would rather
+trade some of that hermeticity for fresher advisories.
+
+```bash
+skills-mcp --vuln-source local      # (default) repo sample + user cache, no network
+skills-mcp --vuln-source hybrid     # api.osv.dev first, fall back to local on empty / error
+skills-mcp --vuln-source external   # api.osv.dev only, no local fallback
+```
+
+| Mode | When to use | Network call per query? | Surfaces fresh CVEs? | Privacy preserved? |
+|------|-------------|-------------------------|----------------------|--------------------|
+| `local` | Air-gap, regulated, signed-data audit, internal packages you don't want leaked to osv.dev | ❌ | Only what was bundled / last fetched | ✅ |
+| `hybrid` | Typical dev / CI with outbound HTTPS allowed; want fresh data but keep working if the API is down | ✅ (cached 5 min in-process) | ✅ | ⚠️ Package names go to osv.dev |
+| `external` | Validating local-cache freshness, or you never want a stale answer even at the cost of a hard fail when osv.dev is unreachable | ✅ | ✅ | ⚠️ Package names go to osv.dev |
+
+`hybrid` does **not** replace the local cache — it queries `api.osv.dev`
+first and only consults the local cache when the API returned zero
+advisories or errored. So users on `hybrid` continue to enjoy
+graceful degradation: an osv.dev outage falls back to whatever the
+bundled sample / user cache has, instead of failing the scan.
+
+Ecosystems osv.dev does not catalog (`docker`, `github-actions`)
+short-circuit to the local cache regardless of mode — the external
+client returns no advisories for them, so there is nothing to enrich.
+
+#### Choosing between `fetch-vulns` and `--vuln-source`
+
+These two features address different deployment shapes; they are
+complementary, not alternatives:
+
+- `skills-check fetch-vulns` populates the **user-local cache** in a
+  scheduled job. The cache is consulted by `--vuln-source local` and
+  `--vuln-source hybrid` alike. Use this when you want fresh data
+  *without* a per-query network call — typical for CI runners that
+  build offline after a single setup-time fetch, and the only path
+  that keeps the data signed-and-reproducible.
+
+- `--vuln-source hybrid` (or `external`) queries `api.osv.dev` at
+  query time, with a short in-process TTL cache. Use this when each
+  developer machine has internet and you want zero scheduling
+  ceremony, accepting the trade-off that the upstream changes
+  between query and re-query.
+
+Many teams will run both: `fetch-vulns --from-release` weekly to keep
+air-gapped CI deterministic, *and* developer-laptop MCPs in `hybrid`
+mode for live enrichment during code review.
+
 ## Token efficiency
 
 AI coding tools have finite context windows, and every byte of instructions you
@@ -433,8 +486,10 @@ skills-mcp --path /path/to/secure-code
 The server registers fifteen tools on `tools/list`:
 
 - `lookup_vulnerability(package, ecosystem?, version?)` — search the supply-chain
-  malicious-packages database, the typosquat DB, AND the local OSV cache
-  (vulnerabilities/osv/) for known CVE / GHSA / OSV-ID advisories.
+  malicious-packages database, the typosquat DB, AND the OSV advisory set
+  (local cache by default; `api.osv.dev` when `--vuln-source` selects
+  `hybrid` or `external` — see [Live OSV.dev lookups](#live-osvdev-lookups-via---vuln-source-opt-in-enrichment))
+  for known CVE / GHSA / OSV-ID advisories.
 - `check_secret_pattern(text)` — run the secret-detection regex rules against
   `text`, returning matches with severity and whether they are known false
   positives.
@@ -445,8 +500,11 @@ The server registers fifteen tools on `tools/list`:
   under the configured allowed roots; supports the `sarif` output format.
 - `check_dependency(package, version?, ecosystem, format?)` — check a dependency
   against the malicious-packages corpus, the typosquat DB, the CVE-pattern list,
-  and the local OSV cache; ecosystem-native semver matching (node-semver, PEP 440,
-  Go module pseudo-versions) is used when both sides parse. Optional SARIF output.
+  and the OSV advisory set (local cache by default; live `api.osv.dev` when
+  `--vuln-source` selects `hybrid` or `external`); ecosystem-native semver matching
+  (node-semver, PEP 440, Go module pseudo-versions) is used when both sides parse.
+  CVE pattern matches are filtered by the queried ecosystem's language family so
+  an npm query no longer returns Java CVEs. Optional SARIF output.
 - `check_typosquat(package, ecosystem?)` — flag candidate typosquats from the
   curated typosquat database.
 - `map_compliance_control(skill_id | query, framework?)` — map an installed
