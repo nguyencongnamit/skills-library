@@ -101,6 +101,68 @@ Bullets without a marker are ignored — they remain prose-only knowledge that
 the AI assistant consults at code-generation time, deliberately not promoted
 to an automated rule.
 
+## Engine markers (declaring scanner engines in `SKILL.md`)
+
+Skills that document a scannable artifact — Dockerfile, GitHub Actions
+workflow, lockfile, source file with secrets — can declare which
+scanner engines the MCP server should expose for that artifact. Engine
+declarations live in the SKILL.md itself, parallel to the **Pattern
+markers** above, so a single source of truth covers both "what rules
+to apply" and "what tools can run them".
+
+Place engine markers under a `## Scanner engines` H2 section (or any
+H2 you prefer — the parser looks at marker syntax, not section
+position). Each marker is an HTML comment carrying a YAML flow payload:
+
+```markdown
+## Scanner engines
+
+- **Internal** — built-in regex rules; always available, offline.
+  <!-- engine: {
+    name: internal,
+    type: builtin,
+    scanner: dockerfile,
+    output_format: dockerfile_finding
+  } -->
+
+- **Hadolint** — industry-standard Dockerfile linter, ~50 rules.
+  <!-- engine: {
+    name: hadolint,
+    type: external,
+    scanner: dockerfile,
+    binary: hadolint,
+    detect: [hadolint, --version],
+    execute: [hadolint, --format, sarif, "{file_path}"],
+    output_format: sarif,
+    install_hint: "brew install hadolint",
+    upstream: "https://github.com/hadolint/hadolint"
+  } -->
+```
+
+The MCP server harvests markers at startup and exposes them via
+`scan_<scanner>_engines` tools (e.g. `scan_dockerfile_engines`). Each
+response is decorated with per-host availability (binary on PATH?
+resolved path?) so the agent can render a multi-select menu and let
+the user pick which engine(s) to run.
+
+Marker payload reference:
+
+| field           | required | meaning |
+|-----------------|----------|---------|
+| `name`          | yes      | kebab-case engine identifier; unique within a (skill, scanner) pair |
+| `type`          | yes      | `builtin` (ships in-process with secure-code) or `external` (CLI on PATH) |
+| `scanner`       | yes      | which scanner bucket — `dockerfile`, `github_actions`, `secrets`, `dependencies` |
+| `description`   | no       | one-line summary shown in the discovery menu |
+| `binary`        | required for `external` | command name to look up on PATH |
+| `detect`        | no       | argv to verify the engine is functional; defaults to `[binary, --version]` for external |
+| `execute`       | required for `external` | argv template; `{file_path}` is substituted at scan time |
+| `output_format` | no       | `sarif` (generic parser), `dockerfile_finding` (builtin shape), or empty |
+| `install_hint`  | no       | shell command shown when the binary is missing |
+| `upstream`      | no       | URL of the upstream project (for reviewer audit) |
+
+Bullets without an `<!-- engine: ... -->` marker are ignored — they
+remain prose-only knowledge the AI consults at code-generation time.
+
 ## Token budgets
 
 Every `SKILL.md` declares `token_budget: { minimal, compact, full }`. The

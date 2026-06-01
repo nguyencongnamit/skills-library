@@ -16,7 +16,7 @@ token_budget:
   full: 2800
 rules_path: "checklists/"
 related_skills: ["infrastructure-security", "iac-security", "secret-detection"]
-last_updated: "2026-06-01"
+last_updated: "2026-06-02"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -92,6 +92,28 @@ sources:
 - One-shot debugging pods (kubectl debug, ephemeral containers) intentionally
   bypass many of these controls; they should not be persisted as YAML in the
   repo.
+
+## Scanner engines
+
+Engines available for scanning Dockerfiles. The MCP server harvests
+these markers at startup and exposes them via the
+`scan_dockerfile_engines` tool. Call that tool first to discover what
+is available on the current host, then let the user choose one or more
+engines before invoking `scan_dockerfile`.
+
+- **Internal** — built-in regex rules shipped with secure-code; always
+  available, offline-friendly. Covers the seven critical rules under
+  `## Rules` above (multi-stage, missing USER, EOL base, secrets in
+  env, ADD remote, curl-pipe-sh, apt without version pin). Limited
+  coverage compared with industry tools; best as a fallback when no
+  external scanner is installed.
+  <!-- engine: {
+    name: internal,
+    type: builtin,
+    scanner: dockerfile,
+    description: "Built-in regex rules — always available, offline.",
+    output_format: dockerfile_finding
+  } -->
 
 ## Context (for humans)
 
