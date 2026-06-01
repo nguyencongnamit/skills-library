@@ -27,8 +27,12 @@ type Server struct {
 }
 
 // NewServer wires a Server up against the library rooted at root.
-func NewServer(root string) (*Server, error) {
-	lib, err := tools.NewLibrary(root)
+// Optional tools.LibraryOption values configure the underlying
+// Library — e.g. tools.WithVulnSource(tools.SourceHybrid) to enable
+// the external OSV.dev backend. Calling NewServer(root) with no
+// options preserves the pre-existing behaviour exactly.
+func NewServer(root string, opts ...tools.LibraryOption) (*Server, error) {
+	lib, err := tools.NewLibrary(root, opts...)
 	if err != nil {
 		return nil, err
 	}
