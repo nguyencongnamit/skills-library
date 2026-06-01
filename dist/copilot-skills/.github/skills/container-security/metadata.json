@@ -27,7 +27,7 @@
     "iac-security",
     "secret-detection"
   ],
-  "last_updated": "2026-06-01",
+  "last_updated": "2026-06-02",
   "sources": [
     "CIS Docker Benchmark v1.6",
     "CIS Kubernetes Benchmark v1.9",
