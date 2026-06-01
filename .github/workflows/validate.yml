@@ -319,6 +319,24 @@ jobs:
       - name: skills-check validate (enforces token budgets)
         run: /tmp/skills-check validate --path .
 
+      - name: skills-check derive-checklists --check (SKILL.md ↔ checklists/*.yaml sync)
+        shell: bash
+        run: |
+          set -e
+          fail=0
+          for skill in skills/*/; do
+            skill_id=$(basename "$skill")
+            # Skip skills that have no SKILL.md (locales/ stubs etc).
+            [ -f "$skill/SKILL.md" ] || continue
+            if ! /tmp/skills-check derive-checklists "$skill_id" --path . --check; then
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::One or more checklists/*.yaml is out of sync with its SKILL.md. Run 'skills-check derive-checklists <skill-id>' and commit the result."
+            exit 1
+          fi
+
   dist-regeneration:
     name: dist/ matches skills/
     needs: go-build-test

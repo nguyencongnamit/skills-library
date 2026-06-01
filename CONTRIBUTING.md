@@ -56,16 +56,50 @@ Before opening a pull request, please run these in order:
    and checklist.
 2. `go test ./...` — every package green, no skipped tests.
 3. `./skills-check regenerate` — `dist/` re-rendered with no uncommitted drift.
-4. `./skills-check manifest compute --path . --write` — manifest checksums are
+4. `./skills-check derive-checklists <skill-id>` for any skill whose `SKILL.md`
+   you changed and whose bullets carry pattern markers (see "Pattern markers"
+   below). CI re-runs the command with `--check` and rejects drift.
+5. `./skills-check manifest compute --path . --write` — manifest checksums are
    in sync. CI re-runs `./skills-check manifest verify --checksums-only` and
    rejects drift.
-5. `last_updated` bumped on any modified `SKILL.md`. CI enforces this.
-6. New / updated entries include at least one external reference URL.
-7. Commit messages follow the convention used in `git log` (no force-pushing to
+6. `last_updated` bumped on any modified `SKILL.md`. CI enforces this.
+7. New / updated entries include at least one external reference URL.
+8. Commit messages follow the convention used in `git log` (no force-pushing to
    `main`; do not amend other contributors' commits).
 
 CI runs the same checks plus `go vet`, `gofmt`, `staticcheck`, the markdown
 link checker, and the token-budget enforcer.
+
+## Pattern markers (linking SKILL.md to `checklists/*.yaml`)
+
+Bullets in a `SKILL.md` ALWAYS / NEVER / KNOWN FALSE POSITIVES section may
+declare themselves as a structured rule by appending an HTML comment marker:
+
+```markdown
+### NEVER
+- Use end-of-life base images. As of mid-2026 this includes ...
+  <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
+```
+
+`skills-check derive-checklists <skill-id>` reads every tagged bullet and
+**merges** it into the matching `checklists/<framework>.yaml`. Existing
+YAML entries whose `id` is not in a marker are preserved verbatim — the
+human maintainer still owns those rows. CI runs the same command with
+`--check` and fails when SKILL.md and YAML are out of sync, so the two
+files stay in lock-step without any manual diffing.
+
+Marker payload (YAML flow style):
+
+| field       | required? | meaning |
+|-------------|-----------|---------|
+| `id`        | yes       | kebab-case identifier; unique within the skill |
+| `severity`  | no        | `critical` / `high` / `medium` / `low` / `info`. Defaults: ALWAYS → `high`, NEVER → `critical`, KFP → `info` |
+| `cwe`       | no        | CWE identifier (integer) |
+| `framework` | no\*      | YAML file basename under `checklists/`. Required when the skill has more than one checklist file; inferred from the single file otherwise |
+
+Bullets without a marker are ignored — they remain prose-only knowledge that
+the AI assistant consults at code-generation time, deliberately not promoted
+to an automated rule.
 
 ## Token budgets
 
