@@ -11,12 +11,12 @@ applies_to:
   - "when reviewing container changes in PR"
 languages: ["dockerfile", "yaml", "go", "python"]
 token_budget:
-  minimal: 1000
-  compact: 1100
-  full: 2500
+  minimal: 1200
+  compact: 1450
+  full: 2800
 rules_path: "checklists/"
 related_skills: ["infrastructure-security", "iac-security", "secret-detection"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-01"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -34,7 +34,15 @@ sources:
   `FROM distroless`, `FROM scratch`, `FROM alpine:<digest>`, or another minimal
   base — pinned by SHA256 digest, not just tag.
 - Run as a non-root user: `USER <uid>` (numeric UID >= 10000 for K8s `runAsNonRoot`
-  policies to be enforceable).
+  policies to be enforceable). Set USER explicitly on the **final stage** —
+  omitting USER entirely leaves the container running as root by default,
+  which is the same as `USER root`.
+  <!-- pattern: { id: dkr-missing-user-directive, severity: critical, cwe: 250, framework: dockerfile_hardening } -->
+- Use **`npm ci`** (and equivalents `pnpm install --frozen-lockfile`,
+  `yarn install --frozen-lockfile`) in container builds, not `npm install`.
+  `npm install` mutates the lockfile and resolves versions per-build,
+  producing non-deterministic images that drift from the lockfile.
+  <!-- pattern: { id: dkr-npm-install-not-ci, severity: medium, framework: dockerfile_hardening } -->
 - Add a `.dockerignore` excluding `.git`, `node_modules`, `.env`, `*.pem`, `*.key`,
   `target/`, `.terraform/`, `dist/`, `coverage/`.
 - Set explicit `HEALTHCHECK` for long-running services and matching
@@ -53,6 +61,13 @@ sources:
 ### NEVER
 - Run containers as root or with `privileged: true` / `allowPrivilegeEscalation:
   true` outside of explicit, audited system pods (e.g., CNI plugins).
+- Use **end-of-life base images**. As of mid-2026 this includes `node:< 18`,
+  `python:< 3.10`, `alpine:< 3.17`, `debian:< 11 (bullseye)`,
+  `ubuntu:< 20.04`, `centos:*`, `ruby:< 3.1`, and any non-LTS Node/Python
+  release. EOL images stop receiving security patches; a maintained
+  image with no public CVEs is still safer than an EOL one.
+  Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar.
+  <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application
   container. It's effectively root on the host.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them
