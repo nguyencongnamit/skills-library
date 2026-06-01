@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "d2f51590e2f4b46eea92179f6f008e87a8aad7131e27cda3fe1bec871b7725d7",
-      "size": 96320,
+      "sha256": "2ae9bddd370df16095641f983071f3b33b41fad8782dc3bccbe8a2871a8d1d21",
+      "size": 97473,
       "action": "unchanged"
     },
     {
@@ -134,13 +134,13 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/SKILL.md",
-      "sha256": "b7f3dfbc8005c91af0d0dc238ef6bf1465d72b4fb0ac67bcf1e92281469216b2",
-      "size": 3500,
+      "sha256": "8babf4c76b0d5d94282afb05d92a3b47ac63c101eb579a9d0517cc0aba3555c0",
+      "size": 4653,
       "action": "unchanged"
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "51415e961b1c1d1b9ee358d2ecdb9e74243f9e4801bd20f065feddc2b1184b0f",
+      "sha256": "857cb0255469f2418b354e82b209d1933826e188c30369a5400b970ebeff7a63",
       "size": 924,
       "action": "unchanged"
     },
@@ -470,13 +470,13 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/SKILL.md",
-      "sha256": "89783794fe37e98c94d66029745a761ec1ae9c9e233be052c1c837abd0b62ba7",
-      "size": 3475,
+      "sha256": "7d5b98120682bedb3671978166d58467c460c13c10a616ca8998c022ddda3aad",
+      "size": 4628,
       "action": "unchanged"
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "51415e961b1c1d1b9ee358d2ecdb9e74243f9e4801bd20f065feddc2b1184b0f",
+      "sha256": "857cb0255469f2418b354e82b209d1933826e188c30369a5400b970ebeff7a63",
       "size": 924,
       "action": "unchanged"
     },
@@ -812,13 +812,13 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/SKILL.md",
-      "sha256": "65e4b06ba29dffe369c099f4fc09a25a86ab04ca8567aadaadd076baf6940345",
-      "size": 3478,
+      "sha256": "71d1d6ba6f2008900f31d120b90f9c2c450a32470dd419a2dc51476cbbbfd513",
+      "size": 4631,
       "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "51415e961b1c1d1b9ee358d2ecdb9e74243f9e4801bd20f065feddc2b1184b0f",
+      "sha256": "857cb0255469f2418b354e82b209d1933826e188c30369a5400b970ebeff7a63",
       "size": 924,
       "action": "unchanged"
     },
@@ -2588,14 +2588,14 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "373ec76ad767ff396a53650247c03fdc98c371d3a030b8cc884bbd2e8c6c63c4",
-      "size": 4742,
+      "sha256": "48e4d18226642845cb67732dae7537e0a0d4ede9b022df6fc519335de63d8b75",
+      "size": 5921,
       "action": "unchanged"
     },
     {
       "path": "skills/container-security/checklists/dockerfile_hardening.yaml",
-      "sha256": "994e7b57a8b89fba361d1baedc741cdbd0af0cde6ef71b6785ef9a5e92c1850c",
-      "size": 1804,
+      "sha256": "e79777464cbb39b17d7c138c502f394711e0a90fec5d221393262421df840140",
+      "size": 2983,
       "action": "unchanged"
     },
     {
