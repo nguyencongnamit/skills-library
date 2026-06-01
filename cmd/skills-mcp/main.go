@@ -41,20 +41,28 @@ import (
 	"strings"
 
 	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/mcp"
+	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/tools"
 )
 
 func main() {
 	libraryPath := flag.String("path", "", "path to the skills-library checkout (default: $SKILLS_LIBRARY_PATH or dir of the binary)")
 	allowedRoots := flag.String("allowed-roots", "", "comma-separated absolute directories that file-reading tools (scan_secrets, scan_dependencies, scan_github_actions, scan_dockerfile, policy_check) are permitted to read from. When unset, the server defaults to the current working directory as the only allowed root. Pass --allow-any-path to opt out of the default and accept any path the process can stat (sensitive system directories such as ~/.ssh, ~/.aws, ~/.gnupg and /etc/shadow are always denied regardless).")
 	allowAnyPath := flag.Bool("allow-any-path", false, "disable the default-to-cwd allow-list and accept any absolute path the process can stat. Intended for local debugging only; production callers should pass an explicit --allowed-roots list. The sensitive-directory deny-list still applies.")
+	vulnSourceArg := flag.String("vuln-source", "local", "where lookup_vulnerability / check_dependency read OSV advisories from: 'local' (repo + user cache, default, no network), 'external' (api.osv.dev only, requires network), or 'hybrid' (api.osv.dev first, fall back to local on empty / error). The local-only default preserves prior behaviour; 'hybrid' is the recommended setting once outbound HTTPS to osv.dev is available.")
 	flag.Parse()
+
+	vulnSource, err := tools.ParseVulnSource(*vulnSourceArg)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+	}
 
 	root, err := resolveLibraryRoot(*libraryPath)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
-	srv, err := mcp.NewServer(root)
+	srv, err := mcp.NewServer(root, tools.WithVulnSource(vulnSource))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
