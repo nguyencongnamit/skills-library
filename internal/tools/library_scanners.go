@@ -21,7 +21,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/tools/parsers"
+	"github.com/kennguy3n/skills-library/internal/tools/parsers"
 	"github.com/kennguy3n/skills-library/internal/skill"
 	"gopkg.in/yaml.v3"
 )
