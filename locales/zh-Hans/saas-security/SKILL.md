@@ -1,7 +1,7 @@
 ---
 id: saas-security
 language: zh-Hans
-source_revision: "f231fd47"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "SaaS 应用安全"
 description: "为主流 SaaS 平台(GWS、Atlassian、Notion、HubSpot、Salesforce、BambooHR、Workday、Odoo、聊天平台、Zoom、Calendly、NetSuite)检测 token、错误配置与 admin 红旗"

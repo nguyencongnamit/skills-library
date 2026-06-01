@@ -1,7 +1,7 @@
 ---
 id: api-security
 language: de
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "API-Sicherheit"
 description: "OWASP-API-Top-10-Muster auf Authentifizierung, Autorisierung und Eingabevalidierung anwenden"

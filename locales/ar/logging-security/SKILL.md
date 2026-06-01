@@ -2,7 +2,7 @@
 id: logging-security
 language: ar
 dir: rtl
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن التسجيل (logging)"
 description: "منع تسرّب الأسرار / PII داخل logs، ودفع هجمات log-injection، وضمان audit trails، وتجنّب احتفاظ ضعيف"

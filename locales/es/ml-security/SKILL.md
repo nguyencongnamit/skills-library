@@ -1,7 +1,7 @@
 ---
 id: ml-security
 language: es
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Seguridad de ML / LLM"
 description: "Prompt injection, poisoning de modelos, ataques de deserialización, PII en datos de entrenamiento, filtraciones de secretos en notebooks"

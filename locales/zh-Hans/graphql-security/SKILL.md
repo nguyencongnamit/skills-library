@@ -1,7 +1,7 @@
 ---
 id: graphql-security
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "GraphQL 安全"
 description: "防御 GraphQL API:深度/复杂度限制、生产环境的 introspection、批处理/别名滥用、字段级授权、persisted queries"

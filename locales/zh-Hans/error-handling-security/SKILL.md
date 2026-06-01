@@ -1,7 +1,7 @@
 ---
 id: error-handling-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "错误处理安全"
 description: "客户端响应中不出现 stack trace / SQL / 路径 / 框架版本;对外返回通用错误,日志中保留结构化错误"

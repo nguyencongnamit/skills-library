@@ -2,7 +2,7 @@
 id: secret-detection
 language: ar
 dir: rtl
-source_revision: "9808b0fa"
+source_revision: "1f1b8c7"
 version: "1.4.0"
 title: "كشف الأسرار"
 description: "اكتشف ومنع الأسرار المُصلَّبة، ومفاتيح API، والـ tokens، والاعتمادات في الكود"

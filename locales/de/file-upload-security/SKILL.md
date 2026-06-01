@@ -1,7 +1,7 @@
 ---
 id: file-upload-security
 language: de
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "File-Upload-Sicherheit"
 description: "User-Uploads validieren: MIME-Magic-Bytes, Filename-Sanitisierung, Grössenlimits, separate Serving-Domain, AV-Scan, Polyglot-Erkennung"

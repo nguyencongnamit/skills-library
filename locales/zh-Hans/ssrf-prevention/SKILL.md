@@ -1,7 +1,7 @@
 ---
 id: ssrf-prevention
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "SSRF 防御"
 description: "防御 Server-Side Request Forgery:云 metadata 拦截、内网 IP 过滤、DNS rebinding 防护、基于 allowlist 的 URL 拉取"

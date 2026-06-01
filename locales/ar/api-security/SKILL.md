@@ -2,7 +2,7 @@
 id: api-security
 language: ar
 dir: rtl
-source_revision: "fbb3a823"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "أمن واجهات برمجة التطبيقات (API)"
 description: "تطبيق أنماط OWASP API Top 10 على المصادقة والتفويض والتحقق من المدخلات"

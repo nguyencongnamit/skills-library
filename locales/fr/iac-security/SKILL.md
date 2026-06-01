@@ -1,7 +1,7 @@
 ---
 id: iac-security
 language: fr
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité de l'Infrastructure-as-Code"
 description: "Règles de durcissement pour Terraform, CloudFormation et Pulumi : state, providers, drift, secrets"

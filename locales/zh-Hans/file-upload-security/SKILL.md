@@ -1,7 +1,7 @@
 ---
 id: file-upload-security
 language: zh-Hans
-source_revision: "4c215e6f"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "文件上传安全"
 description: "校验用户上传:MIME magic bytes、文件名清洗、大小限制、独立服务域、AV 扫描、polyglot 检测"

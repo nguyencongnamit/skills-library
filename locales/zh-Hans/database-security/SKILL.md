@@ -1,7 +1,7 @@
 ---
 id: database-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "数据库安全"
 description: "防止 SQL 注入、ORM 误用、凭证泄漏;强制最小权限数据库用户和安全迁移"

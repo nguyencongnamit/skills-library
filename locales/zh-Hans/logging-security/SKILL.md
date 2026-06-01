@@ -1,7 +1,7 @@
 ---
 id: logging-security
 language: zh-Hans
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "日志安全"
 description: "防止 secret / PII 出现在日志中、防御 log-injection 攻击、避免缺失 audit trail 与过弱的留存策略"

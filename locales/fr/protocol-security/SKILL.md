@@ -1,7 +1,7 @@
 ---
 id: protocol-security
 language: fr
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Sécurité des protocoles"
 description: "TLS 1.2+, mTLS, validation de certificat, HSTS, credentials de canal gRPC, checks d'Origin WebSocket"

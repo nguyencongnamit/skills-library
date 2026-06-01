@@ -1,7 +1,7 @@
 ---
 id: iac-security
 language: pt-BR
-source_revision: "afe376a8"
+source_revision: "1f1b8c7"
 version: "1.0.0"
 title: "Segurança de Infrastructure-as-Code"
 description: "Regras de hardening para Terraform, CloudFormation e Pulumi: state, providers, drift, segredos"
