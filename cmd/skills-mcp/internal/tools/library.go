@@ -5,6 +5,7 @@
 package tools
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -15,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/tools/semver"
 	"github.com/kennguy3n/skills-library/internal/skill"
@@ -121,12 +123,128 @@ type Library struct {
 	// (~/.ssh, ~/.aws, ~/.gnupg, /etc/shadow, ...) are still denied
 	// regardless of the allow-list state.
 	allowedRoots []string
+
+	// vulnSource selects where OSV advisory lookups read from.
+	// Defaults to SourceLocal (the repo-bundled + user cache),
+	// preserving the pre-existing behaviour. Operators opt into
+	// SourceExternal / SourceHybrid via the --vuln-source flag in
+	// cmd/skills-mcp/main.go.
+	vulnSource VulnSource
+
+	// osvClient is non-nil only when vulnSource selects an external
+	// source. It is set by WithOSVClient at construction time;
+	// constructed lazily by WithVulnSource if the operator chose
+	// External/Hybrid without providing a custom client.
+	osvClient OSVClient
+
+	// osvExtCache memoises OSVClient responses for the lifetime of
+	// the Library. Stays nil while vulnSource is SourceLocal so the
+	// cache and its mutex are paid only by the new code paths.
+	osvExtCache *OSVCache
+}
+
+// VulnSource selects which backend the Library's OSV advisory lookups
+// consult. The MCP server passes one of the three constants below via
+// --vuln-source on the command line.
+type VulnSource int
+
+const (
+	// SourceLocal restricts OSV lookups to the repo-bundled sample
+	// and the user-local cache populated by `skills-check fetch-vulns`.
+	// Network-free and reproducible; the default to keep behaviour
+	// unchanged from prior releases.
+	SourceLocal VulnSource = iota
+
+	// SourceExternal queries api.osv.dev for every advisory lookup
+	// and never reads the local cache. Useful for callers who would
+	// rather see a network error than a stale offline result.
+	SourceExternal
+
+	// SourceHybrid queries api.osv.dev first and falls back to the
+	// local cache on any error or empty result. This is the
+	// recommended setting once the operator has confirmed network
+	// access to osv.dev: it surfaces freshly-published advisories
+	// (which the bundled sample necessarily misses) while preserving
+	// graceful degradation when the API is unreachable.
+	SourceHybrid
+)
+
+// String returns the human-readable form of the vuln-source enum,
+// used by the --vuln-source flag's help text and error messages.
+func (s VulnSource) String() string {
+	switch s {
+	case SourceLocal:
+		return "local"
+	case SourceExternal:
+		return "external"
+	case SourceHybrid:
+		return "hybrid"
+	}
+	return "unknown"
+}
+
+// ParseVulnSource turns a CLI string into the typed enum. The accepted
+// names match VulnSource.String. Errors carry the original input so
+// the flag parser can echo it back to the user.
+func ParseVulnSource(s string) (VulnSource, error) {
+	switch strings.ToLower(strings.TrimSpace(s)) {
+	case "", "local":
+		return SourceLocal, nil
+	case "external":
+		return SourceExternal, nil
+	case "hybrid":
+		return SourceHybrid, nil
+	}
+	return SourceLocal, fmt.Errorf("unknown vuln source %q (want one of: local, external, hybrid)", s)
+}
+
+// LibraryOption is a functional option for NewLibrary. Options are
+// applied in order, so a later WithOSVClient overrides an earlier one;
+// this keeps tests free to layer customisations atop a base setup.
+type LibraryOption func(*Library)
+
+// WithVulnSource selects the OSV data source. When source is External
+// or Hybrid and no client was provided via WithOSVClient, a default
+// HTTP client (api.osv.dev, 10s timeout) plus an empty cache are
+// instantiated at apply-time so callers don't have to wire all three
+// pieces by hand.
+func WithVulnSource(source VulnSource) LibraryOption {
+	return func(l *Library) {
+		l.vulnSource = source
+		if source != SourceLocal && l.osvClient == nil {
+			l.osvClient = NewOSVClient()
+		}
+		if source != SourceLocal && l.osvExtCache == nil {
+			l.osvExtCache = NewOSVCache()
+		}
+	}
+}
+
+// WithOSVClient injects a custom OSVClient (typically a fake or a
+// client pointed at a test HTTP server). The Library does not switch
+// to an external source on its own — callers must still pass
+// WithVulnSource(SourceExternal/Hybrid).
+func WithOSVClient(client OSVClient) LibraryOption {
+	return func(l *Library) { l.osvClient = client }
+}
+
+// WithOSVCache injects a custom OSV cache, typically used by tests
+// to assert hit counts or freeze TTL behaviour.
+func WithOSVCache(cache *OSVCache) LibraryOption {
+	return func(l *Library) { l.osvExtCache = cache }
 }
 
 // NewLibrary returns a Library rooted at root. It does not eagerly load
 // any data; the underlying directories are walked on the first call to
 // each tool.
-func NewLibrary(root string) (*Library, error) {
+//
+// Optional LibraryOption arguments configure features that did not exist
+// in the original constructor. The zero-option call (NewLibrary(root))
+// preserves the pre-existing behaviour exactly — vulnSource defaults to
+// SourceLocal, no OSV client is created, and no external network calls
+// are made. The variadic shape was chosen specifically to avoid breaking
+// callers that pre-date the external-source feature.
+func NewLibrary(root string, opts ...LibraryOption) (*Library, error) {
 	if root == "" {
 		return nil, fmt.Errorf("library root is empty")
 	}
@@ -137,13 +255,18 @@ func NewLibrary(root string) (*Library, error) {
 	if _, err := os.Stat(filepath.Join(abs, "skills")); err != nil {
 		return nil, fmt.Errorf("library root %q has no skills/ subdirectory: %w", abs, err)
 	}
-	return &Library{
+	l := &Library{
 		root:          abs,
 		userCacheRoot: defaultUserCacheRoot(),
 		vulnCache:     map[string]*vulnFile{},
 		osvIndex:      map[string]*osvIndexFile{},
 		osvSeverity:   map[string]string{},
-	}, nil
+		vulnSource:    SourceLocal,
+	}
+	for _, opt := range opts {
+		opt(l)
+	}
+	return l, nil
 }
 
 // defaultUserCacheRoot returns the OSV user-cache root the Library
@@ -436,15 +559,73 @@ func (l *Library) LookupVulnerability(pkg, ecosystem, version string) (*LookupVu
 			out.Typosquats = append(out.Typosquats, t)
 		}
 	}
-	// Append OSV cache hits. Lookups are case-insensitive on package
-	// name. Errors in the OSV layer never fail the whole tool: the
-	// cache is optional and the malicious-packages DB remains the
-	// authoritative result for unknown ecosystems.
+	// Append OSV advisory hits. Source-dispatched: local cache only,
+	// api.osv.dev only, or hybrid (external first then local fallback).
+	// Errors in the OSV layer never fail the whole tool: the cache is
+	// optional and the malicious-packages DB remains the authoritative
+	// result for unknown ecosystems.
 	for _, e := range ecosystems {
-		advs := l.lookupOSV(e, pkg)
+		advs := l.fetchOSV(e, pkg, version)
 		out.OSVAdvisories = append(out.OSVAdvisories, advs...)
 	}
 	return out, nil
+}
+
+// fetchOSV is the dispatcher that selects between the local OSV cache
+// (lookupOSV, file-backed) and the live api.osv.dev client based on
+// the Library's configured vulnSource. version, when non-empty, is
+// passed through to api.osv.dev to constrain server-side filtering;
+// the local cache ignores it because its records are not pre-indexed
+// by version.
+//
+// Hybrid mode prefers external results: if api.osv.dev returns any
+// advisories the local cache is not consulted. This is intentional —
+// external is presumed fresher and dragging local entries in would
+// produce duplicates whenever a GHSA exists on both sides.
+//
+// All errors are swallowed in line with the original lookupOSV
+// contract (OSV is best-effort, never fatal). Hybrid only falls back
+// to local when the external call returned exactly zero advisories,
+// which covers both network errors (Query logs nil on error) and
+// genuine empty results — both shapes deserve a second look at the
+// local cache.
+func (l *Library) fetchOSV(eco, pkg, version string) []OSVAdvisory {
+	switch l.vulnSource {
+	case SourceExternal:
+		return l.fetchOSVExternal(eco, pkg, version)
+	case SourceHybrid:
+		if advs := l.fetchOSVExternal(eco, pkg, version); len(advs) > 0 {
+			return advs
+		}
+		return l.lookupOSV(eco, pkg)
+	}
+	return l.lookupOSV(eco, pkg)
+}
+
+// fetchOSVExternal queries api.osv.dev via l.osvClient with caching.
+// A nil client (defensive: should only happen if construction was
+// bypassed) or a nil cache short-circuits to no-result.
+//
+// The request carries its own 10s timeout context so a stalled
+// upstream cannot wedge the whole MCP server.
+func (l *Library) fetchOSVExternal(eco, pkg, version string) []OSVAdvisory {
+	if l.osvClient == nil {
+		return nil
+	}
+	if advs, hit := l.osvExtCache.Get(eco, pkg, version); hit {
+		return advs
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	advs, err := l.osvClient.Query(ctx, pkg, version, eco)
+	if err != nil {
+		// Network or protocol error: do not cache (a transient outage
+		// must not poison the cache with empty results) and let the
+		// caller fall back according to its vulnSource policy.
+		return nil
+	}
+	l.osvExtCache.Set(eco, pkg, version, advs)
+	return advs
 }
 
 // loadOSVIndex returns the OSV index for the given ecosystem. A
