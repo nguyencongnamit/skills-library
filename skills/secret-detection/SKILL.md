@@ -1,6 +1,6 @@
 ---
 id: secret-detection
-version: "1.4.0"
+version: "1.5.0"
 title: "Secret Detection"
 description: "Detect and prevent hardcoded secrets, API keys, tokens, and credentials in code"
 category: prevention
@@ -15,10 +15,10 @@ token_budget:
   minimal: 800
   compact: 1300
   full: 2000
-rules_path: "rules/"
+rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-05-14"
+last_updated: "2026-06-02"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -84,21 +84,28 @@ AI coding assistants accelerate this risk because the path of least resistance i
 inline a working credential and "fix it later." This skill is the counterweight: it
 trains the AI to refuse the path of least resistance.
 
-The detection strategy in `rules/dlp_patterns.json` mirrors the layered pipeline,
-now with **26 distinct patterns** spanning developer platforms (GitHub fine-grained
-PATs, Anthropic, OpenAI, Supabase, Linear), cloud (AWS, Azure AD, GCP, DigitalOcean,
-Heroku), data platforms (Databricks, Datadog, HashiCorp Vault), and comms (Twilio,
-SendGrid, Slack). Each pattern carries severity, hotwords, hotword proximity
-window, and an entropy floor to drive precision.
-documented in [secure-edge ARCHITECTURE.md](https://github.com/kennguy3n/secure-edge/blob/main/ARCHITECTURE.md)
+The detection strategy in `checklists/secret_detection.yaml` mirrors the layered
+pipeline, now with **74 distinct patterns** spanning developer platforms (GitHub
+classic + fine-grained PATs, Anthropic, OpenAI, Supabase, Linear), cloud (AWS,
+Azure AD, GCP, DigitalOcean, Heroku), data platforms (Databricks, Datadog,
+HashiCorp Vault), and comms (Twilio, SendGrid, Slack). Each pattern carries
+severity, hotwords, hotword proximity window, and an entropy floor to drive
+precision, documented in [secure-edge ARCHITECTURE.md](https://github.com/kennguy3n/secure-edge/blob/main/ARCHITECTURE.md)
 — Aho-Corasick prefix scan, regex validation on candidates, hotword proximity,
-entropy thresholds, and exclusion rules — adapted for the static-analysis context.
+entropy thresholds, and exclusion rules — adapted for the static-analysis
+context.
+
+PR-B1 unified the three legacy JSON sidecars
+(`rules/dlp_patterns.json`, `rules/dlp_exclusions.json`,
+`rules/dlp_patterns.locales.json`) into a single
+`checklists/secret_detection.yaml` matching the convention used by every other
+skill. The AI-drafted locale hotword sidecar was dropped in the same PR.
 
 ## References
 
-- `rules/dlp_patterns.json` — machine-readable patterns with Aho-Corasick prefixes,
-  hotwords, entropy thresholds.
-- `rules/dlp_exclusions.json` — community-maintained false positive suppressions.
+- `checklists/secret_detection.yaml` — unified DLP rules: regex patterns
+  (Aho-Corasick prefixes, hotwords, entropy thresholds) plus the
+  `exclusions:` block for false-positive suppressions.
 - `tests/corpus.json` — test fixtures for validation.
 - [OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
 - [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of Hard-coded

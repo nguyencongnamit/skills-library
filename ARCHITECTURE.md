@@ -272,8 +272,9 @@ spawned by the AI client and talks to it over stdio.
   `vulnerabilities/supply-chain/malicious-packages/{ecosystem}.json`
   (npm, pypi, crates, go, rubygems, maven, nuget, github-actions, docker)
   and the typosquat DB; `check_secret_pattern` runs the regex rules from
-  `skills/secret-detection/rules/dlp_patterns.json` and applies
-  `dlp_exclusions.json`; `get_skill` parses `skills/{id}/SKILL.md` and
+  the `checks:` block of
+  `skills/secret-detection/checklists/secret_detection.yaml` and applies
+  its `exclusions:` block; `get_skill` parses `skills/{id}/SKILL.md` and
   returns the requested tier; `search_skills` substring-matches across all
   skill manifests.
 

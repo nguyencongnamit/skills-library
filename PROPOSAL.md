@@ -125,9 +125,9 @@ sources:
 - Base64-encoded non-secret content in tests.
 
 ## References
-- `rules/dlp_patterns.json` — machine-readable patterns with Aho-Corasick prefixes,
-  hotwords, entropy thresholds.
-- `rules/dlp_exclusions.json` — community-maintained false positive suppressions.
+- `checklists/secret_detection.yaml` — unified machine-readable patterns
+  (Aho-Corasick prefixes, hotwords, entropy thresholds) and the
+  `exclusions:` block for community-maintained false-positive suppressions.
 ```
 
 The frontmatter schema is enforced by `skills-check validate` and by CI on every PR.
