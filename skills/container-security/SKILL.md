@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.3.0"
+version: "1.4.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -16,7 +16,7 @@ token_budget:
   full: 2800
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-05"
+last_updated: "2026-06-06"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -26,6 +26,9 @@ external_tools:
   - name: hadolint
     purpose: "Dockerfile linting (~60 ShellCheck-backed rules)"
     command: "hadolint <file>"
+  - name: trivy
+    purpose: "container image + filesystem CVE scan (scans installed packages, not just Dockerfile text)"
+    command: "trivy image <image> | trivy fs ."
 ---
 
 # Container Security

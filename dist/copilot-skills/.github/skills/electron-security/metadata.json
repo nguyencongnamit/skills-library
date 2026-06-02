@@ -1,6 +1,6 @@
 {
   "id": "electron-security",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Electron Desktop Security",
   "description": "Harden Electron apps: renderer trust boundary (nodeIntegration, contextIsolation, sandbox), contextBridge/IPC allowlists, shell.openExternal, navigation guards, deep-link auth, safeStorage",
   "category": "hardening",
@@ -27,7 +27,7 @@
     "secret-detection",
     "auth-security"
   ],
-  "last_updated": "2026-06-02",
+  "last_updated": "2026-06-06",
   "sources": [
     "Electron Security Checklist (official docs)",
     "OWASP — Electron / desktop application security",

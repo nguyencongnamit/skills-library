@@ -1,6 +1,6 @@
 ---
 id: protocol-security
-version: "1.0.0"
+version: "1.1.0"
 title: "Protocol Security"
 description: "TLS 1.2+, mTLS, certificate validation, HSTS, gRPC channel credentials, WebSocket origin checks"
 category: hardening
@@ -16,13 +16,17 @@ token_budget:
   full: 2400
 rules_path: "rules/"
 related_skills: ["crypto-misuse", "frontend-security", "api-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-06"
 sources:
   - "NIST SP 800-52 Rev. 2 (TLS Guidelines)"
   - "RFC 8446 — TLS 1.3"
   - "RFC 6797 — HSTS"
   - "OWASP Transport Layer Security Cheat Sheet"
   - "CWE-295, CWE-326, CWE-319, CWE-757"
+external_tools:
+  - name: testssl.sh
+    purpose: "live TLS/SSL endpoint configuration test (ciphers, protocols, known vulns)"
+    command: "testssl.sh <host:port>"
 ---
 
 # Protocol Security

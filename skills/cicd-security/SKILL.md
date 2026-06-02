@@ -1,6 +1,6 @@
 ---
 id: cicd-security
-version: "1.0.0"
+version: "1.1.0"
 title: "CI/CD Pipeline Security"
 description: "Harden GitHub Actions, GitLab CI, and similar pipelines against supply-chain attacks, secret exfiltration, and pwn-request style abuses"
 category: prevention
@@ -17,13 +17,17 @@ token_budget:
   full: 2200
 rules_path: "checklists/"
 related_skills: ["supply-chain-security", "secret-detection", "container-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-06"
 sources:
   - "OpenSSF Scorecard — Pinned-Dependencies / Token-Permissions"
   - "SLSA v1.0 Build Track"
   - "GitHub Security Lab — Preventing pwn requests"
   - "StepSecurity — tj-actions/changed-files attack analysis"
   - "CWE-1395: Dependency on Vulnerable Third-Party Component"
+external_tools:
+  - name: actionlint
+    purpose: "GitHub Actions workflow lint (syntax, expressions, shellcheck on run: steps)"
+    command: "actionlint"
 ---
 
 # CI/CD Pipeline Security

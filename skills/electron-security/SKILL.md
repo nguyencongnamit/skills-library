@@ -1,6 +1,6 @@
 ---
 id: electron-security
-version: "1.0.0"
+version: "1.1.0"
 title: "Electron Desktop Security"
 description: "Harden Electron apps: renderer trust boundary (nodeIntegration, contextIsolation, sandbox), contextBridge/IPC allowlists, shell.openExternal, navigation guards, deep-link auth, safeStorage"
 category: hardening
@@ -18,12 +18,16 @@ token_budget:
   full: 2600
 rules_path: "checklists/"
 related_skills: ["frontend-security", "secret-detection", "auth-security"]
-last_updated: "2026-06-02"
+last_updated: "2026-06-06"
 sources:
   - "Electron Security Checklist (official docs)"
   - "OWASP — Electron / desktop application security"
   - "CWE-78, CWE-22, CWE-250, CWE-693, CWE-829, CWE-1188"
   - "Doyensec / Electronegativity research on Electron attack surface"
+external_tools:
+  - name: electronegativity
+    purpose: "Electron app misconfiguration & anti-pattern scan"
+    command: "electronegativity -i ."
 ---
 
 # Electron Desktop Security

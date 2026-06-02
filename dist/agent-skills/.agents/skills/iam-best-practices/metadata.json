@@ -1,6 +1,6 @@
 {
   "id": "iam-best-practices",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Identity \u0026 Access Management Best Practices",
   "description": "Least-privilege IAM design, key rotation, MFA enforcement, role assumption, and cross-account access patterns for AWS / GCP / Azure / Kubernetes",
   "category": "prevention",
@@ -30,7 +30,7 @@
     "iac-security",
     "secret-detection"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-06",
   "sources": [
     "NIST SP 800-53 Rev. 5 (AC-2, AC-3, AC-6, AC-17, IA-2, IA-5)",
     "NIST SP 800-63B (Authenticator Assurance)",
