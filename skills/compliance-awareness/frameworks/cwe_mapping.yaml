@@ -32,6 +32,8 @@ mapping:
     cwes: [942, 1385]
   - skill: "container-security"
     cwes: [250, 269, 276, 732]
+  - skill: "electron-security"
+    cwes: [78, 22, 250, 693, 829, 1021, 200]
   - skill: "iac-security"
     cwes: [276, 732, 798, 1188]
   - skill: "serverless-security"
