@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.1.0"
+version: "1.2.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -16,7 +16,7 @@ token_budget:
   full: 2800
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-04"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -93,27 +93,14 @@ sources:
   bypass many of these controls; they should not be persisted as YAML in the
   repo.
 
-## Scanner engines
+## Tooling
 
-Engines available for scanning Dockerfiles. The MCP server harvests
-these markers at startup and exposes them via the
-`scan_dockerfile_engines` tool. Call that tool first to discover what
-is available on the current host, then let the user choose one or more
-engines before invoking `scan_dockerfile`.
-
-- **Internal** — built-in regex rules shipped with secure-code; always
-  available, offline-friendly. Covers the seven critical rules under
-  `## Rules` above (multi-stage, missing USER, EOL base, secrets in
-  env, ADD remote, curl-pipe-sh, apt without version pin). Limited
-  coverage compared with industry tools; best as a fallback when no
-  external scanner is installed.
-  <!-- engine: {
-    name: internal,
-    type: builtin,
-    scanner: dockerfile,
-    description: "Built-in regex rules — always available, offline.",
-    output_format: dockerfile_finding
-  } -->
+The built-in `scan_dockerfile` MCP tool covers the critical rules above
+(multi-stage, missing USER, EOL base, secrets in env, ADD remote,
+curl-pipe-sh, apt without version pin) offline. For broader coverage,
+**hadolint** is the industry-standard Dockerfile linter (~60
+ShellCheck-backed rules) — run it from the shell (`hadolint <file>`)
+when installed; it catches far more than the built-in regex set.
 
 ## Context (for humans)
 
