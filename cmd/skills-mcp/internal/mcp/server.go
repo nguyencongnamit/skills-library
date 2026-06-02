@@ -375,8 +375,6 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			return tools.ScanDockerfileSARIF(res), nil
 		}
 		return res, nil
-	case "scan_dockerfile_engines":
-		return s.lib.ListEngines("dockerfile")
 	case "explain_finding":
 		return s.lib.ExplainFinding(stringArg(args, "query"))
 	case "policy_check":
