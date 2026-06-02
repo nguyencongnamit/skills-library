@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-05-13T18:00:00Z",
+  "last_updated": "2026-06-02T00:00:00Z",
   "description": "Maps CVEs to code-level detection patterns. Unlike SCA tooling, this database is keyed off code shape so that even patched or re-introduced patterns can be caught at generation time. Coverage spans 2014-2025 landmark CVEs across major language ecosystems and infrastructure.",
   "references": [
     "https://nvd.nist.gov/",
