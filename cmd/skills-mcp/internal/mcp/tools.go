@@ -64,12 +64,21 @@ func toolDefinitions() []map[string]interface{} {
 				"properties": map[string]interface{}{
 					"text":      map[string]string{"type": "string", "description": "Inline text to scan. Mutually exclusive with file_path."},
 					"file_path": map[string]string{"type": "string", "description": "Absolute path to a local file to scan. Files larger than 10 MiB are rejected. Subject to --allowed-roots and the sensitive-directory deny-list."},
+					"engine":    map[string]string{"type": "string", "description": "Optional secrets-scanner engine from scan_secrets_engines. Empty or \"internal\" uses the built-in DLP rules (text or file_path); an external name (e.g. \"gitleaks\") runs that tool on file_path if it is installed on PATH."},
 					"format": map[string]interface{}{
 						"type":        "string",
-						"description": "Output format. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log for CI consumption.",
+						"description": "Output format for the builtin engine. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log for CI consumption.",
 						"enum":        []string{"", "json", "sarif"},
 					},
 				},
+			},
+		},
+		{
+			"name":        "scan_secrets_engines",
+			"description": "List secrets-scanner engines this server knows about, with per-engine availability (binary on PATH?) and an install hint when missing. Engines are declared in `skills/*/SKILL.md` via `<!-- engine: { ... } -->` markers. Call this to discover what is available, then run `scan_secrets` with the chosen `engine` (e.g. \"gitleaks\"). The built-in `internal` engine is always available and offline.",
+			"inputSchema": map[string]interface{}{
+				"type":       "object",
+				"properties": map[string]interface{}{},
 			},
 		},
 		{

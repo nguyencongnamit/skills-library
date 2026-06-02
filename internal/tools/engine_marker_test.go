@@ -214,6 +214,44 @@ func TestListEnginesReturnsInternalForDockerfile(t *testing.T) {
 	}
 }
 
+func TestListEnginesReturnsEnginesForSecrets(t *testing.T) {
+	// Integration check against secret-detection/SKILL.md, which
+	// declares the internal builtin and the gitleaks external engine.
+	lib, err := NewLibrary(repoRoot(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := lib.ListEngines("secrets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var seenInternal, seenGitleaks bool
+	for _, e := range res.Engines {
+		switch e.Name {
+		case "internal":
+			seenInternal = true
+			if e.Type != "builtin" || !e.Available {
+				t.Errorf("internal secrets engine = %+v; want builtin/available", e)
+			}
+			if e.SkillID != "secret-detection" {
+				t.Errorf("internal secrets engine SkillID = %q, want secret-detection", e.SkillID)
+			}
+		case "gitleaks":
+			seenGitleaks = true
+			if e.Type != "external" {
+				t.Errorf("gitleaks Type = %q, want external", e.Type)
+			}
+		}
+	}
+	if !seenInternal || !seenGitleaks {
+		t.Errorf("expected internal+gitleaks secrets engines, got %+v", res.Engines)
+	}
+	// builtin must sort before external.
+	if len(res.Engines) >= 2 && res.Engines[0].Type != "builtin" {
+		t.Errorf("first engine should be builtin, got %q", res.Engines[0].Type)
+	}
+}
+
 func TestListEnginesUnknownScannerReturnsEmpty(t *testing.T) {
 	// Calling scan_<unknown>_engines should not error — it should
 	// just return zero engines so the agent gets a deterministic

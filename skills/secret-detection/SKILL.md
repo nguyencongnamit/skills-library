@@ -1,6 +1,6 @@
 ---
 id: secret-detection
-version: "1.6.0"
+version: "1.7.0"
 title: "Secret Detection"
 description: "Detect and prevent hardcoded secrets, API keys, tokens, and credentials in code"
 category: prevention
@@ -18,7 +18,7 @@ token_budget:
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-04"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -71,6 +71,40 @@ sources:
 - Git commit SHAs in changelogs and release notes.
 - JWT tokens in the OAuth RFC documentation examples (`eyJ...` strings appearing in
   comments).
+
+## Scanner engines
+
+Secrets-scanner engines known to secure-code, with their coverage
+trade-offs. These are declarative entries; the MCP server harvests the
+markers and exposes them via `scan_secrets_engines` (discovery) and the
+`scan_secrets` `engine` argument (execution). The skill only records
+what exists — the host/tool layer decides how to surface the choice.
+
+- **Internal** — built-in DLP rules shipped with secure-code; always
+  available, offline. Scans inline text *or* a file, with entropy and
+  hotword-proximity scoring and a known-false-positive list. Best as a
+  fast, dependency-free default and the only option for inline `text`.
+  <!-- engine: {
+    name: internal,
+    type: builtin,
+    scanner: secrets,
+    description: "Built-in DLP regex + entropy rules — always available, offline."
+  } -->
+- **Gitleaks** — the industry-standard secrets scanner (~150 rules,
+  git-history aware). Broader rule coverage than the internal set;
+  operates on a file or directory path (not inline text). Output is
+  redacted SARIF so the raw secret value is not echoed back.
+  <!-- engine: {
+    name: gitleaks,
+    type: external,
+    scanner: secrets,
+    binary: gitleaks,
+    detect: [gitleaks, version],
+    execute: [gitleaks, detect, --no-git, --redact, --source, "{file_path}", --report-format, sarif, --report-path, /dev/stdout],
+    output_format: sarif,
+    install_hint: "brew install gitleaks",
+    upstream: "https://github.com/gitleaks/gitleaks"
+  } -->
 
 ## Context (for humans)
 

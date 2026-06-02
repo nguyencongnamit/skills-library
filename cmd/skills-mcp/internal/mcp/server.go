@@ -305,6 +305,13 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 	case "search_skills":
 		return s.lib.SearchSkills(stringArg(args, "query"))
 	case "scan_secrets":
+		// Optional `engine` delegates to an external secrets scanner
+		// declared via a SKILL.md marker (discover via
+		// scan_secrets_engines). External engines operate on a path, so
+		// they require file_path; empty or "internal" runs the builtin.
+		if eng := stringArg(args, "engine"); eng != "" && !strings.EqualFold(eng, "internal") {
+			return s.lib.RunEngine("secrets", eng, stringArg(args, "file_path"))
+		}
 		res, err := s.lib.ScanSecrets(
 			stringArg(args, "text"),
 			stringArg(args, "file_path"),
@@ -316,6 +323,8 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			return tools.ScanSecretsSARIF(res), nil
 		}
 		return res, nil
+	case "scan_secrets_engines":
+		return s.lib.ListEngines("secrets")
 	case "check_dependency":
 		res, err := s.lib.CheckDependency(
 			stringArg(args, "package"),
