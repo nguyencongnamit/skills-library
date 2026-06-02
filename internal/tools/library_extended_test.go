@@ -102,6 +102,30 @@ func TestCheckDependencyDoesNotLeakCrossEcosystemCVEs(t *testing.T) {
 	}
 }
 
+// TestCheckDependencyDoesNotLeakApplianceCVEs guards the appliance-CVE
+// retag: network-appliance / firmware CVEs (Citrix ADC, FortiOS, Pulse,
+// Ivanti, PAN-OS, Citrix Bleed) used to carry languages: ["*"], so a
+// substring of their name/description leaked them onto unrelated code
+// packages — e.g. the npm package "path" matched "Citrix ADC path
+// traversal", and "buffer"/"socks" matched "curl SOCKS5 heap buffer
+// overflow". After retagging those entries to ["appliance"] / ["c"],
+// the existing ecosystem filter drops them for code ecosystems.
+func TestCheckDependencyDoesNotLeakApplianceCVEs(t *testing.T) {
+	lib := newLibrary(t)
+	// Common-word npm package names that previously collided with the
+	// prose of appliance CVE descriptions.
+	for _, pkg := range []string{"path", "buffer", "tar", "socks", "glob"} {
+		res, err := lib.CheckDependency(pkg, "", "npm")
+		if err != nil {
+			t.Fatalf("CheckDependency(%s, npm): %v", pkg, err)
+		}
+		for _, c := range res.CVEs {
+			t.Errorf("CheckDependency(%s, npm) leaked CVE %s (%s) langs=%v; appliance/infra CVE matched a code package",
+				pkg, c.CVE, c.Name, c.Languages)
+		}
+	}
+}
+
 // TestCheckDependencyKeepsSameLanguageCVEs ensures the ecosystem filter
 // is not over-tight: a maven query for "spring" must still surface the
 // Java/Kotlin Spring CVEs in cve_patterns.json.
