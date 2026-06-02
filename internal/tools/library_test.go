@@ -302,87 +302,42 @@ func TestSearchSkillsEmptyReturnsAll(t *testing.T) {
 	}
 }
 
-// TestMergeLocaleHotwordsUnit covers the pure merge function with a
-// synthetic dataset so the algorithm is exercised independently of
-// the live dlp_patterns.json / dlp_patterns.locales.json files.
-func TestMergeLocaleHotwordsUnit(t *testing.T) {
-	patterns := []*Pattern{
-		{Name: "Generic Secret", Hotwords: []string{"secret", "API"}},
-		{Name: "AWS Access Key", Hotwords: []string{"aws", "access_key"}},
-		{Name: "Empty", Hotwords: nil},
-	}
-	translations := map[string]map[string]string{
-		"secret":     {"es": "secreto", "fr": "secret", "de": "geheimnis"},
-		"access_key": {"es": "clave_de_acceso"},
-	}
-	merged := mergeLocaleHotwords(patterns, translations)
-	// "secret"-row contributes secreto + geheimnis ("secret" -> "secret"
-	// dedupes against the existing English entry). "access_key" row
-	// contributes clave_de_acceso. "aws" / "api" rows are absent from
-	// the translations map and contribute nothing.
-	if merged != 3 {
-		t.Fatalf("merged=%d, want 3 (secreto, geheimnis, clave_de_acceso)", merged)
-	}
-	hasHotword := func(p *Pattern, w string) bool {
-		for _, h := range p.Hotwords {
-			if strings.EqualFold(h, w) {
-				return true
-			}
-		}
-		return false
-	}
-	if !hasHotword(patterns[0], "secreto") || !hasHotword(patterns[0], "geheimnis") {
-		t.Errorf("Generic Secret hotwords missing translations: %v", patterns[0].Hotwords)
-	}
-	if !hasHotword(patterns[1], "clave_de_acceso") {
-		t.Errorf("AWS Access Key missing access_key translation: %v", patterns[1].Hotwords)
-	}
-	// Re-merge to confirm idempotence: hotword set should not grow.
-	beforeLens := []int{len(patterns[0].Hotwords), len(patterns[1].Hotwords)}
-	merged = mergeLocaleHotwords(patterns, translations)
-	if merged != 0 {
-		t.Errorf("re-merge=%d, want 0 (dedupe)", merged)
-	}
-	if len(patterns[0].Hotwords) != beforeLens[0] || len(patterns[1].Hotwords) != beforeLens[1] {
-		t.Errorf("hotwords grew on re-merge: %v then %v",
-			beforeLens, []int{len(patterns[0].Hotwords), len(patterns[1].Hotwords)})
-	}
-}
-
-// TestLoadSecretRulesMergesLocaleSidecar is the integration check: it
-// runs the real loader against the on-disk dlp_patterns.json plus
-// dlp_patterns.locales.json sidecar and verifies that at least one
-// pattern picked up its locale translations.
-func TestLoadSecretRulesMergesLocaleSidecar(t *testing.T) {
+// TestLoadSecretRulesFromYAMLChecklist is the integration check for
+// the PR-B1 migration: the loader must read every type: secret_pattern
+// entry from checklists/secret_detection.yaml, populate runtime
+// fields, and compile each regex.
+func TestLoadSecretRulesFromYAMLChecklist(t *testing.T) {
 	lib := newLibrary(t)
 	rules, err := lib.loadSecretRules()
 	if err != nil {
 		t.Fatalf("loadSecretRules: %v", err)
 	}
-	// Every pattern that lists "secret" as an English hotword should
-	// now also carry the Spanish translation "secreto" (this row is
-	// the one used in the user-facing schema example).
-	var sawTranslated bool
-	for _, pat := range rules.Patterns {
-		hasSecret := false
-		hasSecreto := false
-		for _, h := range pat.Hotwords {
-			if strings.EqualFold(h, "secret") {
-				hasSecret = true
-			}
-			if strings.EqualFold(h, "secreto") {
-				hasSecreto = true
-			}
-		}
-		if hasSecret {
-			if !hasSecreto {
-				t.Errorf("pattern %q has English hotword 'secret' but no 'secreto' translation; got %v",
-					pat.Name, pat.Hotwords)
-			}
-			sawTranslated = true
+	if len(rules.Patterns) == 0 {
+		t.Fatalf("no patterns loaded from checklists/secret_detection.yaml")
+	}
+	// Spot-check: the well-known AWS Access Key entry must survive
+	// the migration with its hotwords and entropy floor intact.
+	var aws *Pattern
+	for _, p := range rules.Patterns {
+		if p.Name == "AWS Access Key" {
+			aws = p
+			break
 		}
 	}
-	if !sawTranslated {
-		t.Fatalf("no pattern in dlp_patterns.json carries the English hotword 'secret'; locale merge could not be validated")
+	if aws == nil {
+		t.Fatalf("AWS Access Key pattern missing after migration")
+	}
+	if aws.Regex == "" || aws.compiled == nil {
+		t.Errorf("AWS Access Key regex did not compile: %q", aws.Regex)
+	}
+	if aws.EntropyMin <= 0 {
+		t.Errorf("AWS Access Key entropy_min not carried: %v", aws.EntropyMin)
+	}
+	if len(aws.Hotwords) == 0 {
+		t.Errorf("AWS Access Key hotwords empty")
+	}
+	// Exclusions block must also have been carried.
+	if len(rules.Exclusions) == 0 {
+		t.Errorf("no exclusions loaded from YAML")
 	}
 }

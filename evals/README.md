@@ -50,7 +50,7 @@ The harness runs three checks, in order:
 
 1. `skills-check test secret-detection` — replays the >230-fixture
    corpus against the rule set (built from `skills/secret-detection/
-   rules/dlp_patterns.json`).
+   checklists/secret_detection.yaml`).
 2. `python3 evals/benchmarks/secret-detection-vs-gitleaks.py` — runs
    the same corpus against **both** the skills-library regex set
    **and** [gitleaks](https://github.com/gitleaks/gitleaks) (if

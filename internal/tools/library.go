@@ -18,6 +18,8 @@ import (
 	"sync"
 	"time"
 
+	"gopkg.in/yaml.v3"
+
 	"github.com/kennguy3n/skills-library/internal/skill"
 	"github.com/kennguy3n/skills-library/internal/tools/semver"
 )
@@ -834,37 +836,85 @@ func (l *Library) loadTyposquats() (*typosquatFile, error) {
 }
 
 // Pattern is one secret-detection regex paired with the runtime
-// metadata declared in dlp_patterns.json.
+// metadata declared in checklists/secret_detection.yaml.
 //
 // The pattern fields mirror the on-disk schema so CheckSecretPattern
 // can apply entropy gating, hotword proximity scoring, and denylist
 // filtering at match time rather than relying on the raw regex alone.
 type Pattern struct {
-	Name               string   `json:"name"`
-	Regex              string   `json:"regex"`
-	Prefix             string   `json:"prefix,omitempty"`
-	Severity           string   `json:"severity"`
-	ScoreWeight        float64  `json:"score_weight,omitempty"`
-	DenylistSubstrings []string `json:"denylist_substrings,omitempty"`
-	Hotwords           []string `json:"hotwords,omitempty"`
-	HotwordWindow      int      `json:"hotword_window,omitempty"`
-	HotwordBoost       float64  `json:"hotword_boost,omitempty"`
-	RequireHotword     bool     `json:"require_hotword,omitempty"`
-	EntropyMin         float64  `json:"entropy_min,omitempty"`
+	Name               string   `json:"name" yaml:"-"`
+	Regex              string   `json:"regex" yaml:"-"`
+	Prefix             string   `json:"prefix,omitempty" yaml:"prefix,omitempty"`
+	Severity           string   `json:"severity" yaml:"severity"`
+	ScoreWeight        float64  `json:"score_weight,omitempty" yaml:"score_weight,omitempty"`
+	DenylistSubstrings []string `json:"denylist_substrings,omitempty" yaml:"denylist_substrings,omitempty"`
+	Hotwords           []string `json:"hotwords,omitempty" yaml:"hotwords,omitempty"`
+	HotwordWindow      int      `json:"hotword_window,omitempty" yaml:"hotword_window,omitempty"`
+	HotwordBoost       float64  `json:"hotword_boost,omitempty" yaml:"hotword_boost,omitempty"`
+	RequireHotword     bool     `json:"require_hotword,omitempty" yaml:"require_hotword,omitempty"`
+	EntropyMin         float64  `json:"entropy_min,omitempty" yaml:"entropy_min,omitempty"`
+	References         []string `json:"references,omitempty" yaml:"references,omitempty"`
 	compiled           *regexp.Regexp
 }
 
-// Exclusion is one entry from dlp_exclusions.json.
+// Exclusion is one entry from the `exclusions:` block of
+// checklists/secret_detection.yaml. It tells CheckSecretPattern which
+// matches to flag as known false positives (documented placeholders,
+// fixture files, RFC example tokens, etc.).
 type Exclusion struct {
-	AppliesTo string   `json:"applies_to"`
-	Type      string   `json:"type"`
-	Words     []string `json:"words"`
-	MatchType string   `json:"match_type"`
+	AppliesTo string   `json:"applies_to" yaml:"applies_to"`
+	Type      string   `json:"type" yaml:"type"`
+	Words     []string `json:"words,omitempty" yaml:"words,omitempty"`
+	MatchType string   `json:"match_type,omitempty" yaml:"match_type,omitempty"`
 }
 
 type secretRules struct {
-	Patterns   []*Pattern  `json:"patterns"`
-	Exclusions []Exclusion `json:"exclusions"`
+	Patterns   []*Pattern
+	Exclusions []Exclusion
+}
+
+// secretChecklistItem is one entry from the `checks:` block of
+// checklists/secret_detection.yaml. The schema is intentionally
+// open-ended: items carrying `type: secret_pattern` are loaded as
+// runtime Pattern entries; other types (e.g. checklist bullets
+// derived from SKILL.md markers via derive-checklists) are
+// ignored by the secret scanner and preserved for forward
+// compatibility — the same YAML file can host both DLP patterns
+// and prose checklist rules without forcing two files.
+//
+// `pattern` (not `regex`) carries the regex to match the existing
+// checklist YAML convention used by the cicd / container skills,
+// so the scanner and derive-checklists share one shape.
+type secretChecklistItem struct {
+	ID                 string   `yaml:"id"`
+	Type               string   `yaml:"type"`
+	Title              string   `yaml:"title"`
+	Pattern            string   `yaml:"pattern"`
+	Severity           string   `yaml:"severity"`
+	Prefix             string   `yaml:"prefix,omitempty"`
+	ScoreWeight        float64  `yaml:"score_weight,omitempty"`
+	DenylistSubstrings []string `yaml:"denylist_substrings,omitempty"`
+	Hotwords           []string `yaml:"hotwords,omitempty"`
+	HotwordWindow      int      `yaml:"hotword_window,omitempty"`
+	HotwordBoost       float64  `yaml:"hotword_boost,omitempty"`
+	RequireHotword     bool     `yaml:"require_hotword,omitempty"`
+	EntropyMin         float64  `yaml:"entropy_min,omitempty"`
+	References         []string `yaml:"references,omitempty"`
+}
+
+// secretChecklistFile is the on-disk shape of
+// checklists/secret_detection.yaml. PR-B1 collapses what used to be
+// three sibling JSON files (dlp_patterns.json + dlp_exclusions.json
+// + dlp_patterns.locales.json) into a single YAML — the locales
+// sidecar was dropped entirely because it was AI-drafted, never
+// native-speaker-reviewed, and added maintenance burden out of
+// proportion to its real-world recall on non-English codebases
+// (which overwhelmingly keep English identifier names anyway).
+type secretChecklistFile struct {
+	SchemaVersion string                `yaml:"schema_version"`
+	Framework     string                `yaml:"framework"`
+	Checks        []secretChecklistItem `yaml:"checks"`
+	Exclusions    []Exclusion           `yaml:"exclusions"`
 }
 
 // SecretMatch is one match returned by CheckSecretPattern.
@@ -893,8 +943,9 @@ type CheckSecretPatternResult struct {
 }
 
 // CheckSecretPattern scans text against the secret-detection regex rules
-// and returns the matches, flagging any match present in
-// dlp_exclusions.json as a known false positive.
+// and returns the matches, flagging any match present in the
+// `exclusions:` block of checklists/secret_detection.yaml as a known
+// false positive.
 //
 // In addition to the regex match, each candidate is evaluated against
 // the pattern's runtime metadata before it is returned:
@@ -965,7 +1016,7 @@ func (l *Library) CheckSecretPattern(text string) (*CheckSecretPatternResult, er
 // the alphabet is one byte wide; secrets dominated by base64-style
 // charsets typically score in the 4–6 range, while English prose and
 // repeated characters sit below ~4. The entropy_min thresholds in
-// dlp_patterns.json are calibrated against this scale.
+// checklists/secret_detection.yaml are calibrated against this scale.
 func shannonEntropy(s string) float64 {
 	if s == "" {
 		return 0
@@ -1077,103 +1128,72 @@ func isKnownFalsePositive(exclusions []Exclusion, ruleName, match string) bool {
 	return false
 }
 
-// dlpLocaleFile is the on-disk schema for dlp_patterns.locales.json,
-// the optional multilingual sidecar that augments each pattern's
-// English hotword list with locale translations of generic hotwords
-// (e.g. "password" -> "contraseña", "passwort", ...). Brand names
-// and tech acronyms are intentionally not translated; see the
-// `skipped_hotwords` block in the sidecar for the policy.
-type dlpLocaleFile struct {
-	SchemaVersion       string                       `json:"schema_version"`
-	HotwordTranslations map[string]map[string]string `json:"hotword_translations"`
-}
+// secretChecklistPath is the on-disk location of the unified
+// secret-detection checklist YAML. PR-B1 collapsed the three legacy
+// JSON sidecars (rules/dlp_patterns.json, rules/dlp_exclusions.json,
+// rules/dlp_patterns.locales.json) into this single file under the
+// `checklists/` directory, matching the convention used by every
+// other skill (cicd-security, container-security, etc.).
+const secretChecklistPath = "skills/secret-detection/checklists/secret_detection.yaml"
 
-// mergeLocaleHotwords appends every translation declared in the
-// sidecar to each pattern's Hotwords slice when an existing English
-// hotword has an entry in the translations map. Translations are
-// added once per pattern, case-insensitive, so repeat loads do not
-// inflate the list. A missing or malformed sidecar is a no-op — the
-// English hotwords stay unchanged. Returns the number of translations
-// merged so tests and operators can sanity-check the augmentation.
-func mergeLocaleHotwords(patterns []*Pattern, translations map[string]map[string]string) int {
-	if len(translations) == 0 || len(patterns) == 0 {
-		return 0
-	}
-	merged := 0
-	for _, pat := range patterns {
-		if len(pat.Hotwords) == 0 {
-			continue
-		}
-		seen := make(map[string]bool, len(pat.Hotwords))
-		for _, h := range pat.Hotwords {
-			seen[strings.ToLower(h)] = true
-		}
-		for _, h := range pat.Hotwords {
-			row, ok := translations[strings.ToLower(h)]
-			if !ok {
-				continue
-			}
-			for _, t := range row {
-				t = strings.TrimSpace(t)
-				if t == "" {
-					continue
-				}
-				lower := strings.ToLower(t)
-				if seen[lower] {
-					continue
-				}
-				seen[lower] = true
-				pat.Hotwords = append(pat.Hotwords, t)
-				merged++
-			}
-		}
-	}
-	return merged
-}
-
+// loadSecretRules reads checklists/secret_detection.yaml, extracts
+// every `type: secret_pattern` entry from the `checks:` block as a
+// runtime Pattern, carries the `exclusions:` block verbatim, and
+// pre-compiles each regex. Items with any other `type:` are skipped
+// here — they may be present because derive-checklists merged
+// prose-checklist bullets into the same file, but they are not
+// regex patterns the secret scanner can apply.
+//
+// The result is cached on the Library for the lifetime of the
+// process; reload is not supported because the MCP server is
+// short-lived per-session.
 func (l *Library) loadSecretRules() (*secretRules, error) {
 	l.secretsMu.Lock()
 	defer l.secretsMu.Unlock()
 	if l.secrets != nil {
 		return l.secrets, nil
 	}
-	patternsPath := filepath.Join(l.root, "skills", "secret-detection", "rules", "dlp_patterns.json")
-	localesPath := filepath.Join(l.root, "skills", "secret-detection", "rules", "dlp_patterns.locales.json")
-	exclusionsPath := filepath.Join(l.root, "skills", "secret-detection", "rules", "dlp_exclusions.json")
-	pBody, err := os.ReadFile(patternsPath)
+	path := filepath.Join(l.root, filepath.FromSlash(secretChecklistPath))
+	body, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("read secret checklist: %w", err)
 	}
-	var p secretRules
-	if err := json.Unmarshal(pBody, &p); err != nil {
-		return nil, err
+	var file secretChecklistFile
+	if err := yaml.Unmarshal(body, &file); err != nil {
+		return nil, fmt.Errorf("parse secret checklist: %w", err)
 	}
-	if body, err := os.ReadFile(localesPath); err == nil {
-		var lf dlpLocaleFile
-		if uerr := json.Unmarshal(body, &lf); uerr == nil {
-			mergeLocaleHotwords(p.Patterns, lf.HotwordTranslations)
-		} else {
-			fmt.Fprintf(os.Stderr, "warn: dlp_patterns.locales.json present but did not parse (%v); continuing with English hotwords only\n", uerr)
-		}
-	} else if !os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "warn: dlp_patterns.locales.json present but unreadable (%v); continuing with English hotwords only\n", err)
+	rules := &secretRules{
+		Patterns:   make([]*Pattern, 0, len(file.Checks)),
+		Exclusions: file.Exclusions,
 	}
-	for _, pat := range p.Patterns {
-		re, err := regexp.Compile(pat.Regex)
-		if err != nil {
+	for _, item := range file.Checks {
+		if item.Type != "secret_pattern" {
+			// Forward-compatibility: ignore non-pattern items
+			// (e.g. checklist bullets derived from SKILL.md
+			// markers). They are valid YAML entries the
+			// scanner just doesn't know how to apply.
 			continue
 		}
-		pat.compiled = re
-	}
-	if body, err := os.ReadFile(exclusionsPath); err == nil {
-		var x struct {
-			Exclusions []Exclusion `json:"exclusions"`
+		pat := &Pattern{
+			Name:               item.Title,
+			Regex:              item.Pattern,
+			Prefix:             item.Prefix,
+			Severity:           item.Severity,
+			ScoreWeight:        item.ScoreWeight,
+			DenylistSubstrings: item.DenylistSubstrings,
+			Hotwords:           item.Hotwords,
+			HotwordWindow:      item.HotwordWindow,
+			HotwordBoost:       item.HotwordBoost,
+			RequireHotword:     item.RequireHotword,
+			EntropyMin:         item.EntropyMin,
+			References:         item.References,
 		}
-		if err := json.Unmarshal(body, &x); err == nil {
-			p.Exclusions = x.Exclusions
+		if re, err := regexp.Compile(pat.Regex); err == nil {
+			pat.compiled = re
 		}
+		rules.Patterns = append(rules.Patterns, pat)
 	}
-	l.secrets = &p
+	l.secrets = rules
 	return l.secrets, nil
 }
 
