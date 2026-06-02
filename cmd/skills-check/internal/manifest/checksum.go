@@ -24,7 +24,6 @@ var DefaultDistributableRoots = []string{
 	"rules",
 	"compliance",
 	"profiles",
-	"locales",
 }
 
 // ComputeChecksums walks the configured distributable roots under repoRoot,
@@ -114,11 +113,9 @@ func (m *Manifest) ComputeChecksumsForRoots(repoRoot string, roots []string) err
 
 	// Update or append.
 	for _, e := range entries {
-		lang := LanguageFromPath(e.path)
 		if existing := m.FileByPath(e.path); existing != nil {
 			existing.SHA256 = e.hash
 			existing.Size = e.size
-			existing.Language = lang
 			// e.hash is always non-empty here — HashFile returns an error
 			// path for unreadable files and entries with that error are
 			// not appended to `entries`. Promote any prior "added" marker
@@ -130,11 +127,10 @@ func (m *Manifest) ComputeChecksumsForRoots(repoRoot string, roots []string) err
 			continue
 		}
 		m.Files = append(m.Files, File{
-			Path:     e.path,
-			SHA256:   e.hash,
-			Size:     e.size,
-			Language: lang,
-			Action:   "added",
+			Path:   e.path,
+			SHA256: e.hash,
+			Size:   e.size,
+			Action: "added",
 		})
 	}
 	// Any files that were in the manifest but not found on disk: leave the
@@ -198,20 +194,4 @@ func HashFile(path string) (string, int64, error) {
 func HashBytes(data []byte) string {
 	sum := sha256.Sum256(data)
 	return hex.EncodeToString(sum[:])
-}
-
-// LanguageFromPath returns the BCP-47 locale tag for a file path under
-// locales/<bcp47>/... (e.g. "locales/zh-Hans/api-security/SKILL.md" -> "zh-Hans").
-// Returns the empty string for any path that is not locale-scoped.
-func LanguageFromPath(p string) string {
-	p = filepath.ToSlash(p)
-	if !strings.HasPrefix(p, "locales/") {
-		return ""
-	}
-	rest := strings.TrimPrefix(p, "locales/")
-	slash := strings.IndexByte(rest, '/')
-	if slash <= 0 {
-		return ""
-	}
-	return rest[:slash]
 }

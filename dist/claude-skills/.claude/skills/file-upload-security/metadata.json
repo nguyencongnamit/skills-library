@@ -23,10 +23,10 @@
   "related_skills": [
     "api-security",
     "ssrf-prevention",
-    "infrastructure-security",
+    "container-security",
     "cors-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-03",
   "sources": [
     "OWASP File Upload Cheat Sheet",
     "CWE-434: Unrestricted Upload of File with Dangerous Type",

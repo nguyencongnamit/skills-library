@@ -340,7 +340,7 @@ jobs:
           fail=0
           for skill in skills/*/; do
             skill_id=$(basename "$skill")
-            # Skip skills that have no SKILL.md (locales/ stubs etc).
+            # Skip any directory that has no SKILL.md.
             [ -f "$skill/SKILL.md" ] || continue
             if ! /tmp/skills-check derive-checklists "$skill_id" --path . --check; then
               fail=1
@@ -578,21 +578,3 @@ jobs:
             --skills-mcp ./skills-mcp \
             --out evals/baselines/scanner-eval-static.md \
             --verbose
-
-  locale-freshness:
-    name: Locale freshness (source_revision + translation pending banners)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          # Need git history so source_revision SHAs can be looked up.
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Run locale freshness check
-        run: python3 scripts/check-locale-freshness.py

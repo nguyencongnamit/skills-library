@@ -23,7 +23,7 @@ controls:
   - id: "CC7.1"
     title: "Vulnerability Detection and Monitoring"
     description: "The entity uses detection and monitoring procedures to identify changes to configurations that result in vulnerabilities."
-    skills: ["supply-chain-security", "infrastructure-security", "container-security", "iac-security"]
+    skills: ["supply-chain-security", "container-security", "iac-security"]
   - id: "CC7.2"
     title: "System Monitoring"
     description: "The entity monitors system components and the operation of those components for anomalies indicative of malicious acts, natural disasters, and errors."

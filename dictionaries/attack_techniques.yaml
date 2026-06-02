@@ -85,7 +85,7 @@ techniques:
     name: "Container API"
     tactic: "Credential Access"
     description: "Adversary abuses container/Kubernetes API endpoints to harvest service account tokens and other credentials mounted into pods."
-    defended_by: ["infrastructure-security"]
+    defended_by: ["container-security"]
     references:
       - "https://attack.mitre.org/techniques/T1552/007/"
 
@@ -133,7 +133,7 @@ techniques:
     name: "Deploy Container"
     tactic: "Defense Evasion"
     description: "Adversary deploys a container to execute or escalate. Covers privileged container abuse, hostPath mounts, and missing security contexts."
-    defended_by: ["infrastructure-security"]
+    defended_by: ["container-security"]
     references:
       - "https://attack.mitre.org/techniques/T1610/"
 
@@ -141,7 +141,7 @@ techniques:
     name: "Escape to Host"
     tactic: "Privilege Escalation"
     description: "Adversary breaks out of a container into the host. Privileged containers, hostPID, and overly-permissive capabilities are the usual roots."
-    defended_by: ["infrastructure-security"]
+    defended_by: ["container-security"]
     references:
       - "https://attack.mitre.org/techniques/T1611/"
 

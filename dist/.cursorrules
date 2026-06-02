@@ -55,7 +55,6 @@ not inlined; query them via MCP (or read the source on disk):
 
 - `container-security` — Container Security
 - `iac-security` — Infrastructure-as-Code Security
-- `infrastructure-security` — Infrastructure Security
 - `mobile-security` — Mobile Application Security
 - `protocol-security` — Protocol Security
 - `serverless-security` — Serverless Security

@@ -86,5 +86,3 @@ nav:
     - Air-gapped Install: air-gapped-install.md
   - Admin:
     - Team Rollout: admin-team-rollout.md
-  - Reference:
-    - Locale Audit: LOCALE_AUDIT.md

@@ -456,11 +456,6 @@ sdk/                      # programmatic access
 ├── go/                   # re-exports of internal/skill
 ├── python/               # skillslib (pyproject.toml, PyYAML)
 └── typescript/           # skillslib npm package (js-yaml, ESM)
-
-locales/                  # informational translations
-├── es/<skill>/SKILL.md
-├── fr/<skill>/SKILL.md
-└── de/<skill>/SKILL.md
 ```
 
 - **Profiles** are pure YAML — they list the skill IDs to enable plus optional
@@ -473,9 +468,6 @@ locales/                  # informational translations
   imports `internal/skill` directly. The Python and TypeScript SDKs
   reimplement the parser and validator independently so they have no Go
   build dependency.
-- **Locales** are not auto-loaded by the validator. They are reference
-  material for human review; the canonical English file under
-  `skills/<id>/SKILL.md` remains the source of truth for tooling.
 - **`.skills-check.yaml`** is written by `skills-check configure`. It
   configures private-repo deployments: alternate update source, bearer
   token env var, additional trusted Ed25519 public keys, and selected
