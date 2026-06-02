@@ -51,6 +51,22 @@ type Frontmatter struct {
 	RelatedSkills []string    `yaml:"related_skills,omitempty"`
 	LastUpdated   string      `yaml:"last_updated"`
 	Sources       []string    `yaml:"sources"`
+	// ExternalTools lists industry-standard CLIs the skill recommends
+	// running (via the shell) for deeper coverage than the built-in
+	// scanners — e.g. gitleaks for secrets, hadolint for Dockerfiles.
+	// This is the single source of truth: the pointer-file generator
+	// lifts these into the always-loaded CLAUDE.md so the agent sees
+	// them every session without having to fetch the skill body.
+	ExternalTools []ExternalTool `yaml:"external_tools,omitempty"`
+}
+
+// ExternalTool is one recommended external CLI declared by a skill.
+// Only Name and Purpose surface in the generated pointer file; Command
+// is kept as on-disk documentation for a human reading the SKILL.md.
+type ExternalTool struct {
+	Name    string `yaml:"name"`
+	Purpose string `yaml:"purpose,omitempty"`
+	Command string `yaml:"command,omitempty"`
 }
 
 // Body contains the parsed markdown body subsections.

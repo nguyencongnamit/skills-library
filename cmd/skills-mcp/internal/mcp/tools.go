@@ -199,6 +199,14 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "list_external_tools",
+			"description": "List the industry-standard external CLIs that secure-code skills recommend (declared in each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's PATH. Discovery only — the server never runs these tools. Use it to decide which external scanner to run, then run the chosen one yourself via the shell (e.g. `gitleaks dir` for whole-repo/git-history secret scanning, `hadolint <file>` for Dockerfile linting). The built-in MCP scanners (scan_secrets, scan_dockerfile, …) remain the offline default.",
+			"inputSchema": map[string]interface{}{
+				"type":       "object",
+				"properties": map[string]interface{}{},
+			},
+		},
+		{
 			"name":        "explain_finding",
 			"description": "Map a CWE ID, CVE ID, or free-text finding description to the relevant Skills Library skills and CVE-pattern entries. Returns the matching skills (with id, title, category, severity, and a short excerpt of the body) plus any CVE rows whose name or description mentions the query. Use this to attach remediation guidance to a SAST / SCA finding from another scanner.",
 			"inputSchema": map[string]interface{}{

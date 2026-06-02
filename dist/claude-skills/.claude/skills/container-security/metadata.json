@@ -1,6 +1,6 @@
 {
   "id": "container-security",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "title": "Container Security",
   "description": "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts",
   "category": "hardening",
@@ -27,7 +27,7 @@
     "secret-detection",
     "iam-best-practices"
   ],
-  "last_updated": "2026-06-04",
+  "last_updated": "2026-06-05",
   "sources": [
     "CIS Docker Benchmark v1.6",
     "CIS Kubernetes Benchmark v1.9",

@@ -101,6 +101,32 @@ Bullets without a marker are ignored — they remain prose-only knowledge that
 the AI assistant consults at code-generation time, deliberately not promoted
 to an automated rule.
 
+## External tools (`external_tools` frontmatter)
+
+A skill can recommend industry-standard external CLIs — tools the agent
+should run via the shell for deeper coverage than the built-in scanners
+(e.g. `gitleaks` for whole-repo / git-history secret scanning, `hadolint`
+for Dockerfile linting). Declare them in the SKILL.md frontmatter:
+
+```yaml
+external_tools:
+  - name: gitleaks          # also the binary looked up on PATH
+    purpose: "secrets, whole-repo + git history"
+    command: "gitleaks dir | gitleaks git"
+```
+
+The skill frontmatter is the single source of truth. Two consumers read it:
+
+1. `skills-check regenerate` lifts a one-line nudge into the generated
+   pointer files (CLAUDE.md, …) so the agent learns the tools exist every
+   session without fetching the skill body.
+2. The `list_external_tools` MCP tool reports each declared tool plus
+   whether its binary resolves on the host's PATH (`installed: true/false`).
+
+secure-code only *discovers* these tools — it never executes them. The agent
+runs the chosen tool itself via the shell. There is no marker schema, no
+registry, and no in-process execution to maintain.
+
 ## Token budgets
 
 Every `SKILL.md` declares `token_budget: { minimal, compact, full }`. The
