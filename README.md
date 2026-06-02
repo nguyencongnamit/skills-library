@@ -1,7 +1,7 @@
 # secure-code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-27-blue)](#skill-catalogue)
+[![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
@@ -274,7 +274,7 @@ Select your tier with `skills-check init --budget compact`. Compact is the defau
 ```
 secure-code/
 ├── README.md  PROPOSAL.md  ARCHITECTURE.md  SIGNING.md  LICENSE
-├── skills/                              # 27 skill definitions (the core product)
+├── skills/                              # 28 skill definitions (the core product)
 │   ├── secret-detection/                #   74 DLP patterns + exclusions + test corpus
 │   ├── dependency-audit/                #   known-malicious package corpus
 │   ├── supply-chain-security/           #   typosquat + dependency-confusion rules
@@ -540,7 +540,7 @@ out-of-band YubiKey-backed signing procedure and key management policy.
 
 ## Skill catalogue
 
-All 27 skills are language-agnostic unless otherwise noted.
+All 28 skills are language-agnostic unless otherwise noted.
 
 | Skill | Category | Severity | Languages |
 |-------|----------|----------|-----------|
@@ -552,6 +552,7 @@ All 27 skills are language-agnostic unless otherwise noted.
 | `compliance-awareness` | compliance | medium | * |
 | `iac-security` | hardening | high | hcl, yaml, json |
 | `container-security` | hardening | high | dockerfile, yaml |
+| `electron-security` | hardening | critical | javascript, typescript |
 | `frontend-security` | prevention | high | javascript, typescript, html |
 | `database-security` | prevention | high | sql, javascript, typescript, python, java, go |
 | `crypto-misuse` | prevention | high | * |

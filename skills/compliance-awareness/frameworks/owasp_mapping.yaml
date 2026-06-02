@@ -34,6 +34,8 @@ mapping:
     owasp_items: ["A05"]
   - skill: "container-security"
     owasp_items: ["A05"]
+  - skill: "electron-security"
+    owasp_items: ["A01", "A05", "A08"]
   - skill: "iac-security"
     owasp_items: ["A05"]
   - skill: "serverless-security"

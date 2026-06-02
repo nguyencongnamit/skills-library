@@ -52,6 +52,7 @@ not inlined; query them via MCP (or read the source on disk):
 ### hardening
 
 - `container-security` — Container Security
+- `electron-security` — Electron Desktop Security
 - `iac-security` — Infrastructure-as-Code Security
 - `mobile-security` — Mobile Application Security
 - `protocol-security` — Protocol Security
