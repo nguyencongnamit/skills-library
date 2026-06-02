@@ -2594,7 +2594,7 @@
     },
     {
       "path": "skills/container-security/checklists/dockerfile_hardening.yaml",
-      "sha256": "e79777464cbb39b17d7c138c502f394711e0a90fec5d221393262421df840140",
+      "sha256": "0bee8b233e36d25e4ff7b3d8a167964aa9d70cad67a0f1a8cbc7c53def2ba47f",
       "size": 2983,
       "action": "unchanged"
     },
@@ -2974,24 +2974,6 @@
       "path": "skills/secret-detection/checklists/secret_detection.yaml",
       "sha256": "78bdb3c215a6fee56e1467b026aa3eca8b9c7ec4b37ae3bad350ffe55b439621",
       "size": 26805,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/secret-detection/rules/dlp_exclusions.json",
-      "sha256": "051181795d69d464b63c374c8cb6fb4be7f8d784d1e530d89e977705e63116c8",
-      "size": 1270,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/secret-detection/rules/dlp_patterns.json",
-      "sha256": "9b4c407b9032d3f76c831f88e10913ec7d138aebc201f3271bd16ad065f251a6",
-      "size": 28711,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/secret-detection/rules/dlp_patterns.locales.json",
-      "sha256": "9b1237652e2e6ebab319d9a40b479ea6c8a44f174d4932c8e97454d738e0136b",
-      "size": 12142,
       "action": "unchanged"
     },
     {
