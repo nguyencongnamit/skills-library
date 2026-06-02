@@ -1,6 +1,6 @@
 ---
 id: iac-security
-version: "1.1.0"
+version: "1.2.0"
 title: "Infrastructure-as-Code Security"
 description: "Hardening rules for Terraform, CloudFormation, and Pulumi: state, providers, drift, secrets"
 category: hardening
@@ -16,12 +16,19 @@ token_budget:
   full: 2500
 rules_path: "checklists/"
 related_skills: ["container-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-06"
 sources:
   - "CIS Benchmarks (AWS, Azure, GCP)"
   - "HashiCorp Terraform Best Practices"
   - "NIST SP 800-53 Rev. 5 (CM-6, CM-8, SC-28)"
   - "OWASP IaC Security Top 10"
+external_tools:
+  - name: checkov
+    purpose: "IaC misconfiguration scan (Terraform/CloudFormation/Kubernetes/Helm)"
+    command: "checkov -d ."
+  - name: trivy
+    purpose: "IaC config misconfiguration scan"
+    command: "trivy config ."
 ---
 
 # Infrastructure-as-Code Security

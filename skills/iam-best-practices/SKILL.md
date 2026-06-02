@@ -1,6 +1,6 @@
 ---
 id: iam-best-practices
-version: "1.0.0"
+version: "1.1.0"
 title: "Identity & Access Management Best Practices"
 description: "Least-privilege IAM design, key rotation, MFA enforcement, role assumption, and cross-account access patterns for AWS / GCP / Azure / Kubernetes"
 category: prevention
@@ -17,7 +17,7 @@ token_budget:
   full: 2400
 rules_path: "rules/"
 related_skills: ["auth-security", "iac-security", "secret-detection"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-06"
 sources:
   - "NIST SP 800-53 Rev. 5 (AC-2, AC-3, AC-6, AC-17, IA-2, IA-5)"
   - "NIST SP 800-63B (Authenticator Assurance)"
@@ -27,6 +27,10 @@ sources:
   - "Microsoft Azure RBAC Best Practices"
   - "CNCF Kubernetes RBAC Good Practices"
   - "OWASP Cloud Security Top 10"
+external_tools:
+  - name: prowler
+    purpose: "live cloud account IAM/security posture assessment (AWS/Azure/GCP)"
+    command: "prowler aws"
 ---
 
 # Identity & Access Management Best Practices
