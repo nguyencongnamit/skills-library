@@ -16,8 +16,8 @@ token_budget:
   compact: 900
   full: 2400
 rules_path: "checklists/"
-related_skills: ["api-security", "secret-detection", "infrastructure-security"]
-last_updated: "2026-05-12"
+related_skills: ["api-security", "secret-detection", "container-security"]
+last_updated: "2026-06-03"
 sources:
   - "OWASP Top 10 2021"
   - "CWE Top 25 2023"

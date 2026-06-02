@@ -23,9 +23,9 @@
   "related_skills": [
     "api-security",
     "cors-security",
-    "infrastructure-security"
+    "iac-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-03",
   "sources": [
     "OWASP SSRF Prevention Cheat Sheet",
     "CWE-918: Server-Side Request Forgery",

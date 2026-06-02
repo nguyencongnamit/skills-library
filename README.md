@@ -1,7 +1,7 @@
 # secure-code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
+[![Skills](https://img.shields.io/badge/skills-27-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
@@ -274,12 +274,11 @@ Select your tier with `skills-check init --budget compact`. Compact is the defau
 ```
 secure-code/
 ├── README.md  PROPOSAL.md  ARCHITECTURE.md  SIGNING.md  LICENSE
-├── skills/                              # 28 skill definitions (the core product)
+├── skills/                              # 27 skill definitions (the core product)
 │   ├── secret-detection/                #   74 DLP patterns + exclusions + test corpus
 │   ├── dependency-audit/                #   known-malicious package corpus
 │   ├── supply-chain-security/           #   typosquat + dependency-confusion rules
 │   ├── secure-code-review/              #   OWASP Top 10 checklists + injection patterns
-│   ├── infrastructure-security/         #   K8s / Docker / Terraform hardening
 │   ├── api-security/                    #   auth + input validation patterns
 │   ├── compliance-awareness/            #   CWE + OWASP framework mappings
 │   ├── iac-security/                    #   Terraform / CloudFormation / Pulumi
@@ -344,11 +343,10 @@ secure-code/
 │   ├── homebrew/ winget/ scoop/         #   tap formula + winget + scoop
 │   ├── apt-yum/                         #   GitHub Pages-hosted APT / YUM repos
 │   └── codesign/                        #   notarization + Authenticode docs
-├── docs/                                # Install + admin docs + locale audit
+├── docs/                                # Install + admin docs
 │   ├── install-{macos,linux,windows}.md
 │   ├── admin-team-rollout.md
-│   ├── air-gapped-install.md
-│   └── LOCALE_AUDIT.md
+│   └── air-gapped-install.md
 ├── profiles/                            # Enterprise --profile mappings
 │   ├── financial-services.yaml
 │   ├── healthcare.yaml
@@ -361,16 +359,6 @@ secure-code/
 │   ├── go/                              #   Re-exports of internal/skill
 │   ├── python/                          #   skillslib Python package
 │   └── typescript/                      #   skillslib npm package
-├── locales/                             # Translated SKILL.md (informational)
-│   ├── es/ fr/ de/ ar/ zh-Hans/ pt-BR/  #   28 SKILL.md per locale; the 3 flagship
-│   │                                    #   skills (secret-detection, supply-chain,
-│   │                                    #   infrastructure) under es/ fr/ de/ are
-│   │                                    #   translated; the remaining 25 + every
-│   │                                    #   ar/ zh-Hans/ pt-BR/ cell is a stub with
-│   │                                    #   a TRANSLATION PENDING banner over the
-│   │                                    #   English original (regenerate via
-│   │                                    #   scripts/generate-locale-stubs.py)
-│   └── README.md                        #   translation policy + locale audit reference
 ├── manifest.json                        # Root manifest for signed remote updates
 └── .github/workflows/
     ├── validate.yml                     # CI: validate all skills, rules, manifests
@@ -385,9 +373,8 @@ secure-code/
   update protocol, CLI layout, scheduler implementation, and signing model.
 - [SIGNING.md](./SIGNING.md) — Ed25519 release signing procedure and key
   management policy.
-- [docs/](./docs/) — install guides (macOS / Linux / Windows / air-gapped), the
-  team rollout admin guide, and a locale audit covering top-10 languages + GCC
-  + Southeast Asia + Germany.
+- [docs/](./docs/) — install guides (macOS / Linux / Windows / air-gapped) and
+  the team rollout admin guide.
 - [packaging/codesign/README.md](./packaging/codesign/README.md) — macOS
   notarization and Windows Authenticode signing in the release workflow.
 
@@ -553,7 +540,7 @@ out-of-band YubiKey-backed signing procedure and key management policy.
 
 ## Skill catalogue
 
-All 28 skills are language-agnostic unless otherwise noted.
+All 27 skills are language-agnostic unless otherwise noted.
 
 | Skill | Category | Severity | Languages |
 |-------|----------|----------|-----------|
@@ -561,7 +548,6 @@ All 28 skills are language-agnostic unless otherwise noted.
 | `dependency-audit` | supply-chain | high | * |
 | `secure-code-review` | prevention | high | * |
 | `supply-chain-security` | supply-chain | critical | * |
-| `infrastructure-security` | hardening | high | yaml, hcl, dockerfile |
 | `api-security` | prevention | high | * |
 | `compliance-awareness` | compliance | medium | * |
 | `iac-security` | hardening | high | hcl, yaml, json |
@@ -650,23 +636,6 @@ import { loadSkill, extract } from "@skills-library/skillslib";
 const s = loadSkill("skills/secret-detection/SKILL.md");
 console.log(extract(s, "compact"));
 ```
-
-## Localization
-
-Translated copies of the SKILL.md files live under [`locales/`](./locales).
-Tier 1 coverage today: **6 locales** (`es`, `fr`, `de`, `ar`, `zh-Hans`,
-`pt-BR`) × **28 skills**, of which 9 cells are real translations (the three
-flagship skills `secret-detection`, `supply-chain-security`,
-`infrastructure-security` under `es/`, `fr/`, `de/`) and the remaining 159
-cells are stubs that prepend a `> ⚠️ TRANSLATION PENDING` banner over the
-untranslated English body. Run [`scripts/generate-locale-stubs.py`](./scripts/generate-locale-stubs.py)
-to regenerate the stubs after adding a skill or a locale.
-
-Translations remain informational — the canonical English file under
-`skills/<id>/SKILL.md` is the source of truth for the validator and the IDE
-config generators. A full audit of language coverage gaps for top-10 world
-languages, the GCC region, Southeast Asia, and Germany is in
-[`docs/LOCALE_AUDIT.md`](./docs/LOCALE_AUDIT.md).
 
 ## Contributing
 

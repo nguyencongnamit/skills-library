@@ -240,7 +240,7 @@ func TestParseRejectsEmptyListFields(t *testing.T) {
 // caller fixing the typed Skill can address everything in one pass,
 // matching sdk/go.Validate's collect-all behavior.
 func TestValidateAccumulatesAllDefects(t *testing.T) {
-	good, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
+	good, err := ParseBytes("skills/example-skill/SKILL.md", []byte(validSkill))
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
@@ -279,7 +279,7 @@ func TestValidateAccumulatesAllDefects(t *testing.T) {
 // never as both "missing category" and "invalid category \"\"". Same
 // for Severity.
 func TestValidateEmptyEnumReportsOneError(t *testing.T) {
-	good, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
+	good, err := ParseBytes("skills/example-skill/SKILL.md", []byte(validSkill))
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
@@ -380,96 +380,13 @@ func TestIsValidTier(t *testing.T) {
 	}
 }
 
-const localizedSkill = `---
-id: example-skill
-language: ar
-source_revision: "abc1234567"
-dir: rtl
-version: "1.0.0"
-title: "مهارة مثال"
-description: "A skill used to exercise the locale fields"
-category: prevention
-severity: high
-applies_to:
-  - "before every commit"
-languages: ["*"]
-token_budget:
-  minimal: 100
-  compact: 400
-  full: 1200
-rules_path: "rules/"
-last_updated: "2026-05-15"
-sources:
-  - "Test source"
----
-
-# مهارة مثال
-
-## Rules (for AI agents)
-
-### ALWAYS
-- always-one.
-
-### NEVER
-- never-one.
-`
-
-func TestParseLocaleFields(t *testing.T) {
-	s, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-	if s.Frontmatter.Language != "ar" {
-		t.Errorf("language = %q, want ar", s.Frontmatter.Language)
-	}
-	if s.Frontmatter.SourceRevision != "abc1234567" {
-		t.Errorf("source_revision = %q, want abc1234567", s.Frontmatter.SourceRevision)
-	}
-	if s.Frontmatter.Dir != "rtl" {
-		t.Errorf("dir = %q, want rtl", s.Frontmatter.Dir)
-	}
-}
-
-func TestParseInvalidDir(t *testing.T) {
-	bad := strings.Replace(localizedSkill, "dir: rtl", "dir: sideways", 1)
-	_, err := ParseBytes("bad.md", []byte(bad))
-	if err == nil {
-		t.Fatalf("expected error for invalid dir")
-	}
-	if !strings.Contains(err.Error(), "invalid dir") {
-		t.Errorf("error should mention invalid dir, got %v", err)
-	}
-}
-
-// TestValidateRejectsInvalidDir verifies that Skill.Validate() applies the
-// same dir-allowlist check as ParseBytes — Validate is the entry point for
-// callers that construct a Skill outside of the parser.
-func TestValidateRejectsInvalidDir(t *testing.T) {
-	s, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-	s.Frontmatter.Dir = "sideways"
-	verr := s.Validate()
-	if verr == nil {
-		t.Fatalf("Validate accepted dir=sideways; want error")
-	}
-	if !strings.Contains(verr.Error(), "invalid dir") {
-		t.Errorf("Validate error should mention invalid dir, got %v", verr)
-	}
-	s.Frontmatter.Dir = "rtl"
-	if err := s.Validate(); err != nil {
-		t.Errorf("Validate rejected dir=rtl: %v", err)
-	}
-}
-
 // TestValidateMirrorsParseBytes ensures Skill.Validate() catches every kind
 // of frontmatter defect that ParseBytes catches — required-field presence,
 // allowlists, and TokenBudget positives — so callers constructing a Skill
 // outside the parser cannot bypass validation.
 func TestValidateMirrorsParseBytes(t *testing.T) {
 	// Start from a fully valid Skill, then mutate one field at a time.
-	good, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
+	good, err := ParseBytes("skills/example-skill/SKILL.md", []byte(validSkill))
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
@@ -521,7 +438,7 @@ func TestValidateMirrorsParseBytes(t *testing.T) {
 // catches the *invalid-non-empty* case, exercised separately in
 // TestValidateMirrorsParseBytes.
 func TestValidateEmptyEnumsReportMissing(t *testing.T) {
-	good, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
+	good, err := ParseBytes("skills/example-skill/SKILL.md", []byte(validSkill))
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
@@ -597,7 +514,7 @@ func TestValidateInvalidEnumMatchesParseBytes(t *testing.T) {
 			// with the allowlist temporarily relaxed so we land on a
 			// typed Skill carrying the invalid value, then call
 			// Validate.
-			good, err := ParseBytes("locales/ar/example-skill/SKILL.md", []byte(localizedSkill))
+			good, err := ParseBytes("skills/example-skill/SKILL.md", []byte(validSkill))
 			if err != nil {
 				t.Fatalf("setup parse: %v", err)
 			}
@@ -616,24 +533,5 @@ func TestValidateInvalidEnumMatchesParseBytes(t *testing.T) {
 				t.Errorf("Validate error for %s = %v, want suffix %q (must match ParseBytes wording)", tc.name, validateErr, tc.wantSuffix)
 			}
 		})
-	}
-}
-
-func TestParseDefaultsToNoLocaleFields(t *testing.T) {
-	// English source skill has none of language / source_revision /
-	// dir set — these must be empty strings (zero values), not
-	// missing fields, so they round-trip cleanly through json/yaml.
-	s, err := ParseBytes("skills/example/SKILL.md", []byte(validSkill))
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-	if s.Frontmatter.Language != "" {
-		t.Errorf("language should be empty for English source, got %q", s.Frontmatter.Language)
-	}
-	if s.Frontmatter.SourceRevision != "" {
-		t.Errorf("source_revision should be empty for English source, got %q", s.Frontmatter.SourceRevision)
-	}
-	if s.Frontmatter.Dir != "" {
-		t.Errorf("dir should be empty for English source, got %q", s.Frontmatter.Dir)
 	}
 }

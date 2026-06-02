@@ -325,8 +325,7 @@ jobs:
             dist \
             rules \
             compliance \
-            profiles \
-            locales
+            profiles
           # Pack the full upstream OSV cache as a separate asset. The
           # archive's top-level entry is `osv/`, so `fetch-vulns
           # --from-release` can extract it directly into the user's
@@ -381,7 +380,7 @@ jobs:
             - `skills-check-<goos>-<goarch>[.exe]` — CLI binary (reproducible build).
             - `checksums-<goos>-<goarch>.txt` — SHA-256 of each binary.
             - `manifest.json` — library manifest (signed out-of-band before publish).
-            - `skills-library-data.tar.gz` — library payload (skills, vulnerabilities, dictionaries, dist, rules, compliance, profiles, locales, manifest.json). This is what `skills-check update` downloads by default. The bundled `vulnerabilities/osv/` tree is a small latest-first sample.
+            - `skills-library-data.tar.gz` — library payload (skills, vulnerabilities, dictionaries, dist, rules, compliance, profiles, manifest.json). This is what `skills-check update` downloads by default. The bundled `vulnerabilities/osv/` tree is a small latest-first sample.
             - `osv-cache.tar.gz` — full upstream OSV catalogue (`osv/<eco>/...`). Consumed by `skills-check fetch-vulns --from-release` to populate the user cache with complete coverage without hitting osv.dev.
             - `deltas.tar.gz` — patch set against the previous release (best effort).
             - `SHA256SUMS.txt` — checksum of every asset above.

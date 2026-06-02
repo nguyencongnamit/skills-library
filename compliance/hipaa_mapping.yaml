@@ -6,7 +6,7 @@ controls:
   - id: "164.308(a)(1)(ii)(A)"
     title: "Risk Analysis"
     description: "Conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of ePHI."
-    skills: ["supply-chain-security", "infrastructure-security"]
+    skills: ["supply-chain-security"]
     references: ["https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"]
   - id: "164.308(a)(3)(ii)(A)"
     title: "Authorization and/or Supervision"
