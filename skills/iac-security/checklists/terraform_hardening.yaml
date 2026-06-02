@@ -52,3 +52,17 @@ patterns:
   - id: cfn-no-hardcoded-secrets
     severity: critical
     rule: "CloudFormation templates use AWS::SecretsManager::Secret / dynamic references, not literal passwords"
+  # Salvaged from the deprecated infrastructure-security skill (PR: deprecate-infrastructure-security).
+  # These are AWS resource-level controls the generic terraform rules above did not cover.
+  - id: tf-s3-block-public
+    severity: critical
+    rule: "Every aws_s3_bucket has a companion aws_s3_bucket_public_access_block with block_public_acls, block_public_policy, ignore_public_acls, and restrict_public_buckets all set to true"
+    cwe: 284
+  - id: tf-rds-not-public
+    severity: high
+    rule: "aws_db_instance / aws_rds_cluster set publicly_accessible=false unless an internet-facing design is explicitly documented"
+    cwe: 284
+  - id: tf-cloudtrail-enabled
+    severity: high
+    rule: "An aws_cloudtrail trail exists with is_multi_region_trail=true and enable_log_file_validation=true so control-plane activity is auditable across all regions"
+    cwe: 778

@@ -8,26 +8,26 @@
   "files": [
     {
       "path": "compliance/hipaa_mapping.yaml",
-      "sha256": "d5ca5b7de67f316001d617192a0b3d052fab28d48ce572656eef5f7299ecb180",
-      "size": 3069,
+      "sha256": "fcde4eb3fec95a51d6e6b7547775d20f2c4b99643eaee073e2607ede95b67cc7",
+      "size": 3042,
       "action": "unchanged"
     },
     {
       "path": "compliance/pci_dss_mapping.yaml",
-      "sha256": "3d08a4ae7ad36cc4d322459ba55c52dd304727f429887ccde45e8f9180756596",
-      "size": 3820,
+      "sha256": "0ec365a11550963af0ba7817802ebf465da42f5e12d1eee8bfc0e30ea41d5ba5",
+      "size": 3739,
       "action": "unchanged"
     },
     {
       "path": "compliance/soc2_mapping.yaml",
-      "sha256": "f9d50d4f3c63502c6bef34c7a1b480efd04d92512a452d0334c1234dfaf451c8",
-      "size": 2978,
+      "sha256": "a140f08090f15e02ff33e289d6053272ffbea8dced66f9db65135565e2347d3c",
+      "size": 2951,
       "action": "unchanged"
     },
     {
       "path": "dictionaries/attack_techniques.yaml",
-      "sha256": "d17ed6201283cb8e09e4fcd981646c3d0635834b5e7be5ae360b44cc11dc8790",
-      "size": 8244,
+      "sha256": "5020b59d3cb2d699c55d976fbf5942cfcf6372ce34514794abe3299a37d95546",
+      "size": 8229,
       "action": "unchanged"
     },
     {
@@ -50,38 +50,38 @@
     },
     {
       "path": "dist/.clinerules",
-      "sha256": "44ae5aed2b9edde838aa768696c4077519a9ccfc9999d3f5ddb5c66fb8a757df",
-      "size": 3912,
+      "sha256": "ea1b6dafd9a8f493588366f1910b71f9b87acd091786aca031c3aee9f227d244",
+      "size": 3856,
       "action": "unchanged"
     },
     {
       "path": "dist/.cursorrules",
-      "sha256": "e8763ef40f2a53a74577872c60cbf915d0d415a77be35d93bde896dcfe68c099",
-      "size": 3903,
+      "sha256": "2fab30b66b614b41af20277e99d6dff840e2ad5ffaec85538f6ea5c368fc68a7",
+      "size": 3847,
       "action": "unchanged"
     },
     {
       "path": "dist/.windsurfrules",
-      "sha256": "020e281236b975b8c77e37c605e90cbfa883fdeb05f2ac383e619f9ddbc1a802",
-      "size": 3907,
+      "sha256": "a1f04f8a2eb356243d08ab7cca2b98a0d85ae5338cd12234beffb1c1e807bea8",
+      "size": 3851,
       "action": "unchanged"
     },
     {
       "path": "dist/AGENTS.md",
-      "sha256": "8e0c3edc70b2834075653fdb84c17da31e7dbe6c591c8c58315ef45dc5fbfc92",
-      "size": 3844,
+      "sha256": "01fc09cf0b84643b64584c622ed134e1819393df11b0f8907286cc58aafdbdb4",
+      "size": 3788,
       "action": "unchanged"
     },
     {
       "path": "dist/CLAUDE.md",
-      "sha256": "01818b022c96225e09a7a186a00f8a49972e1ecbb23521bafe40fe4e3afbe34e",
-      "size": 3834,
+      "sha256": "1311372fcd505c7827a84ead0a364d05394a7208232f4b842a2107b547300e73",
+      "size": 3778,
       "action": "unchanged"
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "2ae9bddd370df16095641f983071f3b33b41fad8782dc3bccbe8a2871a8d1d21",
-      "size": 97473,
+      "sha256": "1267a8a919665170c83f9db5d64f4ada12f026863cb34092b992d5cee30a6f81",
+      "size": 95001,
       "action": "unchanged"
     },
     {
@@ -140,8 +140,8 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "b7ced19ddc61259dd0f8beb7e0a56929a1c2d1ff5da1b603bd91009552951026",
-      "size": 924,
+      "sha256": "0f848c3d132df3257ccbc5e13541907b6d3aa0056d9f04484c3ff2b8c0890fb3",
+      "size": 919,
       "action": "unchanged"
     },
     {
@@ -224,8 +224,8 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/file-upload-security/metadata.json",
-      "sha256": "a52fd1dbd29749d5b78235c0a465a745df8a0d432c922b59af7cb3b1607fcb5d",
-      "size": 1071,
+      "sha256": "30b90d6b072cc0954dbf5ca02ef42dc6a2ffe6e8600f5d22a0b01b2631b2ec0a",
+      "size": 1066,
       "action": "unchanged"
     },
     {
@@ -260,8 +260,8 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/iac-security/metadata.json",
-      "sha256": "5a1ebc001f3d2facca503acdd85c0aae11536d15fb385d0703886eaab316142f",
-      "size": 967,
+      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "size": 962,
       "action": "unchanged"
     },
     {
@@ -274,18 +274,6 @@
       "path": "dist/agent-skills/.agents/skills/iam-best-practices/metadata.json",
       "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
       "size": 1308,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/agent-skills/.agents/skills/infrastructure-security/SKILL.md",
-      "sha256": "ac6ed68e53858e66bef205a063fb53d2bb36c162c1dd0193a589ffff80862edf",
-      "size": 2881,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/agent-skills/.agents/skills/infrastructure-security/metadata.json",
-      "sha256": "b277e7d207676be945887a2f71bebf05f8503f6b6a525d05106204980b16fbae",
-      "size": 911,
       "action": "unchanged"
     },
     {
@@ -368,8 +356,8 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/secure-code-review/metadata.json",
-      "sha256": "39f3fb3c6f83a1305ea1aa38895384244f472ff5bed25f0a5f1b488292ac9dd2",
-      "size": 833,
+      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "size": 828,
       "action": "unchanged"
     },
     {
@@ -392,8 +380,8 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/ssrf-prevention/metadata.json",
-      "sha256": "6a96fcf6305cb39fc10d722f1a6ca53ae31f7f84527b93f9fc4b7021a0ee05a9",
-      "size": 1122,
+      "sha256": "bba16fdea0b3edfad65e97ebd832f4dadde177eda60b51df888c3fe9dde1122f",
+      "size": 1111,
       "action": "unchanged"
     },
     {
@@ -476,8 +464,8 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "b7ced19ddc61259dd0f8beb7e0a56929a1c2d1ff5da1b603bd91009552951026",
-      "size": 924,
+      "sha256": "0f848c3d132df3257ccbc5e13541907b6d3aa0056d9f04484c3ff2b8c0890fb3",
+      "size": 919,
       "action": "unchanged"
     },
     {
@@ -560,8 +548,8 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/file-upload-security/metadata.json",
-      "sha256": "a52fd1dbd29749d5b78235c0a465a745df8a0d432c922b59af7cb3b1607fcb5d",
-      "size": 1071,
+      "sha256": "30b90d6b072cc0954dbf5ca02ef42dc6a2ffe6e8600f5d22a0b01b2631b2ec0a",
+      "size": 1066,
       "action": "unchanged"
     },
     {
@@ -596,8 +584,8 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/iac-security/metadata.json",
-      "sha256": "5a1ebc001f3d2facca503acdd85c0aae11536d15fb385d0703886eaab316142f",
-      "size": 967,
+      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "size": 962,
       "action": "unchanged"
     },
     {
@@ -610,18 +598,6 @@
       "path": "dist/claude-skills/.claude/skills/iam-best-practices/metadata.json",
       "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
       "size": 1308,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/claude-skills/.claude/skills/infrastructure-security/SKILL.md",
-      "sha256": "2743c193b9315540e7af7c1ba9b2bcff6ef40edca1e43d497e3dfad26747d657",
-      "size": 2856,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/claude-skills/.claude/skills/infrastructure-security/metadata.json",
-      "sha256": "b277e7d207676be945887a2f71bebf05f8503f6b6a525d05106204980b16fbae",
-      "size": 911,
       "action": "unchanged"
     },
     {
@@ -704,8 +680,8 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/secure-code-review/metadata.json",
-      "sha256": "39f3fb3c6f83a1305ea1aa38895384244f472ff5bed25f0a5f1b488292ac9dd2",
-      "size": 833,
+      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "size": 828,
       "action": "unchanged"
     },
     {
@@ -728,8 +704,8 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/ssrf-prevention/metadata.json",
-      "sha256": "6a96fcf6305cb39fc10d722f1a6ca53ae31f7f84527b93f9fc4b7021a0ee05a9",
-      "size": 1122,
+      "sha256": "bba16fdea0b3edfad65e97ebd832f4dadde177eda60b51df888c3fe9dde1122f",
+      "size": 1111,
       "action": "unchanged"
     },
     {
@@ -758,8 +734,8 @@
     },
     {
       "path": "dist/copilot-instructions.md",
-      "sha256": "06e44fc0ea8a58431dbfcb3f402f1934514087007f3c2663f750d354e8f8e948",
-      "size": 3851,
+      "sha256": "4d69d838bbefe0a5c0d40e6a51e63acc4b2be690d3c6ac2287b318aac4413a65",
+      "size": 3795,
       "action": "unchanged"
     },
     {
@@ -818,8 +794,8 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "b7ced19ddc61259dd0f8beb7e0a56929a1c2d1ff5da1b603bd91009552951026",
-      "size": 924,
+      "sha256": "0f848c3d132df3257ccbc5e13541907b6d3aa0056d9f04484c3ff2b8c0890fb3",
+      "size": 919,
       "action": "unchanged"
     },
     {
@@ -902,8 +878,8 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/file-upload-security/metadata.json",
-      "sha256": "a52fd1dbd29749d5b78235c0a465a745df8a0d432c922b59af7cb3b1607fcb5d",
-      "size": 1071,
+      "sha256": "30b90d6b072cc0954dbf5ca02ef42dc6a2ffe6e8600f5d22a0b01b2631b2ec0a",
+      "size": 1066,
       "action": "unchanged"
     },
     {
@@ -938,8 +914,8 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/iac-security/metadata.json",
-      "sha256": "5a1ebc001f3d2facca503acdd85c0aae11536d15fb385d0703886eaab316142f",
-      "size": 967,
+      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "size": 962,
       "action": "unchanged"
     },
     {
@@ -952,18 +928,6 @@
       "path": "dist/copilot-skills/.github/skills/iam-best-practices/metadata.json",
       "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
       "size": 1308,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/copilot-skills/.github/skills/infrastructure-security/SKILL.md",
-      "sha256": "4e31b9b9029928bfd35a4006e5d99fe505b36bf5f63ac4767f18fee9c5f60918",
-      "size": 2859,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/copilot-skills/.github/skills/infrastructure-security/metadata.json",
-      "sha256": "b277e7d207676be945887a2f71bebf05f8503f6b6a525d05106204980b16fbae",
-      "size": 911,
       "action": "unchanged"
     },
     {
@@ -1046,8 +1010,8 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/secure-code-review/metadata.json",
-      "sha256": "39f3fb3c6f83a1305ea1aa38895384244f472ff5bed25f0a5f1b488292ac9dd2",
-      "size": 833,
+      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "size": 828,
       "action": "unchanged"
     },
     {
@@ -1070,8 +1034,8 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/ssrf-prevention/metadata.json",
-      "sha256": "6a96fcf6305cb39fc10d722f1a6ca53ae31f7f84527b93f9fc4b7021a0ee05a9",
-      "size": 1122,
+      "sha256": "bba16fdea0b3edfad65e97ebd832f4dadde177eda60b51df888c3fe9dde1122f",
+      "size": 1111,
       "action": "unchanged"
     },
     {
@@ -1100,1250 +1064,26 @@
     },
     {
       "path": "dist/devin.md",
-      "sha256": "3560a9d9aa517afaaa6153b36ee7d055cf94e5dde6b63a44bba6f110ba1c2507",
-      "size": 3827,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/README.md",
-      "sha256": "0cf9c5b81d0b5281edb6ffafbe2837280a34dbdd19d4f1c2568f7aaeea331ac5",
-      "size": 1165,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/api-security/SKILL.md",
-      "sha256": "d3b65b5b56889e45d27059ff4bb1b1a5375f79cbbc488223de3fd2ecff53329c",
-      "size": 5039,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/auth-security/SKILL.md",
-      "sha256": "b818612d5b02bf67285ee7831e32b0604e75f608ff0071c58c60caaeabd44dd1",
-      "size": 6948,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/cicd-security/SKILL.md",
-      "sha256": "7ba54fec2502491d8f8121eb6ccbcf0be9013b0d7f6b529741180ce8fe777426",
-      "size": 8588,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/compliance-awareness/SKILL.md",
-      "sha256": "91282c0ecb58235fd530f4a73d52d122294c5234563d7a3c64809b713554115d",
-      "size": 4296,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/container-security/SKILL.md",
-      "sha256": "3103f415db0c384fcb626775a8b7a5a3aec06185ef525d24665d2309ab7c7fc1",
-      "size": 6143,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/cors-security/SKILL.md",
-      "sha256": "047d2de8ad7bc0c2900188d587bf86425bd91515b853232043378972be658f0e",
-      "size": 5538,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/crypto-misuse/SKILL.md",
-      "sha256": "8dca1b9c14411a98985bec5cc0d5ab87a3347c2bcf9f6254c0681a66800a0cdc",
-      "size": 6334,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/database-security/SKILL.md",
-      "sha256": "1608b5698dfdb72c5a2ecce6fd21b9d6563262d52625b1f7d419c77f20625dea",
-      "size": 6519,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/dependency-audit/SKILL.md",
-      "sha256": "aaf23b233b0b69d9f6b3118769cdbe0b4138017e661f3c1832699f56d1831b7c",
-      "size": 4946,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/deserialization-security/SKILL.md",
-      "sha256": "ccbaa99aa306405eee51c74d653b10465dc644df1ec6311cd3e9a0f340f4e4c8",
-      "size": 8493,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/error-handling-security/SKILL.md",
-      "sha256": "20c325c1cc95e57eb2cfcd731c24b425f0df12ec9c1ce7d4458870a5c571d9a0",
-      "size": 6010,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/file-upload-security/SKILL.md",
-      "sha256": "f0504fa283fbaf7742f6fe038a740dd610ac4817dbc9a5e7407d93ef156ebc38",
-      "size": 8893,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/frontend-security/SKILL.md",
-      "sha256": "5b1d21eaee23023dc89afb9a75b4a3f72fe3db6f0a68599ddf5b30f783a8308a",
-      "size": 6190,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/graphql-security/SKILL.md",
-      "sha256": "4b306d84576ee2d30bbb3437a3b1bcaa03a4c48d1993dd1e3e443d485d40e318",
-      "size": 7714,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/iac-security/SKILL.md",
-      "sha256": "99b6438a3aacaf7c39f616e9f0392b87a139fb8c4f8242156f6172e8b31b204e",
-      "size": 6127,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/iam-best-practices/SKILL.md",
-      "sha256": "aa3eb4d61d8982a35f894c85d2c7cf1fcb886210912a2932e6f3124b07fb828c",
-      "size": 9470,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/infrastructure-security/SKILL.md",
-      "sha256": "33fcdae952cef15751052360f1c2c46ed699e93377a8ff7e3865c19e6fee16f3",
-      "size": 4797,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/logging-security/SKILL.md",
-      "sha256": "f5988900fdfef73d72688c439091d10be0b9c1c9806b1b2d65b51f54a1b7a89f",
-      "size": 6555,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/ml-security/SKILL.md",
-      "sha256": "15d950bd149e43a933e940f6234bed6e372ceefb6299ec725e329ecf57381dcb",
-      "size": 7509,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/mobile-security/SKILL.md",
-      "sha256": "317256303c2cea9d5cc41b8a7271f3adf8a0ac3041bd2ba826f819cd7a0fc083",
-      "size": 6939,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/protocol-security/SKILL.md",
-      "sha256": "b14d116ed2a36c266b438b26fa97ad66b92c5b2fab2c022a50fcba0b8362973f",
-      "size": 6520,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/saas-security/SKILL.md",
-      "sha256": "152c28020e13cfc5f6d0f951fb94f2c699731ac488cc1a88ed36483ba9770a8b",
-      "size": 15413,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/secret-detection/SKILL.md",
-      "sha256": "a65f319cbc0a453dcb0e6e6255d4f35f8681af2c2c78d390ad1d7cb348412d32",
-      "size": 7385,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/secure-code-review/SKILL.md",
-      "sha256": "6f3b824ade6e3dca4f116778f3d30dec3c8e153f72c9f9669a28f0a2871e3f5d",
-      "size": 5385,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/serverless-security/SKILL.md",
-      "sha256": "e8462b6d9b9c768eb667355f00d4706987eb80ce68e280980426ad9ffb29a13e",
-      "size": 6053,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/ssrf-prevention/SKILL.md",
-      "sha256": "47c0fd33a8048aab504dd828914cea516740261ecafc8a7ef3a2035ab90e356e",
-      "size": 7733,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/supply-chain-security/SKILL.md",
-      "sha256": "d4f65e8843dbcfe26e04c2adfbe2073afff4799f19f24328ec27b86a9ad1dffd",
-      "size": 5209,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/ar/websocket-security/SKILL.md",
-      "sha256": "74452f0ef96d11f946e0329953d05284057e45f97469a061a202e0a474cd2ad5",
-      "size": 8080,
-      "language": "ar",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/api-security/SKILL.md",
-      "sha256": "76cfe2e7c3562b09c848022828aecbb0e6a37604a067a9b56722ad8f982c5dda",
-      "size": 3892,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/auth-security/SKILL.md",
-      "sha256": "b5b4a70f09137f5c3223cfd56bbca1f050bd1d4f55d6cd1254da7c8f564efadf",
-      "size": 5512,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/cicd-security/SKILL.md",
-      "sha256": "d6a3c275716ece31cd2c97d61422e364c8dd7466e5db65bb64e3cec6252b1270",
-      "size": 7061,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/compliance-awareness/SKILL.md",
-      "sha256": "ab77b0644b19aca8534f8bfee483693479da6f9c34fb7bbbc4d3dd20eabd3638",
-      "size": 3355,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/container-security/SKILL.md",
-      "sha256": "28690c42a6db7cd32e48889ec296a14afd6d8479cd50a251863b665a68debe36",
-      "size": 5111,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/cors-security/SKILL.md",
-      "sha256": "5a6ead26afc80ed9d2ab6e0e29456b7c054b2ba080a384540e48b6fe2f6a775e",
-      "size": 4735,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/crypto-misuse/SKILL.md",
-      "sha256": "6ce652d72f612d8c4d85be2e7be65328366cbca749c124743c5ed0a0a229151d",
-      "size": 5042,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/database-security/SKILL.md",
-      "sha256": "77821a185f306364036afd40b340beccc3243581233ce9b46745e54eb3be5de4",
-      "size": 5148,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/dependency-audit/SKILL.md",
-      "sha256": "54504391ac9d9bf876b8e81d6417e79c9bde2ecc91cd111823bf2ba99b6112d9",
-      "size": 4176,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/deserialization-security/SKILL.md",
-      "sha256": "5c35cc6feed68e7ce3f320cbf410dfb2162f1d76b14f9fd152f4226663598e93",
-      "size": 6692,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/error-handling-security/SKILL.md",
-      "sha256": "69daa85dcef256e7ab74bcad5ab2d5b45f07fa42169cb3d3d654caa0ec3e3e90",
-      "size": 4599,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/file-upload-security/SKILL.md",
-      "sha256": "9ffbdb4479dce7ff85eddb62e9fdfd3753333b1c2356cf1fb0d41661b10e2fbe",
-      "size": 7103,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/frontend-security/SKILL.md",
-      "sha256": "9248a45876a828c8f3b996e16e91579b8143df9d8277b3b51b6bd9495f79598b",
-      "size": 5161,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/graphql-security/SKILL.md",
-      "sha256": "505af23bf2b62be7e431e2d3b9ee4e4c626a0b17a27af66e2cc0821f614b962c",
-      "size": 6085,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/iac-security/SKILL.md",
-      "sha256": "6faf9c27709743d3395563c2b92de5440e164cc3a823c5551bc45640a7c5794e",
-      "size": 5109,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/iam-best-practices/SKILL.md",
-      "sha256": "5801121cd279f2756ea43a1b78f34fcad7cac045416b6199943f2fe0d878f29e",
-      "size": 7876,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/infrastructure-security/SKILL.md",
-      "sha256": "c7ae3cc6c89cac3ad1a5c0464c5ba7b8046d73ef7b8af2499c07f20285903959",
-      "size": 4046,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/logging-security/SKILL.md",
-      "sha256": "06edd878b29af5f037b672c8d0e7d1e248709a6c1e14f94e230e8fd8231b65e7",
-      "size": 4997,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/ml-security/SKILL.md",
-      "sha256": "957c62016d591ceb98459412ab1221443b9ec41deff43b23727608705b0c6cd8",
-      "size": 5752,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/mobile-security/SKILL.md",
-      "sha256": "bbd8d6d2e1d1e82e80197db43c04e085441743741e18edaba59399182edb4e9a",
-      "size": 5337,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/protocol-security/SKILL.md",
-      "sha256": "8bc728c439577cab990ee0d57361228a20c757a2a239acda789bf28afdda8dfc",
-      "size": 5056,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/saas-security/SKILL.md",
-      "sha256": "95903041dbdfde7f5c814d881bfbcaa5a2891340a037ad008012509fff0c9f1a",
-      "size": 12035,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/secret-detection/SKILL.md",
-      "sha256": "5e97d9ef6bb03759ad93255d8fcbaeb13476d5e35b986a833d1c7b5196d29b6c",
-      "size": 2824,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/secure-code-review/SKILL.md",
-      "sha256": "71a130caec0d6bf4d395fc861daff4403712571663ab24fd3edff72e2ced980f",
-      "size": 4156,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/serverless-security/SKILL.md",
-      "sha256": "816c75fcadd99bbe58370d37a49f13d67c0f1350884e0653ee80284fa6667801",
-      "size": 4911,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/ssrf-prevention/SKILL.md",
-      "sha256": "b38a104e2ad75ed3eee9c2dff25182bafe76b50b8f4cc2ac3bdef194b2454482",
-      "size": 6221,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/supply-chain-security/SKILL.md",
-      "sha256": "c773891a48e8e271b1ee67507a1da0f96538f2e160f548926966e7eed3dd99a3",
-      "size": 2323,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/de/websocket-security/SKILL.md",
-      "sha256": "d56cce2ec7fb03598c2ae115a81ec5743c885b15e865db540080cd290418ce52",
-      "size": 6414,
-      "language": "de",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/api-security/SKILL.md",
-      "sha256": "fe3b1c7fbab40649aa08f407dee51c7955f7d61738e059582c7aa24f655a0879",
-      "size": 3793,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/auth-security/SKILL.md",
-      "sha256": "5bea936f6abaa363002209843fdd0a7aae1c56cdc6010928c822fc8866fab2f4",
-      "size": 5507,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/cicd-security/SKILL.md",
-      "sha256": "3aeb59644c1b7c353540d26e86af31fd26ba62d8c89448ce44d7c98af0537e3e",
-      "size": 7075,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/compliance-awareness/SKILL.md",
-      "sha256": "feff23e512cafc7329c9200dc2d470c7ad24ef095636d9274d65077d8c3cb240",
-      "size": 3479,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/container-security/SKILL.md",
-      "sha256": "aae2238e79bcff21ba074b573c19f4df1652260562f5107a8e9ef312df86a2cf",
-      "size": 5175,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/cors-security/SKILL.md",
-      "sha256": "ec5140d1add3a71cb79bf39629d05c85f033d1f60f85c44e3e5d9f4aa37526bf",
-      "size": 4698,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/crypto-misuse/SKILL.md",
-      "sha256": "53a3dc67b9747d6b06034516e9829870038b420258e5b8cd6050fe1c89c09be2",
-      "size": 4993,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/database-security/SKILL.md",
-      "sha256": "55434f98a198f8faa76427d87f8c23bbb2282734db74d03c66d2b87cc4b46f6e",
-      "size": 5318,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/dependency-audit/SKILL.md",
-      "sha256": "9116d21067522deb863cd588efd4d0b9b9c7cc49ed86987ebfb93bd9152f06f0",
-      "size": 4165,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/deserialization-security/SKILL.md",
-      "sha256": "99193856ccc4468c9667c426a50131f21e71c1defd1e77fb083aa2a6b71884a7",
-      "size": 6730,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/error-handling-security/SKILL.md",
-      "sha256": "2065f330eb47fadcc27ba36ef8438292d62e6e48895648d569dca9810e1a4981",
-      "size": 4772,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/file-upload-security/SKILL.md",
-      "sha256": "5b879fe420d431e0888081bec2cda6fe6e8a1fd08561f206bbaf3ab2432f70f9",
-      "size": 7201,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/frontend-security/SKILL.md",
-      "sha256": "e662cdd6b68f39488aac935a3142aacb5ebe3c90c405e03753c1c05a0448830a",
-      "size": 5040,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/graphql-security/SKILL.md",
-      "sha256": "0161580ff9661ae5ac98db2f193faf81614d78ad8a61ba64e196188fc5f33047",
-      "size": 6235,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/iac-security/SKILL.md",
-      "sha256": "029cf2b9bba06b990edf490891bdc3c734c585ed3f77b53cc3869cdf17ed3df0",
-      "size": 5011,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/iam-best-practices/SKILL.md",
-      "sha256": "3b13692a7410426b468ca9e9d112d2eed51d3bf995d8ab2ad1e0d170e8a3e3b5",
-      "size": 7849,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/infrastructure-security/SKILL.md",
-      "sha256": "3b12c10059ede1515d6c278baabf6fd60e0cf3531e229d702e344c8bc106cc53",
-      "size": 4045,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/logging-security/SKILL.md",
-      "sha256": "3678b499d7164997926a45249b9f666087e8f19791ce4c29e098758c79e2e0f9",
-      "size": 5130,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/ml-security/SKILL.md",
-      "sha256": "75b6fbb9aa33d5c14bc8f181d40c35ea6f99f711af046662b6edaffc4c68ca5e",
-      "size": 5930,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/mobile-security/SKILL.md",
-      "sha256": "0b19fe68af9a5ac8ae31f3be96a6f83f66cce81703eb241b03f7ad7246c5a5bb",
-      "size": 5368,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/protocol-security/SKILL.md",
-      "sha256": "147c4782113876a2fa9386e343a3d99c6bef3eb2857e1e180e4ba92a39278393",
-      "size": 5129,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/saas-security/SKILL.md",
-      "sha256": "7fa8069e7d438f8fd252232ee1f3c5794af02d0b3396328c966385b527be48f7",
-      "size": 12122,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/secret-detection/SKILL.md",
-      "sha256": "e8920c7053b70556a2bb43e7d13eac0405f8d0b052155bdcd798df322d60f96d",
-      "size": 2768,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/secure-code-review/SKILL.md",
-      "sha256": "b256ef42daa966170efee37a5f2eba44661f29c4a73f59739b24d3a960db4e0f",
-      "size": 4182,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/serverless-security/SKILL.md",
-      "sha256": "e7be178f462688fc502ae784d0b0b50ff7689194da30c965b5ebf7eedfe8b8e8",
-      "size": 4872,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/ssrf-prevention/SKILL.md",
-      "sha256": "92b5c2f0d24738868b0abae51d5c6c58165afa33a1f27a8db401098c2d28cb96",
-      "size": 6230,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/supply-chain-security/SKILL.md",
-      "sha256": "6cc5fe94865294fd9ca87eb794b1108438638a87bd68a18ad87c5514b8c5e51f",
-      "size": 2495,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/es/websocket-security/SKILL.md",
-      "sha256": "dcfd2007a5363dfa776db56743e519613fc61c07bd4e4b0d1548d023d0c63a29",
-      "size": 6420,
-      "language": "es",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/api-security/SKILL.md",
-      "sha256": "eb944a6a2b9933125942b1f5ccaaf5e37174dc5ff2bb5f1e936f5a619e58ce26",
-      "size": 4177,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/auth-security/SKILL.md",
-      "sha256": "70a2d987d4c7d91d4326814d99ca8ca49cd81702b548ea2d879298655ca67ed9",
-      "size": 5921,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/cicd-security/SKILL.md",
-      "sha256": "ee379e039c9662cec515a2bbd33eaac9b45290fa5ff8618353a273d4ab06e4dd",
-      "size": 7484,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/compliance-awareness/SKILL.md",
-      "sha256": "e9f28f0ef8d03f6291a864ae9ea800f15dbd38c231319b427c02d56b72640ee2",
-      "size": 3670,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/container-security/SKILL.md",
-      "sha256": "0d4910d6cafcd6a27f6c87f8dd35a1ea18745bb2a55afdf2611b8fd4fcc43f35",
-      "size": 5448,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/cors-security/SKILL.md",
-      "sha256": "fd2a3dcead6faa4802daa794cb3a3bb26e92fa2f43b1a31c80ab71f158c44acc",
-      "size": 4971,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/crypto-misuse/SKILL.md",
-      "sha256": "eff0ff3e4617b61593f3938dc553174c8c132a4c97e511eab9daa81bd9406be1",
-      "size": 5333,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/database-security/SKILL.md",
-      "sha256": "dd2e02b715f1c53e209c9a7d88be209f66a32001f50d4fd550ab89554854c093",
-      "size": 5676,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/dependency-audit/SKILL.md",
-      "sha256": "6ded21d25457a023ff565353cf00918c7aee4734fa19f3f8f27ec66cea6c28eb",
-      "size": 4317,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/deserialization-security/SKILL.md",
-      "sha256": "b6630cfb16df2ca74587c6893bc934f8cbc5be220448aa588a5b5bba0aede15b",
-      "size": 6965,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/error-handling-security/SKILL.md",
-      "sha256": "1c545b3592d55656fa057fbfec5c1bc071a0185af60902d61a28e97a8fe27e47",
-      "size": 5018,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/file-upload-security/SKILL.md",
-      "sha256": "c9e03892aa1a83d5723a48d97c705806e0012c98fa0a0ab70f4b22821807b210",
-      "size": 7451,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/frontend-security/SKILL.md",
-      "sha256": "31b3517403eb0052885ad6d44f82fe248796810c6aa5345827cc363cc762ecd3",
-      "size": 5348,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/graphql-security/SKILL.md",
-      "sha256": "3ff932ca8c0a7649dd5ccdf18719267932899ff7f598c9bec4107d10987a726d",
-      "size": 6507,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/iac-security/SKILL.md",
-      "sha256": "138f13652d1b44c065e853d8c0b7947f2c29c8cdae625bf1d8b874f21b088908",
-      "size": 5302,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/iam-best-practices/SKILL.md",
-      "sha256": "372f7b03369e6d721bf5e54a9f0fab1873926e479cc78309a63397c06caebd7e",
-      "size": 8212,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/infrastructure-security/SKILL.md",
-      "sha256": "cc00f5551d5f6415901c5a5ca867a1707ee73789f89f1cb505b6992fcf5fed37",
-      "size": 4151,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/logging-security/SKILL.md",
-      "sha256": "5c219fdbe193cbf2390e65bd788049dea1ac74785e47b2348d79813d4b8e05a6",
-      "size": 5373,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/ml-security/SKILL.md",
-      "sha256": "286f7a51da14dd32b9d7cdb1810b24a81820cea867d85a900dd874a8ad663f45",
-      "size": 6175,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/mobile-security/SKILL.md",
-      "sha256": "8f03c0960af60957a50f830f4901de6962d63c5db68f5bac6c7d0043439a2186",
-      "size": 5644,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/protocol-security/SKILL.md",
-      "sha256": "0ed01e211558d54230cac3c82eba2b068f5688e8def4efc733973e24916b5cd8",
-      "size": 5333,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/saas-security/SKILL.md",
-      "sha256": "5f90a5f7eb1ee3a472433744417e27265bc1b1d0ab9ef9b8efb4ebf74bf50fde",
-      "size": 12427,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/secret-detection/SKILL.md",
-      "sha256": "887c9130babdfd64de0c96e236b9125a05d74a81df7b0327932d3d26af09c3f4",
-      "size": 2806,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/secure-code-review/SKILL.md",
-      "sha256": "547ec5f38b735d0a3f65d0f4f20e74de144d965bd5dcd945ac0aa7d34f10ba67",
-      "size": 4440,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/serverless-security/SKILL.md",
-      "sha256": "f8b45d631cca22a77fbd570aacf3a4873985e5915450d02df531cf5a744bcd08",
-      "size": 5129,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/ssrf-prevention/SKILL.md",
-      "sha256": "a1912b3045d7f1846769816fd2b7835b1df52ea06db20f4b2ef4803f672fa87d",
-      "size": 6424,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/supply-chain-security/SKILL.md",
-      "sha256": "3638c53e97e4ef20625067d9fbb1eaeb9b1cb4bc54a1650d93dd8da937ed8766",
-      "size": 2474,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/fr/websocket-security/SKILL.md",
-      "sha256": "7535d59827070356ddc198542e5a4888f2b6c6806fa2e856eb8d1b13c2300da3",
-      "size": 6707,
-      "language": "fr",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.README.md",
-      "sha256": "3ed9cd00cc85fbda8e01c743d93229b4025d80376ea8f97a81452a8afa86449c",
-      "size": 1696,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.ar.yaml",
-      "sha256": "9f9efb57bb665317e906054f798d4e22b29311c366487583342136bf28db4cc0",
-      "size": 2553,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.de.yaml",
-      "sha256": "1fa1e46b82af6a6d8f8cb6fbedf8f6eb7fc6f691e686f14f57bd20710cd5eabb",
-      "size": 2264,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.es.yaml",
-      "sha256": "717bd100504898c601d8a5de29a70035b818af9acef3c704a769b7196f8b352f",
-      "size": 2171,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.fr.yaml",
-      "sha256": "985276d461d54e05afa4d2fab0e0a920d0246e860022abd0013fe721a540e21c",
-      "size": 2132,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.pt-BR.yaml",
-      "sha256": "9e3203a3d3f2f4cb195a77002d858803515a77ffa0c7ccbbe22e4b7c17182baf",
-      "size": 2152,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/glossary.zh-Hans.yaml",
-      "sha256": "66fe18471cc5f068fef88a695a70e0ba3dbce1c9fbe004defa14a2362568a312",
-      "size": 2096,
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/api-security/SKILL.md",
-      "sha256": "7510a74513d936a739f39362ad159643a3da9355d2016da4c308b5a18346b0f4",
-      "size": 3774,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/auth-security/SKILL.md",
-      "sha256": "e7ccae273413e4c6f6c3f81b198c9fdd6b3155047bb161acc7c2804905f93dbd",
-      "size": 5456,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/cicd-security/SKILL.md",
-      "sha256": "71901941ecebba7f1076f2f0da6cca99d99b2fb218df6a612f775485d6e4f6d0",
-      "size": 6929,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/compliance-awareness/SKILL.md",
-      "sha256": "1f2e6be1a259c5159a45ff0ffb4d8c60e1ba85506be07c91b0978908907d2bd8",
-      "size": 3412,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/container-security/SKILL.md",
-      "sha256": "354355826a73fa467a3037f6c8db6d600d04902011f7967034afc64333ea54a9",
-      "size": 5048,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/cors-security/SKILL.md",
-      "sha256": "eb6725c437cae1477ed19967d14ccc6aaf6f6d9e26f65bb812ba94b724fdbc15",
-      "size": 4603,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/crypto-misuse/SKILL.md",
-      "sha256": "496dea771e505113576ff043113eee4bd85400010fc10c97a9b5617c7b49c75b",
-      "size": 5004,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/database-security/SKILL.md",
-      "sha256": "015abf9db164933727156fdc5367c378e16ec0cb0c4c1a8572dc0d3b8b0dfe1e",
-      "size": 5222,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/dependency-audit/SKILL.md",
-      "sha256": "38e65a331af8451b08844d74e8e4d06e411dcf1652bbb82e79e15d6b6a23b368",
-      "size": 4039,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/deserialization-security/SKILL.md",
-      "sha256": "1d1ffbe61da62588b578053ff82c86bbf08c696f4e2e2cb66d4247c92aa33a0e",
-      "size": 6686,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/error-handling-security/SKILL.md",
-      "sha256": "6f73be7733b561ca1158075081505c23bc1a9a8152f6a8871d609d1ac1784a2d",
-      "size": 4678,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/file-upload-security/SKILL.md",
-      "sha256": "ce41730364a4b7cee69af42bacf7a3a6484fc15df7c7d8eb6c4e2a74c225fb87",
-      "size": 7137,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/frontend-security/SKILL.md",
-      "sha256": "512feb38f8ff0a12fc8c5c8b866ed6f90b422b56650747b51716f9a0d841f34d",
-      "size": 5015,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/graphql-security/SKILL.md",
-      "sha256": "b06bb135ccdbc2034dadea42d912dd846ee11d563f5d847cfe317d5888e27a58",
-      "size": 6072,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/iac-security/SKILL.md",
-      "sha256": "edcdc2165ae64b5e872f0a39981a56b89aadd06b29063fd3c8b88afe7ca24530",
-      "size": 4930,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/iam-best-practices/SKILL.md",
-      "sha256": "25d968fc79b71f8be145cdc0e0b92efe218acaa2beeac98923b4f6e8ab135835",
-      "size": 7781,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/infrastructure-security/SKILL.md",
-      "sha256": "164764b92a9835b7bf7fb1b56603ec5da9ebf2cee0dd222d8754f32e5fb40364",
-      "size": 3976,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/logging-security/SKILL.md",
-      "sha256": "4e8d9fd41414dda134a54b7d6e3d50456c2095bc851f206ed5b5d211fc8650e0",
-      "size": 5025,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/ml-security/SKILL.md",
-      "sha256": "237810ca89599bffbacc50d6ac4e13b52defffefadfabf63043380ce7a03aba9",
-      "size": 5768,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/mobile-security/SKILL.md",
-      "sha256": "0c2a4f64766e2e027bb81b420165ae36356b5c9262b1cc7f49030f2b273f60d6",
-      "size": 5402,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/protocol-security/SKILL.md",
-      "sha256": "e59e61157469f5e7fbd914764dfe24957872efb80b7bc375cf336fd78cbd9406",
-      "size": 5088,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/saas-security/SKILL.md",
-      "sha256": "3ba01e4e7f8179e2c270c02dcec81a25ba6c7d5317bc729311456bbc99fb8428",
-      "size": 12007,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/secret-detection/SKILL.md",
-      "sha256": "582c1a90cfe030e4b4a55a06efbf205b4b59ff6767e5029d3fba7222a477acbf",
-      "size": 5760,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/secure-code-review/SKILL.md",
-      "sha256": "7d5fb55d58b5a206a0cbf9df4876d6955538b403c1b574c2daa4f05ceb1e8059",
-      "size": 4152,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/serverless-security/SKILL.md",
-      "sha256": "79cef72285b0e6eb53cde0c4eaf22c540081df8207ce4e4ffb572eb1c429d31f",
-      "size": 4822,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/ssrf-prevention/SKILL.md",
-      "sha256": "31e86dab965dca459e3fadd08d725458e41b391fe91a12d88dadb93fa9028e6d",
-      "size": 6146,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/supply-chain-security/SKILL.md",
-      "sha256": "e58a5101c1e35ff45a24fd14f0bce095b64620ee4e7781346c57c14d9405bfb4",
-      "size": 4049,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/pt-BR/websocket-security/SKILL.md",
-      "sha256": "9b07d9072275b618b472eaecb18fb6e0cd8dfd06476e6d5b74c0b1368d7321fd",
-      "size": 6272,
-      "language": "pt-BR",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/api-security/SKILL.md",
-      "sha256": "40c5f2137923f9bb9822d90f675c369f2bda68bdf55d8701c52a56ef7bd0e133",
-      "size": 3264,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/auth-security/SKILL.md",
-      "sha256": "027b0704896258a49a0049cf2948091645780e31bcc85aecce3c98c5cf41b3d9",
-      "size": 4822,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/cicd-security/SKILL.md",
-      "sha256": "44acf07fa7116dc29567a4db876cb9f804bea4538f04ab05a0dc8cec38cc357b",
-      "size": 6332,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/compliance-awareness/SKILL.md",
-      "sha256": "0085ea48419ac0864c549bdb074007dfc323b465980386a765dc7bf1fa9df29e",
-      "size": 2920,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/container-security/SKILL.md",
-      "sha256": "22044804711b9586e9eb64e2e2326bdb32d25681cd61eae96ca69d89d50458ba",
-      "size": 4729,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/cors-security/SKILL.md",
-      "sha256": "65f31a07f1f599b522fbba7ae7a14e76f26b4bfb22728b36ff76d45b096b8903",
-      "size": 4218,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/crypto-misuse/SKILL.md",
-      "sha256": "076ff3a9353aa4ad8045cc8c7f285aa55e031b43c9c1c90df837cf2fb59d808f",
-      "size": 4602,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/database-security/SKILL.md",
-      "sha256": "aa740c7a26d8d9ac5d6cf254e10f9f4d9fc00fdbcfd399181ecaaaba6716fe6b",
-      "size": 4755,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/dependency-audit/SKILL.md",
-      "sha256": "e90868841d0250ea1e59629aa94cb7e78763488d839cf9ede5478a088a57289d",
-      "size": 3498,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/deserialization-security/SKILL.md",
-      "sha256": "42893fe4dac25cd9de85dbc64949810ef8d71c5fcbfce6d3378a4d006a136fd5",
-      "size": 6113,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/error-handling-security/SKILL.md",
-      "sha256": "c3da8e7b6d7f8b5ae2e7e93adb8b93a822246262fd5f64b15573d9108c49b3b2",
-      "size": 4128,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/file-upload-security/SKILL.md",
-      "sha256": "cb8e3b34ca4936dddf66a9fc5282998343be0ef0cec10b4e9f81e78c1cb49edc",
-      "size": 6335,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/frontend-security/SKILL.md",
-      "sha256": "914f8bcad619fb4846ab08b1dba5d3af4dbd64d02d7e51079a8d39d2e55133a0",
-      "size": 4756,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/graphql-security/SKILL.md",
-      "sha256": "8ec576987be57e6347d2c559280c4090b3bc4f08796bfcae872f36684b403fbf",
-      "size": 5379,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/iac-security/SKILL.md",
-      "sha256": "f9d4267b57e15eee4504912d82e799297bd244ed300aad5478c4c3afabae7c37",
-      "size": 4570,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/iam-best-practices/SKILL.md",
-      "sha256": "1edbfd4ddc107a4a03652c86b43ee0b7cb7286befde64f6c642b445301a04bb5",
-      "size": 6905,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/infrastructure-security/SKILL.md",
-      "sha256": "21e90ef9ec499d652b4487c7369ce386d7e86894f766441be891e21f787d63c4",
-      "size": 3772,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/logging-security/SKILL.md",
-      "sha256": "d8d5db93ffe4ceee287c5e38b2dad0202428591d77534e8df353f4edabf1eef4",
-      "size": 4591,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/ml-security/SKILL.md",
-      "sha256": "f83bab96b66070c5f167c4d24baabca2297af4a4a863c9d9e77aa3213170cb53",
-      "size": 5251,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/mobile-security/SKILL.md",
-      "sha256": "ab60c2c577e43f93fa0a00967d9f3465f669f581b81a090df293f3d779a0e72b",
-      "size": 5101,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/protocol-security/SKILL.md",
-      "sha256": "2130cd24f06887148c374a01ea8bb4b6b0bac90bb06db66120bae9f9866b0d46",
-      "size": 4641,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/saas-security/SKILL.md",
-      "sha256": "77d54a851e2b5df5c5f8fa777a4e216b713c1a073742da6f9db0eafbf3155424",
-      "size": 11331,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/secret-detection/SKILL.md",
-      "sha256": "9f94f3331f0fdc5ec425425d595a6022080a2b3348852358d1d74751e68bf759",
-      "size": 5328,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/secure-code-review/SKILL.md",
-      "sha256": "e949bbc23e1d5b7ebb89c5dd88b54ef9d999843d1fc36e9932cd1de35597845a",
-      "size": 3614,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/serverless-security/SKILL.md",
-      "sha256": "5db8f25e9982e4f5b3c71ceec1b6da74fdaa9105f1a321ab721b46f6ebe4ef1d",
-      "size": 4544,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/ssrf-prevention/SKILL.md",
-      "sha256": "46504eb7875061fa4dd71b0b2c22b32f63d281dc62143715c5f65d78e3bc6a58",
-      "size": 5695,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/supply-chain-security/SKILL.md",
-      "sha256": "5e542b7c9a455d8c12ac396024e463ef0e1f4ac54b59226cf27e308d643d651c",
-      "size": 3696,
-      "language": "zh-Hans",
-      "action": "unchanged"
-    },
-    {
-      "path": "locales/zh-Hans/websocket-security/SKILL.md",
-      "sha256": "6bdf6168b063b95017f3454af26e94015ca5e7b433db175edf2a116120fdd293",
-      "size": 5685,
-      "language": "zh-Hans",
+      "sha256": "a942aa05d22d93eda7ce2fc6dd03bb7e16505fad01a09e235017b37c57a44345",
+      "size": 3771,
       "action": "unchanged"
     },
     {
       "path": "profiles/financial-services.yaml",
-      "sha256": "d3392efb25f0f34fac19a26cb633803c5e624d004df716c85903f2fc03cf7fcf",
-      "size": 1830,
+      "sha256": "acb528c2366dd4164d53af1c35b8672548451b991771794ad660da4511af8158",
+      "size": 1802,
       "action": "unchanged"
     },
     {
       "path": "profiles/government.yaml",
-      "sha256": "aa3e68584d4831e90dcda54c20409e346f3989e77466c2d28cad9d0352e1de0f",
-      "size": 2360,
+      "sha256": "d35c644362605895e7b3e158ecc8d8a64e714598b135e8ebc8257f7139debbc9",
+      "size": 2332,
       "action": "unchanged"
     },
     {
       "path": "profiles/healthcare.yaml",
-      "sha256": "f1a3684f3d307f278ebed47a72cd0ebc6e408921bccbe5c35195b3194f347d09",
-      "size": 1778,
+      "sha256": "dc2e5053ea4b9228c5d2f75927e4d8623888d0f80d631dd57a37ff65de5d8748",
+      "size": 1750,
       "action": "unchanged"
     },
     {
@@ -2576,32 +1316,32 @@
     },
     {
       "path": "skills/compliance-awareness/frameworks/cwe_mapping.yaml",
-      "sha256": "cb0c45787f8ac837a16bbbca04e39bb58b117bedd95d0208f3938968a0a5f1dc",
-      "size": 1868,
+      "sha256": "c8b5c87153199aadac0df0c470f1e35fd5bba9ca1d94bce6e178b7e85a863e14",
+      "size": 1805,
       "action": "unchanged"
     },
     {
       "path": "skills/compliance-awareness/frameworks/owasp_mapping.yaml",
-      "sha256": "4af5d5a20bf65ea408cbdecd8a440536f994caa7121de8a8bbf16142c1414064",
-      "size": 1816,
+      "sha256": "d2ee33abc2acb1ffa2bf5c45f745c0ced78d49bad4c1165f56c1598f2d9ce34a",
+      "size": 1754,
       "action": "unchanged"
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "e0e95b70f17b0a40e3e088e01d8f4cec0a2cb30e2a51816f600df7fa48d139c8",
-      "size": 6822,
+      "sha256": "51bc1126d803c7937a3d437041a8fa3d7b98ef78da693823adf1147a2349237b",
+      "size": 6829,
       "action": "unchanged"
     },
     {
       "path": "skills/container-security/checklists/dockerfile_hardening.yaml",
-      "sha256": "0bee8b233e36d25e4ff7b3d8a167964aa9d70cad67a0f1a8cbc7c53def2ba47f",
-      "size": 2983,
+      "sha256": "759547c3ada694acf211ee012232976fa8488cf8edc1755634d8d57bac3bbcd9",
+      "size": 3550,
       "action": "unchanged"
     },
     {
       "path": "skills/container-security/checklists/k8s_pod_security.yaml",
-      "sha256": "d38c7b3c62d9280fbbd05a217c0d36b3027eab3279f0dc275248c1be00cf02ba",
-      "size": 2264,
+      "sha256": "a2950ed8bc1407ddcd08decd5d887a5648a31b3343e98f269071e249337fe51a",
+      "size": 2606,
       "action": "unchanged"
     },
     {
@@ -2696,8 +1436,8 @@
     },
     {
       "path": "skills/file-upload-security/SKILL.md",
-      "sha256": "a3057a631183f78f37b6f21ef91eb047cc1e5badfbb674eb4817238d4f1bfbab",
-      "size": 6489,
+      "sha256": "0a82344db218b9266079296dc7e2c4d2c37ef25821f2581b27f5929845f70319",
+      "size": 6484,
       "action": "unchanged"
     },
     {
@@ -2738,8 +1478,8 @@
     },
     {
       "path": "skills/iac-security/SKILL.md",
-      "sha256": "3c45e8b7e8e129d121f9e4f13eda6f610f73a16393a4b317ed8baad2260443bf",
-      "size": 4547,
+      "sha256": "c0a7191ae9d008b2d4b48c518a31d106a11dfbdfe290f7ee2efccc536ed8b22e",
+      "size": 4542,
       "action": "unchanged"
     },
     {
@@ -2750,8 +1490,8 @@
     },
     {
       "path": "skills/iac-security/checklists/terraform_hardening.yaml",
-      "sha256": "c9fc7844af1f834b59f8eb698d9e420b8820e4ab038cfc39da7520847b334b6f",
-      "size": 2482,
+      "sha256": "7791be971f6d3902c7ba7c19578a55c7436ec8ec3503b4a8024c8b7585bb8040",
+      "size": 3354,
       "action": "unchanged"
     },
     {
@@ -2770,30 +1510,6 @@
       "path": "skills/iam-best-practices/rules/key_rotation_policy.json",
       "sha256": "207dc8e9ec6f34868c31e4bfeb6c0c3f941e9a4872bf827a2bc49e37045d03df",
       "size": 2561,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/infrastructure-security/SKILL.md",
-      "sha256": "be4bcdbf75b2ddb7f74cded9c490f93dbc90acf3ca7926d1f04f5d84d5f75494",
-      "size": 3692,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/infrastructure-security/checklists/docker_security.yaml",
-      "sha256": "503f4f3b1fc9df4705200b55d0e8cd99bf9554cc1c7390e5e6212c74552fd7ee",
-      "size": 1359,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/infrastructure-security/checklists/k8s_hardening.yaml",
-      "sha256": "938be9ce041996661e190e7e3dc4eac31b781558fce3bc66f4ab925175db7eac",
-      "size": 1751,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/infrastructure-security/checklists/terraform_security.yaml",
-      "sha256": "1fcba655072afa2d980e1208ec4630ae60cdcf2bedb5ca25cdaa993199253c76",
-      "size": 1633,
       "action": "unchanged"
     },
     {
@@ -2984,8 +1700,8 @@
     },
     {
       "path": "skills/secure-code-review/SKILL.md",
-      "sha256": "1afa76ec227ecd72d1aace4ebab8fa2c4989b5412de431d587bcb0cc55c190f7",
-      "size": 3759,
+      "sha256": "64010c462ac4706ea870e2b5ed493fdf9638ae1d012fdfae2f2deadb46b1b56d",
+      "size": 3754,
       "action": "unchanged"
     },
     {
@@ -3020,8 +1736,8 @@
     },
     {
       "path": "skills/ssrf-prevention/SKILL.md",
-      "sha256": "f0f24634f0b553e36c8996b62570dec19ceff673fbe2da9648108f7b43f2e914",
-      "size": 5769,
+      "sha256": "7cd88965a5722d6042129c04335aa15de9d3b70bde5e60cc3ed4d0660fa74ce3",
+      "size": 5758,
       "action": "unchanged"
     },
     {

@@ -12,8 +12,6 @@ mapping:
     cwes: [494, 829, 830, 1357]
   - skill: "dependency-audit"
     cwes: [1104, 937, 1035]
-  - skill: "infrastructure-security"
-    cwes: [276, 732, 798]
   - skill: "auth-security"
     cwes: [287, 306, 384, 521, 522, 798]
   - skill: "crypto-misuse"

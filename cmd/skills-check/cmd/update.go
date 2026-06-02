@@ -15,8 +15,8 @@ import (
 // via --source. It points at the single skills-library-data.tar.gz asset
 // the release workflow publishes alongside the binaries: the archive
 // bundles manifest.json plus the distributable tree (skills/,
-// vulnerabilities/, dictionaries/, dist/, rules/, compliance/, profiles/,
-// locales/) so the updater can pull the whole library in one HTTP request.
+// vulnerabilities/, dictionaries/, dist/, rules/, compliance/, profiles/)
+// so the updater can pull the whole library in one HTTP request.
 // Individual library files are not published as separate release assets,
 // so a per-file URL scheme like
 // .../releases/latest/download/skills/foo/SKILL.md would 404.

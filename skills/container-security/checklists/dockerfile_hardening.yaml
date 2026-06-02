@@ -54,3 +54,11 @@ patterns:
   - id: dkr-npm-install-not-ci
     severity: medium
     rule: Use **`npm ci`** (and equivalents `pnpm install --frozen-lockfile`, `yarn install --frozen-lockfile`) in container builds, not `npm install`. `npm install` mutates the lockfile and resolves versions per-build, producing non-deterministic images that drift from the lockfile.
+  - id: dkr-apt-version-pin
+    severity: medium
+    rule: '`RUN apt-get update` is paired with `apt-get install` of pinned versions (`pkg=1.2.3`) and `--no-install-recommends`, followed by `rm -rf /var/lib/apt/lists/*` in the same layer. Unpinned installs make image contents non-reproducible.'
+    cwe: 1357
+  - id: dkr-no-secrets-in-build-args
+    severity: critical
+    rule: Secrets are never passed via `ARG` — build args are recorded in `docker history` and image metadata. Use `RUN --mount=type=secret` (BuildKit) or runtime injection instead.
+    cwe: 798

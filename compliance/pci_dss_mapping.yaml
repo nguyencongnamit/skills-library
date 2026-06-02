@@ -6,12 +6,12 @@ controls:
   - id: "1.4"
     title: "Network Security Controls between Trusted and Untrusted Networks"
     description: "Network security controls (NSCs) are implemented between trusted and untrusted networks."
-    skills: ["infrastructure-security", "iac-security", "container-security"]
+    skills: ["iac-security", "container-security"]
     references: ["https://www.pcisecuritystandards.org/document_library"]
   - id: "2.2"
     title: "Secure Configuration Standards"
     description: "System components are configured and managed securely."
-    skills: ["iac-security", "container-security", "infrastructure-security"]
+    skills: ["iac-security", "container-security"]
   - id: "3.5.1"
     title: "Cryptographic Keys are Protected"
     description: "Cryptographic keys used to protect stored account data are protected against disclosure and misuse."
@@ -59,7 +59,7 @@ controls:
   - id: "11.3"
     title: "External and Internal Vulnerabilities are Regularly Identified"
     description: "Vulnerability identification and reporting is automated and routine."
-    skills: ["supply-chain-security", "infrastructure-security"]
+    skills: ["supply-chain-security"]
   - id: "12.10"
     title: "Suspected and Confirmed Security Incidents are Responded to Immediately"
     description: "Incident response plan is in place to respond to suspected or confirmed security incidents."

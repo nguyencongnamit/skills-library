@@ -27,15 +27,10 @@ const SignaturePrefix = "ed25519:"
 const PlaceholderSignature = "TBD"
 
 // File is a single file entry in the manifest.
-//
-// Language is the BCP-47 locale tag for files that live under
-// locales/<bcp47>/... (e.g. "es", "zh-Hans"). It is empty for every
-// other file. ComputeChecksums populates it from the path.
 type File struct {
 	Path      string `json:"path"`
 	SHA256    string `json:"sha256"`
 	Size      int64  `json:"size"`
-	Language  string `json:"language,omitempty"`
 	Action    string `json:"action,omitempty"`
 	DeltaFrom string `json:"delta_from,omitempty"`
 	DeltaSHA  string `json:"delta_sha256,omitempty"`

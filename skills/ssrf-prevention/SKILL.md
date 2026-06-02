@@ -16,8 +16,8 @@ token_budget:
   compact: 1500
   full: 2200
 rules_path: "rules/"
-related_skills: ["api-security", "cors-security", "infrastructure-security"]
-last_updated: "2026-05-13"
+related_skills: ["api-security", "cors-security", "iac-security"]
+last_updated: "2026-06-03"
 sources:
   - "OWASP SSRF Prevention Cheat Sheet"
   - "CWE-918: Server-Side Request Forgery"
