@@ -24,6 +24,10 @@ sources:
   - "CWE-798: Use of Hard-coded Credentials"
   - "CWE-259: Use of Hard-coded Password"
   - "NIST SP 800-57 Part 1 Rev. 5: Key Management"
+external_tools:
+  - name: gitleaks
+    purpose: "secrets, whole-repo + git history"
+    command: "gitleaks dir | gitleaks git"
 ---
 
 # Secret Detection
@@ -117,9 +121,6 @@ Each carries its upstream URL in the `references:` field as evidence.
   (Aho-Corasick prefixes, hotwords, entropy thresholds) plus the
   `exclusions:` block for false-positive suppressions.
 - `tests/corpus.json` — test fixtures for validation.
-- For whole-repo and git-history scanning beyond the built-in rules,
-  [gitleaks](https://github.com/gitleaks/gitleaks) is the industry-standard
-  CLI — run it from the shell (`gitleaks dir`, `gitleaks git`).
 - [OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
 - [CWE-798](https://cwe.mitre.org/data/definitions/798.html) — Use of Hard-coded
   Credentials.
