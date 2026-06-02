@@ -30,6 +30,9 @@ scanning, or CI policy checks.
      `explain_finding(query)` for CI / image / finding triage.
    - `map_compliance_control`, `get_sigma_rule`, `version_status()`
      for controls / Sigma rules / data version respectively.
+   - For a `scan_*` tool, first call the matching
+     `scan_<scanner>_engines` to see installed engines; offer the
+     user any external one via the scan tool's `engine` argument.
 2. If the MCP server is not reachable, read the skill source
    directly under `skills/<skill-id>/SKILL.md` and the matching
    rule under `rules/<category>/`.
