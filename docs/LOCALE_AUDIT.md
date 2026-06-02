@@ -1,5 +1,19 @@
 # Locale & language-support audit
 
+> [!WARNING]
+> **Historical document — Tier 1.1 was reverted in PR-B1 (2026-06).**
+> The "Localize hotwords" recommendation (Tier 1.1 below) was implemented
+> as `skills/secret-detection/rules/dlp_patterns.locales.json` and then
+> dropped in PR-B1, which migrated the DLP rules to
+> `skills/secret-detection/checklists/secret_detection.yaml`. The drop
+> was deliberate: the AI-drafted translations were never native-speaker
+> reviewed, real-world non-English codebases overwhelmingly keep
+> English identifier names, and the maintenance burden was
+> disproportionate to recall gain. Any future locale work must start
+> from a native-speaker-reviewed source, not an LLM regeneration.
+> The rest of this document is preserved verbatim for historical
+> context.
+
 **Last updated:** 2026-05-14
 **Scope:** Audit the natural-language coverage of **secure-code** against
 the user-supplied target set (top-10 world languages, GCC region, Southeast

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 
 	"github.com/kennguy3n/skills-library/internal/skill"
 )
@@ -27,17 +28,24 @@ type corpusFile struct {
 	Fixtures      []corpusFixture `json:"fixtures"`
 }
 
+// rulePatternEntry mirrors the subset of fields the test runner needs
+// from one `checks:` entry of checklists/secret_detection.yaml. It is
+// intentionally narrower than internal/tools.Pattern: the runner only
+// applies regex + hotword + denylist gating, not score / entropy
+// thresholds (those belong to CheckSecretPattern's full pipeline).
 type rulePatternEntry struct {
-	Name               string   `json:"name"`
-	Regex              string   `json:"regex"`
-	Hotwords           []string `json:"hotwords"`
-	HotwordWindow      int      `json:"hotword_window"`
-	RequireHotword     bool     `json:"require_hotword"`
-	DenylistSubstrings []string `json:"denylist_substrings"`
+	ID                 string   `yaml:"id"`
+	Type               string   `yaml:"type"`
+	Title              string   `yaml:"title"`
+	Pattern            string   `yaml:"pattern"`
+	Hotwords           []string `yaml:"hotwords"`
+	HotwordWindow      int      `yaml:"hotword_window"`
+	RequireHotword     bool     `yaml:"require_hotword"`
+	DenylistSubstrings []string `yaml:"denylist_substrings"`
 }
 
 type rulePatternFile struct {
-	Patterns []rulePatternEntry `json:"patterns"`
+	Checks []rulePatternEntry `yaml:"checks"`
 }
 
 func testCmd() *cobra.Command {
@@ -53,9 +61,9 @@ against the skill's bundled rule files.
 The runner supports two corpus shapes:
 
   * Regex-driven (e.g., secret-detection): the corpus declares "detect" or
-    "ignore" per fixture, and the runner matches the text against any pattern
-    declared in skills/<id>/rules/dlp_patterns.json (with hotword window
-    enforcement).
+    "ignore" per fixture, and the runner matches the text against any
+    type: secret_pattern entry declared in
+    skills/<id>/checklists/<framework>.yaml (with hotword window enforcement).
   * Schema-driven (other skills): the corpus is treated as a smoke test; the
     runner only verifies that fixtures parse and that "expected" is one of the
     accepted values.
@@ -150,33 +158,51 @@ func boolStr(b bool) string {
 	return "ignore"
 }
 
-// loadRulePatterns reads skills/<id>/rules/dlp_patterns.json if present and
-// returns the compiled patterns. Other rule shapes return an empty slice (the
-// runner then falls back to schema-only smoke validation).
+// loadRulePatterns reads the first checklists/*.yaml in skills/<id>/
+// and returns every `type: secret_pattern` entry compiled into a
+// runnable shape. Skills without a checklists/ directory or without
+// any secret_pattern items return an empty slice and the test runner
+// falls back to schema-only smoke validation.
 func loadRulePatterns(skillDir string) []compiledPattern {
-	path := filepath.Join(skillDir, "rules", "dlp_patterns.json")
-	data, err := os.ReadFile(path)
+	checklistsDir := filepath.Join(skillDir, "checklists")
+	entries, err := os.ReadDir(checklistsDir)
 	if err != nil {
 		return nil
 	}
-	var f rulePatternFile
-	if err := json.Unmarshal(data, &f); err != nil {
-		return nil
-	}
-	out := make([]compiledPattern, 0, len(f.Patterns))
-	for _, p := range f.Patterns {
-		re, err := regexp.Compile(p.Regex)
+	out := []compiledPattern{}
+	for _, ent := range entries {
+		if ent.IsDir() {
+			continue
+		}
+		name := ent.Name()
+		if !strings.HasSuffix(name, ".yaml") && !strings.HasSuffix(name, ".yml") {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(checklistsDir, name))
 		if err != nil {
 			continue
 		}
-		out = append(out, compiledPattern{
-			Name:               p.Name,
-			Regex:              re,
-			Hotwords:           p.Hotwords,
-			HotwordWindow:      p.HotwordWindow,
-			RequireHotword:     p.RequireHotword,
-			DenylistSubstrings: p.DenylistSubstrings,
-		})
+		var f rulePatternFile
+		if err := yaml.Unmarshal(data, &f); err != nil {
+			continue
+		}
+		for _, c := range f.Checks {
+			if c.Type != "secret_pattern" {
+				continue
+			}
+			re, err := regexp.Compile(c.Pattern)
+			if err != nil {
+				continue
+			}
+			out = append(out, compiledPattern{
+				Name:               c.Title,
+				Regex:              re,
+				Hotwords:           c.Hotwords,
+				HotwordWindow:      c.HotwordWindow,
+				RequireHotword:     c.RequireHotword,
+				DenylistSubstrings: c.DenylistSubstrings,
+			})
+		}
 	}
 	return out
 }

@@ -209,7 +209,7 @@ func ScanSecretsSARIF(res *ScanSecretsResult) *SARIFLog {
 			DefaultConfig: &SARIFRuleConfig{Level: sarifLevel(m.Severity)},
 			Properties: map[string]any{
 				"severity": m.Severity,
-				"source":   "skills/secret-detection/rules/dlp_patterns.json",
+				"source":   "skills/secret-detection/checklists/secret_detection.yaml",
 			},
 		})
 	}
