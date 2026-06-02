@@ -100,7 +100,7 @@
         "https://support.citrix.com/article/CTX267027/"
       ],
       "languages": [
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "/../vpns/",
@@ -563,7 +563,7 @@
         "https://www.fortiguard.com/psirt/FG-IR-18-384"
       ],
       "languages": [
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "/remote/fgt_lang\\?lang=[^\\s\\\"']*\\.\\./",
@@ -665,7 +665,7 @@
         "https://kb.pulsesecure.net/articles/Pulse_Security_Advisories/SA44101"
       ],
       "languages": [
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "/dana-na/[^\\\"\\s]*\\?fileurl=",
@@ -1082,8 +1082,7 @@
         "https://support.citrix.com/article/CTX579459"
       ],
       "languages": [
-        "c",
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "/oauth/idp/login",
@@ -1134,8 +1133,7 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2023-38545"
       ],
       "languages": [
-        "c",
-        "*"
+        "c"
       ],
       "code_patterns": [
         "CURLOPT_PROXYTYPE.*CURLPROXY_SOCKS5_HOSTNAME",
@@ -1183,7 +1181,7 @@
         "https://forums.ivanti.com/s/article/CVE-2023-46805-Authentication-Bypass-CVE-2024-21887-Command-Injection-for-Ivanti-Connect-Secure-and-Ivanti-Policy-Secure-Gateways"
       ],
       "languages": [
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "/api/v1/totp/user-backup-code",
@@ -1280,8 +1278,7 @@
         "https://security.paloaltonetworks.com/CVE-2024-3400"
       ],
       "languages": [
-        "python",
-        "*"
+        "appliance"
       ],
       "code_patterns": [
         "GlobalProtect\\b",
