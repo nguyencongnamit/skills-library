@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.1.0"
+version: "1.2.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -16,7 +16,7 @@ token_budget:
   full: 2800
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-04"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -95,14 +95,13 @@ sources:
 
 ## Scanner engines
 
-Engines available for scanning Dockerfiles. The MCP server harvests
-these markers at startup and exposes them via the
-`scan_dockerfile_engines` tool. Call that tool first to discover what
-is available on the current host, then let the user choose one or more
-engines before invoking `scan_dockerfile`.
+Dockerfile scanner engines known to secure-code, with their coverage
+trade-offs. These are declarative entries; the MCP server harvests the
+markers and exposes them via `scan_dockerfile_engines` (host/tool layer
+decides how to surface the choice — the skill only records what exists).
 
 - **Internal** — built-in regex rules shipped with secure-code; always
-  available, offline-friendly. Covers the seven critical rules under
+  available, offline-friendly. Covers the critical rules under
   `## Rules` above (multi-stage, missing USER, EOL base, secrets in
   env, ADD remote, curl-pipe-sh, apt without version pin). Limited
   coverage compared with industry tools; best as a fallback when no
@@ -113,6 +112,20 @@ engines before invoking `scan_dockerfile`.
     scanner: dockerfile,
     description: "Built-in regex rules — always available, offline.",
     output_format: dockerfile_finding
+  } -->
+- **Hadolint** — the industry-standard Dockerfile linter (~60 rules,
+  ShellCheck-backed). Far broader coverage than the internal rules;
+  prefer it when installed.
+  <!-- engine: {
+    name: hadolint,
+    type: external,
+    scanner: dockerfile,
+    binary: hadolint,
+    detect: [hadolint, --version],
+    execute: [hadolint, --format, sarif, "{file_path}"],
+    output_format: sarif,
+    install_hint: "brew install hadolint",
+    upstream: "https://github.com/hadolint/hadolint"
   } -->
 
 ## Context (for humans)

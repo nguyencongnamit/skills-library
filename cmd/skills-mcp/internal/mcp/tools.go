@@ -184,14 +184,15 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "scan_dockerfile",
-			"description": "Run a hardening pass over a Dockerfile. Detects untagged or :latest base images, USER root, secrets baked into ENV/ARG, ADD from a remote URL, `curl | sh` install patterns, and apt-get install lines without version pins. Subject to --allowed-roots and the sensitive-directory deny-list. Pass `format`=\"sarif\" for SARIF 2.1.0 output.",
+			"description": "Run a hardening pass over a Dockerfile. By default uses the built-in regex scanner (untagged/:latest base images, USER root, secrets in ENV/ARG, ADD remote URL, `curl | sh`, apt-get without version pins). Pass `engine` to delegate to an external engine declared in SKILL.md (discover available ones with scan_dockerfile_engines) — e.g. `engine`=\"hadolint\" runs hadolint and returns its findings. Subject to --allowed-roots and the sensitive-directory deny-list. Pass `format`=\"sarif\" for SARIF 2.1.0 output (builtin engine only).",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{
 					"file_path": map[string]string{"type": "string", "description": "Absolute path to a Dockerfile."},
+					"engine":    map[string]string{"type": "string", "description": "Optional scanner engine name from scan_dockerfile_engines. Empty or \"internal\" uses the built-in scanner; an external name (e.g. \"hadolint\") runs that tool if it is installed on PATH."},
 					"format": map[string]interface{}{
 						"type":        "string",
-						"description": "Output format. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log.",
+						"description": "Output format for the builtin engine. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log.",
 						"enum":        []string{"", "json", "sarif"},
 					},
 				},

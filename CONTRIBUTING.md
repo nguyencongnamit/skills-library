@@ -139,11 +139,23 @@ position). Each marker is an HTML comment carrying a YAML flow payload:
   } -->
 ```
 
-The MCP server harvests markers at startup and exposes them via
-`scan_<scanner>_engines` tools (e.g. `scan_dockerfile_engines`). Each
-response is decorated with per-host availability (binary on PATH?
-resolved path?) so the agent can render a multi-select menu and let
-the user pick which engine(s) to run.
+The MCP server harvests markers at startup and exposes them two ways:
+
+1. **Discovery** — `scan_<scanner>_engines` (e.g. `scan_dockerfile_engines`)
+   lists the declared engines decorated with per-host availability
+   (binary on PATH? resolved path? install hint when missing). How the
+   choice is surfaced to a human is the host/agent's concern — the
+   SKILL.md only declares what exists, never how to prompt.
+2. **Execution** — the scan tool accepts an `engine` argument. For
+   Dockerfiles, `scan_dockerfile(file_path, engine="hadolint")` runs the
+   declared external engine and returns its parsed findings; an empty or
+   `"internal"` engine runs the in-process builtin. Execution is gated:
+   only registry-declared `external` engines run, only when their binary
+   resolves on PATH, only on a `{file_path}` that passes the same
+   `--allowed-roots` / sensitive-directory guard as the builtin scanners,
+   always as an argv array (no shell), and under a 30s timeout. Engines
+   whose `output_format` is `sarif` are parsed generically; other formats
+   need a parser registered against the value before they can execute.
 
 Marker payload reference:
 

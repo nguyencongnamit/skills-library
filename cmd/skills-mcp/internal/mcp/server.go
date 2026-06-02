@@ -367,6 +367,12 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 		}
 		return res, nil
 	case "scan_dockerfile":
+		// Optional `engine` selects an external engine declared via a
+		// SKILL.md marker (discover them with scan_dockerfile_engines).
+		// Empty or "internal" runs the in-process builtin scanner.
+		if eng := stringArg(args, "engine"); eng != "" && !strings.EqualFold(eng, "internal") {
+			return s.lib.RunEngine("dockerfile", eng, stringArg(args, "file_path"))
+		}
 		res, err := s.lib.ScanDockerfile(stringArg(args, "file_path"))
 		if err != nil {
 			return nil, err
