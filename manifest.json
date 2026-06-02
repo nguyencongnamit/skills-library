@@ -50,38 +50,38 @@
     },
     {
       "path": "dist/.clinerules",
-      "sha256": "ea1b6dafd9a8f493588366f1910b71f9b87acd091786aca031c3aee9f227d244",
-      "size": 3856,
+      "sha256": "91fd0f07de850bddddf78cf3855c87c888ca720f85c7846b4704dbb02e2eae27",
+      "size": 3908,
       "action": "unchanged"
     },
     {
       "path": "dist/.cursorrules",
-      "sha256": "2fab30b66b614b41af20277e99d6dff840e2ad5ffaec85538f6ea5c368fc68a7",
-      "size": 3847,
+      "sha256": "f5979fe5945571acdf96258b308531d409755222c4c6c4c08b96edf3fd23fb40",
+      "size": 3899,
       "action": "unchanged"
     },
     {
       "path": "dist/.windsurfrules",
-      "sha256": "a1f04f8a2eb356243d08ab7cca2b98a0d85ae5338cd12234beffb1c1e807bea8",
-      "size": 3851,
+      "sha256": "bc48df2cdf869edec251f59fa1fd552fe980907592b824c8d484efadbdccdede",
+      "size": 3903,
       "action": "unchanged"
     },
     {
       "path": "dist/AGENTS.md",
-      "sha256": "01fc09cf0b84643b64584c622ed134e1819393df11b0f8907286cc58aafdbdb4",
-      "size": 3788,
+      "sha256": "9d0c55e89d17f71534ec1e61aedfb59aba8e626583db9fd32dbe2dabe4d879b9",
+      "size": 3840,
       "action": "unchanged"
     },
     {
       "path": "dist/CLAUDE.md",
-      "sha256": "1311372fcd505c7827a84ead0a364d05394a7208232f4b842a2107b547300e73",
-      "size": 3778,
+      "sha256": "4bebcc3865423c18cddf60e3edbf4bb7bbeff1c2540b185a50ec39d110f18326",
+      "size": 3830,
       "action": "unchanged"
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "1267a8a919665170c83f9db5d64f4ada12f026863cb34092b992d5cee30a6f81",
-      "size": 95001,
+      "sha256": "ce9db5ebbf5acfe767b5d9111aade203cdc451cec2d13be5cd99ba173dfe3781",
+      "size": 98657,
       "action": "unchanged"
     },
     {
@@ -203,6 +203,18 @@
       "sha256": "494f396afd1ba8d85044db03e50a40f2877ad0f9e1f465a5c00ae527efa64ea4",
       "size": 1162,
       "action": "unchanged"
+    },
+    {
+      "path": "dist/agent-skills/.agents/skills/electron-security/SKILL.md",
+      "sha256": "e43b7ae2fd12fcaeb65f97e36af94660709d0996a5f5129abc11641dae7045ec",
+      "size": 4315,
+      "action": "added"
+    },
+    {
+      "path": "dist/agent-skills/.agents/skills/electron-security/metadata.json",
+      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "size": 1273,
+      "action": "added"
     },
     {
       "path": "dist/agent-skills/.agents/skills/error-handling-security/SKILL.md",
@@ -529,6 +541,18 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/claude-skills/.claude/skills/electron-security/SKILL.md",
+      "sha256": "917d107ce9375c358df1b58cebaa076b699a293b96bde2ef78e40b2af5d023bf",
+      "size": 4290,
+      "action": "added"
+    },
+    {
+      "path": "dist/claude-skills/.claude/skills/electron-security/metadata.json",
+      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "size": 1273,
+      "action": "added"
+    },
+    {
       "path": "dist/claude-skills/.claude/skills/error-handling-security/SKILL.md",
       "sha256": "930962ff78016cf280468c4b9deb866df016c1a963f13d0c8d3ddb649fe22491",
       "size": 3277,
@@ -734,8 +758,8 @@
     },
     {
       "path": "dist/copilot-instructions.md",
-      "sha256": "4d69d838bbefe0a5c0d40e6a51e63acc4b2be690d3c6ac2287b318aac4413a65",
-      "size": 3795,
+      "sha256": "812cce4dd8339461cb66fb4b75a318d1504023d2a6560e2fc2e3130a035aef69",
+      "size": 3847,
       "action": "unchanged"
     },
     {
@@ -857,6 +881,18 @@
       "sha256": "494f396afd1ba8d85044db03e50a40f2877ad0f9e1f465a5c00ae527efa64ea4",
       "size": 1162,
       "action": "unchanged"
+    },
+    {
+      "path": "dist/copilot-skills/.github/skills/electron-security/SKILL.md",
+      "sha256": "91994776e2eee4f77df4cbfcfdf1286036f1f300e4a7251e7c313a23def784fb",
+      "size": 4293,
+      "action": "added"
+    },
+    {
+      "path": "dist/copilot-skills/.github/skills/electron-security/metadata.json",
+      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "size": 1273,
+      "action": "added"
     },
     {
       "path": "dist/copilot-skills/.github/skills/error-handling-security/SKILL.md",
@@ -1064,8 +1100,8 @@
     },
     {
       "path": "dist/devin.md",
-      "sha256": "a942aa05d22d93eda7ce2fc6dd03bb7e16505fad01a09e235017b37c57a44345",
-      "size": 3771,
+      "sha256": "016e5fa6dea1bbdc64503ecbfd5215802fb3307fd7e7cf2002968fc2715ccdab",
+      "size": 3823,
       "action": "unchanged"
     },
     {
@@ -1316,14 +1352,14 @@
     },
     {
       "path": "skills/compliance-awareness/frameworks/cwe_mapping.yaml",
-      "sha256": "c8b5c87153199aadac0df0c470f1e35fd5bba9ca1d94bce6e178b7e85a863e14",
-      "size": 1805,
+      "sha256": "d53488596a43d32736cc728f0b3df0b0e2585b12233f326b250996b22ab201fe",
+      "size": 1881,
       "action": "unchanged"
     },
     {
       "path": "skills/compliance-awareness/frameworks/owasp_mapping.yaml",
-      "sha256": "d2ee33abc2acb1ffa2bf5c45f745c0ced78d49bad4c1165f56c1598f2d9ce34a",
-      "size": 1754,
+      "sha256": "7dd178109ff6e54249c7ee943c04f5bec7904dd17b146d6b068863bd56a82b25",
+      "size": 1824,
       "action": "unchanged"
     },
     {
@@ -1415,6 +1451,18 @@
       "sha256": "0a6b0fc13970d80448f4772cb2a59d23d3e7faf21748d7070d98810ca4da9ad0",
       "size": 5730,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/electron-security/SKILL.md",
+      "sha256": "caed96326b46c2b01a7a0b249f457253d4a2b4aecd21736aec288648fae0bd06",
+      "size": 6270,
+      "action": "added"
+    },
+    {
+      "path": "skills/electron-security/checklists/electron_hardening.yaml",
+      "sha256": "3901c6cc268dd364c900f5e62702c17667249139738c9740ca2f1c56e22b5ee0",
+      "size": 2827,
+      "action": "added"
     },
     {
       "path": "skills/error-handling-security/SKILL.md",
