@@ -1,6 +1,6 @@
 ---
 id: secure-code-review
-version: "1.0.0"
+version: "1.1.0"
 title: "Secure Code Review"
 description: "Apply OWASP Top 10 and CWE Top 25 patterns during code generation and review"
 category: prevention
@@ -17,11 +17,15 @@ token_budget:
   full: 2400
 rules_path: "checklists/"
 related_skills: ["api-security", "secret-detection", "container-security"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-06"
 sources:
   - "OWASP Top 10 2021"
   - "CWE Top 25 2023"
   - "SEI CERT Coding Standards"
+external_tools:
+  - name: semgrep
+    purpose: "multi-language SAST (OWASP/CWE rulesets)"
+    command: "semgrep --config auto"
 ---
 
 # Secure Code Review
