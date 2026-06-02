@@ -116,7 +116,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/cicd-security/metadata.json",
-      "sha256": "0939ebc002f0bf6395be8057bbd20b2e8c788d24c3e71d6e4aea63c04256ae02",
+      "sha256": "6f492de74cb603d74c897b031ffcdb091699daac1dfec2fe59c4fdff5ccf1599",
       "size": 1165,
       "action": "unchanged"
     },
@@ -140,7 +140,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
+      "sha256": "63e0a917ee6bfebf8f35a994cc2af67f89cbb154ffb3c7ec27c82921e48f4218",
       "size": 919,
       "action": "unchanged"
     },
@@ -212,7 +212,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/electron-security/metadata.json",
-      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "sha256": "39a0f3c85930a0ebfb195b38f7c2b698f32d145e41ca43232c575267a75a6268",
       "size": 1273,
       "action": "unchanged"
     },
@@ -272,7 +272,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/iac-security/metadata.json",
-      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "sha256": "e6b0ab9b4eba499ab58cee7d13f3d544434d4b6723cf0fd4b4af87564151a800",
       "size": 962,
       "action": "unchanged"
     },
@@ -284,7 +284,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/iam-best-practices/metadata.json",
-      "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
+      "sha256": "99035c4b81d12da100e5389083e5e65511e294b267a86e0d84932fd64bdfa7b6",
       "size": 1308,
       "action": "unchanged"
     },
@@ -332,7 +332,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/protocol-security/metadata.json",
-      "sha256": "3baec1f532cd8b29e8210c9b7f21670deace959cc424376ba7fedb0b8f1180d9",
+      "sha256": "3f9fb28d764754ec39033ee826e1cc6ba14bade298abc493e72a5c56abe665f7",
       "size": 954,
       "action": "unchanged"
     },
@@ -368,7 +368,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/secure-code-review/metadata.json",
-      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "sha256": "0a1dc0ff0f041dff92939f6321a0db6b2a8ed05b1f4b59747517a250c5d38583",
       "size": 828,
       "action": "unchanged"
     },
@@ -452,7 +452,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/cicd-security/metadata.json",
-      "sha256": "0939ebc002f0bf6395be8057bbd20b2e8c788d24c3e71d6e4aea63c04256ae02",
+      "sha256": "6f492de74cb603d74c897b031ffcdb091699daac1dfec2fe59c4fdff5ccf1599",
       "size": 1165,
       "action": "unchanged"
     },
@@ -476,7 +476,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
+      "sha256": "63e0a917ee6bfebf8f35a994cc2af67f89cbb154ffb3c7ec27c82921e48f4218",
       "size": 919,
       "action": "unchanged"
     },
@@ -548,7 +548,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/electron-security/metadata.json",
-      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "sha256": "39a0f3c85930a0ebfb195b38f7c2b698f32d145e41ca43232c575267a75a6268",
       "size": 1273,
       "action": "unchanged"
     },
@@ -608,7 +608,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/iac-security/metadata.json",
-      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "sha256": "e6b0ab9b4eba499ab58cee7d13f3d544434d4b6723cf0fd4b4af87564151a800",
       "size": 962,
       "action": "unchanged"
     },
@@ -620,7 +620,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/iam-best-practices/metadata.json",
-      "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
+      "sha256": "99035c4b81d12da100e5389083e5e65511e294b267a86e0d84932fd64bdfa7b6",
       "size": 1308,
       "action": "unchanged"
     },
@@ -668,7 +668,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/protocol-security/metadata.json",
-      "sha256": "3baec1f532cd8b29e8210c9b7f21670deace959cc424376ba7fedb0b8f1180d9",
+      "sha256": "3f9fb28d764754ec39033ee826e1cc6ba14bade298abc493e72a5c56abe665f7",
       "size": 954,
       "action": "unchanged"
     },
@@ -704,7 +704,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/secure-code-review/metadata.json",
-      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "sha256": "0a1dc0ff0f041dff92939f6321a0db6b2a8ed05b1f4b59747517a250c5d38583",
       "size": 828,
       "action": "unchanged"
     },
@@ -794,7 +794,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/cicd-security/metadata.json",
-      "sha256": "0939ebc002f0bf6395be8057bbd20b2e8c788d24c3e71d6e4aea63c04256ae02",
+      "sha256": "6f492de74cb603d74c897b031ffcdb091699daac1dfec2fe59c4fdff5ccf1599",
       "size": 1165,
       "action": "unchanged"
     },
@@ -818,7 +818,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
+      "sha256": "63e0a917ee6bfebf8f35a994cc2af67f89cbb154ffb3c7ec27c82921e48f4218",
       "size": 919,
       "action": "unchanged"
     },
@@ -890,7 +890,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/electron-security/metadata.json",
-      "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
+      "sha256": "39a0f3c85930a0ebfb195b38f7c2b698f32d145e41ca43232c575267a75a6268",
       "size": 1273,
       "action": "unchanged"
     },
@@ -950,7 +950,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/iac-security/metadata.json",
-      "sha256": "e02d1f8738ff40e27f958206075c36609765813ef2771b5a379f6a7eb74b69e6",
+      "sha256": "e6b0ab9b4eba499ab58cee7d13f3d544434d4b6723cf0fd4b4af87564151a800",
       "size": 962,
       "action": "unchanged"
     },
@@ -962,7 +962,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/iam-best-practices/metadata.json",
-      "sha256": "87f4c4219f3623dad0dd2924005e1e1a85d4976906a4d644b6da8207959ce572",
+      "sha256": "99035c4b81d12da100e5389083e5e65511e294b267a86e0d84932fd64bdfa7b6",
       "size": 1308,
       "action": "unchanged"
     },
@@ -1010,7 +1010,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/protocol-security/metadata.json",
-      "sha256": "3baec1f532cd8b29e8210c9b7f21670deace959cc424376ba7fedb0b8f1180d9",
+      "sha256": "3f9fb28d764754ec39033ee826e1cc6ba14bade298abc493e72a5c56abe665f7",
       "size": 954,
       "action": "unchanged"
     },
@@ -1046,7 +1046,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/secure-code-review/metadata.json",
-      "sha256": "ee1e13b839b2ef39feb780cf563e87db7c20764e33831b26a029859bb539bb1e",
+      "sha256": "0a1dc0ff0f041dff92939f6321a0db6b2a8ed05b1f4b59747517a250c5d38583",
       "size": 828,
       "action": "unchanged"
     },
@@ -1328,8 +1328,8 @@
     },
     {
       "path": "skills/cicd-security/SKILL.md",
-      "sha256": "5112444994d090959b0c767696adf325fc25414debfcd39c60cb3672b6221f11",
-      "size": 6372,
+      "sha256": "88c63d5c4fef52deb3a98cb227bd2c148878ee169d22dfda7640ff46bbffc393",
+      "size": 6527,
       "action": "unchanged"
     },
     {
@@ -1364,8 +1364,8 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "b0fea115f8ef05be11fd320149284c485594701d6a994948f1abb1281de8dd66",
-      "size": 6058,
+      "sha256": "d808635a1a52fba8754e95e5bf23115914bc5c8c9ee689e7a095acb3e646cc61",
+      "size": 6228,
       "action": "unchanged"
     },
     {
@@ -1454,8 +1454,8 @@
     },
     {
       "path": "skills/electron-security/SKILL.md",
-      "sha256": "caed96326b46c2b01a7a0b249f457253d4a2b4aecd21736aec288648fae0bd06",
-      "size": 6270,
+      "sha256": "1a043b77a7ea38920a0d93464026a21d3b2f2be970e9734e89eec96911269a9f",
+      "size": 6417,
       "action": "unchanged"
     },
     {
@@ -1526,8 +1526,8 @@
     },
     {
       "path": "skills/iac-security/SKILL.md",
-      "sha256": "c0a7191ae9d008b2d4b48c518a31d106a11dfbdfe290f7ee2efccc536ed8b22e",
-      "size": 4542,
+      "sha256": "3ba859685541febde07673f44612e04d08877f94e24657d3b94d814f89b14553",
+      "size": 4782,
       "action": "unchanged"
     },
     {
@@ -1544,8 +1544,8 @@
     },
     {
       "path": "skills/iam-best-practices/SKILL.md",
-      "sha256": "09bb06c745f39b078520ff17377275b69939464909961a1332df2eca09126d53",
-      "size": 7173,
+      "sha256": "27e56c16839255dcfce4bfcdca01b36cc3d9e4a8ed62f945c1b9e79ab9366466",
+      "size": 7316,
       "action": "unchanged"
     },
     {
@@ -1616,8 +1616,8 @@
     },
     {
       "path": "skills/protocol-security/SKILL.md",
-      "sha256": "2455e65ab9a8d5fa6b9ce3636c97aa869183f8f141ad23f4337ef8a70aa80522",
-      "size": 4694,
+      "sha256": "7bd456a860bae5a48615a15571dc4aa427e839792f8a5520f0aa08054a5d1bb8",
+      "size": 4859,
       "action": "unchanged"
     },
     {
@@ -1748,8 +1748,8 @@
     },
     {
       "path": "skills/secure-code-review/SKILL.md",
-      "sha256": "64010c462ac4706ea870e2b5ed493fdf9638ae1d012fdfae2f2deadb46b1b56d",
-      "size": 3754,
+      "sha256": "2bc19bdaa63304c4bfadf81be8c7d4dae3a0788e6f47874cd65f021732940728",
+      "size": 3881,
       "action": "unchanged"
     },
     {
