@@ -208,13 +208,13 @@
       "path": "dist/agent-skills/.agents/skills/electron-security/SKILL.md",
       "sha256": "e43b7ae2fd12fcaeb65f97e36af94660709d0996a5f5129abc11641dae7045ec",
       "size": 4315,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/agent-skills/.agents/skills/electron-security/metadata.json",
       "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
       "size": 1273,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/agent-skills/.agents/skills/error-handling-security/SKILL.md",
@@ -544,13 +544,13 @@
       "path": "dist/claude-skills/.claude/skills/electron-security/SKILL.md",
       "sha256": "917d107ce9375c358df1b58cebaa076b699a293b96bde2ef78e40b2af5d023bf",
       "size": 4290,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/claude-skills/.claude/skills/electron-security/metadata.json",
       "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
       "size": 1273,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/claude-skills/.claude/skills/error-handling-security/SKILL.md",
@@ -886,13 +886,13 @@
       "path": "dist/copilot-skills/.github/skills/electron-security/SKILL.md",
       "sha256": "91994776e2eee4f77df4cbfcfdf1286036f1f300e4a7251e7c313a23def784fb",
       "size": 4293,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/electron-security/metadata.json",
       "sha256": "e816c8750aa313eab7b07ecefa8581343eb54b4dc4166bbf7d6411808bfe4dbb",
       "size": 1273,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/error-handling-security/SKILL.md",
@@ -1456,13 +1456,13 @@
       "path": "skills/electron-security/SKILL.md",
       "sha256": "caed96326b46c2b01a7a0b249f457253d4a2b4aecd21736aec288648fae0bd06",
       "size": 6270,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/electron-security/checklists/electron_hardening.yaml",
       "sha256": "3901c6cc268dd364c900f5e62702c17667249139738c9740ca2f1c56e22b5ee0",
       "size": 2827,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/error-handling-security/SKILL.md",
