@@ -140,7 +140,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "f0ca11245b48714d1d31d2fca4fe359941f7af36d9879d24412af14c8d7c0671",
+      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
       "size": 919,
       "action": "unchanged"
     },
@@ -356,7 +356,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/secret-detection/metadata.json",
-      "sha256": "efdfb506ed2b41dfbc9a73529c1c05669e4433d94cebc183f1750ad3497b1d1e",
+      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
       "size": 910,
       "action": "unchanged"
     },
@@ -476,7 +476,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "f0ca11245b48714d1d31d2fca4fe359941f7af36d9879d24412af14c8d7c0671",
+      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
       "size": 919,
       "action": "unchanged"
     },
@@ -692,7 +692,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/secret-detection/metadata.json",
-      "sha256": "efdfb506ed2b41dfbc9a73529c1c05669e4433d94cebc183f1750ad3497b1d1e",
+      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
       "size": 910,
       "action": "unchanged"
     },
@@ -818,7 +818,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "f0ca11245b48714d1d31d2fca4fe359941f7af36d9879d24412af14c8d7c0671",
+      "sha256": "5d11abacfc3bc8208d6ee1a362ee5ccbf538bf81cb1a26abe2605e99a6501f98",
       "size": 919,
       "action": "unchanged"
     },
@@ -1034,7 +1034,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/secret-detection/metadata.json",
-      "sha256": "efdfb506ed2b41dfbc9a73529c1c05669e4433d94cebc183f1750ad3497b1d1e",
+      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
       "size": 910,
       "action": "unchanged"
     },
@@ -1364,7 +1364,7 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "e82f434a4f7297fe1a21cb25b6e120882778038f09ef2c2d48caae48eaecda17",
+      "sha256": "b0fea115f8ef05be11fd320149284c485594701d6a994948f1abb1281de8dd66",
       "size": 6058,
       "action": "unchanged"
     },
@@ -1730,7 +1730,7 @@
     },
     {
       "path": "skills/secret-detection/SKILL.md",
-      "sha256": "2c22b4ab1280f887133f5c8b11c5e0bd426868d1ef7655d71ae291531cf7a0a6",
+      "sha256": "46864f33975a87f185cfbaa18adb7fed44bd160a8b6b3037260d70f62e76b16d",
       "size": 6464,
       "action": "unchanged"
     },

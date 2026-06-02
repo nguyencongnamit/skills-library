@@ -1,6 +1,6 @@
 ---
 id: secret-detection
-version: "1.7.0"
+version: "1.8.0"
 title: "Secret Detection"
 description: "Detect and prevent hardcoded secrets, API keys, tokens, and credentials in code"
 category: prevention
@@ -18,7 +18,7 @@ token_budget:
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-04"
+last_updated: "2026-06-05"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
