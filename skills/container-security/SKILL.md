@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.2.0"
+version: "1.3.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -16,12 +16,16 @@ token_budget:
   full: 2800
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-04"
+last_updated: "2026-06-05"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
   - "NIST SP 800-190 Application Container Security Guide"
   - "OWASP Docker Top 10"
+external_tools:
+  - name: hadolint
+    purpose: "Dockerfile linting (~60 ShellCheck-backed rules)"
+    command: "hadolint <file>"
 ---
 
 # Container Security
@@ -92,15 +96,6 @@ sources:
 - One-shot debugging pods (kubectl debug, ephemeral containers) intentionally
   bypass many of these controls; they should not be persisted as YAML in the
   repo.
-
-## Tooling
-
-The built-in `scan_dockerfile` MCP tool covers the critical rules above
-(multi-stage, missing USER, EOL base, secrets in env, ADD remote,
-curl-pipe-sh, apt without version pin) offline. For broader coverage,
-**hadolint** is the industry-standard Dockerfile linter (~60
-ShellCheck-backed rules) — run it from the shell (`hadolint <file>`)
-when installed; it catches far more than the built-in regex set.
 
 ## Context (for humans)
 
