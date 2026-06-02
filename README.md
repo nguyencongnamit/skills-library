@@ -4,7 +4,7 @@
 [![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
-[![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/rules/dlp_patterns.json)
+[![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
 
 **secure-code** is a structured, machine-readable library of security skills and
@@ -662,12 +662,6 @@ cells are stubs that prepend a `> ⚠️ TRANSLATION PENDING` banner over the
 untranslated English body. Run [`scripts/generate-locale-stubs.py`](./scripts/generate-locale-stubs.py)
 to regenerate the stubs after adding a skill or a locale.
 
-For the secret-detection scanner there is also a multilingual hotword
-sidecar at [`skills/secret-detection/rules/dlp_patterns.locales.json`](./skills/secret-detection/rules/dlp_patterns.locales.json)
-that the loader merges into the live hotword set at compile time so the
-scoring path can match locale-language variable names (e.g. `contraseña`,
-`passwort`) in non-English codebases.
-
 Translations remain informational — the canonical English file under
 `skills/<id>/SKILL.md` is the source of truth for the validator and the IDE
 config generators. A full audit of language coverage gaps for top-10 world
@@ -690,8 +684,10 @@ predominantly AI-generated pull requests are not accepted). In brief:
   ID, advisory URL, or reputable disclosure write-up).
 - **Detection rules** — add Sigma YAML files to `rules/`. Follow the existing
   taxonomy (`cloud/`, `endpoint/`, `container/`, `saas/`).
-- **False positive fixes** — update the relevant `dlp_exclusions.json` (or a
-  skill-specific exclusion file). False-positive PRs are merged quickly.
+- **False positive fixes** — update the `exclusions:` block of
+  `skills/secret-detection/checklists/secret_detection.yaml` (or the
+  equivalent exclusion file for another skill). False-positive PRs are
+  merged quickly.
 - **IDE integration** — improve the templates in the `dist/` compiler for
   specific tools.
 - Run `skills-check validate` and `go test ./...` before submitting a PR. CI
