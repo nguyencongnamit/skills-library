@@ -16,8 +16,8 @@ token_budget:
   compact: 1500
   full: 2200
 rules_path: "rules/"
-related_skills: ["api-security", "ssrf-prevention", "infrastructure-security", "cors-security"]
-last_updated: "2026-05-13"
+related_skills: ["api-security", "ssrf-prevention", "container-security", "cors-security"]
+last_updated: "2026-06-03"
 sources:
   - "OWASP File Upload Cheat Sheet"
   - "CWE-434: Unrestricted Upload of File with Dangerous Type"

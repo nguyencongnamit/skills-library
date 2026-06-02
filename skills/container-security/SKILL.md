@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.0.0"
+version: "1.1.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -15,8 +15,8 @@ token_budget:
   compact: 1450
   full: 2800
 rules_path: "checklists/"
-related_skills: ["infrastructure-security", "iac-security", "secret-detection"]
-last_updated: "2026-06-02"
+related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
+last_updated: "2026-06-03"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -124,8 +124,8 @@ risks**, **registry risks**, **orchestrator risks**, and **runtime risks**.
 
 AI assistants almost always generate Dockerfiles that work and ship — fast — but
 they default to a single-stage `FROM node` / `FROM python` and `USER root`. This
-skill is the counterweight; pair it with `infrastructure-security` for K8s
-controls beyond the pod (RBAC, admission, supply chain).
+skill is the counterweight; pair it with `iam-best-practices` for cluster
+RBAC and `supply-chain-security` for image provenance beyond the pod.
 
 ## References
 

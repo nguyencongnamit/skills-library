@@ -141,7 +141,7 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <a class="ss-card" data-pkg="dlp" href="https://github.com/namncqualgo/skills-library/tree/main/skills/secret-detection">
 <span class="ss-card-icon">🔐</span>
 <span class="ss-card-body"><span class="ss-card-title">DLP Patterns</span>
-<span class="ss-card-desc">74 secret-detection patterns optimised for AI-assistant context. Locale-aware hotwords merged at compile time.</span></span>
+<span class="ss-card-desc">74 secret-detection patterns optimised for AI-assistant context, with entropy and hotword-proximity scoring.</span></span>
 </a>
 <a class="ss-card" data-pkg="signing" href="https://github.com/namncqualgo/skills-library/blob/main/SIGNING.md">
 <span class="ss-card-icon">✍️</span>

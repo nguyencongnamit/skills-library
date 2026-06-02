@@ -55,7 +55,7 @@ func TestListOutputsAllSeven(t *testing.T) {
 	}
 	for _, id := range []string{
 		"api-security", "compliance-awareness", "dependency-audit",
-		"infrastructure-security", "secret-detection",
+		"container-security", "secret-detection",
 		"secure-code-review", "supply-chain-security",
 	} {
 		if !strings.Contains(stdout, id) {

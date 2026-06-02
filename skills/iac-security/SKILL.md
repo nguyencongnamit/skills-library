@@ -1,6 +1,6 @@
 ---
 id: iac-security
-version: "1.0.0"
+version: "1.1.0"
 title: "Infrastructure-as-Code Security"
 description: "Hardening rules for Terraform, CloudFormation, and Pulumi: state, providers, drift, secrets"
 category: hardening
@@ -15,8 +15,8 @@ token_budget:
   compact: 1100
   full: 2500
 rules_path: "checklists/"
-related_skills: ["infrastructure-security", "container-security", "secret-detection"]
-last_updated: "2026-05-13"
+related_skills: ["container-security", "secret-detection", "iam-best-practices"]
+last_updated: "2026-06-03"
 sources:
   - "CIS Benchmarks (AWS, Azure, GCP)"
   - "HashiCorp Terraform Best Practices"

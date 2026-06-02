@@ -12,8 +12,6 @@ mapping:
     owasp_items: ["A06"]
   - skill: "supply-chain-security"
     owasp_items: ["A06", "A08"]
-  - skill: "infrastructure-security"
-    owasp_items: ["A05"]
   - skill: "compliance-awareness"
     owasp_items: ["A09"]
   - skill: "auth-security"

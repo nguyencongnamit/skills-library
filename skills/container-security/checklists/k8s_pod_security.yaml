@@ -53,3 +53,8 @@ patterns:
   - id: k8s-image-pull-policy
     severity: medium
     rule: "imagePullPolicy=Always for digest-pinned images so updated image at same digest forces re-pull"
+  # Salvaged from the deprecated infrastructure-security skill (PR: deprecate-infrastructure-security).
+  - id: k8s-image-digest-pin
+    severity: medium
+    rule: "Production manifests reference container images by digest (image@sha256:...), not by floating tag, so a re-pushed tag cannot silently change the running workload"
+    cwe: 1357
