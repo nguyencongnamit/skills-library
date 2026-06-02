@@ -1,6 +1,6 @@
 ---
 id: secret-detection
-version: "1.5.0"
+version: "1.6.0"
 title: "Secret Detection"
 description: "Detect and prevent hardcoded secrets, API keys, tokens, and credentials in code"
 category: prevention
@@ -18,7 +18,7 @@ token_budget:
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-02"
+last_updated: "2026-06-03"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -85,21 +85,31 @@ inline a working credential and "fix it later." This skill is the counterweight:
 trains the AI to refuse the path of least resistance.
 
 The detection strategy in `checklists/secret_detection.yaml` mirrors the layered
-pipeline, now with **74 distinct patterns** spanning developer platforms (GitHub
-classic + fine-grained PATs, Anthropic, OpenAI, Supabase, Linear), cloud (AWS,
-Azure AD, GCP, DigitalOcean, Heroku), data platforms (Databricks, Datadog,
-HashiCorp Vault), and comms (Twilio, SendGrid, Slack). Each pattern carries
-severity, hotwords, hotword proximity window, and an entropy floor to drive
-precision, documented in [secure-edge ARCHITECTURE.md](https://github.com/kennguy3n/secure-edge/blob/main/ARCHITECTURE.md)
-— Aho-Corasick prefix scan, regex validation on candidates, hotword proximity,
-entropy thresholds, and exclusion rules — adapted for the static-analysis
-context.
+pipeline, now with **83 distinct patterns** grouped as: developer platforms (28
+— GitHub, Anthropic, OpenAI, Supabase, Vercel), collaboration & comms (13 —
+Slack, Discord, Dropbox, Twilio, Teams), cloud platforms (12 — AWS, Azure AD,
+GCP, DigitalOcean, Heroku), enterprise SaaS (11 — Salesforce, Atlassian,
+Shopify, Workday, NetSuite), data platforms (9 — Databricks, Datadog, Vault,
+MongoDB Atlas, Grafana), generic & cryptographic (4 — JWT, PEM keys), payments
+(3 — Stripe), and email (3 — SendGrid, Mailgun, Mailchimp). Each pattern carries
+severity, hotwords, a proximity window, and an entropy floor, documented in
+[secure-edge ARCHITECTURE.md](https://github.com/kennguy3n/secure-edge/blob/main/ARCHITECTURE.md)
+— Aho-Corasick prefix scan, regex validation, hotword proximity, entropy
+thresholds, and exclusion rules. Counts are derived from the
+`type: secret_pattern` entries; keep them in sync when adding patterns.
 
 PR-B1 unified the three legacy JSON sidecars
 (`rules/dlp_patterns.json`, `rules/dlp_exclusions.json`,
 `rules/dlp_patterns.locales.json`) into a single
 `checklists/secret_detection.yaml` matching the convention used by every other
 skill. The AI-drafted locale hotword sidecar was dropped in the same PR.
+
+Lane 1 (this PR) imported 9 high-confidence patterns from
+[mazen160/secrets-patterns-db](https://github.com/mazen160/secrets-patterns-db) —
+AWS AppSync (`da2-`), AWS MWS (`amzn.mws.`), GitHub App Installation (`ghs_`),
+GitHub Refresh (`ghr_`), Stripe Public Live (`pk_live_`), Mailgun (`key-`),
+Mailchimp (32-hex + `-usN`), Dropbox short-lived (`sl.`), and Discord bot.
+Each carries its upstream URL in the `references:` field as evidence.
 
 ## References
 
