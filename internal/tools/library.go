@@ -126,20 +126,6 @@ type Library struct {
 	// regardless of the allow-list state.
 	allowedRoots []string
 
-	// engineRegistry holds scanner-engine declarations harvested from
-	// `<!-- engine: { ... } -->` markers in each skills/*/SKILL.md
-	// file. Keyed by EngineMarker.Scanner ("dockerfile",
-	// "github_actions", ...), each entry is the list of engines a
-	// caller can ask scan_<scanner>_engines to surface.
-	//
-	// Populated lazily by ensureEnginesLoaded() so a Library that
-	// never calls a scan_*_engines tool doesn't pay the cost of
-	// re-reading every SKILL.md.
-	engineMu         sync.Mutex
-	engineRegistry   map[string][]EngineMarker
-	enginesLoaded    bool
-	enginesLoadError error
-
 	// vulnSource selects where OSV advisory lookups read from.
 	// Defaults to SourceLocal (the repo-bundled + user cache),
 	// preserving the pre-existing behaviour. Operators opt into
@@ -429,72 +415,6 @@ func (l *Library) loadSkills() ([]*skill.Skill, error) {
 		l.skills = skills
 	})
 	return l.skills, l.loadErr
-}
-
-// ensureEnginesLoaded harvests `<!-- engine: { ... } -->` markers from
-// every SKILL.md and groups them by EngineMarker.Scanner. The result
-// is cached on the Library so subsequent scan_*_engines tool calls do
-// not re-read the on-disk files.
-//
-// Returns the loader error verbatim — a malformed engine marker should
-// fail loudly so the SKILL.md author sees it immediately. Callers
-// (the scan_*_engines handlers) surface this as a tool error.
-//
-// The function reads each SKILL.md's raw bytes rather than relying on
-// the parsed skill.Body, because engine markers live in a
-// `## Scanner engines` H2 section that the existing parser does not
-// recognise. A raw regex scan keeps the parser unchanged and lets the
-// marker appear anywhere in the file.
-func (l *Library) ensureEnginesLoaded() error {
-	l.engineMu.Lock()
-	defer l.engineMu.Unlock()
-	if l.enginesLoaded {
-		return l.enginesLoadError
-	}
-	skills, err := l.loadSkills()
-	if err != nil {
-		l.enginesLoaded = true
-		l.enginesLoadError = err
-		return err
-	}
-	registry := map[string][]EngineMarker{}
-	for _, s := range skills {
-		body, err := os.ReadFile(s.Path)
-		if err != nil {
-			// One unreadable SKILL.md should not poison the whole
-			// registry — skip it and continue. The skill-parsing
-			// layer above us would have failed first if the file
-			// were truly unreadable.
-			continue
-		}
-		markers, err := extractEngineMarkers(s.Frontmatter.ID, body)
-		if err != nil {
-			l.enginesLoaded = true
-			l.enginesLoadError = err
-			return err
-		}
-		for _, m := range markers {
-			registry[m.Scanner] = append(registry[m.Scanner], m)
-		}
-	}
-	l.engineRegistry = registry
-	l.enginesLoaded = true
-	return nil
-}
-
-// EnginesForScanner returns every engine marker registered against the
-// named scanner type ("dockerfile", "github_actions", "secrets",
-// "dependencies"). An unknown scanner returns nil + nil — the caller
-// should treat that as "no engines registered" and surface a minimal
-// menu (just the always-available builtin).
-//
-// The list is ordered by SKILL.md walk order, which is
-// lexicographically by skill id (deterministic across calls).
-func (l *Library) EnginesForScanner(scanner string) ([]EngineMarker, error) {
-	if err := l.ensureEnginesLoaded(); err != nil {
-		return nil, err
-	}
-	return l.engineRegistry[scanner], nil
 }
 
 // VulnEntry is one entry in a per-ecosystem malicious-packages JSON file.
