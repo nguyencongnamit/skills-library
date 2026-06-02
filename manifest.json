@@ -1790,8 +1790,8 @@
     },
     {
       "path": "vulnerabilities/cve/code-relevant/cve_patterns.json",
-      "sha256": "03aa80dcf83f375a3c1f41279472a43350aa9edcb5b830eb2908241fc1258272",
-      "size": 65758,
+      "sha256": "2893a697758c72493d09ccf327fb6d8b6d31b02ea7c42f9f5c324973196cf16a",
+      "size": 65762,
       "action": "unchanged"
     },
     {
