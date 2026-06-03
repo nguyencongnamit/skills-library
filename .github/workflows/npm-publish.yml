@@ -1,0 +1,122 @@
+name: npm publish
+
+# Publishes the secure-code MCP server to npm as:
+#   @namncqualgo/secure-code-mcp                      (launcher + library data)
+#   @namncqualgo/secure-code-mcp-<os>-<arch>  x5      (per-platform binaries)
+#
+# The binaries are rebuilt from the tagged source in this run (not downloaded
+# from the GitHub release), so npm provenance attests them against this exact
+# commit. The platform packages are published BEFORE the main package because
+# the main package lists them as optionalDependencies.
+#
+# Manual by design (matches the repo's deliberate draft -> sign -> publish
+# release flow); also runs when a GitHub release is published. Both paths
+# resolve the version from the tag (npm version = tag without the leading "v").
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to publish (e.g. v0.1.0). npm version = tag without the leading 'v'."
+        required: true
+        type: string
+  release:
+    types: [released]
+
+permissions:
+  contents: read
+  id-token: write # required for `npm publish --provenance` (OIDC)
+
+jobs:
+  publish:
+    name: Build, smoke-test, and publish to npm
+    runs-on: ubuntu-latest
+    env:
+      # Secrets are not allowed in `if:` conditions directly; surface presence
+      # as an env flag so the publish step can no-op when the token is unset
+      # (the build + smoke-test steps still run and validate the packaging).
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
+    steps:
+      - name: Resolve tag and version
+        id: ver
+        shell: bash
+        env:
+          TAG_INPUT: ${{ inputs.tag }}
+          TAG_RELEASE: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          tag="${TAG_INPUT:-$TAG_RELEASE}"
+          if [ -z "$tag" ]; then
+            echo "::error::no tag provided (workflow_dispatch input or release tag)"
+            exit 1
+          fi
+          version="${tag#v}"
+          if ! printf '%s' "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-+].+)?$'; then
+            echo "::error::resolved version '$version' is not semver (from tag '$tag')"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Publishing npm version $version (tag $tag)"
+
+      - name: Checkout the tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.ver.outputs.tag }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.22"
+          cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Cross-compile skills-mcp for every target
+        shell: bash
+        env:
+          CGO_ENABLED: "0"
+          SOURCE_DATE_EPOCH: "0"
+        run: |
+          set -euo pipefail
+          mkdir -p npm-binaries
+          for pair in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
+            goos="${pair%/*}"; goarch="${pair#*/}"
+            out="skills-mcp-${goos}-${goarch}"
+            [ "$goos" = "windows" ] && out="${out}.exe"
+            GOOS="$goos" GOARCH="$goarch" go build \
+              -trimpath -ldflags "-s -w" \
+              -o "npm-binaries/${out}" ./cmd/skills-mcp
+            echo "built ${out}"
+          done
+
+      - name: Assemble npm packages
+        run: node npm/build.mjs --binaries npm-binaries --root . --version "${{ steps.ver.outputs.version }}" --out npm/dist
+
+      - name: Smoke-test (build host pkg + initialize handshake)
+        run: node npm/smoke-test.mjs
+
+      - name: Publish to npm (platform packages first, then main)
+        if: ${{ env.HAS_NPM_TOKEN == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Platform packages must exist before the main package (which lists
+          # them as optionalDependencies) so a first install resolves cleanly.
+          for d in npm/dist/secure-code-mcp-*/; do
+            echo "publishing $(basename "$d")"
+            npm publish "$d" --provenance --access public
+          done
+          echo "publishing secure-code-mcp (main)"
+          npm publish npm/dist/secure-code-mcp --provenance --access public
+
+      - name: Token not configured (no-op)
+        if: ${{ env.HAS_NPM_TOKEN != 'true' }}
+        run: |
+          echo "::notice::NPM_TOKEN is not set — built and smoke-tested the packages but skipped publish. Add the NPM_TOKEN repo secret to enable publishing."
