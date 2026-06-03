@@ -1,0 +1,42 @@
+{
+  "name": "@namncqualgo/secure-code-mcp",
+  "version": "0.0.0-dev",
+  "description": "Security skills MCP server for AI coding agents — secret / dependency / Dockerfile / GitHub Actions scanning, offline OSV cache, and 28 hardening skills.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "security",
+    "sast",
+    "secret-detection",
+    "sca",
+    "osv",
+    "claude",
+    "cursor"
+  ],
+  "homepage": "https://github.com/namncqualgo/skills-library#readme",
+  "bugs": "https://github.com/namncqualgo/skills-library/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namncqualgo/skills-library.git",
+    "directory": "npm/secure-code-mcp"
+  },
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bin": {
+    "secure-code-mcp": "bin/launch.js"
+  },
+  "files": [
+    "bin/",
+    "data/"
+  ],
+  "optionalDependencies": {
+    "@namncqualgo/secure-code-mcp-darwin-x64": "0.0.0-dev",
+    "@namncqualgo/secure-code-mcp-darwin-arm64": "0.0.0-dev",
+    "@namncqualgo/secure-code-mcp-linux-x64": "0.0.0-dev",
+    "@namncqualgo/secure-code-mcp-linux-arm64": "0.0.0-dev",
+    "@namncqualgo/secure-code-mcp-win32-x64": "0.0.0-dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
