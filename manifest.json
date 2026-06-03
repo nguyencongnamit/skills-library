@@ -766,169 +766,169 @@
       "path": "dist/copilot-rules/.github/instructions/api-security.instructions.md",
       "sha256": "5387d55e898d85175038ceec3b44431d8523e291933af8f11ab7f73cdf10b7ab",
       "size": 2347,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/auth-security.instructions.md",
       "sha256": "f0981d5db2d0c972cb25d13fe6fb2f98432f73ea3444df4f3ea3d9445021dd41",
       "size": 3466,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/cicd-security.instructions.md",
       "sha256": "d93a90a3a484e4c0962ba763961246a4384a411215e7e1810115059eab716d30",
       "size": 4062,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/compliance-awareness.instructions.md",
       "sha256": "c13048cd46c73da67e1d4f8478249e1d44db4dd9a1ae9d0dac1171bc6d1a5a66",
       "size": 1955,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/container-security.instructions.md",
       "sha256": "de3596ebb4463601f00a68b19ef5be033f10cc24ed17a9b4bb03c10e9a29ab82",
       "size": 4437,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/cors-security.instructions.md",
       "sha256": "4938373d628119a7ca0328e1bc4beffe39c581d16ccb46c977447e8241786bc3",
       "size": 3005,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/crypto-misuse.instructions.md",
       "sha256": "28e1bad4b878c66c98677fa7b621352d52393eac1a519efc2818a3ca13181ee8",
       "size": 3004,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/database-security.instructions.md",
       "sha256": "9677f73b68dda13e423fc129c801a480eea4a9a46a35327f650dfb30a01dbe07",
       "size": 3286,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/dependency-audit.instructions.md",
       "sha256": "549e550d1cdb0b6ab26ea0ec6360c0bb676c461baa2611372ba45f819d977ced",
       "size": 2004,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/deserialization-security.instructions.md",
       "sha256": "e1e13bbbcbf19c91a4c5a971b032352051b817c3a06931bb21b8564ccee885d9",
       "size": 4192,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/electron-security.instructions.md",
       "sha256": "9ec53b18b9866c434da69ce466d10c6c18897e9d41afc465fbc36d6e4c168a26",
       "size": 3803,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/error-handling-security.instructions.md",
       "sha256": "137da67ffcf93825f340efe0770f01e5ab870562a28a0bb1619373a4d3dc2e8f",
       "size": 2966,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/file-upload-security.instructions.md",
       "sha256": "420559e2e1caaebb0b69b0eb2acd50ca3c70527cc16584c80604aaa189574d03",
       "size": 4397,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/frontend-security.instructions.md",
       "sha256": "5c71382d5b2125278d3b904ca7a170138221529f6b61f835dd4b64b5d14033ec",
       "size": 3077,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/graphql-security.instructions.md",
       "sha256": "581db655be36554c2294c0a8f337de4800743cd75889f91a9fb6ab6d4a1d1886",
       "size": 3808,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/iac-security.instructions.md",
       "sha256": "4c9e3cc819a2872f4dc97716ec671fb1f67179777da090fd8f594a3ee74c5d92",
       "size": 3122,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/iam-best-practices.instructions.md",
       "sha256": "e02f0bf102e1f3031890dc33b91364af80ddf5fb1b823a8bca2da6c2a8c1cbd0",
       "size": 4564,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/logging-security.instructions.md",
       "sha256": "b5494615d06caff79f6b356e92b1882c3e21ba16668f2db9c1b1225a8e188afa",
       "size": 2936,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/ml-security.instructions.md",
       "sha256": "8566b488de51ae2b616babaa06e725a137e0ee310b06e5fbc7f2a9e05ef9278d",
       "size": 3620,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/mobile-security.instructions.md",
       "sha256": "4d47605964f06904691c556c2cf8582364d49eb3962b5ffe659091b73c9ca716",
       "size": 3638,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/protocol-security.instructions.md",
       "sha256": "1e1aaffb8119b9dcf76ddf2551f30f3a17322e45053f8ff3ffb30a8c4cc253e2",
       "size": 3197,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/saas-security.instructions.md",
       "sha256": "ffcb3c9e0cafcb6d35399e8a6a8e78c482b38b9aea7c12844417b2bf4ae6d938",
       "size": 7049,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/secret-detection.instructions.md",
       "sha256": "5afc7a22fd771f8743cdb5e3fd728f8c7efab97e6d1c493ebb6c5bb697ecfa45",
       "size": 2787,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/secure-code-review.instructions.md",
       "sha256": "59a9416da4fe133261a78d8a14f3e08112a2779fab4f79b42ee0e4fbad629631",
       "size": 2718,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/serverless-security.instructions.md",
       "sha256": "4bd974bd278565f25eb859af62ae64aa4f67481d066f46b46614a684ca4a96e3",
       "size": 3081,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/ssrf-prevention.instructions.md",
       "sha256": "5dfa0fccdcb715fea37540aac5144a95bf253c6aabb2a5a73cb4004acac6e9ca",
       "size": 3681,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/supply-chain-security.instructions.md",
       "sha256": "0ca1bdfa6474afcac2e08d3c8e828ed78a179be0a92eac8661e334c8e3b0f217",
       "size": 2369,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-rules/.github/instructions/websocket-security.instructions.md",
       "sha256": "3432dd4d9cd045e85daa1ddd5e9521476187c831f46597134714b93fe1b65543",
       "size": 4048,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/api-security/SKILL.md",
@@ -1270,175 +1270,343 @@
       "path": "dist/cursor-rules/.cursor/rules/api-security.mdc",
       "sha256": "31b7b311b6e4ac29cbacc253bd96041a0865e2809b21e11acfcfa689327db1f5",
       "size": 2602,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/auth-security.mdc",
       "sha256": "3e86a8ab15f34078ba2ff7813f1666677c7fe5dca17a1c2b58146d92e5f925b9",
       "size": 3784,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/cicd-security.mdc",
       "sha256": "cca5cc02a1b3b6348475b4fd3351201087f12e73ebe2b7ba26f54f2558edd6b1",
       "size": 4448,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/compliance-awareness.mdc",
       "sha256": "2dd42ba987aa5c8cb1168d1961f4ca7513a192d2a0fe4ba925be957071ffe1b3",
       "size": 2246,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/container-security.mdc",
       "sha256": "b3087d51f422dc1cd9173375b9360f40b43fa7f27eb9dad0a69c74c40aa3b4b2",
       "size": 4702,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/cors-security.mdc",
       "sha256": "c5e6d71799036874b9b5314e7d2fcdd18d4c716433a699ace0c50846d6779fc0",
       "size": 3332,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/crypto-misuse.mdc",
       "sha256": "5d2be053955c4147170db09e6d604cafd3124ee6f3098662fb01a69d45e2f2fd",
       "size": 3295,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/database-security.mdc",
       "sha256": "5210e583248913f0e485c41f8f99a18cb9379ebeb80bc1e939bd0e99d30770dd",
       "size": 3599,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/dependency-audit.mdc",
       "sha256": "ce360d9b1426e7ba25af79cba3f5946b954f888f307a8197e6d1f4caac95f6a1",
       "size": 2326,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/deserialization-security.mdc",
       "sha256": "9053fdf1e512968c8bc796a79d265170a952b56496e60b30d4571991bc8b5776",
       "size": 4587,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/electron-security.mdc",
       "sha256": "b74ddf79aa6df03d888089dcff7c7602c412474e73d0475ff03225ce6cf29842",
       "size": 4336,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/error-handling-security.mdc",
       "sha256": "82dcf61e1cae3f8df2089450861916254d29984d576dac98d54b73c7c01cf9b9",
       "size": 3258,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/file-upload-security.mdc",
       "sha256": "e224a03f884b3eca8d76f819034716d79555eada494ca42fa580e0866950ba8f",
       "size": 4781,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/frontend-security.mdc",
       "sha256": "78f060ef1a5c46e4686ce8602b7594d10c72668ffb8530bd389b12a2e7e2ddfe",
       "size": 3361,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/graphql-security.mdc",
       "sha256": "834645d39701e38df628e3d7695017ece4d2a2bb79010dda1ba5adad84268806",
       "size": 4201,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/iac-security.mdc",
       "sha256": "f018e843d61e1f4d6f008343b9a78d7d5df1389c1018409892d66a375b217ceb",
       "size": 3387,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/iam-best-practices.mdc",
       "sha256": "23fb8fd166c8c20685c37381e985f6f631d44a41db301fb669ab0fba1fe987ac",
       "size": 4976,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/logging-security.mdc",
       "sha256": "280993bcee853135aa4e042ac56213bf0b2fc2b0ac744b7a3b1e4d173b79e597",
       "size": 3229,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/ml-security.mdc",
       "sha256": "e11adc67c3f3638aa61962f40592375781d83c2d077b4ae4ebff193234214447",
       "size": 3976,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/mobile-security.mdc",
       "sha256": "bc61c1050ffb46551cadc43f94a473383c823f3d16fa71c90f733061aa0f2773",
       "size": 3954,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/protocol-security.mdc",
       "sha256": "6ee76d04703cccc9827ceb69819aa2b1b2a2f2aeaae445cd074dd00e72c1b650",
       "size": 3500,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/saas-security.mdc",
       "sha256": "399170e44ff078eb72f355e8895881eccf3cbf81294ce669407cae141dc20a22",
       "size": 7530,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/secret-detection.mdc",
       "sha256": "1de75ec92723d0d24f63343c0b006490faccf99dba1971fb095f74597ae15c24",
       "size": 3035,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/secure-code-review.mdc",
       "sha256": "87591aa628b96ee019f68973e16a6b6ddbe1329d2837852f4d6bb24d7ead8c46",
       "size": 2998,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/serverless-security.mdc",
       "sha256": "62bab8d690e123aa02589f734b7c9427ad86e917a78cf45670b6e3359f5ad2c2",
       "size": 3411,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/ssrf-prevention.mdc",
       "sha256": "436e2c09fd99eb56f41a7781e9ae7677fc28c29b16b6a8d3135eb6f3147f33a1",
       "size": 4111,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/supply-chain-security.mdc",
       "sha256": "858ab0f5070d40af6ca73617a1eaf26eb4dafce10e1e446a6f60df1f4208272f",
       "size": 2680,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/websocket-security.mdc",
       "sha256": "2e74bfa7cae947ea25c28f20724f52dffd70c04d5185b519b0426d3d0d6f471f",
       "size": 4383,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "dist/devin.md",
       "sha256": "77db3937c49b130defaaa8516b5e18e10289f4a7bcd10944ccd20447ce8b290e",
       "size": 4002,
       "action": "unchanged"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/api-security.md",
+      "sha256": "4672f4ea9b17a74e78b82a24758f55dd1eed42765a80b58ba16c9a898ee1918a",
+      "size": 2609,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/auth-security.md",
+      "sha256": "cbb9bda336ca9dd1eb053a358e867457836c9dc2a44a530d72e41f8f20965356",
+      "size": 3791,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/cicd-security.md",
+      "sha256": "9cd3070e81a39234356065c4060235d459037ccdd6521781bf8d8c17021ab4ad",
+      "size": 4066,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/compliance-awareness.md",
+      "sha256": "daf87be5dda97959112f5bc65d4f229dca1720921922775bdce6df45fc26a7bc",
+      "size": 2253,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/container-security.md",
+      "sha256": "57bc46fb460f61108a5fcd3d6c689fdee5f502f4531a4ef597b1a71bf7203d64",
+      "size": 4441,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/cors-security.md",
+      "sha256": "1e3e139ae8ab36b02a39f7da9f31d67d3e3d1ccb978d48ef51220b6fb39fd3e0",
+      "size": 3339,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/crypto-misuse.md",
+      "sha256": "d2e106dc7fdd3996b780195311501b71a2d86e80040578e223b06405fdec9e8d",
+      "size": 3302,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/database-security.md",
+      "sha256": "1cf301fccba51bcb84ed424ad1e5956c647aeddbc431c027310239f82c34497e",
+      "size": 3290,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/dependency-audit.md",
+      "sha256": "eb8774ddb25d00c105e50ab2570431897cb6b5dac25ce664c02338b2b874ab15",
+      "size": 2333,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/deserialization-security.md",
+      "sha256": "79c1cdbf380e1db7e3703daff028c1fafba7274cdffb5df9c82ed62df5d74aaf",
+      "size": 4196,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/electron-security.md",
+      "sha256": "f306bd058e221063ee75df6cdb147626171789a71f2988e3cefd3fb608e4c05e",
+      "size": 3807,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/error-handling-security.md",
+      "sha256": "cbc30b70c7d4f36540a1fbe300b0242b0d52b6819024d1bf6a3e859fe3760941",
+      "size": 3265,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/file-upload-security.md",
+      "sha256": "7f9d182050d629cb22fcc24407abdea060bd2579c831d1a89b1d8ac3c8548978",
+      "size": 4788,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/frontend-security.md",
+      "sha256": "0dc913538cfae4b09dbca41942596ee5e7c6b87e2be83d7591e7d3fcdba9652a",
+      "size": 3081,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/graphql-security.md",
+      "sha256": "b894833151ff50e452931733464b156841a4f4e0ff7390a43dcac1d5998bd5aa",
+      "size": 3812,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/iac-security.md",
+      "sha256": "f507a9a81d020a255d21226948605c23966561042c520dfde2bcf8c87fb2d277",
+      "size": 3126,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/iam-best-practices.md",
+      "sha256": "7f1ac6dad2354d5efd0d40f2177f6e1a1e9bf08461daa889fb2cbe8d271f6a7f",
+      "size": 4568,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/logging-security.md",
+      "sha256": "64995e5059bceada383bfc0e90b6c42e97b663a9c526e7d983527836e4fff2e4",
+      "size": 3236,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/ml-security.md",
+      "sha256": "af5a0c2b0c1219681f9a9e43c27e81b7b3859c2a0bd0e90cf31f14932712a971",
+      "size": 3624,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/mobile-security.md",
+      "sha256": "6c8a75e48c07bca1a01acbf417f65b95aaafd4df3acf2650143ffaa6b55c73cd",
+      "size": 3642,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/protocol-security.md",
+      "sha256": "21cce64f0431d5fad2678a4b986f31ed346380e9b11faaa5f6f2a0167f458254",
+      "size": 3507,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/saas-security.md",
+      "sha256": "09284c8d174f069d5dcfd73cb21d6cdbc4fe2fdcf322c5a120c60a23fb0186b9",
+      "size": 7537,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/secret-detection.md",
+      "sha256": "1937369b32fd8d55c284ddf706bab2e7f21f3323078290339dca2b2df5d27a8c",
+      "size": 3042,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/secure-code-review.md",
+      "sha256": "e359826e97c1ba9d1b4eb5715704d93810a74a15fc226de6a4031345e44ae91c",
+      "size": 3005,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/serverless-security.md",
+      "sha256": "79e0a5acca1f0d4a51e18dc4e25586917c1f1aa97798e6ebb787f35d7f42e033",
+      "size": 3085,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/ssrf-prevention.md",
+      "sha256": "1fd91a3aeadc2236256f87b576bef022db8e50bc51ca29373119c9b3a177033d",
+      "size": 4118,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/supply-chain-security.md",
+      "sha256": "f70590adac8bb30e688da781636031c6ff9c61fda64f18293c8558dcba9cd2bc",
+      "size": 2687,
+      "action": "added"
+    },
+    {
+      "path": "dist/windsurf-rules/.windsurf/rules/websocket-security.md",
+      "sha256": "a37523b5028b4f199c4accfe264bd4ef306b796f1f71493bc6da03e8026cb3bc",
+      "size": 4052,
+      "action": "added"
     },
     {
       "path": "profiles/financial-services.yaml",

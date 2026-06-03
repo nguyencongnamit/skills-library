@@ -95,11 +95,12 @@ func dedupeSorted(in []string) []string {
 	return out
 }
 
-// WriteRuleBundles emits the Cursor and Copilot per-skill rule trees under
-// outDir, purging stale per-skill files first.
+// WriteRuleBundles emits the Cursor, Copilot, and Windsurf per-skill rule
+// trees under outDir, purging stale per-skill files first.
 func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 	cursorDir := filepath.Join(outDir, "cursor-rules", ".cursor", "rules")
 	copilotDir := filepath.Join(outDir, "copilot-rules", ".github", "instructions")
+	windsurfDir := filepath.Join(outDir, "windsurf-rules", ".windsurf", "rules")
 
 	if err := purgeStale(cursorDir, ".mdc", skills); err != nil {
 		return fmt.Errorf("cursor-rules purge: %w", err)
@@ -107,11 +108,13 @@ func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 	if err := purgeStale(copilotDir, ".instructions.md", skills); err != nil {
 		return fmt.Errorf("copilot-rules purge: %w", err)
 	}
-	if err := os.MkdirAll(cursorDir, 0o755); err != nil {
-		return err
+	if err := purgeStale(windsurfDir, ".md", skills); err != nil {
+		return fmt.Errorf("windsurf-rules purge: %w", err)
 	}
-	if err := os.MkdirAll(copilotDir, 0o755); err != nil {
-		return err
+	for _, d := range []string{cursorDir, copilotDir, windsurfDir} {
+		if err := os.MkdirAll(d, 0o755); err != nil {
+			return err
+		}
 	}
 
 	for _, s := range skills {
@@ -120,6 +123,9 @@ func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 			return err
 		}
 		if err := os.WriteFile(filepath.Join(copilotDir, id+".instructions.md"), []byte(renderCopilotInstruction(s)), 0o644); err != nil {
+			return err
+		}
+		if err := os.WriteFile(filepath.Join(windsurfDir, id+".md"), []byte(renderWindsurfRule(s)), 0o644); err != nil {
 			return err
 		}
 	}
@@ -185,6 +191,26 @@ func renderCopilotInstruction(s *skill.Skill) string {
 	fmt.Fprintf(&b, "applyTo: %s\n", yamlQuote(applyTo))
 	b.WriteString("---\n\n")
 	b.WriteString(renderRuleBody(s, "GitHub Copilot"))
+	return b.String()
+}
+
+// renderWindsurfRule produces a Windsurf `.windsurf/rules/<id>.md` rule.
+// Windsurf activation modes mirror Cursor: a `glob` trigger auto-attaches by
+// file pattern; a `model_decision` trigger lets the agent pull the rule based
+// on its description (used for broad skills, so they're never always-on).
+func renderWindsurfRule(s *skill.Skill) string {
+	globs, _ := skillGlobs(s)
+	var b strings.Builder
+	b.WriteString("---\n")
+	if len(globs) > 0 {
+		b.WriteString("trigger: glob\n")
+		fmt.Fprintf(&b, "globs: %s\n", strings.Join(globs, ","))
+	} else {
+		b.WriteString("trigger: model_decision\n")
+		fmt.Fprintf(&b, "description: %s\n", yamlQuote(nativeDescription(s)))
+	}
+	b.WriteString("---\n\n")
+	b.WriteString(renderRuleBody(s, "Windsurf"))
 	return b.String()
 }
 

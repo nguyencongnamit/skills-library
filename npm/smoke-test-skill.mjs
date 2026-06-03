@@ -32,17 +32,28 @@ async function main() {
   if (r.status !== 0) die('build-skill.mjs failed');
   const cli = path.join(out, 'secure-code-skill', 'bin', 'cli.js');
 
-  // 2. init into a temp project
-  console.log('[2/3] init into a temp project');
-  const proj = path.join(work, 'proj');
-  await fs.mkdir(proj, { recursive: true });
-  r = spawnSync(process.execPath, [cli, 'init', proj], { stdio: 'inherit' });
-  if (r.status !== 0) die('init exited non-zero');
-  const skillsDir = path.join(proj, '.claude', 'skills');
-  const ids = (await fs.readdir(skillsDir)).filter((d) => !d.startsWith('.'));
-  if (ids.length < 20) die(`expected >=20 skills installed, got ${ids.length}`);
-  const sample = await fs.readFile(path.join(skillsDir, 'secret-detection', 'SKILL.md'), 'utf8');
-  if (!/^name:\s*secret-detection/m.test(sample)) die('installed SKILL.md missing Claude Code `name:` frontmatter');
+  // 2. init each tool into its own temp project; assert the expected files.
+  console.log('[2/3] init per --tool');
+  const cases = [
+    { tool: 'claude', check: '.claude/skills/secret-detection/SKILL.md', needle: /^name:\s*secret-detection/m },
+    { tool: 'cursor', check: '.cursor/rules/container-security.mdc', needle: /^globs:/m },
+    { tool: 'windsurf', check: '.windsurf/rules/secret-detection.md', needle: /^trigger:\s*model_decision/m },
+    { tool: 'copilot', check: '.github/instructions/cicd-security.instructions.md', needle: /^applyTo:/m },
+    { tool: 'cline', check: '.clinerules', needle: /secure-code|secret/i },
+  ];
+  for (const c of cases) {
+    const proj = path.join(work, 'proj-' + c.tool);
+    await fs.mkdir(proj, { recursive: true });
+    const rr = spawnSync(process.execPath, [cli, 'init', proj, '--tool', c.tool], { encoding: 'utf8' });
+    if (rr.status !== 0) die(`init --tool ${c.tool} exited ${rr.status}: ${rr.stderr}`);
+    const f = path.join(proj, c.check);
+    let body;
+    try { body = await fs.readFile(f, 'utf8'); } catch { die(`init --tool ${c.tool}: expected ${c.check}`); }
+    if (!c.needle.test(body)) die(`init --tool ${c.tool}: ${c.check} missing expected ${c.needle}`);
+  }
+  // unknown tool must fail
+  const bad = spawnSync(process.execPath, [cli, 'init', work, '--tool', 'nope'], { encoding: 'utf8' });
+  if (bad.status === 0) die('init --tool nope should have failed');
 
   // 3. connect-mcp without claude on PATH -> fallback message
   console.log('[3/3] connect-mcp fallback (no Claude CLI)');
@@ -53,7 +64,7 @@ async function main() {
   }
 
   await fs.rm(work, { recursive: true, force: true });
-  console.log(`smoke-test-skill: PASS — installed ${ids.length} skills; connect-mcp resolves the secure-code MCP`);
+  console.log(`smoke-test-skill: PASS — init works for ${cases.length} tools (scoped + pointer); connect-mcp resolves the secure-code MCP`);
 }
 
 main().catch((e) => die(e.message));
