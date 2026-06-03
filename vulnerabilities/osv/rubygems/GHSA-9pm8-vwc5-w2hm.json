@@ -4,7 +4,6 @@
   "published": "2026-04-14T01:07:01Z",
   "modified": "2026-04-14T01:25:46.759995Z",
   "summary": "Fat Free CRM has BOLA in DELETE /emails/:id - Any authenticated user can hit this endpoint and delete emails by ID",
-  "details": "### Impact\n\nAuthenticated users can delete emails imported into the system assigned to another user; where the [Email Dropbox](https://github.com/fatfreecrm/fat_free_crm/wiki/Email-Dropbox) is in use.\n\n### Patches\n\nFixed in v0.26.0\n\n### Workarounds\n\nDisable use of email dropbox.",
   "affected": [
     {
       "package": {

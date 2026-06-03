@@ -7,7 +7,6 @@
     "CVE-2026-44306"
   ],
   "summary": "Statamic CMS vulnerable to email enumeration via forgot password endpoint",
-  "details": "### Impact\n\nResponses from the forgot password forms hinted at whether an account existed for a given email address. An unauthenticated attacker could use this to enumerate valid users, which can aid in follow-up credential-based attacks.\n\n### Patches\n\nThis has been fixed in 5.73.21 and 6.15.0. The forgot password forms now return the same generic response regardless of whether the submitted email matches a registered user.",
   "affected": [
     {
       "package": {

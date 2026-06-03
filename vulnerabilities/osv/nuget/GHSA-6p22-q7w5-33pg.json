@@ -4,7 +4,6 @@
   "published": "2026-03-26T22:09:16Z",
   "modified": "2026-03-26T22:19:56.537823Z",
   "summary": "ImageMagick has possible memory leak in ASHLAR coder when action fails",
-  "details": "The ASHLAR coder leaks a temporary image when an action fails and that could result to an out of memory.",
   "affected": [
     {
       "package": {

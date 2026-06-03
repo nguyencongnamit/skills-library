@@ -7,7 +7,6 @@
     "CVE-2026-40310"
   ],
   "summary": "ImageMagick has a heap out-of-bounds write in JP2 encoder",
-  "details": "Heap out-of-bounds write in the JP2 encoder with when a user specifies an invalid sampling index.",
   "affected": [
     {
       "package": {

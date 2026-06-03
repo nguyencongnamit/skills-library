@@ -7,7 +7,6 @@
     "CVE-2026-44900"
   ],
   "summary": "epa4all-client has a VAU Signature bypass",
-  "details": "### Impact\nIn SignedPublicKeysTrustValidatorImpl.isTrusted(), the ECDSA signature verification at line 45 discards the boolean return value of Signature.verify(). The method performs certificate chain validation, OCSP check, and signature algorithm setup, but never checks whether the signature actually matches. For any structurally valid signature, it returns true.\n\n### Patches\nPatched in [#34](https://github.com/oviva-ag/epa4all-client/pull/34).\n\n### Workarounds\nNone.\n\n### Resources\n- [MS-OVIVA-EPA4ALL-d76aec](https://www.machinespirits.com/advisory/d76aec/)\n\n### Credits\n\n[Machine Spirits](https://machinespirits.com) (contact@machinespirits.de)\n- Dr. rer. nat. Simon Weber\n- Dipl.-Inf. Volker Sch\u00f6nefeld\n- Chiara Fliegner",
   "affected": [
     {
       "package": {

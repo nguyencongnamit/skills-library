@@ -4,7 +4,6 @@
   "published": "2026-03-18T12:10:40Z",
   "modified": "2026-03-19T12:49:50.927304Z",
   "summary": "Malicious code in test6789.client (NuGet)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n",
   "affected": [
     {
       "package": {

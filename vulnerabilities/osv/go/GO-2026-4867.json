@@ -18,7 +18,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Miscompilation allows memory corruption via CONVNOP-wrapped array copy in cmd/compile",
-  "details": "The compiler is meant to unwrap pointers which are the operands of a memory move; a no-op interface conversion prevented the compiler from making the correct determination about non-overlapping moves, potentially leading to memory corruption at runtime.",
   "affected": [
     {
       "package": {

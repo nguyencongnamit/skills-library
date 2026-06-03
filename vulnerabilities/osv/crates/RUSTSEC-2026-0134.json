@@ -4,7 +4,6 @@
   "published": "2026-04-24T12:00:00Z",
   "modified": "2026-05-13T14:30:06.407754Z",
   "summary": "Unsound access to padding bytes while serializing date/time values using the Mysql backend",
-  "details": "Diesel relies on libmysqlclient for interacting with Mysql compatible databases. This library requires to provide date/time values according to the byte layout of their `MYSQL_TIME` type.\n\nDiesel replicated this type as `#[repr(C)]` struct, populated all the fields of this struct and then casted this value to an array of bytes. As this cast exposes padding bytes contained in this struct, this is undefined behaviour.\n\nThis vulnerability affects any user serializing date/time values using the Mysql backend.\n\n## Mitigation\n\nThe preferred mitigation to the outlined problem is to update to Diesel version 2.3.8 or newer, which includes fixes for the problem.\n\n## Resolution\n\nDiesel now manually serializes the relevant data without accessing the padding bytes.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2023-42343"
   ],
   "summary": "Alkacon OpenCms is vulnerable to XSS via cmis-online/type",
-  "details": "A Cross Site Scripting vulnerability in Alkacon OpenCms before 10.5.1 exists via cmis-online/type.",
   "affected": [
     {
       "package": {

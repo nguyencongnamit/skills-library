@@ -10,7 +10,6 @@
     "CVE-2020-15230"
   ],
   "summary": "Arbitrary file read using percent-encoded relative paths in FileMiddleware",
-  "details": "### Impact\n\nAttackers can access data at arbitrary filesystem paths on the same host as an application using `FileMiddleware`.\n\n### Patches\n\nVersion [4.29.4](https://github.com/vapor/vapor/releases/tag/4.29.4)\n\n### Workarounds\n\nUpgrade to 4.24.4 or later, or disable `FileMiddleware`.\n\n### References\n\n* Introduced in https://github.com/vapor/vapor/pull/2223\n* Fixed by https://github.com/vapor/vapor/pull/2500\n\n### For more information\n\nIf you have any questions or comments about this advisory:\n* Open [an issue](https://github.com/vapor/vapor/issues)\n* Email us at [security@vapor.codes](mailto:security@vapor.codes)",
   "affected": [
     {
       "package": {

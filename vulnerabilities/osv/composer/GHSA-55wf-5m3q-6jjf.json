@@ -7,7 +7,6 @@
     "CVE-2026-42224"
   ],
   "summary": "ipl/web is vulnerable to reflected XSS by malformed search requests",
-  "details": "### Impact\nThe vulnerability allows an attacker to inject malicious Javascript into a victim's browser to run it in the context of Icinga Web. The victim needs to visit a specifically prepared website and may have no immediate chance to notice any wrongdoing.\n\n### Patches\nVersion 0.13.1 includes a fix for this. It will be published as part of `icinga-php-library` version 0.19.2.\n\n### Workarounds\nEnable the Content-Security-Policy (CSP) in the general configuration of Icinga Web available since version 2.12.0.\n\n### References\nNone",
   "affected": [
     {
       "package": {

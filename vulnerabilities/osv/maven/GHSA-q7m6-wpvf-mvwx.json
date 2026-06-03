@@ -7,7 +7,6 @@
     "CVE-2026-44672"
   ],
   "summary": "Mapfish Print: Remote Code Injection (RCE) in Dynamic table",
-  "details": "### Impact\n\nThe attacker can execute arbitrary code without being authenticated\n\n### Mitigation\n\nUpgrade to a patched version (please check affected/patched version matrix)\n\n### Credits\n\nBug Bounty of Canton du Jura",
   "affected": [
     {
       "package": {

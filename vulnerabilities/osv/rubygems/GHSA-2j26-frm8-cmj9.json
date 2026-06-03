@@ -10,7 +10,6 @@
     "CGA-6p82-p5j2-744w"
   ],
   "summary": "Rails Active Support has a possible DoS vulnerability in its number helpers",
-  "details": "### Impact\nActive Support number helpers accept strings containing scientific notation (e.g. `1e10000`), which when converted to a string could be expanded into extremely large decimal representations. This can cause excessive memory allocation and CPU consumption when the expanded number is formatted, possibly resulting in a DoS vulnerability.\n\n### Releases\nThe fixed releases are available at the normal locations.\n\n### Credit\nThis issue was responsibly reported by Hackerone researcher [manun](https://hackerone.com/manun).",
   "affected": [
     {
       "package": {

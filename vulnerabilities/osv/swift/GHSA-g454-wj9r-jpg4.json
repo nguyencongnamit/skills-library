@@ -7,7 +7,6 @@
     "CVE-2023-39135"
   ],
   "summary": "Path traversal in Zip Swift",
-  "details": "An issue in Zip Swift v2.1.2 allows attackers to execute a path traversal attack via a crafted zip entry.",
   "affected": [
     {
       "package": {

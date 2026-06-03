@@ -7,7 +7,6 @@
     "CVE-2023-42346"
   ],
   "summary": "Alkacon OpenCms is vulnerable to XXE when the <!DOCTYPE> refers to an external host",
-  "details": "Alkacon OpenCms before 16 allows XXE when the <!DOCTYPE> refers to an external host.",
   "affected": [
     {
       "package": {

@@ -12,7 +12,6 @@
     "CGA-grqw-v5x4-56m6"
   ],
   "summary": "RoadRunner is at risk of HTTP Request/Response Smuggling through vulnerable dependency",
-  "details": "The net/http package dependency used by RoadRunner improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext.",
   "affected": [
     {
       "package": {

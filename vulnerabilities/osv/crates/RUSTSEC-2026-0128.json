@@ -4,7 +4,6 @@
   "published": "2026-05-02T12:00:00Z",
   "modified": "2026-05-13T12:30:06.615206Z",
   "summary": "Double-free and use-after-free in `Keys::next()`",
-  "details": "`Keys::next()` uses `ptr::read` to move out the `Option<V>` by value, which\ndrops the contained `V` when `V` is non-Copy (e.g. `String`). This leaves a\ndangling value in the map's storage slot. Subsequent `get()` operations on\nthat key return a dangling reference to already-freed memory.\n\nThis can be triggered through safe public APIs \u2014 `Map::keys()`,\n`Keys::next()`, and `Map::get()` \u2014 with no `unsafe` required from the\ncaller. Under Miri, accessing the freed slot produces \"Undefined Behavior:\npointer not dereferenceable: alloc has been freed, so this pointer is\ndangling\".",
   "affected": [
     {
       "package": {

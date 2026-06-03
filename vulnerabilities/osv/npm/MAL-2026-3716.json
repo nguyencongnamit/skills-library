@@ -4,7 +4,6 @@
   "published": "2026-05-13T11:53:21Z",
   "modified": "2026-05-15T07:51:38.581957Z",
   "summary": "Malicious code in truffle-helper (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (27652f23529349a6999e9121bc9714a5e9b5d11b227729c3c24147e5d2260eee)\npackage.json line 7 invokes require('child_process') and execSync('curl...') from an npm lifecycle script. This causes the installer's machine to fetch and execute remote content at install time, without user consent and without any visible integrity check. The package's declared purpose (a Truffle helper) has no legitimate need to pipe curl output through a shell during install. Any installer running `npm install truffle-helper` runs attacker-controlled commands on their host.\n\n## Source: ossf-package-analysis (a7ffc14f56f1b088e2835429bbdd7f07020e022594b7f123c7c58c2c12602996)\nThe OpenSSF Package Analysis project identified 'truffle-helper' @ 2.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

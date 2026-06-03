@@ -7,7 +7,6 @@
     "CVE-2026-33902"
   ],
   "summary": " ImageMagick has a Stack Overflow via Recursive FX Expression Parsing",
-  "details": "A stack overflow vulnerability in ImageMagick's FX expression parser allows an attacker to crash the process by providing a deeply nested expression.",
   "affected": [
     {
       "package": {

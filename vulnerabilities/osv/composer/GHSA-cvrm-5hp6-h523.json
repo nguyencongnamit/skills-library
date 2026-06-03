@@ -7,7 +7,6 @@
     "CVE-2025-65954"
   ],
   "summary": "SimpleSAMLphp casserver: Open Redirect in logout",
-  "details": "### Summary\n\nThe logout endpoint accepts a `url` query parameter to redirect to.  casserver treats that url as trusted, and either (depending on configuration) redirects the browser there, or shows a \"you've been logged out\" page with a link to continue to that url.\n\nThere are a number of other things broken with logout in 7 (cas v3 uses a different query parameters, etc)\n\n### Details\n\nhttps://github.com/simplesamlphp/simplesamlphp-module-casserver/blob/21418f7efbea8c4f078fd4a7d1b9eacf94dd4941/src/Controller/LogoutController.php#L104\n\nPrevious module checked the url against the valid service urls.\n\n### PoC\n\nThe docker instructions from the README.md run an image with a vulnerable config. \n\nAccessing  https://localhost/cas/logout?url=https://google.com  will redirect to Google\n\n### Impact\n\nImpacted configs have\n\n```php\n'enable_logout' => true,\n```\n\nand are most impacted if they also have\n\n```\n'skip_logout_page' -> true,\n```",
   "affected": [
     {
       "package": {

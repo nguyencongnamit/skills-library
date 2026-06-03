@@ -7,7 +7,6 @@
     "CVE-2026-33209"
   ],
   "summary": "Avo has a XSS vulnerability on `return_to` param",
-  "details": "## Description\n\nA reflected cross-site scripting (XSS) vulnerability exists in the `return_to` query parameter used in the avo interface.\n\nAn attacker can craft a malicious URL that injects arbitrary JavaScript, which is executed when he clicks a dynamically generated navigation button.\n\n## Impact\n\nThis vulnerability may allow execution of arbitrary JavaScript in the context of the application.\n\nImpact varies depending on deployment:\n- In unauthenticated setups: exploitable via crafted links sent to users\n- In authenticated setups: limited to authenticated users and requires interaction",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2020-35669"
   ],
   "summary": "http before 0.13.3 vulnerable to header injection",
-  "details": "An issue was discovered in the http package before 0.13.3 for Dart. If the attacker controls the HTTP method and the app is using Request directly, it's possible to achieve CRLF injection in an HTTP request via HTTP header injection. This issue has been addressed in commit abb2bb182 by validating request methods.",
   "affected": [
     {
       "package": {

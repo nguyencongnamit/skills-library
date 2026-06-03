@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "CrossOriginProtection insecure bypass patterns not limited to exact matches in net/http",
-  "details": "When using http.CrossOriginProtection, the AddInsecureBypassPattern method can unexpectedly bypass more requests than intended. CrossOriginProtection then skips validation, but forwards the original request path, which may be served by a different handler without the intended security protections.",
   "affected": [
     {
       "package": {

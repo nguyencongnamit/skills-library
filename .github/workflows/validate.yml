@@ -483,7 +483,12 @@ jobs:
             echo "::warning::could not resolve base ref $BASE_REF; skipping check"
             exit 0
           fi
-          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BASE_SHA"...HEAD -- 'skills/**' 'vulnerabilities/**' || true)
+          # OSV advisories under vulnerabilities/osv/ are mirrored from
+          # osv.dev: their `last_updated` tracks the upstream advisory's
+          # `modified` date, not when we touch the file, so repackaging edits
+          # (e.g. stripping the `details` field) must not require a bump.
+          # Their integrity is covered by the manifest checksum check instead.
+          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BASE_SHA"...HEAD -- 'skills/**' 'vulnerabilities/**' ':(exclude)vulnerabilities/osv/**' || true)
           if [ "${#CHANGED[@]}" -eq 0 ]; then
             echo "no skill / vuln changes; skipping"
             exit 0

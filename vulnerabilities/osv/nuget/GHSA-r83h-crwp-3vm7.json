@@ -7,7 +7,6 @@
     "CVE-2026-40311"
   ],
   "summary": "ImageMagick has a heap-use-after-free via XMP profile could result in a crash when printing the values.",
-  "details": "An heap use after free when reading an invalid XMP profile could result in a crash due to an heap use after free when printing the values.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-34579"
   ],
   "summary": "MantisBT has an authorization bypass in private issue monitoring",
-  "details": "Using a crafted POST request to bug_monitor_add.php, a user with project-level access can add themselves as a monitor for a private issue they do not have access to. Despite displaying an Access Denied error, the application accepts the request and creates a monitor relationship for the private issue.\n\n\n### Impact\nDirect access to the private issue remains blocked, but the user will receive email notifications for updates, leading to disclosure of the private issue's metadata and content.\n\n### Patches\n- 0a93267deba445fb9d15250c16e6fdb1246ffa65\n\n### Workarounds\nNone\n\n### Credits\nThanks to Vishal Shukla for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

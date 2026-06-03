@@ -12,7 +12,6 @@
     "RHSA-2026:7291"
   ],
   "summary": "Panic in name constraint checking for malformed certificates in crypto/x509",
-  "details": "Certificate verification can panic when a certificate in the chain has an empty DNS name and another certificate in the chain has excluded name constraints. This can crash programs that are either directly verifying X.509 certificate chains, or those that use TLS.",
   "affected": [
     {
       "package": {

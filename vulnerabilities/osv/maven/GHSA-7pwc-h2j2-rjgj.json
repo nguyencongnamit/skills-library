@@ -11,7 +11,6 @@
     "CGA-hxj2-j4hj-7v6x"
   ],
   "summary": "Apache Thrift has an Improper Validation of Certificate with Host Mismatch Vulnerability",
-  "details": "Improper Validation of Certificate with Host Mismatch vulnerability in Apache Thrift.\n\nThis issue affects Apache Thrift: before 0.23.0.\n\nUsers are recommended to upgrade to version [0.23.0](https://github.com/apache/thrift/releases/tag/v0.23.0), which fixes the issue.",
   "affected": [
     {
       "package": {

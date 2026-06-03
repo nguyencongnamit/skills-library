@@ -7,7 +7,6 @@
     "CGA-665p-g3m9-mmwv"
   ],
   "summary": "Defense in Depth update for NuGet Client",
-  "details": "### Impact\nThis update adds validation of the package ID and version during package download, in addition to the existing package signature validation.\n\n### Patches\n\n#### NuGet\n\nThe following NuGet.exe, NuGet.CommandLine, NuGet.Packaging, and NuGet.Protocol versions have been patched:\n\n|Affected versions|Patched version|\n|--|--|\n|>= 4.9.0, <= 4.9.6|4.9.7|\n|>= 5.11.0, <= 5.11.6|5.11.7|\n|>= 6.8.0, <= 6.8.1|6.8.2|\n|>= 6.11.0, <= 6.11.1|6.11.2|\n|>= 6.12.0, <= 6.12.4|6.12.5|\n|>= 6.14.0, <= 6.14.2|6.14.3|\n|>= 7.0.0, <= 7.0.2|7.0.3|\n|7.3.0|7.3.1|\n\n#### .NET SDK\n\n* .NET 8.0.126 SDK\n* .NET 8.0.420 SDK\n* .NET 9.0.116 SDK\n* .NET 9.0.313 SDK\n* .NET 10.0.106 SDK\n* .NET 10.0.202 SDK\n\n### Workarounds\nN/A\n\n### References\nhttps://github.com/NuGet/NuGetGallery/security/advisories/GHSA-9r3h-v4hx-rhfr\n\n### Credit\n[splitline](https://x.com/_splitline_) with [DEVCORE](https://devco.re/)",
   "affected": [
     {
       "package": {

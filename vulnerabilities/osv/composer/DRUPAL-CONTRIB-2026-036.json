@@ -6,7 +6,6 @@
   "aliases": [
     "CVE-2026-8493"
   ],
-  "details": "This module enables you to open content already on the page within a colorbox.\n\nThe module doesn't sufficiently sanitize the data-colorbox-inline attribute value before passing it to jQuery, leading to a Cross-Site Scripting (XSS) vulnerability.\n\nThis vulnerability is mitigated by the fact that an attacker must have a role with permission to enter HTML tags containing specific data attributes.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-34463"
   ],
   "summary": "MantisBT is Vulnerable to Stored HTML Injection/XSS in Clone Issue Form",
-  "details": "When cloning an issue originating from a Project other than the current one, the clone form (bug_report_page.php) prepends the source Project name before the category selector without proper escaping, allowing an attacker able to to inject HTML if they can set the Project's name (which typically requires *manager* or *administrator* access level).\n\n\n### Impact\nCross-site scripting (XSS).\nThis is mitigated by Content Security Policy which restricts scripts execution.\n\n### Patches\n- df22697ae497ddd93f3d9132fdf4979db8d081cd\n\n### Workarounds\nMake sure Project names do not contain any HTML tags.\n\n### Credits\nThanks to Vishal Shukla for discovering and responsibly reporting the issue.\n\nThe vulnerability was also identified and independently reported by @siunam321 (Tang Cheuk Hei), prior to this Advisory's publication.",
   "affected": [
     {
       "package": {

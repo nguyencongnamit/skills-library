@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Quadratic parsing complexity in golang.org/x/net/html",
-  "details": "The html.Parse function in golang.org/x/net/html has quadratic parsing complexity when processing certain inputs, which can lead to denial of service (DoS) if an attacker provides specially crafted HTML content.",
   "affected": [
     {
       "package": {

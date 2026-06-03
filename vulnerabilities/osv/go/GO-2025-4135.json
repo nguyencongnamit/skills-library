@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Malformed constraint may cause denial of service in golang.org/x/crypto/ssh/agent",
-  "details": "SSH Agent servers do not validate the size of messages when processing new identity requests, which may cause the program to panic if the message is malformed due to an out of bounds read.",
   "affected": [
     {
       "package": {

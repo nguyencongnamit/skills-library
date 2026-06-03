@@ -18,7 +18,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Missing bound checks can lead to memory corruption in safe Go in cmd/compile",
-  "details": "Arithmetic over induction variables in loops were not correctly checked for underflow or overflow. As a result, the compiler would allow for invalid indexing to occur at runtime, potentially leading to memory corruption.",
   "affected": [
     {
       "package": {

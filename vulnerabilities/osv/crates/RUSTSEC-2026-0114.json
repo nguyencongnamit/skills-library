@@ -8,7 +8,6 @@
     "GHSA-p8xm-42r7-89xg"
   ],
   "summary": "Panic when allocating a table exceeding the size of the host's address space",
-  "details": "This is an entry in the RustSec database for the Wasmtime security advisory\nlocated at\nhttps://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-p8xm-42r7-89xg\nFor more information see the GitHub-hosted security advisory.",
   "affected": [
     {
       "package": {

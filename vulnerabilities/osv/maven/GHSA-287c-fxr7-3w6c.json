@@ -10,7 +10,6 @@
     "CGA-9c65-97pv-f3rg"
   ],
   "summary": "Apache Neethi doesn't impose any restrictions on URIs when manually fetching remote policy references through the PolicyReference API",
-  "details": "Apache Neethi does not impose any restrictions on URIs when manually fetching remote policy references through the PolicyReference API. When an application explicitly calls the API to retrieve a policy from a remote URI, an outbound request is made for arbitrary protocols and internal IP adddresses. From 3.2.2, only http or https URIs are allowed, and link-local/multicast/any-local addresses are forbidden.\n\nUsers are recommended to upgrade to version 3.2.2, which fixes this issue.",
   "affected": [
     {
       "package": {

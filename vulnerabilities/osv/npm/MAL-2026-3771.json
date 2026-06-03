@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:32Z",
   "modified": "2026-05-15T07:50:28.978061Z",
   "summary": "Malicious code in request-logger-canary (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (cf0d566d7abb400988aea74b00099a6db4c5ea928f32e7d44648193e21a36035)\nrequest-logger-canary@1.0.0 ships a preinstall.js that, when `npm install` runs, opens a TCP socket to 52.74.242.200:8851 and pipes an interactive `/bin/sh` to the remote endpoint (stdin/stdout/stderr all bridged to the socket). The code executes unconditionally at install time via scripts.preinstall \u2014 there is no guard, no `if (false)`, no environment check. The README falsely claims the reverse shell is dead code wrapped in `if (false)` and located in postinstall.js; the live payload is actually in preinstall.js with no guard. This misdirection is itself evidence of deliberate supply-chain attack intent. Any machine running `npm install request-logger-canary` hands a root-of-user interactive shell to the operator of 52.74.242.200.\n",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2023-39139"
   ],
   "summary": "Path traversal in Archive",
-  "details": "An issue in Archive v3.3.7 allows attackers to execute a path traversal via extracting a crafted zip file.",
   "affected": [
     {
       "package": {

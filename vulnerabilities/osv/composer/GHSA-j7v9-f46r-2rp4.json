@@ -7,7 +7,6 @@
     "CVE-2026-41897"
   ],
   "summary": "MantisBT is Vulnerable to Reflected XSS in Rendering Dynamic Custom Textarea Field",
-  "details": "Lack of validation of filter_target parameter on return_dynamic_filters.php (normally used as an AJAX in View Issues Page) allows an attacker to inject arbitrary HTML if the target is a TEXTAREA custom field.\n\n### Impact\nCross-site scripting (XSS)\n\n### Patches\n- c885af13f0b8596714ffe11df757c09f35fbd8f4\n\n### Workarounds\nNone\n\n### Credits\n\nThanks to siunam (Tang Cheuk Hei) for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

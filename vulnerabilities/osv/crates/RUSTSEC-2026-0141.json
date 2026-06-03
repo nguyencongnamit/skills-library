@@ -7,7 +7,6 @@
     "GHSA-4pj9-g833-qx53"
   ],
   "summary": "TLS hostname verification disabled when using Boring TLS backend",
-  "details": "An inverted-boolean bug in lettre's `boring-tls` integration silently\ndisables TLS hostname verification for callers using the default (strict)\nconfiguration. An on-path attacker presenting any chain-valid certificate\nfor any domain can intercept SMTP submission, including PLAIN/LOGIN\ncredentials and message contents, against any lettre user built with the\n`boring-tls` feature. Other TLS backends (`native-tls`, `rustls`) are\nunaffected.\n\nThe bug was introduced in v0.10.1 and persists through v0.11.21 (latest).",
   "affected": [
     {
       "package": {

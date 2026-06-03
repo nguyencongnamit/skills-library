@@ -7,7 +7,6 @@
     "CVE-2026-37709"
   ],
   "summary": "Snipe-IT has insecure permissions in file uploads",
-  "details": "Insecure Permissions vulnerability in grokability snipe-it versions through 8.4.0, fixed after 2026-03-10 commit 676a9958, allow a remote attacker to execute arbitrary code via the `app/Http/Controllers/Api/UploadedFilesController.php` component\n\n### Impact\nUsers who can view assets, consumables, etc were able to send a POST request to `/api/v1/{object_type}/{id}/files`. The API authorized with \"view\" instead of write permission and persists the file and audit log entry.\n\n### Patches\nFixed after 2026-03-10 commit 676a9958, fix released to 8.4.1.\n\n### Workarounds\nNone.",
   "affected": [
     {
       "package": {

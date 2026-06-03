@@ -13,7 +13,6 @@
     "CGA-27mw-8mc6-m4rc"
   ],
   "summary": "Sparkle Signing Checks Bypass",
-  "details": "A security issue was found in Sparkle before version 2.6.4. An attacker can replace an existing signed update with another payload, bypassing Sparkle\u2019s (Ed)DSA signing checks.",
   "affected": [
     {
       "package": {

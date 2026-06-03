@@ -6,7 +6,6 @@
   "aliases": [
     "CVE-2026-8492"
   ],
-  "details": "The GTranslate module provides a language switcher widget for Drupal sites.\n\nThe module\u2019s widget JavaScript did not sufficiently validate that document.currentScript referred to the executing script element. A user who can add HTML to a page could cause the generated language-switcher links to point to an unintended domain.\n\nThis vulnerability is mitigated by the fact that an attacker must be able to add HTML with attributes that are not allowed by Drupal\u2019s default CKEditor configuration. It is also limited to sites using the paid versions of GTranslate widget JavaScript and configurations where the generated language links use script-provided values.",
   "affected": [
     {
       "package": {

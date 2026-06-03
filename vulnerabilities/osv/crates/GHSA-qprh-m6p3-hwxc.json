@@ -7,7 +7,6 @@
     "RUSTSEC-2026-0108"
   ],
   "summary": "`sui-execution-cut` was removed from crates.io for malicious code",
-  "details": "`sui-execution-cut` included a build script that attempted to exfiltrate data from the build machine.\n\nThe malicious crate had 1 version published on 2026-04-20 and had no evidence of actual usage. This crate had no dependencies on crates.io.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-33899"
   ],
   "summary": "ImageMagick has a heap-Buffer-Overflow write of a single zero byte when parsing xml.",
-  "details": "When `Magick` parses an XML file it is possible that a single zero byte is written out of the bounds.",
   "affected": [
     {
       "package": {
