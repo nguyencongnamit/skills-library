@@ -23,6 +23,7 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 
 - [Why secure-code](#why-secure-code)
 - [What's inside](#whats-inside)
+- [Install & run](#install--run)
 - [Quick start — embed in your IDE](#quick-start--embed-in-your-ide)
 - [CLI install and routine updates](#cli-install-and-routine-updates)
 - [Vulnerability database — repo sample vs full upstream](#vulnerability-database--repo-sample-vs-full-upstream)
@@ -75,6 +76,104 @@ generation*, before the diff ever touches your repo.
 | **Pre-compiled IDE files** | [`dist/`](./dist) | Ready-to-drop-in `CLAUDE.md`, `.cursorrules`, `copilot-instructions.md`, `AGENTS.md`, `.windsurfrules`, `devin.md`, `.clinerules`, and a universal `SECURITY-SKILLS.md`. |
 | **CLI** | [`cmd/skills-check/`](./cmd/skills-check) | Single static Go binary for installing, updating, and validating skills across every supported IDE. |
 | **MCP server** | [`cmd/skills-mcp/`](./cmd/skills-mcp) | JSON-RPC 2.0 Model Context Protocol server for on-demand skill / vulnerability lookups. |
+
+## Install & run
+
+There are three ways to use secure-code, depending on whether you want the
+**MCP server** (16 scanning tools, any agent), the **skills** (knowledge for
+Claude Code), or both. Pick one — they're independent.
+
+### A. npm / npx — no Go, no clone (easiest)
+
+Two published packages:
+
+| Package | What it is |
+|---------|------------|
+| [`@namncqualgo/secure-code-mcp`](https://www.npmjs.com/package/@namncqualgo/secure-code-mcp) | the MCP server (Go binary + data), agent-agnostic |
+| [`@namncqualgo/secure-code-skill`](https://www.npmjs.com/package/@namncqualgo/secure-code-skill) | the 28 skills + a connector, for Claude Code |
+
+**MCP server** — add to any MCP client's config (no install; `npx` fetches and
+runs it on demand):
+
+```jsonc
+// Claude Code / Cursor / Windsurf / Cline … mcpServers block
+{
+  "mcpServers": {
+    "secure-code": { "command": "npx", "args": ["-y", "@namncqualgo/secure-code-mcp"] }
+  }
+}
+```
+
+Or, in Claude Code: `claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp`
+
+**Skills** — install the native Claude Code skills into a project, then
+optionally wire up the MCP for active scanning:
+
+```bash
+# install the 28 skills into ./.claude/skills (self-contained; no MCP needed)
+npx @namncqualgo/secure-code-skill init
+
+# (optional) connect the MCP engine for precise automated scanning
+npx @namncqualgo/secure-code-skill connect-mcp
+#   connect-mcp is generic — it can register any MCP server:
+#   npx @namncqualgo/secure-code-skill connect-mcp <name> -- <cmd> ...
+```
+
+`npx` downloads + runs in one step (nothing is permanently installed — only the
+files `init` writes). Prefer a persistent command? `npm install -g
+@namncqualgo/secure-code-skill`, then `secure-code-skill init`.
+
+### B. Go — `go install`
+
+```bash
+# the MCP server
+go install github.com/namncqualgo/skills-library/cmd/skills-mcp@latest
+
+# the CLI (install/update/validate skills across IDEs)
+go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
+```
+
+`skills-mcp` reads its library data from disk (it does not embed it), so point
+it at a **library directory** via `--path` (or `$SKILLS_LIBRARY_PATH`). Get one
+by cloning (section C below); `skills-check update` keeps that directory's
+signed skills + vulnerability data current:
+
+```bash
+git clone https://github.com/namncqualgo/skills-library.git lib
+skills-mcp --path ./lib            # run the server against ./lib
+skills-check update --path ./lib   # later: pull signed updates into ./lib
+```
+
+### C. From source (clone)
+
+```bash
+git clone https://github.com/namncqualgo/skills-library.git
+cd skills-library
+
+# build both binaries
+go build -o skills-mcp   ./cmd/skills-mcp
+go build -o skills-check ./cmd/skills-check
+
+# run the MCP server against this checkout
+./skills-mcp --path .
+```
+
+Wire the local binary into an agent by absolute path:
+
+```jsonc
+{
+  "mcpServers": {
+    "secure-code": {
+      "command": "/abs/path/skills-library/skills-mcp",
+      "args": ["--path", "/abs/path/skills-library"]
+    }
+  }
+}
+```
+
+The skills also live in the checkout — copy
+`dist/claude-skills/.claude/skills/` into your project's `.claude/skills/`, or
+use the IDE-embed files in [`dist/`](./dist) (next section).
 
 ## Quick start — embed in your IDE
 
