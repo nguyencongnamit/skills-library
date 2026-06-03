@@ -49,7 +49,7 @@ set:
 ```yaml
 - name: secure-code — validate
   run: |
-    go install github.com/kennguy3n/skills-library/cmd/skills-check@latest
+    go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
     skills-check validate
     skills-check regenerate --tool claude --out .
     git diff --exit-code CLAUDE.md

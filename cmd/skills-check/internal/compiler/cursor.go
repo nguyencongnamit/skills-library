@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 type cursorFormatter struct{}

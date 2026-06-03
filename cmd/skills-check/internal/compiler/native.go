@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // NativeBundle describes one native-skill output tree.

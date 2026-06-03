@@ -17,7 +17,7 @@ description: |
   generates IDE-specific configuration files, and pulls signed updates of
   vulnerability data and detection rules.
 vendor: Skills Library
-homepage: https://github.com/kennguy3n/skills-library
+homepage: https://github.com/namncqualgo/skills-library
 license: MIT
 contents:
   - src: ${BINARY}
@@ -26,7 +26,7 @@ contents:
       mode: 0755
 deb:
   fields:
-    Bugs: https://github.com/kennguy3n/skills-library/issues
+    Bugs: https://github.com/namncqualgo/skills-library/issues
 rpm:
   group: Applications/System
   summary: Skills Library CLI

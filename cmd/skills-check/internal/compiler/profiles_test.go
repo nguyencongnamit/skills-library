@@ -3,7 +3,7 @@ package compiler
 import (
 	"testing"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // TestFilterSkillsByProfileDoesNotMutateCaller is the regression test for

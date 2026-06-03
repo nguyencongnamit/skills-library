@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // repoRoot walks upward from the test binary cwd to find the repository root.

@@ -73,7 +73,7 @@ func ScanDependenciesSARIF(res *ScanDependenciesResult) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          rules,
 			}},
 			Results: results,
@@ -159,7 +159,7 @@ func ScanGitHubActionsSARIF(res *ScanGitHubActionsResult) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          rules,
 			}},
 			Results: results,
@@ -217,7 +217,7 @@ func ScanDockerfileSARIF(res *ScanDockerfileResult) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          rules,
 			}},
 			Results: results,

@@ -12,7 +12,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 // BackupDirName is where the last applied update stashes the files it

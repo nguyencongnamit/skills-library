@@ -10,7 +10,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // Profile bundles a curated skill set plus compliance-framework references for

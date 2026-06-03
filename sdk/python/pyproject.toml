@@ -23,8 +23,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kennguy3n/skills-library"
-Issues = "https://github.com/kennguy3n/skills-library/issues"
+Homepage = "https://github.com/namncqualgo/skills-library"
+Issues = "https://github.com/namncqualgo/skills-library/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
