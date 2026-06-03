@@ -1,0 +1,33 @@
+{
+  "name": "@namncqualgo/secure-code-skill",
+  "version": "0.0.0-dev",
+  "description": "Install the secure-code security skills into a Claude Code project, and connect MCP servers (secure-code-mcp or any other).",
+  "keywords": [
+    "security",
+    "claude",
+    "claude-code",
+    "skills",
+    "mcp",
+    "secret-detection",
+    "sast"
+  ],
+  "homepage": "https://github.com/namncqualgo/skills-library#readme",
+  "bugs": "https://github.com/namncqualgo/skills-library/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namncqualgo/skills-library.git",
+    "directory": "npm/secure-code-skill"
+  },
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bin": {
+    "secure-code-skill": "bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "skills-native/"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
