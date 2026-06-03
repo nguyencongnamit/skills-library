@@ -7,7 +7,6 @@
     "CVE-2026-40598"
   ],
   "summary": "MantisBT has Potential Referer-Based Reflected HTML Injection / XSS in Tag Update Page",
-  "details": "Improper escaping of the redirection page (retrieved from the request's\u00a0*Referer*\u00a0header) allows an attacker to inject HTML.\n\nWhile this is generally not directly actionable as modern browsers will URL-encode special characters, on some specific server configurations this could poison the cache, leading to cross-site scripting.\n\n### Impact\nCross-site scripting (XSS).\n\n### Patches\n- b1ebc57763f104eb5f541b7b4d1ce6948168abd9\n\n### Workarounds\nNone\n\n### Credits\nThanks to siunam (Tang Cheuk Hei) for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

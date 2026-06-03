@@ -4,7 +4,6 @@
   "published": "2026-03-26T22:09:26Z",
   "modified": "2026-03-26T22:19:59.788841Z",
   "summary": "ImageMagick: META reader memory leak in the APP1JPEG input path",
-  "details": "ImageMagick contains a memory leak in the META reader when processing the `APP1JPEG` input path.",
   "affected": [
     {
       "package": {

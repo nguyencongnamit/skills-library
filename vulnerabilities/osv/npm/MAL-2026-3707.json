@@ -4,7 +4,6 @@
   "published": "2026-05-13T11:58:47Z",
   "modified": "2026-05-15T07:53:09.429195Z",
   "summary": "Malicious code in ethers-common (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (9a7b953533124edcc31e4293ed6bffe010e9110d795f812ba432de8b81d4d558)\npackage.json declares a postinstall hook that base64-decodes the URL http://8.217.75.147:3000/payload, fetches it via curl over plain HTTP, and pipes the response directly into bash. This executes attacker-controlled code on every installer's machine at `npm install` time, with no integrity verification and an obfuscated (base64) destination. The package itself is a hollow lure: index.js exports an empty object, and the package name and description (\"Utilities for Web3/ethers development\") impersonate the well-known `ethers` Web3 library to bait installs. The combination of bare-IP C2, plain HTTP, base64-obfuscated URL, curl|bash dropper in a lifecycle hook, and an empty cover-story library is unambiguous supply-chain attack.\n\n## Source: ossf-package-analysis (48af3bdbd3b7966516ff3ab4baf1a946a38ce1735dc0c8fb41b2bc9abfa30449)\nThe OpenSSF Package Analysis project identified 'ethers-common' @ 1.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

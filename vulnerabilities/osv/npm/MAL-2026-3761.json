@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:07Z",
   "modified": "2026-05-15T07:52:43.876482Z",
   "summary": "Malicious code in ethers-signing-key (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (b6735be7311be4f6b4f609762cfb77504fe141bc9d8d5b5c0a75d521119aa2fa)\nThe package's npm postinstall hook executes a one-liner that uses child_process.exec to curl/wget an unpinned Python script from a personal user's GitHub Gist (gist.githubusercontent.com/guellemilb/631fb6348967d9d475125edf67048c0e/raw/build_utils.py) and pipes it directly to python3 (with a node fallback). The captured stdout is additionally passed to eval(). The remote URL is mutable, unauthenticated, and not version-pinned, so the Gist owner can change the executed payload at any time. The package itself has no functional library surface \u2014 index.js contains only `module.exports = {};` \u2014 and the package name 'ethers-signing-key' impersonates the ethers blockchain library (which exposes a SigningKey class), so the only meaningful effect of `npm install ethers-signing-key` is arbitrary remote code execution on the installer's machine at install time.\n",
   "affected": [
     {
       "package": {

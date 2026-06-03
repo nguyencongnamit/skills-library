@@ -10,7 +10,6 @@
     "CGA-j7xx-7jrr-6p4q"
   ],
   "summary": "ImageMagick has Integer Overflow leading to out of bounds write in SIXEL decoder",
-  "details": "An integer overflow vulnerability exists in the SIXEL decoer. The vulnerability allows an attacker to perform an out of bounds via a specially crafted mage.",
   "affected": [
     {
       "package": {

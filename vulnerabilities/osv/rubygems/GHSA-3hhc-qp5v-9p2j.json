@@ -10,7 +10,6 @@
     "CVE-2022-32224"
   ],
   "summary": "Active Record RCE bug with Serialized Columns",
-  "details": "When serialized columns that use YAML (the default) are deserialized, Rails uses YAML.unsafe_load to convert the YAML data in to Ruby objects. If an attacker can manipulate data in the database (via means like SQL injection), then it may be possible for the attacker to escalate to an RCE.\n\nThere are no feasible workarounds for this issue, but other coders (such as JSON) are not impacted.",
   "affected": [
     {
       "package": {

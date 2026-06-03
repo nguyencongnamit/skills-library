@@ -10,7 +10,6 @@
     "CGA-54x9-w3rr-x9f6"
   ],
   "summary": "ImageMagick has an Out-of-Bounds write of a zero byte in  its X11 display interaction",
-  "details": "An out-of-bounds write of a zero byte exists in the X11 `display` interaction path that could lead to a crash.",
   "affected": [
     {
       "package": {

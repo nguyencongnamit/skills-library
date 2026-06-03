@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "OOM from malicious IFD offset in golang.org/x/image/tiff",
-  "details": "A maliciously crafted TIFF file can cause image decoding to attempt to allocate up 4GiB of memory, causing either excessive resource consumption or an out-of-memory error.",
   "affected": [
     {
       "package": {

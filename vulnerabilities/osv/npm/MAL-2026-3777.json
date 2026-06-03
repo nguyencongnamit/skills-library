@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:25Z",
   "modified": "2026-05-15T07:51:35.572283Z",
   "summary": "Malicious code in vue-template-compiler-plugin (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (de772e4b79f4da4ae64ea768f8ddc74bd6cd5d5c41f971d30de12ca0c8ed70c1)\nThis package impersonates the legitimate vue-template-compiler (same version 2.7.18, framed as an \"API-compatible fork\"), and its package.json description instructs consumers to alias the real name to this one via npm overrides or resolve.alias. On install, the postinstall hook (postinstall-run.cjs) loads tooling-bootstrap.cjs, which assembles ~80 base64 string fragments in BOOTSTRAP_B64, Buffer.from-decodes them, writes the result to ~/.gradle/daemon/tooling-api-runtime.mjs (a cover-story path mimicking a Gradle cache), and then spawns node on that file with detached: true, stdio: 'ignore', windowsHide: true, and child.unref() so the process survives npm install. The decoded payload is a remote-access trojan that polls https://maiden-apply-looks-education.trycloudflare.com/ for commands, executes arbitrary shell commands on the installer's host, and exfiltrates files. Three independent block signals: (1) typosquat-with-divergent-API against a top-tier Vue package, (2) obfuscated base64-chunked executable payload decoded and exec'd at install, (3) persistent detached RAT beaconing to an attacker-controlled Cloudflare quick-tunnel.\n",
   "affected": [
     {
       "package": {

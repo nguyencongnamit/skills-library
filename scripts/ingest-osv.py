@@ -207,10 +207,19 @@ def extract_subset(
             # OSV records already have `schema_version`; surface `modified`
             # (the OSV equivalent of last_updated) as the latter.
             doc = json.loads(body)
+            # Strip the verbose `details` field. The offline scanner never
+            # reads it (it matches via index.json + the `severity`/`affected`
+            # fields), and its prose routinely embeds the very payload it
+            # documents — reverse shells, base64 blobs, `eval(...)` — which
+            # trips endpoint AV (Microsoft Defender et al.) into quarantining
+            # the bundled advisory JSON as "high-severity malware". Dropping
+            # it removes the false-positive trigger and shrinks the tree
+            # markedly. The short `summary` is kept for human-readable context.
+            doc.pop("details", None)
             modified = doc.get("modified") or doc.get("published") or ""
             if modified and "last_updated" not in doc:
                 doc["last_updated"] = modified[:10]
-                body = (json.dumps(doc, indent=2) + "\n").encode("utf-8")
+            body = (json.dumps(doc, indent=2) + "\n").encode("utf-8")
             out = dest_dir / Path(name).name
             out.write_bytes(body)
             written += 1

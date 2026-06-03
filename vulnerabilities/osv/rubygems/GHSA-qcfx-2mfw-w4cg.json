@@ -10,7 +10,6 @@
     "CGA-jwmv-8x4w-7p4x"
   ],
   "summary": "Rails Active Storage has possible content type bypass via metadata in direct uploads",
-  "details": "### Impact\nActive Storage's `DirectUploadsController` accepts arbitrary metadata from the client and persists it on the blob. Because internal flags like `identified` and `analyzed` are stored in the same metadata hash, a malicious direct-upload client could set these flags.\n\n### Releases\nThe fixed releases are available at the normal locations.\n\n### Credit\nThis was responsible reported by Hackerone researcher [pwnie](https://hackerone.com/pwnie)",
   "affected": [
     {
       "package": {

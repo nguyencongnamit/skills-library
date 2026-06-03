@@ -10,7 +10,6 @@
     "CGA-6f96-8rgr-55j9"
   ],
   "summary": "ImageMagick has an Out-of-bounds Write via InterpretImageFilename",
-  "details": "Due to an incorrect return value on certain platforms a pointer is incremented past the end of a buffer that is on the stack and that could result in an out of bounds write.\n\n```\n=================================================================\n==48558==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016b9b7490 at pc 0x0001046d48ac bp 0x00016b9b31d0 sp 0x00016b9b31c8\nWRITE of size 1 at 0x00016b9b7490 thread T0\n```",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2023-42345"
   ],
   "summary": "Alkacon OpenCms is vulnerable to XSS via updateModelGroups.jsp",
-  "details": "A Cross Site Scripting vulnerability in Alkacon OpenCms before 16 exists via updateModelGroups.jsp.",
   "affected": [
     {
       "package": {

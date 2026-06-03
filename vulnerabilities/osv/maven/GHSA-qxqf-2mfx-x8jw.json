@@ -7,7 +7,6 @@
     "CVE-2024-28109"
   ],
   "summary": "veraPDF has potential XSLT injection vulnerability when using policy files",
-  "details": "### Impact\n\nExecuting policy checks using custom schematron files invokes an XSL transformation that may theoretically lead to a remote code execution (RCE) vulnerability.\n\n### Patches\n\nThis has been patched and users should upgrade to veraPDF v1.24.2\n\n### Workarounds\n\nThis doesn't affect the standard validation and policy checks functionality, veraPDF's common use cases. Most veraPDF users don't insert any custom XSLT code into policy profiles, which are based on Schematron syntax rather than direct XSL transforms. For users who do, only load custom policy files from sources you trust.\n\n### References\n\nOriginal issue: <https://github.com/veraPDF/veraPDF-library/issues/1415>",
   "affected": [
     {
       "package": {

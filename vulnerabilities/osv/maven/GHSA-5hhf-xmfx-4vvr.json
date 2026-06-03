@@ -7,7 +7,6 @@
     "CVE-2026-45574"
   ],
   "summary": "epa4all-client: TLS Certificate Validation Disabled in Production",
-  "details": "### Impact\nAn attacker on the network path between the ePA service and the Konnektor can present any TLS certificate (self-signed, expired, wrong CN) and intercept all SOAP traffic. This includes patient identifiers (KVNR), SMC-B card operations (authentication, signing),\ndocument content, and credential exchanges.\n\n### Patches\n[#36](https://github.com/oviva-ag/epa4all-client/pull/36)\n\n### Workarounds\nUse the library directly instead of the REST wrapper.\n\n### Resources\n- MS-OVIVA-EPA4ALL-771a78\n\n### Credits\n[Machine Spirits](https://machinespirits.com/) ([contact@machinespirits.de](mailto:contact@machinespirits.de))\n\n- Dr. rer. nat. Simon Weber\n- Dipl.-Inf. Volker Sch\u00f6nefeld\n- Chiara Fliegner",
   "affected": [
     {
       "package": {

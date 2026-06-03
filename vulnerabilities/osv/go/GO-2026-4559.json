@@ -12,7 +12,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Sending certain HTTP/2 frames can cause a server to panic in golang.org/x/net",
-  "details": "Due to missing nil check, sending 0x0a-0x0f HTTP/2 frames will cause a running server to panic",
   "affected": [
     {
       "package": {

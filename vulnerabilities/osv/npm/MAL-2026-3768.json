@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:24:58Z",
   "modified": "2026-05-15T07:50:13.670241Z",
   "summary": "Malicious code in npmjs_web3-util (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (263a0126b20b1d58bc0528a4b7bea19027b94383e00b5b9f03b712d96be89ca7)\nThe package's `postinstall` lifecycle hook downloads a script from a personal GitHub Gist (`gist.githubusercontent.com/guellemilb/631fb6348967d9d475125edf67048c0e/raw/build_utils.py`) via curl/wget and pipes the response to `python3`, `node`, and `eval` \u2014 with fallback chains across all three interpreters. The Gist URL is mutable (the gist owner can change the served content at any time without any package republish), is unrelated to the package's advertised publisher, performs no hash or signature verification on the fetched bytes, and runs unconditionally on every `npm install`. The package otherwise provides no functionality: `index.js` is `module.exports = {};` despite the package describing itself as \"Utilities for Web3/web3 development\" \u2014 the dropper is the package's only effect. The name (`npmjs_web3-util`) and web3-themed keywords appear crafted to attract developers searching for web3 utility packages, making this a typosquat-style lure whose payload is the remote-fetch-and-execute chain.\n",
   "affected": [
     {
       "package": {

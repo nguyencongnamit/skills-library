@@ -7,7 +7,6 @@
     "CVE-2026-23886"
   ],
   "summary": "Swift W3C TraceContext vulnerable to a malformed HTTP header causing a crash",
-  "details": "### Impact\n\nA denial-of-service vulnerability due to improper input validation allows a remote attacker to crash the service via a malformed HTTP header.\n\nAllows crashing the process with data coming from the network when used with, for example, an HTTP server. Most common way of using Swift W3C Trace Context is through Swift OTel.\n\n### Patches\n\nhttps://github.com/swift-otel/swift-w3c-trace-context/commit/5da9b143ba6046734de3fa51dafea28290174e4e\n\n### Workarounds\nDisable either Swift OTel or the code that extracts the trace information from an incoming header (such as a `TracingMiddleware`).\n\n### References\n\n[Swift W3C TraceContext 1.0.0-beta.5](https://github.com/swift-otel/swift-w3c-trace-context/releases/tag/1.0.0-beta.5)\n[Swift OTel 1.0.4](https://github.com/swift-otel/swift-otel/releases/tag/1.0.4)",
   "affected": [
     {
       "package": {

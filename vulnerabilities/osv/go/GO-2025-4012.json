@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Lack of limit when parsing cookies can cause memory exhaustion in net/http",
-  "details": "Despite HTTP headers having a default limit of 1MB, the number of cookies that can be parsed does not have a limit. By sending a lot of very small cookies such as \"a=;\", an attacker can make an HTTP server allocate a large amount of structs, causing large memory consumption.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-39850"
   ],
   "summary": "Yii 2: Local file inclusion via view parameter name collision",
-  "details": "The core view rendering method `View::renderPhpFile()` calls `extract($_params_, EXTR_OVERWRITE)` before the `require` statement that includes the view file. A caller-controlled parameter named `_file_` in the `$params` array overwrites the internal local variable that specifies which file is included \u2014 enabling a Local File Inclusion primitive.\n\n### Impact\n\n- Local File Inclusion (arbitrary file read via non-PHP files)\n- Potential RCE if attacker can write PHP files via a separate primitive\n- Information disclosure\n\n### Patches\n\n2.0.55\n\n### Workarounds\n\nNo.",
   "affected": [
     {
       "package": {

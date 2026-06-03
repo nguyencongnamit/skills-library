@@ -10,7 +10,6 @@
     "CGA-phf7-w5jg-gh42"
   ],
   "summary": "Rails Active Support has a possible ReDoS vulnerability in number_to_delimited",
-  "details": "### Impact\n`NumberToDelimitedConverter` used a regular expression with `gsub!` to insert thousands delimiters. This could produce quadratic time complexity on long digit strings.\n\n### Releases\nThe fixed releases are available at the normal locations.\n\n### Credit\nThis issue was responsibly reported by Hackerone researcher [scyoon](https://hackerone.com/scyoon).",
   "affected": [
     {
       "package": {

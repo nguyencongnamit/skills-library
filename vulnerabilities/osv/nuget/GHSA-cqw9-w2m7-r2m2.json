@@ -10,7 +10,6 @@
     "CGA-chgg-wgm6-vmp9"
   ],
   "summary": "ImageMagick has Heap Buffer Over-Read in BilateralBlurImage",
-  "details": "BilateralBlurImage contains a heap buffer over-read caused by an incorrect conversion. When processing a crafted image with the `-bilateral-blur` operation an out of bounds read can occur.\n\n```\n=================================================================\n==676172==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x50a0000079c0 at pc 0x57b483c722f7 bp 0x7fffc0acd380 sp 0x7fffc0acd370\nREAD of size 4 at 0x50a0000079c0 thread T0\n```",
   "affected": [
     {
       "package": {

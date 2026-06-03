@@ -7,7 +7,6 @@
     "CVE-2026-40091"
   ],
   "summary": "SpiceDB's SPICEDB_DATASTORE_CONN_URI is leaked on startup logs",
-  "details": "### Impact\nWhen SpiceDB starts with log level `info`, the startup `\"configuration\"` log will include the full datastore DSN, including the plaintext password, inside `DatastoreConfig.URI`.\n\n### Patches\nv1.51.1\n\n### Workarounds\nChange the log level to `warn` or `error`.",
   "affected": [
     {
       "package": {

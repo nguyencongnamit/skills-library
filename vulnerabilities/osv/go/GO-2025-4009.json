@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Quadratic complexity when parsing some invalid inputs in encoding/pem",
-  "details": "The processing time for parsing some invalid inputs scales non-linearly with respect to the size of the input.\n\nThis affects programs which parse untrusted PEM inputs.",
   "affected": [
     {
       "package": {

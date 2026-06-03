@@ -7,7 +7,6 @@
     "CVE-2020-8166"
   ],
   "summary": "Ability to forge per-form CSRF tokens in Rails",
-  "details": "It is possible to, given a global CSRF token such as the one present in the authenticity_token meta tag, forge a per-form CSRF token for any action for that session.\n\nImpact\n------\n\nGiven the ability to extract the global CSRF token, an attacker would be able to construct a per-form CSRF token for that session.\n\nWorkarounds\n-----------\n\nThis is a low-severity security issue. As such, no workaround is necessarily until such time as the application can be upgraded.",
   "affected": [
     {
       "package": {

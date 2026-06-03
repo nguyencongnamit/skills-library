@@ -7,7 +7,6 @@
     "CGA-9xm3-x84m-gh3c"
   ],
   "summary": "slack-go `SecretsVerifier` accepts empty signing secret without precondition",
-  "details": "```go\nfunc NewSecretsVerifier(header http.Header, secret string) (SecretsVerifier, error) {\n    hash := hmac.New(sha256.New, []byte(secret))    // raw secret, no precondition\n}\n```",
   "affected": [
     {
       "package": {

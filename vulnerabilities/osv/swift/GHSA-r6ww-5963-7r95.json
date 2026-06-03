@@ -7,7 +7,6 @@
     "CVE-2022-24777"
   ],
   "summary": "Denial of Service via reachable assertion",
-  "details": "A grpc-swift server is vulnerable to a denial of service attack via a reachable assertion. This was due to incorrect logic when handling `GOAWAY` frames.\n\nThe attack is low-effort: it takes very little resources to construct and send the required sequence of frames. The impact on availability is high as the server will crash, dropping all in flight connections and requests.\n\nThe issue was discovered by automated fuzz testing and is resolved by fixing the relevant state handling code.",
   "affected": [
     {
       "package": {

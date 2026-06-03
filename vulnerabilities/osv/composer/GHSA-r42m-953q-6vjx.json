@@ -7,7 +7,6 @@
     "CVE-2026-44831"
   ],
   "summary": "Snipe-IT has Stored XSS via Component Checkout Notes (v8.4.0)",
-  "details": "### Impact\nUsers with component view access could be impacted by an unescaped `notes` column. \n\n### Patches\nThis was patched in https://github.com/grokability/snipe-it/commit/28f493d84d057895fbb93b6570e7393a2c2fa438, and is fixed in v8.4.1 or greater. \n\n### Workarounds\nNone.",
   "affected": [
     {
       "package": {

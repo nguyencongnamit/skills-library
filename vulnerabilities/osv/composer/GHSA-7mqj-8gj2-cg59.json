@@ -7,7 +7,6 @@
     "CVE-2026-44655"
   ],
   "summary": "MantisBT has Stored XSS on Move Attachments Admin Page",
-  "details": "Unescaped Project Name allows an attacker that can set it (which typically requires manager or administrator access level) to inject HTML in Move Attachments admin page.\n\n### Impact\nCross-site scripting (XSS).\nThis is mitigated by Content Security Policy which restricts scripts execution.\n\n### Patches\n- 5cb4b469295889f5d2b01677c9bf82c143e0fdaa\n\n### Workarounds\nNone",
   "affected": [
     {
       "package": {

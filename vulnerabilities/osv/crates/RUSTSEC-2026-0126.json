@@ -4,7 +4,6 @@
   "published": "2026-04-27T12:00:00Z",
   "modified": "2026-05-13T10:15:29.201476Z",
   "summary": "AVX2 Implementation Did Not Fully Reduce Intermediate Values",
-  "details": "The AVX2 implementation of ML-DSA did not fully reduce intermediate\ninputs to the inverse NTT, which leads to a testable difference in\npanic behaviour of internal functions compared to the portable\nimplementation.\n\n## Impact\nWe are not aware of inputs to the public key generation, signing or\nverification APIs that trigger a panic in the AVX2 implementation\nbecause the intermediate values were not fully reduced.\n\n## Mitigation\nFrom version `0.0.9` intermediate values on AVX2 platforms are fully\nreduced in alignment with the portable implementation.",
   "affected": [
     {
       "package": {

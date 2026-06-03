@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:15Z",
   "modified": "2026-05-15T07:51:35.668368Z",
   "summary": "Malicious code in prettier-lint-lenz (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (28f7035dda69170600724a31f4b3543e02ac23c9153f3a62c35f2ee5264eef44)\nPackage impersonates the popular `prettier` formatter \u2014 README and description are copied verbatim from the real Prettier project, but the package ships no formatter code. Instead, `package.json` declares `\"postinstall\": \"node index.mjs\"`, which on Windows POSTs an install beacon to a hardcoded bare-IP C2 (`http://204.10.194.64:5000/api/nonce`), copies a bundled `prettier-lint/` directory to `%LOCALAPPDATA%\\prettier-lint`, and executes `ctll.mjs` from the deployed location. `ctll.mjs` writes a hidden VBScript runner and registers a Windows Scheduled Task named `CdllProtect` with a LogonTrigger (`schtasks /Create /XML`) that relaunches `cdll.mjs` via `wscript.exe //nologo` in a hidden window on every user logon, with 999 retries and no execution time limit. The deployed `cdll.mjs` polls the clipboard every ~250ms via `powershell.exe Get-Clipboard -Raw` and POSTs the raw clipboard text as JSON to the same hardcoded endpoint over plain HTTP on every change, exfiltrating passwords, 2FA codes, wallet addresses, and any copied text. All three components (install-time beacon, deployed worker, persistence) share the attacker-controlled endpoint `204.10.194.64:5000`.\n",
   "affected": [
     {
       "package": {

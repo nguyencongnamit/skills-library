@@ -7,7 +7,6 @@
     "CVE-2026-33052"
   ],
   "summary": "MantisBT Has Authorization Bypass in Global Profile Creation",
-  "details": "MantisBT allows a low-privileged authenticated user having *add_profile_threshold* to create a global profile despite not having *manage_global_profile_threshold*, by tampering with the user_id parameter in a valid profile creation request.\n\n### Impact\nAuthentication bypass\n\n### Patches\n- 3f952e68fa864e0e60abc3e84adecf3cfa84c75e\n\n### Workarounds\nNone\n\n### Credits\nThanks to Vishal Shukla for discovering and responsibly reporting the issues.",
   "affected": [
     {
       "package": {

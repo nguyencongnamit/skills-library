@@ -10,7 +10,6 @@
     "CGA-457j-wv38-43g8"
   ],
   "summary": "Rails Active Storage has a possible DoS vulnerability when in proxy mode via Range requests",
-  "details": "### Impact\nWhen serving files through Active Storage's `Blobs::ProxyController`, the controller loads the entire requested byte range into memory before sending it. A request with a large or unbounded Range header (e.g. `bytes=0-`) could cause the server to allocate memory proportional to the file size, possibly resulting in a DoS vulnerability through memory exhaustion.\n\n### Releases\nThe fixed releases are available at the normal locations.\n\n### Credit\nThis issue was responsibly reported by Hackerone user [pirikara](https://hackerone.com/pirikara)",
   "affected": [
     {
       "package": {

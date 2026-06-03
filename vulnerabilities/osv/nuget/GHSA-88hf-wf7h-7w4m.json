@@ -7,7 +7,6 @@
     "CVE-2026-41310"
   ],
   "summary": "OpenTelemetry's Zipkin remote endpoint cache could grow without bounds and increase memory pressure",
-  "details": "### Summary\n\nThe Zipkin exporter remote endpoint cache accepted unbounded key growth derived from span attributes. In high-cardinality scenarios, this could increase process memory usage over time and degrade availability.\n\n### Details\n\n- Introduce a bounded, thread-safe LRU cache for remote endpoints.\n- Enforce fixed maximum size to prevent unbounded growth.\n\n### Impact\n\n- A process using Zipkin export for client/producer spans could experience avoidable memory growth under sustained unique remote endpoint values.\n\n### Resources\n\n[#7081](https://github.com/open-telemetry/opentelemetry-dotnet/pull/7081)",
   "affected": [
     {
       "package": {

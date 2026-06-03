@@ -10,7 +10,6 @@
     "CGA-q9w2-5fvj-m9fm"
   ],
   "summary": "Spring Boot accepts predictable temp directory without ownership verification",
-  "details": "A local attacker on the same host as the application may be able to take control of the directory used by `ApplicationTemp`. When `server.servlet.session.persistent` is set to `true` and the attack persists across application restarts, this may allow the attacker to read session information and hijack authenticated users or deploy a gadget chain and execute code as the application's user.\n\nAffected: Spring Boot 4.0.0\u20134.0.5 (fix 4.0.6), 3.5.0\u20133.5.13 (fix 3.5.14), 3.4.0\u20133.4.15 (fix 3.4.16), 3.3.0\u20133.3.18 (fix 3.3.19), 2.7.0\u20132.7.32 (fix 2.7.33); predictable temp directory / `ApplicationTemp` ownership verification. Versions that are no longer supported are also affected per vendor advisory.",
   "affected": [
     {
       "package": {

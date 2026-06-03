@@ -7,7 +7,6 @@
     "CVE-2025-30404"
   ],
   "summary": "ExecuTorch integer overflow vulnerability",
-  "details": "An integer overflow vulnerability in the loading of ExecuTorch models can cause overlapping allocations, potentially resulting in code execution or other undesirable effects. This issue affects ExecuTorch prior to commit d158236b1dc84539c1b16843bc74054c9dcba006.",
   "affected": [
     {
       "package": {

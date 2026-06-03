@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Excessive CPU consumption in Reader.ReadResponse in net/textproto",
-  "details": "The Reader.ReadResponse function constructs a response string through repeated string concatenation of lines. When the number of lines in a response is large, this can cause excessive CPU consumption.",
   "affected": [
     {
       "package": {

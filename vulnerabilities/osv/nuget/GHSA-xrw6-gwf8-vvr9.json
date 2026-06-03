@@ -7,7 +7,6 @@
     "CVE-2026-39959"
   ],
   "summary": "Tmds.DBus: malicious D-Bus peers can spoof signals, exhaust file descriptor resources, and cause denial of service",
-  "details": "Tmds.DBus and Tmds.DBus.Protocol are vulnerable to malicious D-Bus peers. A peer on the same bus can spoof signals by impersonating the owner of a well-known name, exhaust system resources or cause file descriptor spillover by sending messages with an excessive number of Unix file descriptors, and crash the application by sending malformed message bodies that cause unhandled exceptions on the SynchronizationContext.\n\n### Patches\n\nThe vulnerabilities are fixed in version 0.92.0.\nFor Tmds.DBus.Protocol, the fixes are also backported to 0.21.3.\n\n### Workarounds\n\nThere are no known workarounds. Users should upgrade to a patched version.",
   "affected": [
     {
       "package": {

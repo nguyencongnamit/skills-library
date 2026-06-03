@@ -7,7 +7,6 @@
     "GHSA-p3hv-ff6m-fcxx"
   ],
   "summary": "Malicious code in dowload_ebok_the_upside_of_unrequited_by_becky_albertalli_2jgmw (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (3ee926b545cf54c3adba768fae4d34c9b3d29de1b1e5637f09a52cb865a0207b)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n",
   "affected": [
     {
       "package": {

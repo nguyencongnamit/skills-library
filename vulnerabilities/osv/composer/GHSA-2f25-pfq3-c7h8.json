@@ -7,7 +7,6 @@
     "CVE-2023-49316"
   ],
   "summary": "Phpseclib needs guardrails on large binaryfield integers",
-  "details": "### Impact\nAnyone loading untrusted ASN1 files (eg. X509 certificates, RSA PKCS8 private or public keys, etc)\n\n### Patches\nhttps://github.com/phpseclib/phpseclib/commit/964d78101a70305df33f442f5490f0adb3b7e77f\n\n### Workarounds\nNo.\n\n### References\nhttps://github.com/phpseclib/phpseclib/commit/964d78101a70305df33f442f5490f0adb3b7e77f\nhttps://www.usenix.org/system/files/usenixsecurity25-shi-bing.pdf",
   "affected": [
     {
       "package": {

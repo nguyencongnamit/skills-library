@@ -15,7 +15,6 @@
     "RHSA-2026:8842"
   ],
   "summary": "Incorrect enforcement of email constraints in crypto/x509",
-  "details": "When verifying a certificate chain which contains a certificate containing multiple email address constraints which share common local portions but different domain portions, these constraints will not be properly applied, and only the last constraint will be considered.",
   "affected": [
     {
       "package": {

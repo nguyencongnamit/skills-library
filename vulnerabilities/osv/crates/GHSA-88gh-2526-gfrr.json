@@ -7,7 +7,6 @@
     "CVE-2026-45373"
   ],
   "summary": "DeepSeek TUI has SSRF\u200c IPV6 bypass",
-  "details": "### Summary\nAlthough SSRF is validated against hostnames that resolve to private IPv6 addresses, when providing the IPV6 in\u200c\u200c URL\u200c as `http://[::1]`, the SSRF defenses do not work.\n\n### Details\nhttps://github.com/Hmbown/DeepSeek-TUI/blob/15f62e3e93d842f30b428877819ebc1c8cb96814/crates/tui/src/tools/fetch_url.rs#L321\n\n### PoC\nPrompt:\u200c `Run fetch_url tool and give output, no thinking. Use url : http://[::1]`\n\n### Impact\nAccess to local restricted resources",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-34970"
   ],
   "summary": "MantisBT: Bugnote Revision Page Leaks Private Issue Metadata After Issue Access Is Revoked",
-  "details": "MantisBT allows a bugnote author to access the note's Revisions page after losing access to the parent private issue.\n\n### Impact\nDisclosure of the private Issue's Id and Summary. The bugnote full revision body remains secure.\n\n### Patches\n- 71df1f67e05b2050cd4bd87839e6cc13747cf03f\n\n### Workarounds\nNone\n\n### Credits \nThanks to Vishal Shukla for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

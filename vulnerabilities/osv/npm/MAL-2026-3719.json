@@ -4,7 +4,6 @@
   "published": "2026-05-13T11:51:32Z",
   "modified": "2026-05-15T07:51:48.715022Z",
   "summary": "Malicious code in web3-core-js (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (46f9612aaab12b9656a1f1b5fbd7684fdcd57833bbf76d14b2a243f679cb0977)\npackage.json declares a lifecycle hook that invokes require('child_process') and execSync with a curl command at install time. This pattern fetches remote content and executes it on the installer's machine as part of `npm install`, before any user code runs. The package name mimics the widely-used web3/web3-core ecosystem while shipping only a lifecycle trigger for remote execution \u2014 no library code consistent with the claimed web3 purpose is present. Running `npm install web3-core-js` on any developer or CI machine results in arbitrary attacker-controlled bytes being fetched and executed with the privileges of the installing user.\n\n## Source: ossf-package-analysis (44e1f40536600c94540b0fd722439856b2f118f6090709db7461f5aa06fc2fb4)\nThe OpenSSF Package Analysis project identified 'web3-core-js' @ 2.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

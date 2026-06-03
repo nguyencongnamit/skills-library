@@ -10,7 +10,6 @@
     "CGA-7w8p-mgrw-jr85"
   ],
   "summary": "Apache MINA vulnerable to Deserialization of Untrusted Data",
-  "details": "Apache MINA's AbstractIoBuffer.resolveClass() contains two branches, one of them (for static classes or primitive types) does not check the class at all, bypassing the classname allowlist and allowing arbitrary code to be executed.\n\nThe fix checks if the class is present in the accepted class filter\u00a0before calling\u00a0Class.forName().\u00a0\n\nAffected versions are Apache MINA 2.0.0 <= 2.0.27, 2.1.0 <= 2.1.10, and 2.2.0 <= 2.2.5.\n\nThe problem is resolved in Apache MINA 2.0.28, 2.1.11, and 2.2.6 by applying the classname allowlist earlier.\n\nAffected are applications using Apache MINA that call\u00a0IoBuffer.getObject().\n\nApplications using Apache MINA are advised to upgrade.",
   "affected": [
     {
       "package": {

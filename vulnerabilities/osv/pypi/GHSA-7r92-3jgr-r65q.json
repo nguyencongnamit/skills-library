@@ -7,7 +7,6 @@
     "CVE-2026-44368"
   ],
   "summary": "pyquorum: Timing side\u2011channel in mul_mod",
-  "details": "### Impact\nThe `mul_mod` function implements multiplication via a binary expansion loop whose execution time depends on the Hamming weight of the second operand (the exponent). An attacker who can measure the time of secret\u2011sharing operations (e.g., via a remote service) could progressively recover the values of shares, ultimately leading to secret reconstruction.\n\n### Patches\nhttps://github.com/svvqt/pyquorum/releases/tag/v0.2.1",
   "affected": [
     {
       "package": {

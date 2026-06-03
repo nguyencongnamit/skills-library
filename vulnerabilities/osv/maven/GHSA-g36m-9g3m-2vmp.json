@@ -10,7 +10,6 @@
     "CGA-fx5p-hjr6-v9gx"
   ],
   "summary": "Apache Neethi is vulnerable to a Denial of Service attack through algorithmic complexity in policy normalization",
-  "details": "Apache Neethi is vulnerable to a Denial of Service attack through algorithmic complexity in policy normalization. Specially crafted WS-Policy documents can trigger an exponential Cartesian cross-product expansion during the normalization process, causing unbounded memory allocation that exhausts the JVM heap. This occurs when the normalization process generates an excessive number of policy alternatives without bounds, leading to runtime memory exhaustion.\n\nUsers should upgrade to 3.2.2 which limits the maximum number of normalized policy alternatives.",
   "affected": [
     {
       "package": {

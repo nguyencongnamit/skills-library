@@ -7,7 +7,6 @@
     "CVE-2026-40596"
   ],
   "summary": "MantisBT is Vulnerable to XSS leading to account takeover via updating a user's font family preference",
-  "details": "Any authenticated user can inject arbitrary HTML via updating their account's font family.\n\n### Impact\nCross-site scripting.\nThe injected payload will be reflected in every MantisBT page.\n\nLeveraging another vulnerability (CSP bypass, see [GHSA-9c3j-xm6v-j7j3](https://github.com/mantisbt/mantisbt/security/advisories/GHSA-9c3j-xm6v-j7j3)), the attacker could achieve account takeover.\n\n### Patches\n- 9e8409cdd979eba86ef532756fc47c1d8112d22d\n\n### Workarounds\nNone\n\n### Credits\nThanks to siunam (Tang Cheuk Hei) for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {
