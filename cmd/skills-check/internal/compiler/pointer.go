@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // PointerSpec parameterises the per-tool minimal pointer output.

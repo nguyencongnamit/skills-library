@@ -1,4 +1,4 @@
-module github.com/kennguy3n/skills-library
+module github.com/namncqualgo/skills-library
 
 go 1.22
 

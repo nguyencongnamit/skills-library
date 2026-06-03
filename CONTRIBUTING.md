@@ -31,7 +31,7 @@ secure-code is released under the [MIT license](./LICENSE) and maintained by
 
 ```bash
 # Clone
-git clone https://github.com/kennguy3n/skills-library.git
+git clone https://github.com/namncqualgo/skills-library.git
 cd skills-library
 
 # Build the CLI (Go 1.22+)
@@ -146,7 +146,7 @@ than enlarging the existing tier.
 ## Style
 
 - **Brand:** the project is **secure-code**. The Go module path remains
-  `github.com/kennguy3n/skills-library` and the CLI binary remains
+  `github.com/namncqualgo/skills-library` and the CLI binary remains
   `skills-check` — these are stable technical identifiers. Use the brand name
   in prose, the technical identifiers in code/import paths.
 - **Voice:** direct, neutral, factual. No marketing language in `SKILL.md` or

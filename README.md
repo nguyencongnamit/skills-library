@@ -153,13 +153,13 @@ local copy current with incremental, signature-verified remote updates.
 
 ```bash
 # From source (requires Go 1.22+)
-go install github.com/kennguy3n/skills-library/cmd/skills-check@latest
+go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 
 # macOS via Homebrew
-brew install kennguy3n/tap/skills-check
+brew install namncqualgo/tap/skills-check
 
 # Windows via winget
-winget install kennguy3n.skills-check
+winget install namncqualgo.skills-check
 
 # Linux via .deb / .rpm — see docs/install-linux.md
 ```
@@ -534,7 +534,7 @@ out-of-band YubiKey-backed signing procedure and key management policy.
 
 | OS | Architectures | CLI install | Scheduled updates |
 |----|---------------|-------------|-------------------|
-| macOS | `amd64`, `arm64` | `brew install kennguy3n/tap/skills-check`, `go install` | `launchd` |
+| macOS | `amd64`, `arm64` | `brew install namncqualgo/tap/skills-check`, `go install` | `launchd` |
 | Linux | `amd64`, `arm64` | `.deb`, `.rpm`, `go install`, `apt`, `yum` | `systemd` user timer |
 | Windows | `amd64` | MSI, `winget`, `scoop`, `go install` | Task Scheduler |
 
@@ -620,7 +620,7 @@ trusted Ed25519 keys (`VerifyAny`) and authenticated HTTPS pulls.
 Minimal Go, Python, and TypeScript SDKs live under [`sdk/`](./sdk).
 
 ```go
-import skillslib "github.com/kennguy3n/skills-library/sdk/go"
+import skillslib "github.com/namncqualgo/skills-library/sdk/go"
 
 s, _ := skillslib.LoadSkill("skills/secret-detection/SKILL.md")
 fmt.Println(skillslib.Extract(s, skillslib.TierCompact))

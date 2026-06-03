@@ -14,7 +14,7 @@
 
 ARTIFACTS ?= ../../release
 VERSION   ?= 0.0.0
-GPG_KEY   ?= skills-library@kennguy3n
+GPG_KEY   ?= skills-library@namncqualgo
 SITE      ?= site
 
 APT_ROOT = $(SITE)/apt

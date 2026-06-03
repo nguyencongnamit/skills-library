@@ -124,12 +124,12 @@ func TestResolveReleaseAssetURL(t *testing.T) {
 		{
 			name: "latest tag uses /releases/latest/download/",
 			tag:  "latest",
-			want: "https://github.com/kennguy3n/skills-library/releases/latest/download/osv-cache.tar.gz",
+			want: "https://github.com/namncqualgo/skills-library/releases/latest/download/osv-cache.tar.gz",
 		},
 		{
 			name: "specific tag uses /releases/download/<tag>/",
 			tag:  "v0.1.1",
-			want: "https://github.com/kennguy3n/skills-library/releases/download/v0.1.1/osv-cache.tar.gz",
+			want: "https://github.com/namncqualgo/skills-library/releases/download/v0.1.1/osv-cache.tar.gz",
 		},
 		{
 			name:        "explicit URL overrides tag",

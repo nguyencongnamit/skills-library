@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"sort"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 // ExternalToolStatus is one row of the list_external_tools response: an

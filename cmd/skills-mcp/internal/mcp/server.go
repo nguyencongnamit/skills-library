@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/tools"
+	"github.com/namncqualgo/skills-library/internal/tools"
 )
 
 // Server is the JSON-RPC dispatcher. It owns one Library and exposes the

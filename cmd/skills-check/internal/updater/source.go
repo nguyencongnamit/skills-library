@@ -28,7 +28,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 // Source abstracts where a manifest and its referenced files come from. The

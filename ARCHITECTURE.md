@@ -1,7 +1,7 @@
 # secure-code — Architecture
 
 This document describes the runtime architecture of the **secure-code** project
-(Go module path [`github.com/kennguy3n/skills-library`](https://github.com/kennguy3n/skills-library);
+(Go module path [`github.com/namncqualgo/skills-library`](https://github.com/namncqualgo/skills-library);
 CLI binary `skills-check`). The Go module path and CLI binary name (`skills-check`)
 are stable technical identifiers.
 

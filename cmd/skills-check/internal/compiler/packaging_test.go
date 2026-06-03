@@ -60,7 +60,7 @@ func TestPackageManifestsPresent(t *testing.T) {
 		"packaging/linux/nfpm.yaml",
 		"packaging/linux/Makefile",
 		"packaging/homebrew/skills-check.rb",
-		"packaging/winget/kennguy3n.skills-check.yaml",
+		"packaging/winget/namncqualgo.skills-check.yaml",
 		"packaging/scoop/skills-check.json",
 		"packaging/apt-yum/README.md",
 		"packaging/apt-yum/Makefile",

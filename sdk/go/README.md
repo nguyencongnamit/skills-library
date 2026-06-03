@@ -1,7 +1,7 @@
 # secure-code — Go SDK
 
 `skillslib` is the public Go SDK for **secure-code** (Go module path
-`github.com/kennguy3n/skills-library`).
+`github.com/namncqualgo/skills-library`).
 
 It is a thin re-export of `internal/skill` so downstream Go programs can load
 and validate skills without depending on internal packages.
@@ -9,7 +9,7 @@ and validate skills without depending on internal packages.
 ## Install
 
 ```bash
-go get github.com/kennguy3n/skills-library/sdk/go
+go get github.com/namncqualgo/skills-library/sdk/go
 ```
 
 ## Quick start
@@ -20,7 +20,7 @@ package main
 import (
     "fmt"
 
-    skillslib "github.com/kennguy3n/skills-library/sdk/go"
+    skillslib "github.com/namncqualgo/skills-library/sdk/go"
 )
 
 func main() {
