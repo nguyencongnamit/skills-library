@@ -1370,7 +1370,7 @@
     },
     {
       "path": "skills/container-security/checklists/dockerfile_hardening.yaml",
-      "sha256": "759547c3ada694acf211ee012232976fa8488cf8edc1755634d8d57bac3bbcd9",
+      "sha256": "504d57a70db3a3141b76f7c9c2ff9b9fef04ba37644cde8e0a5959d927367233",
       "size": 3550,
       "action": "unchanged"
     },
