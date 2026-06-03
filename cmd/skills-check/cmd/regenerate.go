@@ -101,6 +101,16 @@ func regenerateCmd() *cobra.Command {
 					fmt.Fprintf(out, "%-10s -> %s/<skill-id>/  (%d skills, native bundle)\n",
 						bundle.Subdir, rel, len(skills))
 				}
+				// Per-skill, context-scoped rule files for IDEs that load
+				// rules selectively (Cursor .mdc with globs; Copilot
+				// .instructions.md with applyTo) — the progressive-disclosure
+				// equivalent of the native bundles, so non-Claude IDEs also
+				// pull only the relevant rule into context.
+				if err := compiler.WriteRuleBundles(skills, outDir); err != nil {
+					return err
+				}
+				fmt.Fprintf(out, "%-10s -> dist/cursor-rules/.cursor/rules/<skill-id>.mdc  (%d skills, scoped rules)\n", "cursor-rules", len(skills))
+				fmt.Fprintf(out, "%-10s -> dist/copilot-rules/.github/instructions/<skill-id>.instructions.md  (%d skills, scoped rules)\n", "copilot-rules", len(skills))
 			}
 			return nil
 		},
