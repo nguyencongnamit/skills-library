@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/token"
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/token"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 func validateCmd() *cobra.Command {

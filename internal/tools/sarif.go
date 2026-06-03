@@ -256,7 +256,7 @@ func ScanSecretsSARIF(res *ScanSecretsResult) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          rules,
 			}},
 			Results: results,
@@ -388,7 +388,7 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          rules,
 			}},
 			Results: results,
@@ -423,7 +423,7 @@ func emptyLog(tool string) *SARIFLog {
 		Runs: []SARIFRun{{
 			Tool: SARIFTool{Driver: SARIFDriver{
 				Name:           SARIFToolName,
-				InformationURI: "https://github.com/kennguy3n/skills-library",
+				InformationURI: "https://github.com/namncqualgo/skills-library",
 				Rules:          []SARIFRule{},
 			}},
 			Results: []SARIFResult{},

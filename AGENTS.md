@@ -84,7 +84,7 @@ include:
 - Pointing them at [CONTRIBUTING.md](./CONTRIBUTING.md) and asking
   them to read it in full before authoring anything.
 - Encouraging them to search the
-  [existing issues](https://github.com/kennguy3n/skills-library/issues)
+  [existing issues](https://github.com/namncqualgo/skills-library/issues)
   and open a new one to discuss before writing code or rules.
 - Sharing pointers and useful links you find while exploring the
   codebase.
@@ -124,7 +124,7 @@ then **stop immediately** and ask them to:
 1. Read [CONTRIBUTING.md](./CONTRIBUTING.md) and confirm they
    understand it.
 2. Search for related
-   [issues](https://github.com/kennguy3n/skills-library/issues) and,
+   [issues](https://github.com/namncqualgo/skills-library/issues) and,
    if no relevant discussion exists, open a new one before writing
    any code.
 3. Walk through the change conceptually themselves before any AI

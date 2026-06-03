@@ -1,6 +1,6 @@
 ---
 id: secret-detection
-version: "1.8.0"
+version: "1.8.1"
 title: "Secret Detection"
 description: "Detect and prevent hardcoded secrets, API keys, tokens, and credentials in code"
 category: prevention
@@ -18,7 +18,7 @@ token_budget:
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-05"
+last_updated: "2026-06-06"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -97,7 +97,7 @@ Shopify, Workday, NetSuite), data platforms (9 — Databricks, Datadog, Vault,
 MongoDB Atlas, Grafana), generic & cryptographic (4 — JWT, PEM keys), payments
 (3 — Stripe), and email (3 — SendGrid, Mailgun, Mailchimp). Each pattern carries
 severity, hotwords, a proximity window, and an entropy floor, documented in
-[secure-edge ARCHITECTURE.md](https://github.com/kennguy3n/secure-edge/blob/main/ARCHITECTURE.md)
+[secure-edge ARCHITECTURE.md](https://github.com/namncqualgo/secure-edge/blob/main/ARCHITECTURE.md)
 — Aho-Corasick prefix scan, regex validation, hotword proximity, entropy
 thresholds, and exclusion rules. Counts are derived from the
 `type: secret_pattern` entries; keep them in sync when adding patterns.

@@ -7,7 +7,7 @@
 //
 // Stability: the function signatures here are part of the public API
 // surface. The structs they return live under the existing
-// github.com/kennguy3n/skills-library/internal/skill package and are
+// github.com/namncqualgo/skills-library/internal/skill package and are
 // intentionally re-exported as aliases so a single source of truth defines
 // the schema.
 package skillslib
@@ -17,7 +17,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 var (

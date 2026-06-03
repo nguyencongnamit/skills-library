@@ -3,7 +3,7 @@ package compiler
 import (
 	"strings"
 
-	"github.com/kennguy3n/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/skill"
 )
 
 type claudeFormatter struct{}

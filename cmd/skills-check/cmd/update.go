@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/updater"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/updater"
 )
 
 // DefaultUpdateSource is the canonical update channel. Operators can override
@@ -22,7 +22,7 @@ import (
 // .../releases/latest/download/skills/foo/SKILL.md would 404.
 // Keep this list in sync with the `tar -czf` command in
 // .github/workflows/release.yml.
-const DefaultUpdateSource = "https://github.com/kennguy3n/skills-library/releases/latest/download/skills-library-data.tar.gz"
+const DefaultUpdateSource = "https://github.com/namncqualgo/skills-library/releases/latest/download/skills-library-data.tar.gz"
 
 func updateCmd() *cobra.Command {
 	var (

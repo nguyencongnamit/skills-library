@@ -356,7 +356,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/secret-detection/metadata.json",
-      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
+      "sha256": "6b135ed6525b0b5cf88873d298b3b6116283c9ef225002ab67c5dbe00cee4ccb",
       "size": 910,
       "action": "unchanged"
     },
@@ -692,7 +692,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/secret-detection/metadata.json",
-      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
+      "sha256": "6b135ed6525b0b5cf88873d298b3b6116283c9ef225002ab67c5dbe00cee4ccb",
       "size": 910,
       "action": "unchanged"
     },
@@ -1034,7 +1034,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/secret-detection/metadata.json",
-      "sha256": "d02df839fed1b5f3068e3eb4be3be2f78bd1e9e25faf4ce33bb2517f65a19d06",
+      "sha256": "6b135ed6525b0b5cf88873d298b3b6116283c9ef225002ab67c5dbe00cee4ccb",
       "size": 910,
       "action": "unchanged"
     },
@@ -1730,8 +1730,8 @@
     },
     {
       "path": "skills/secret-detection/SKILL.md",
-      "sha256": "46864f33975a87f185cfbaa18adb7fed44bd160a8b6b3037260d70f62e76b16d",
-      "size": 6464,
+      "sha256": "cf22508bd25e815b7799f749a3686a07a625dda558168e5e87f44dd47b585d01",
+      "size": 6466,
       "action": "unchanged"
     },
     {

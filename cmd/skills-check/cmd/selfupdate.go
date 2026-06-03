@@ -16,13 +16,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 // DefaultSelfUpdateBaseURL is the GitHub Releases "latest" endpoint that
 // hosts the skills-check binaries and the matching per-target SHA-256
 // checksum files.
-const DefaultSelfUpdateBaseURL = "https://github.com/kennguy3n/skills-library/releases/latest/download"
+const DefaultSelfUpdateBaseURL = "https://github.com/namncqualgo/skills-library/releases/latest/download"
 
 func selfUpdateCmd() *cobra.Command {
 	var baseURL string
