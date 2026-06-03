@@ -7,7 +7,6 @@
     "CVE-2023-39137"
   ],
   "summary": "Filename spoofing in archive",
-  "details": "An issue in Archive v3.3.7 allows attackers to spoof zip filenames which can lead to inconsistent filename parsing.",
   "affected": [
     {
       "package": {

@@ -10,7 +10,6 @@
     "CVE-2021-36155"
   ],
   "summary": "Uncontrolled Resource Consumption in LengthPrefixedMessageReader",
-  "details": "### Impact\n\nAffected gRPC Swift clients and servers are vulnerable to uncontrolled resource consumption attacks. Excessive memory may be allocated when parsing messages. This can lead to a denial of service.\n\n### Patches\n\nThe problem has been fixed in 1.2.0.\n\n### Workarounds\n\nNo workaround is available. Users must upgrade.",
   "affected": [
     {
       "package": {

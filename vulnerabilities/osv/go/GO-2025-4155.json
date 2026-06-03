@@ -131,7 +131,6 @@
     "RHSA-2026:9109"
   ],
   "summary": "Excessive resource consumption when printing error string for host certificate validation in crypto/x509",
-  "details": "Within HostnameError.Error(), when constructing an error string, there is no limit to the number of hosts that will be printed out. Furthermore, the error string is constructed by repeated string concatenation, leading to quadratic runtime. Therefore, a certificate provided by a malicious actor can result in excessive resource consumption.",
   "affected": [
     {
       "package": {

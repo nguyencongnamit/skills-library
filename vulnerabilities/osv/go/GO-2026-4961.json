@@ -12,7 +12,6 @@
     "RHSA-2026:8291"
   ],
   "summary": "Panic when decoding large WEBP image on 32-bit platforms in golang.org/x/image",
-  "details": "Parsing a WEBP image with an invalid, large size panics on 32-bit platforms.",
   "affected": [
     {
       "package": {

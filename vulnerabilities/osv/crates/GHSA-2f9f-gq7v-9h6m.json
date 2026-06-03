@@ -8,7 +8,6 @@
     "CVE-2026-43868"
   ],
   "summary": "Apache Thrift has a Memory Allocation with Excessive Size Value Vulnerability",
-  "details": "Memory Allocation with Excessive Size Value vulnerability in Apache Thrift.\n\nThis issue affects Apache Thrift: before 0.23.0.\n\nUsers are recommended to upgrade to version [0.23.0](https://github.com/apache/thrift/releases/tag/v0.23.0), which fixes the issue.",
   "affected": [
     {
       "package": {

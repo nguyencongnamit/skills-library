@@ -10,7 +10,6 @@
     "CVE-2023-44386"
   ],
   "summary": "Vapor's incorrect request error handling triggers server crash",
-  "details": "Vapor incorrectly handles errors encountered during parsing of HTTP 1.x requests, triggering a precondition failure in swift-nio due to API misuse and causing immediate termination of the server process.\n\n### Impact\nThis is a denial of service vulnerability, impacting all users of affected versions of Vapor. Because the crash is an explicit assertion failure, there is no corruption of process state and no risk of data leakage or unauthorized code execution. Total impact is limited to an immediately recoverable service interruption.\n\n### Patches\nThe issue is fixed as of Vapor release 4.84.2.\n\n### Workarounds\nNone known at this time.\n\n### For more information\nIf you have any questions or comments about this advisory:\n* Open an issue in [the Vapor repo](https://github.com/vapor/vapor)\n* Ask in [Vapor Discord](http://vapor.team)\n\n### Acknowledgements\n\nFull credit for reporting this issue goes to @t0rchwo0d, with additional thanks for responsibly disclosing.",
   "affected": [
     {
       "package": {

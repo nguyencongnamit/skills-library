@@ -7,7 +7,6 @@
     "CVE-2022-31005"
   ],
   "summary": "Vapor vulnerable to denial of service in HTTP Range Request of FileMiddleware",
-  "details": "Vapor is an HTTP web framework for Swift and [middleware](https://docs.vapor.codes/advanced/middleware/) is a logic chain between the client and a Vapor route handler. [FileMiddleware](https://docs.vapor.codes/advanced/middleware/#file-middleware) enables the serving of assets from the Public folder of a project to the client. \n\nVapor before 4.60.3 is vulnerable to denial of service due to an integer overflow when given invalid range headers while using FileMiddleware. This is patched in 4.60.3.",
   "affected": [
     {
       "package": {

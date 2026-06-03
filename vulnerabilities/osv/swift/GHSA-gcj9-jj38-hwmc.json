@@ -10,7 +10,6 @@
     "CVE-2021-21328"
   ],
   "summary": "Vapor's Metrics integration could cause a system drain",
-  "details": "### Impact\nThis is a DoS attack against anyone who Bootstraps a metrics backend for their Vapor app with the following attack vector:\n\n1. send unlimited requests against a vapor instance with different paths. this will create \u201cunlimited\u201d counters and timers, which will eventually drain the system.\n2. downstream services might suffer from this attack as well by being spammed with error paths\n\n### Patches\nThis has been patched in 4.40.1. The `DefaultResponder` will rewrite any undefined route paths for to `vapor_route_undefined` to avoid unlimited counters.\n\n### Workarounds\nDon't bootstrap a metrics system or upgrade to 4.40.1\n\n### For more information\nIf you have any questions or comments about this advisory:\n* Open an issue in [Vapor](https://github.com/vapor/vapor)\n* Ask in [Discord](http://vapor.team)",
   "affected": [
     {
       "package": {

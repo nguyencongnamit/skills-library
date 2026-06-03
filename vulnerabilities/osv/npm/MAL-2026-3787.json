@@ -7,7 +7,6 @@
     "GHSA-hgq6-j7x3-3p37"
   ],
   "summary": "Malicious code in frank-at-alibaba-internal (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (afa566980a277ca6c9aa31d0b25d8152ae701ab07731a168fc1562d9fffdd553)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n",
   "affected": [
     {
       "package": {

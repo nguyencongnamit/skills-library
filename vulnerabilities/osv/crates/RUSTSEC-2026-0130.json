@@ -4,7 +4,6 @@
   "published": "2026-05-02T12:00:00Z",
   "modified": "2026-05-13T12:45:08.933263Z",
   "summary": "Out-of-bounds read/write in `Index` and `IndexMut` implementations",
-  "details": "The `Index` and `IndexMut` implementations for `Caja` use unchecked pointer\narithmetic without bounds validation. Creating a `Caja` with a small key and\nthen accessing an out-of-range index causes out-of-bounds reads or writes\nbeyond the allocated memory.\n\nThis can be triggered through safe public APIs \u2014 the `[]` indexing operator\non a `Caja` with an out-of-range index \u2014 with no `unsafe` required from the\ncaller.",
   "affected": [
     {
       "package": {

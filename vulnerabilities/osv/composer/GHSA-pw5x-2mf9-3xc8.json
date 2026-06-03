@@ -7,7 +7,6 @@
     "CVE-2026-42071"
   ],
   "summary": "MantisBT has a Private Bugnote Attachment Content Leak via REST API",
-  "details": "A missing authorization check in MantisBT's file visibility function allows any authenticated user (REPORTER+) to download attachments on private bugnotes they should not be able to access, via the REST API endpoint GET /api/rest/issues/{id}/files and SOAP API mc_issue_attachment_get endpoint.\n\n### Impact\n- REPORTER (access level 25) can view file attachments that were uploaded to private bugnotes by DEVELOPER/MANAGER/ADMIN users\n- Private bugnotes are intended for internal developer discussion; their attachments (logs, screenshots, patches) should be equally protected\n- The web UI is NOT affected \u2014 it filters through bugnote_get_all_visible_bugnotes() first\n\n### Patches\n- 029d9d203d9e4ae96b3e59d552fa7395cc1e5071\n\n### Workarounds\nNone\n\n### Credits\nThanks to the following security researchers for independently discovering and responsibly reporting the issue.\n- Vishal Shukla \n- Tristan Madani (@TristanInSec) from Talence Security \n- Tang Cheuk Hei (@siunam321) \n\nThis advisory's contents was largely copied from Tristan's well-written report.",
   "affected": [
     {
       "package": {

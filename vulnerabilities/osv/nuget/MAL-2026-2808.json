@@ -4,7 +4,6 @@
   "published": "2026-04-16T10:25:01Z",
   "modified": "2026-04-16T15:58:26.957344Z",
   "summary": "Malicious code in wpfuihelpercore (NuGet)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n",
   "affected": [
     {
       "package": {

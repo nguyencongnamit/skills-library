@@ -7,7 +7,6 @@
     "CVE-2025-67202"
   ],
   "summary": "Sidekiq-cron is vulnerable to a cross-site scripting (xss) vulnerability via crafted URL",
-  "details": "Sidekiq-cron thru 2.3.1, an open-source scheduling add-on for Sidekiq, is vulnerable to a cross-site scripting (xss) vulnerability via crafted URL being rended from cron.erb.",
   "affected": [
     {
       "package": {

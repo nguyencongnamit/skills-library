@@ -7,7 +7,6 @@
     "CVE-2026-44657"
   ],
   "summary": "MantisBT Vulnerable to Stored XSS in File Download",
-  "details": "Using *show_inline=1* parameter and a valid *file_show_inline_token* CSRF token on file_download.php, an attacker can execute code by uploading a crafted XHTML attachment referencing a JavaScript attachment.\n\n### Impact\nCross-site scripting\n\n### Patches\n- 26647b2e68ba30b9d7987d4e03d7a16416684bc2\n\n### Workarounds\nNone\n\n### Credits\nThanks to siunam (Tang Cheuk Hei) for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

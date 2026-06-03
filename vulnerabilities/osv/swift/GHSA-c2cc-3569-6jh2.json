@@ -7,7 +7,6 @@
     "CVE-2023-39138"
   ],
   "summary": "Path traversal in ZIPFoundation",
-  "details": "An issue in ZIPFoundation v0.9.16 allows attackers to execute a path traversal via extracting a crafted zip file.",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-40563"
   ],
   "summary": "Apache Atlas has a Code Injection Vulnerability",
-  "details": "### Description:\nImproper Control of Generation of Code ('Code Injection') vulnerability in Apache Atlas.\n\nApache Atlas exposes a DSL search endpoint that accepts user-supplied query strings. Attacker can alter Gremlin traversal logic within grammar-allowed characters to access unintended data.\n\n\n### Affected Version:\nThis issue affects Apache Atlas: from 0.8-incubating through 2.4.0.\n\n\nFor affected versions >= 2.0.0, the vulnerability is only exploitable when Atlas is deployed with below non-default configuration.\n\n\n`atlas.dsl.executor.traversal=false`\n\n\n### Mitigation:\nUsers are recommended to upgrade to version 2.5.0, which fixes the issue.",
   "affected": [
     {
       "package": {

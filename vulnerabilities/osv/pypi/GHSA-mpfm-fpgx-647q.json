@@ -7,7 +7,6 @@
     "CVE-2026-41132"
   ],
   "summary": "CKAN has no certificate validation on STMP connection",
-  "details": "### Impact\nConfigured SMTP server may be spoofed with any certificate (e.g. self-signed), leaving credentials and all emails sent open to MITM attacks.\n\n### Patches\nThe vulnerability has been patched in CKAN 2.10.10 and CKAN 2.11.5",
   "affected": [
     {
       "package": {

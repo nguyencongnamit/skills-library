@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Unbounded memory consumption in golang.org/x/crypto/ssh",
-  "details": "SSH servers parsing GSSAPI authentication requests do not validate the number of mechanisms specified in the request, allowing an attacker to cause unbounded memory consumption.",
   "affected": [
     {
       "package": {

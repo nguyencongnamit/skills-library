@@ -4,7 +4,6 @@
   "published": "2026-03-27T13:26:48Z",
   "modified": "2026-03-27T13:49:54.742299Z",
   "summary": "Malicious code in monolith-twirp-pullsd-pullrequestinfo (RubyGems)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ossf-package-analysis (a6f4e556f55b516ccdd02700729877fa73287ece3920dfc7288d673ed337d5e6)\nThe OpenSSF Package Analysis project identified 'monolith-twirp-pullsd-pullrequestinfo' @ 1.0.1 (rubygems) as malicious.\n\nIt is considered malicious because:\n\n- The package communicates with a domain associated with malicious activity.\n",
   "affected": [
     {
       "package": {

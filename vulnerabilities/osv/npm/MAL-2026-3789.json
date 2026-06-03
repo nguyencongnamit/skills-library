@@ -7,7 +7,6 @@
     "GHSA-vx6x-92w6-f9gc"
   ],
   "summary": "Malicious code in jenkins-forge-app (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (fcdbc3b81513e4ebda8e59950b3d72cddb9b851c345784f26b0eec0acc1ee4b3)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n",
   "affected": [
     {
       "package": {

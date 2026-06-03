@@ -7,7 +7,6 @@
     "CVE-2026-33901"
   ],
   "summary": "ImageMagick has a heap Buffer Overflow in ImageMagick MVG decoder",
-  "details": "A heap buffer overflow occurs in the MVG decoder that could result in an out of bounds write when processing a crafted image.",
   "affected": [
     {
       "package": {

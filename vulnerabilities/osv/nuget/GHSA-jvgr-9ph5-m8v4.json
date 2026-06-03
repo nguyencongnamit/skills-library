@@ -10,7 +10,6 @@
     "CGA-qm9q-c6h5-rcxf"
   ],
   "summary": "ImageMagick has a heap buffer overflow when encoding JXL image with a 16-bit float",
-  "details": "The JXL encoder has an heap write overflow when a user specifies that the image should be encoded as 16 bit floats.",
   "affected": [
     {
       "package": {

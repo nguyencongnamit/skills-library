@@ -7,7 +7,6 @@
     "CVE-2026-34754"
   ],
   "summary": "MantisBT has an Authorization Bypass that Allows Uploading Attachments to Private Issues via REST API",
-  "details": "### Impact\nMantisBT allows an authenticated user to upload attachments to private Issues they are not authorized to access.\n\n### Patches\n- b262b4d2835b81394d75356dead66e52a6275206\n\n### Workarounds\nNone.\n\n### Credits\nThanks to Vishal Shukla for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

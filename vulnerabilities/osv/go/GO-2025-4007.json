@@ -13,7 +13,6 @@
     "RHSA-2026:7385"
   ],
   "summary": "Quadratic complexity when checking name constraints in crypto/x509",
-  "details": "Due to the design of the name constraint checking algorithm, the processing time of some inputs scale non-linearly with respect to the size of the certificate.\n\nThis affects programs which validate arbitrary certificate chains.",
   "affected": [
     {
       "package": {

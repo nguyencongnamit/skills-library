@@ -4,7 +4,6 @@
   "published": "2025-12-23T08:41:05Z",
   "modified": "2026-04-16T16:01:47.920498Z",
   "summary": "Malicious code in queenbee-plugin (RubyGems)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ossf-package-analysis (705c314b786f674b8b06825a6211d1595db25022404041a4d8760b4094e863e1)\nThe OpenSSF Package Analysis project identified 'queenbee-plugin' @ 99.0.7 (rubygems) as malicious.\n\nIt is considered malicious because:\n\n- The package communicates with a domain associated with malicious activity.\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

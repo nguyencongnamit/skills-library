@@ -7,7 +7,6 @@
     "GHSA-g38r-8gmr-ghrf"
   ],
   "summary": "`mysten-metrics` was removed from crates.io for malicious code",
-  "details": "`mysten-metrics` included a build script that attempted to exfiltrate data from\nthe build machine.\n\nThe malicious crate had 1 version published on 2026-04-20 and had no evidence\nof actual usage. This crate had no dependencies on crates.io.",
   "affected": [
     {
       "package": {

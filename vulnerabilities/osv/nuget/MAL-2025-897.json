@@ -4,7 +4,6 @@
   "published": "2025-02-03T17:08:15Z",
   "modified": "2026-03-19T12:49:56.140522Z",
   "summary": "Malicious code in \u0421ityTalk.CommonLibrary (NuGet)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n",
   "affected": [
     {
       "package": {

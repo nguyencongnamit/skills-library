@@ -4,7 +4,6 @@
   "published": "2026-04-14T23:32:22Z",
   "modified": "2026-04-16T15:58:44.207679Z",
   "summary": "ImageMagick has a heap buffer overflow read in magnify operation via unrecognized magnify:method value",
-  "details": "An unrecognized magnify:method will result in an out of bounds read in the magnify operation.\n\n```\n==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x61a000000b30\nREAD of size 4 at 0x61a000000b30 thread T0\n```",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2025-30402"
   ],
   "summary": "ExecuTorch vulnerable to Heap-based Buffer Overflow attack",
-  "details": "A heap-buffer-overflow vulnerability in the loading of ExecuTorch methods can cause the runtime to crash and potentially result in code execution or other undesirable effects. This issue affects ExecuTorch prior to commit 93b1a0c15f7eda49b2bc46b5b4c49557b4e9810f",
   "affected": [
     {
       "package": {

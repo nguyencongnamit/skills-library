@@ -7,7 +7,6 @@
     "CVE-2026-34744"
   ],
   "summary": "MantisBT has an authorization bypass that allows reading attachments after losing access to a private issue",
-  "details": "MantisBT permits a user to list and download their own attachments from an Issue created by another user, even after that Issue becomes private and direct access to it is denied.\n\n### Impact\nThe loss of confidentiality caused by this vulnerability is minimal, considering that only the attachments that were previously uploaded by the user themselves remains accessible.\n\n### Patches\n- de7bdeec36de066235e38a77bf056917d951c84d\n\n### Workarounds\nNone.\n\n### Credits\n\nThanks to Vishal Shukla for discovering and responsibly reporting the issue.",
   "affected": [
     {
       "package": {

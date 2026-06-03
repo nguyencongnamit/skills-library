@@ -6,7 +6,6 @@
   "aliases": [
     "CVE-2026-8495"
   ],
-  "details": "This module enables you to export entity date fields as iCal feeds.\n\nThe module doesn't sufficiently check entity or field access or sanitize user inputs when generating iCal feeds.\n\nThis vulnerability is not mitigated by any permission, the routes are accessible to all anonymous users with no configuration required.",
   "affected": [
     {
       "package": {

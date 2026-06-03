@@ -4,7 +4,6 @@
   "published": "2026-03-27T13:26:58Z",
   "modified": "2026-03-27T13:49:20.274404Z",
   "summary": "Malicious code in monolith-twirp-loops-core (RubyGems)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ossf-package-analysis (8d4a98f58930eb7f736a5c69a6cf5de5b6dd033785255d4d55ae1da5a5866629)\nThe OpenSSF Package Analysis project identified 'monolith-twirp-loops-core' @ 1.0.2 (rubygems) as malicious.\n\nIt is considered malicious because:\n\n- The package communicates with a domain associated with malicious activity.\n",
   "affected": [
     {
       "package": {

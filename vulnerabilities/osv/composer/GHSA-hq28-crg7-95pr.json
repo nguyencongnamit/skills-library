@@ -7,7 +7,6 @@
     "CVE-2026-44832"
   ],
   "summary": "Snipe-IT has Privilege Escalation via API Permissions Assignment",
-  "details": "### Impact\nAn authenticated user with only `users.edit` permission can escalate their own privileges to `admin` by sending a PATCH request to `/api/v1/users/{id}` with `permissions[admin]=1`. The API controller only strips the `superuser` key from the permissions array, allowing `admin` and all other permission keys to be set by any user who can update users.\n\n### Patches\nPatched in https://github.com/grokability/snipe-it/commit/ce18ff669ceb0f0349749fd5d11c1d3d40b10569, fix was released in v8.4.1\n\n### Workarounds\nNone.",
   "affected": [
     {
       "package": {

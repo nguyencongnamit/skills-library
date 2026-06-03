@@ -106,7 +106,6 @@
     "RHSA-2026:9695"
   ],
   "summary": "Incorrect parsing of IPv6 host literals in net/url",
-  "details": "url.Parse insufficiently validated the host/authority component and accepted some invalid URLs.",
   "affected": [
     {
       "package": {

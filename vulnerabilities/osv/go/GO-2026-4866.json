@@ -12,7 +12,6 @@
     "RHSA-2026:7291"
   ],
   "summary": "Case-sensitive excludedSubtrees name constraints cause Auth Bypass in crypto/x509",
-  "details": "When verifying a certificate chain containing excluded DNS constraints, these constraints are not correctly applied to wildcard DNS SANs which use a different case than the constraint.\n\nThis only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
   "affected": [
     {
       "package": {

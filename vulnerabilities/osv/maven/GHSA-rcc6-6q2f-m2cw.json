@@ -7,7 +7,6 @@
     "CVE-2023-42344"
   ],
   "summary": "Alkacon OpenCms allows remote unauthenticated attackers to obtain sensitive information",
-  "details": "Alkacon OpenCms before 10.5.1 allows remote unauthenticated attackers to obtain sensitive information via a cmis-online/query XXE attack on a Chemistry servlet.",
   "affected": [
     {
       "package": {

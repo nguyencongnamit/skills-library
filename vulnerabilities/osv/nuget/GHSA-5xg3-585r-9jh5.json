@@ -10,7 +10,6 @@
     "CGA-5qc9-c28f-q7qp"
   ],
   "summary": "ImageMagick has an off-by-one error in MSL decoder could result in crash",
-  "details": "An off by one error in de MSL decoder could result in a crash when a malicous msl file is read.",
   "affected": [
     {
       "package": {

@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:34Z",
   "modified": "2026-05-15T07:52:27.858776Z",
   "summary": "Malicious code in @webapp-next/store (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (cbad3803cdda40845fe2aa64e0963b9293f9ee523b3f9205a354da2ae1e317bf)\npackage.json declares \"preinstall\": \"node index.js\", which runs automatically on npm install. index.js collects os.hostname(), os.platform(), os.arch(), os.homedir(), os.userInfo() (username, uid, gid, shell), OS release/memory/CPU info, process.cwd(), and the output of shell commands `whoami` and `id`, then POSTs the aggregated JSON to https://oia2jeijtfmt053ynp686t5riioac00p.oastify.com/testbydext. The destination is a Burp Suite Collaborator out-of-band interaction subdomain controlled by the attacker. The package has no legitimate functionality \u2014 index.js contains only the exfiltration payload, and package.json carries empty author/description fields under a scope (@webapp-next) that resembles a legitimate namespace, consistent with a dependency-confusion lure.\n",
   "affected": [
     {
       "package": {

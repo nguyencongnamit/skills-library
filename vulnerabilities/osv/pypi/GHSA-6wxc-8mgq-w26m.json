@@ -7,7 +7,6 @@
     "CVE-2026-45106"
   ],
   "summary": "Weblate: Stored HTML injection in editor search preview",
-  "details": "### Impact\nWeblate's live search preview renders unit `source` and `context` as HTML without escaping. Any contributor whose content reaches those fields stores HTML and CSS that runs inside the authenticated editor of every user who runs a matching search.\n\n### Patches\n* https://github.com/WeblateOrg/weblate/pull/19422\n\n### Workarounds\nOnly the search preview on the selected views is affected.\n\n### Resources\nWeblate thanks @adrgs for reporting this issue responsibly via GitHub.",
   "affected": [
     {
       "package": {

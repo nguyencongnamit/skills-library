@@ -4,7 +4,6 @@
   "published": "2026-05-13T15:33:46Z",
   "modified": "2026-05-13T15:48:54.485140Z",
   "summary": "Anchor: `InterfaceAccount` allows account substitution between unexpected types",
-  "details": "### Impact\nAny uses of `InterfaceAccount` allows another unexpected account type to be passed, after https://github.com/solana-foundation/anchor/pull/3837 disabled discriminator checking for this type.\n\nThe bug was originally reported and fixed in https://github.com/solana-foundation/anchor/pull/4139, see that PR for more details.\n\n### Patches\nhttps://github.com/solana-foundation/anchor/pull/4139 patched the issue and was released in `1.0.0-rc.2`. Users should upgrade to the latest released version of Anchor 1.0.\n\n### References\nBug landed in: https://github.com/solana-foundation/anchor/pull/3837\nBug fixed in: https://github.com/solana-foundation/anchor/pull/4139",
   "affected": [
     {
       "package": {

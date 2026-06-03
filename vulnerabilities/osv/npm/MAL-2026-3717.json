@@ -4,7 +4,6 @@
   "published": "2026-05-13T12:10:40Z",
   "modified": "2026-05-15T07:51:34.946644Z",
   "summary": "Malicious code in truffle-js (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (52bd5b41de871fbbc8c5895f63dfec08ba2ff6ecb9ea03fa6fdb5d9245c74616)\nThe package.json lifecycle script invokes require('child_process').execSync with a curl command at install time. Running curl through child_process during an npm install lifecycle hook causes any installer to execute remote content fetched over the network, without consent, as soon as `npm install` runs. The package name also resembles the widely-used 'truffle' Ethereum development toolkit, consistent with a typosquat lure. There is no legitimate reason for a small utility package to shell out to curl from its package.json install hook.\n\n## Source: ossf-package-analysis (c190460255cf713f1797bacece635079c6d3db6a45a58199af29ab1acc9faa2f)\nThe OpenSSF Package Analysis project identified 'truffle-js' @ 2.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {

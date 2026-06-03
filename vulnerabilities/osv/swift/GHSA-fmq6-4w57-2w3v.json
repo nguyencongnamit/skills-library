@@ -7,7 +7,6 @@
     "CVE-2024-27529"
   ],
   "summary": "wasm3 uncontrolled memory allocation vulnerability",
-  "details": "wasm3 at commit 139076a contains a memory leak in the Read_utf8 function.",
   "affected": [
     {
       "package": {

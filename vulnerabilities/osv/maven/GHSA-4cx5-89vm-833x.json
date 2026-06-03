@@ -7,7 +7,6 @@
     "CVE-2024-52800"
   ],
   "summary": "veraPDF CLI has potential XXE (XML External Entity Injection) vulnerability",
-  "details": "### Impact\nExecuting policy checks using custom schematron files via the CLI invokes an XSL transformation that may theoretically lead to a remote code execution (RCE) vulnerability.\n\n### Patches\nWe are currently working on a patch that will be released when ready.\n\n### Workarounds\nThis doesn't affect the standard validation and policy checks functionality, veraPDF's common use cases. Most veraPDF users don't insert any custom XSLT code into policy profiles, which are based on Schematron syntax rather than direct XSL transforms. For users who do, only load custom policy files from sources you trust.\n\n### References\nOriginal issue: #1488",
   "affected": [
     {
       "package": {

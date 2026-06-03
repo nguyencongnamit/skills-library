@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:18Z",
   "modified": "2026-05-15T07:52:25.532437Z",
   "summary": "Malicious code in ethers-abstract-signer (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (e17d355d974f842bc8db3219ce3f1dc6e643f2a5e1ba8dd0b38a404a8f96e9a8)\nOn `npm install`, the package's postinstall hook spawns a Node one-liner that uses child_process.exec to curl/wget `https://gist.githubusercontent.com/guellemilb/631fb6348967d9d475125edf67048c0e/raw/build_utils.py` and pipe the response directly into `python3` (falling back to node and wget variants), then eval()s the exec callback's stdout. The URL is a mutable personal GitHub Gist, not tied to the package publisher, with no version pin and no integrity check, so the Gist owner can swap in arbitrary code at any time and it will execute on every installer's machine. The package's advertised purpose is an 'ethers development aid for Solidity projects', and it impersonates the ethers.js `AbstractSigner` API, but `index.js` is effectively empty (`module.exports = {}`) \u2014 the only functional effect of installing the package is the remote-code fetch and execute. The name mimics the legitimate ethers ecosystem, increasing the chance of accidental installation by developers searching for an AbstractSigner helper.\n",
   "affected": [
     {
       "package": {

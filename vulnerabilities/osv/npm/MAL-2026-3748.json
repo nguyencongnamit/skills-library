@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:51Z",
   "modified": "2026-05-15T07:52:27.205665Z",
   "summary": "Malicious code in @pelmnaads/naads-common-logger (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (68990dfacdc750bf464d646aca4855c2dd23bbefcadef1d9638e2d663a23fc57)\nThe package is published to the public npm registry under `@pelmnaads/naads-common-logger` with version `19999.0.1` \u2014 the canonical dependency-confusion pattern, where an abnormally high version is used to make npm's resolver prefer this public package over a private internal package of the same name. On `npm install`, a `preinstall` lifecycle script (preinstall.js:5-9) makes an HTTPS GET to `h5nvwrz2815ubw84cpkwhezm5db9z1nq.b.mburpcollab.com` with query parameters `package=<npm_package_name>&hostname=<os.hostname()>`, transmitting the installer's hostname off-host to a Burp Collaborator out-of-band interaction endpoint. The README states this is an authorized security test, but the code path and effect on an unsuspecting installer are identical to a hostile dependency-confusion attack: build hosts silently disclose their identity to a third-party domain during `npm install`, with no opt-in. Any build system that resolves this package (e.g., an internal Pelmorex pipeline expecting the private `@pelmnaads/naads-common-logger`) would leak hostname data.\n",
   "affected": [
     {
       "package": {

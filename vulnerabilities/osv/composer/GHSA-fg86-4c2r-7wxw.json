@@ -7,7 +7,6 @@
     "CVE-2024-40624"
   ],
   "summary": "TorrentPier Deserialization of Untrusted Data vulnerability",
-  "details": "### Summary\n\nIn `torrentpier/library/includes/functions.php`, `get_tracks()` uses the unsafe native PHP serialization format to deserialize user-controlled cookies:\n\nhttps://github.com/torrentpier/torrentpier/blob/84f6c9f4a081d9ffff4c233098758280304bf50f/library/includes/functions.php#L41-L60\n\n### PoC\n\nOne can use [`phpggc`](https://github.com/ambionics/phpggc/) and the chain `Guzzle/FW1` to write PHP code to an arbitrary file, and execute commands on the system. For instance, the cookie `bb_t` will be deserialized when browsing to `viewforum.php`.",
   "affected": [
     {
       "package": {

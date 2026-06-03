@@ -7,7 +7,6 @@
     "GHSA-46mf-fcf5-frhf"
   ],
   "summary": "Malicious code in dowload_ebok_terra_incognita_urania_by_ian_mcdonald_um4vu (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (683af0fad5c14c0dec17aa1fb237a2e10f9fd7ff8be5928b7f3b071ea0404712)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n",
   "affected": [
     {
       "package": {

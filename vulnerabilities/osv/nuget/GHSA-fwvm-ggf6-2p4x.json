@@ -7,7 +7,6 @@
     "CVE-2026-33908"
   ],
   "summary": "ImageMagick has a Stack Overflow in DestroyXMLTree()",
-  "details": "Magick frees the memory of the XML tree via the `DestroyXMLTree` function; however, this process is executed recursively with no depth limit imposed. When magick processes an XML file with deeply nested structures, it will exhaust the stack memory, resulting in a Denial of Service (DoS) attack.",
   "affected": [
     {
       "package": {

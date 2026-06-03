@@ -10,7 +10,6 @@
     "CGA-wh6f-hv3m-v474"
   ],
   "summary": "Jenkins Script Security Plugin: Missing permission checks allow enumeration of pending and approved classpaths ",
-  "details": "Jenkins Script Security Plugin versions 1399.ve6a_66547f6e1 and earlier do not perform a permission check in an HTTP endpoint.\n\nThis allows attackers with Overall/Read permission to enumerate pending and approved Script Security classpaths.\n\nScript Security Plugin 1402.v94c9ce464861 requires Overall/Administer permission to enumerate pending and approved Script Security classpaths.",
   "affected": [
     {
       "package": {

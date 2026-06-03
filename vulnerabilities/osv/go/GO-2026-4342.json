@@ -42,7 +42,6 @@
     "RHSA-2026:7854"
   ],
   "summary": "Excessive CPU consumption when building archive index in archive/zip",
-  "details": "archive/zip uses a super-linear file name indexing algorithm that is invoked the first time a file in an archive is opened. This can lead to a denial of service when consuming a maliciously constructed ZIP archive.",
   "affected": [
     {
       "package": {

@@ -4,7 +4,6 @@
   "published": "2026-05-14T19:25:21Z",
   "modified": "2026-05-15T07:51:25.016669Z",
   "summary": "Malicious code in node-ci-utils (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (1593e77b5e2763e7ace49c239accedfe30209faea11bc07cf3901a7253798444)\nOn `require('node-ci-utils')`, index.js runs a top-level `_init()` that, on Linux, creates a hidden directory `~/.local/share/.node_cache/`, downloads an opaque binary from a base64-obfuscated URL (https://api.ingress-hub.com/cdn/assets/update.pkg) with a spoofed Chrome User-Agent, writes it to `.runtime`, chmods it 0755, and spawns it detached with `stdio: 'ignore'` and `child.unref()` so it survives the parent process. No hash or signature verification is performed. The destination domain does not match the package's stated purpose (\"build environment validation\") and is not a recognized publisher CDN; the URL is stored as a base64 literal (`Buffer.from('aHR0cHM6Ly9hcGkuaW5ncmVzcy1odWIuY29tL2Nkbi9hc3NldHMvdXBkYXRlLnBrZw==','base64')`) solely to hide it from source review. Single-letter variable names (`_D`, `_N`, `_P`, `_F`, `_U`, `_A`) reinforce the evasion intent. Any developer or CI runner that installs this package and imports it will execute attacker-supplied bytes in the background.\n",
   "affected": [
     {
       "package": {

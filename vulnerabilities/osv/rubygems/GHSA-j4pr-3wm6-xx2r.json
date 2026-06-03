@@ -10,7 +10,6 @@
     "CGA-h9qq-gc53-r23m"
   ],
   "summary": "URI Credential Leakage Bypass over CVE-2025-27221",
-  "details": "### Impact\n\nIn affected URI version, a bypass exists for the fix to CVE-2025-27221 that can expose user credentials.\n\nWhen using the `+` operator to combine URIs, sensitive information like passwords from the original URI can be leaked, violating RFC3986 and making applications vulnerable to credential exposure.\n\nThe vulnerability affects the `uri` gem bundled with the following Ruby series:\n\n* 0.12.4 and earlier (bundled in Ruby 3.2 series)\n* 0.13.2 and earlier (bundled in Ruby 3.3 series)\n* 1.0.3 and earlier (bundled in Ruby 3.4 series)\n\n### Patches\n\nUpgrade to 0.12.5, 0.13.3 or 1.0.4\n\n### References\n\n* https://www.ruby-lang.org/en/news/2025/02/26/security-advisories/\n* https://hackerone.com/reports/2957667",
   "affected": [
     {
       "package": {

@@ -7,7 +7,6 @@
     "CVE-2026-44511"
   ],
   "summary": "katalyst-koi: Session cookies can be replayed after user logout",
-  "details": "### Impact\n\nAdmin session cookies were not invalidated when an admin user logged out. An attacker with access to a valid admin session cookie could continue to access admin functionality after logout, until the cookie expired or session secrets were rotated.\n\nThis affects applications using Koi admin authentication where an admin session cookie may have been exposed, cached, intercepted, or otherwise retained after logout.\n\n### Patches\n\nThe issue has been patched by recording admin logout time and rejecting any admin session cookie created before the user\u2019s most recent logout.\n\nUsers should upgrade to the patched Koi releases once available.\n\n### Workarounds\n\nKatalyst Koi recommends upgrading to the latest available version, or back porting the changes released in 5.6.0/4.20.0\n\n### Resources\n\nThis is an application of https://guides.rubyonrails.org/v5.2.0/security.html#replay-attacks-for-cookiestore-sessions",
   "affected": [
     {
       "package": {

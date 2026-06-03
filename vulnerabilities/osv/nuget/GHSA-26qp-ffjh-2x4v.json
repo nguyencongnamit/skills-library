@@ -7,7 +7,6 @@
     "CVE-2026-34238"
   ],
   "summary": "ImageMagick has an integer overflow in despeckle operation causing a heap buffer overflow on 32-bit builds",
-  "details": "An integer overflow in the despeckle operation causes a heap buffer overflow on 32-bit builds that will result in an out of bounds write.\n\n```\n==1551685==ERROR: AddressSanitizer: heap-buffer-overflow on address 0xea2fb818 at pc 0x56cbc42a bp 0xffc4ce48 sp 0xffc4ce38\nWRITE of size 8 at 0xea2fb818 thread T0\n```",
   "affected": [
     {
       "package": {

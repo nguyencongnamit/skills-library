@@ -4,7 +4,6 @@
   "published": "2026-04-14T23:31:52Z",
   "modified": "2026-04-16T15:39:40.531187Z",
   "summary": "ImageMagick has has a stack-buffer-overflow in MNG encoder with oversized pallete",
-  "details": "The patch for GHSA-7h7q-j33q-hvpf was incomplete and still allows a stack buffer overflow for the multi frame images.",
   "affected": [
     {
       "package": {

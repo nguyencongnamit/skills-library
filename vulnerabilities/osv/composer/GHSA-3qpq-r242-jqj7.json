@@ -7,7 +7,6 @@
     "CVE-2026-44167"
   ],
   "summary": "phpseclib has a CVE-2024-27355 mitigation bypass \u2014 OID amplification DoS in ASN1::decodeOID()",
-  "details": "### Impact\nAnyone loading untrusted ASN1 files (eg. X509 certificates, RSA PKCS8 private or public keys, etc)\n\n### Patches\nhttps://github.com/phpseclib/phpseclib/commit/d53d2021bcb9f6a04d5d44ec99e6bbef219a71bc\n\n### Workarounds\nNo.\n\n### References\nhttps://github.com/phpseclib/phpseclib/commit/d53d2021bcb9f6a04d5d44ec99e6bbef219a71bc",
   "affected": [
     {
       "package": {

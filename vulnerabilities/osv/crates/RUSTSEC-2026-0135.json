@@ -4,7 +4,6 @@
   "published": "2026-04-24T12:00:00Z",
   "modified": "2026-05-13T14:30:09.174119Z",
   "summary": "Unsound transmute while debug/display printing batch Insert statements in Diesel's SQLite backend",
-  "details": "Diesel allows users to output the generated SQL for any query DSL construct via th `diesel::debug_query` function as `Display` and `Debug` output.\n\nFor the particular implementation used by batch Insert statements in the SQLite backend Diesel relied on an unspecified transmute between types with a `#[repr(rust)]` layout. This is formally undefined behaviour as the compiler is free to change the layout of these types at any time. \n\nThis vulnerability affects users that print out batch insert statements constructed using an array/vector of values without default values using `diesel::debug_query` on the SQLite backend.\n\n## Mitigation\n\nThe preferred mitigation to the outlined problem is to update to Diesel version 2.3.8 or newer, which includes fixes for the problem.\n\n## Resolution\n\nDiesel now uses a sound cast instead.",
   "affected": [
     {
       "package": {

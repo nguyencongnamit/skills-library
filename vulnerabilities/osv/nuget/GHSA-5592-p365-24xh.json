@@ -10,7 +10,6 @@
     "CGA-j93x-vqv7-7hvh"
   ],
   "summary": "ImageMagick has a heap buffer overflow (WRITE) in the YAML and JSON encoders.",
-  "details": "A crafted image could result in an out of bounds heap write when writing a yaml or json output and that could result in a crash.",
   "affected": [
     {
       "package": {

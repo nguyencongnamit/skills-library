@@ -4,7 +4,6 @@
   "published": "2025-11-09T00:17:09Z",
   "modified": "2026-05-15T07:47:44.083816Z",
   "summary": "Malicious code in frontend-vue-next (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (5ecba1e4c2f32734e178b8a3697ed962053354867af75787af708f92f0da2474)\npackage.json declares \"preinstall\": \"node index.js\", causing index.js to execute automatically on npm install. The script collects system identity (os.hostname(), os.userInfo() including username/uid/gid/shell, platform, arch, home directory, cwd, cpu/memory info) and executes shell commands `whoami` and `id` via child_process, then POSTs the aggregated JSON to a hardcoded URL https://7z7l0xz2ay3chokh48nrncmaz15stih7.oastify.com/testbydext. The destination is a Burp Suite Collaborator out-of-band subdomain \u2014 a throwaway, attacker-controlled listener used to capture exfiltrated data. The package metadata is empty (no author, no description, no repository), and the name rides on the Vue/Next.js namespace as a lure. Installing this package on a developer machine or CI runner leaks host and user identity to the attacker without consent.\n",
   "affected": [
     {
       "package": {

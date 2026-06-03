@@ -7,7 +7,6 @@
     "CVE-2026-31853"
   ],
   "summary": "ImageMagick is vulnerable to heap buffer over-write on 32-bit systems in SFW decoder",
-  "details": "An overflow on  32-bit systems can cause a crash in the SFW decoder when processing extremely large images.",
   "affected": [
     {
       "package": {

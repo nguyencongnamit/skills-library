@@ -6,7 +6,6 @@
   "aliases": [
     "CVE-2026-8491"
   ],
-  "details": "Node view permissions module enables permissions \"View own content\" and \"View any content\" for each content type on permissions page  \nThe module doesn't sufficiently handle the case where a user is cancelled and their content is reassigned to the anonymous user.  \nThis vulnerability is mitigated by the fact that only private contents where anonymous should not have view access are affected, and only if a node was reassigned to the anonymous user.",
   "affected": [
     {
       "package": {

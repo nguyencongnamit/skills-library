@@ -10,7 +10,6 @@
     "CGA-wgw2-47j5-xgfw"
   ],
   "summary": "Quarkus has Authentication/Authorization bypasses",
-  "details": "Quarkus version 3.32.4 is vulnerable to an authorization bypass issue (GHSL-2026-099), in which semicolons (matrix parameters) in HTTP requests can be used to bypass security constraints, potentially allowing unauthorized access to protected resources.\n\nUnauthenticated or lower-privileged users can bypass HTTP path-based authorization policies by appending a semicolon (`;`) and arbitrary text to the request URL. The vulnerability arises from a path-normalization inconsistency: Quarkus's [security layer](https://quarkus.io/guides/security-authorize-web-endpoints-reference) performs authorization checks on the raw URL path (which preserves matrix parameters), whereas RESTEasy Reactive's routing layer strips matrix parameters before matching endpoints. This allows requests like `/api/admin;anything` to bypass policies protecting `/api/admin` while still routing to the protected endpoint.\n\n\n### Impact\n\nThis issue may lead to Authentication/Authorization bypasses.\n\n### Credits\n\nThis issue was discovered with the [GitHub Security Lab Taskflow Agent](https://github.com/GitHubSecurityLab/seclab-taskflow-agent) and manually verified by GHSL team members [@p- (Peter St\u00f6ckli)](https://github.com/p-) and [@m-y-mo (Man Yue Mo)](https://github.com/m-y-mo).",
   "affected": [
     {
       "package": {

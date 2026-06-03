@@ -7,7 +7,6 @@
     "GHSA-26wq-8rv4-pr98"
   ],
   "summary": "Malicious code in dowload_ebok_como_leer_el_futbol_by_ruud_gullit_8qd97 (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (67d1b0594ae0e7b49c98e8f7c54a136ef965de85faac65756608af8bf2304c14)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n",
   "affected": [
     {
       "package": {

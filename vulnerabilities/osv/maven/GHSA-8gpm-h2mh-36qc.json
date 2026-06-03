@@ -7,7 +7,6 @@
     "CVE-2026-7411"
   ],
   "summary": "Eclipse BaSyx Java Server SDK vulnerable to Path Traversal",
-  "details": "In Eclipse BaSyx Java Server SDK versions prior to 2.0.0-milestone-10, inadequate path normalization in the Submodel HTTP API allows an unauthenticated remote attacker to perform a path traversal attack. By supplying a maliciously crafted fileName parameter during a file upload operation, an attacker can bypass intended storage boundaries and write arbitrary files to any location on the host filesystem accessible by the Java process. This can lead to Remote Code Execution (RCE) and complete system compromise.",
   "affected": [
     {
       "package": {

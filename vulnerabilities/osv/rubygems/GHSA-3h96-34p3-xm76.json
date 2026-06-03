@@ -4,7 +4,6 @@
   "published": "2026-05-05T21:51:15Z",
   "modified": "2026-05-05T22:09:47.011849Z",
   "summary": "GraphQL-Ruby's Ruby lexer does not count comment tokens for the purposes of max_query_string_tokens",
-  "details": "GraphQL-Ruby's `max_query_string_tokens` configuration didn't count comment tokens against the limit, allowing strings to be processed even after the configured maximum had actually been reached. \n\nIn patched versions, the Ruby lexer does count these tokens. \n\nGraphQL-CParser is not affected by this problem. \n\n`max_query_string_tokens` was introduced in v2.3.1. Each 2.x version has received a new patch release for including a fix.",
   "affected": [
     {
       "package": {

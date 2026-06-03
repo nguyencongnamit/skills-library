@@ -7,7 +7,6 @@
     "CVE-2026-41901"
   ],
   "summary": "Sandboxed Thymeleaf expressions vulnerable to improper recognition of unauthorized syntax patterns",
-  "details": "### Impact\n\nA security bypass vulnerability exists in the expression execution mechanisms of Thymeleaf up to and including 3.1.4.RELEASE. Although the library provides mechanisms to avoid the execution of potentially dangerous expressions in some specific sandboxed (restricted) contexts, it fails to properly neutralize specific constructs that allow this kind of expressions to be executed. If an application developer passes to the template engine unsanitized variables that contain such expressions, and these values are used in sandboxed contexts inside the templates, these expressions can be executed achieving Server-Side Template Injection (SSTI).\n\n### Patches\n\nThis has been fixed in Thymeleaf 3.1.5.RELEASE. All users are advised to upgrade immediately.\n\n### Workarounds\n\nNo workaround is available beyond ensuring applications do not pass unvalidated/unsanitized data directly to the template engine. Upgrading to 3.1.5.RELEASE is strongly recommended in any case.",
   "affected": [
     {
       "package": {

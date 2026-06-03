@@ -7,7 +7,6 @@
     "CVE-2026-33905"
   ],
   "summary": "ImageMagick has an out-of-bounds read in sample operation",
-  "details": "The -sample operation has an out of bounds read when an specific offset is set through the `sample:offset` define that could lead to an out of bounds read.",
   "affected": [
     {
       "package": {

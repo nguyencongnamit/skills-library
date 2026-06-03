@@ -7,7 +7,6 @@
     "GHSA-fqqh-jjx6-5vcg"
   ],
   "summary": "Malicious code in apple-security-internal-scanner-v3 (npm)",
-  "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: amazon-inspector (6088746661229cdf51da875e15d5ba99c4ebee26f205b968e5aa52015a80cfad)\nThe package apple-security-internal-scanner-v3 was found to contain malicious code.\n\n## Source: ghsa-malware (2726e7776f506696fb512788536442906d9b7348bfebf01de10af88096c42fe1)\nAny computer that has this package installed or running should be considered fully compromised. All secrets and keys stored on that computer should be rotated immediately from a different computer. The package should be removed, but as full control of the computer may have been given to an outside entity, there is no guarantee that removing the package will remove all malicious software resulting from installing it.\n\n## Source: ossf-package-analysis (737d706aa0ea58f3adf22752a514da4fd2017d12699d131cafd76bc1d5ccb72f)\nThe OpenSSF Package Analysis project identified 'apple-security-internal-scanner-v3' @ 1.0.0 (npm) as malicious.\n\nIt is considered malicious because:\n\n- The package executes one or more commands associated with malicious behavior.\n",
   "affected": [
     {
       "package": {
