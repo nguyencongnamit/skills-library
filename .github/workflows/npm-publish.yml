@@ -104,7 +104,13 @@ jobs:
       - name: Smoke-test (build host pkg + initialize handshake)
         run: node npm/smoke-test.mjs
 
-      - name: Publish to npm (platform packages first, then main)
+      - name: Assemble skill package
+        run: node npm/build-skill.mjs --root . --version "${{ steps.ver.outputs.version }}" --out npm/dist-skill
+
+      - name: Smoke-test skill (init + connect-mcp)
+        run: node npm/smoke-test-skill.mjs
+
+      - name: Publish to npm (platform packages first, then main, then skill)
         if: ${{ env.HAS_NPM_TOKEN == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -119,6 +125,10 @@ jobs:
           done
           echo "publishing secure-code-mcp (main)"
           npm publish npm/dist/secure-code-mcp --access public
+          # The skill package is independent (no binaries) and references the
+          # MCP package by name; publish it last.
+          echo "publishing secure-code-skill"
+          npm publish npm/dist-skill/secure-code-skill --access public
 
       - name: Token not configured (no-op)
         if: ${{ env.HAS_NPM_TOKEN != 'true' }}
