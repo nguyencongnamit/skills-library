@@ -5,9 +5,13 @@ name: npm publish
 #   @namncqualgo/secure-code-mcp-<os>-<arch>  x5      (per-platform binaries)
 #
 # The binaries are rebuilt from the tagged source in this run (not downloaded
-# from the GitHub release), so npm provenance attests them against this exact
-# commit. The platform packages are published BEFORE the main package because
-# the main package lists them as optionalDependencies.
+# from the GitHub release). The platform packages are published BEFORE the main
+# package because the main package lists them as optionalDependencies.
+#
+# Note: --provenance is NOT used because npm provenance requires a PUBLIC source
+# repository (npm rejects private repos with E422). This repo is private, so we
+# publish without the sigstore attestation. If the repo is ever made public,
+# re-add `--provenance` to the publish commands and `id-token: write` below.
 #
 # Manual by design (matches the repo's deliberate draft -> sign -> publish
 # release flow); also runs when a GitHub release is published. Both paths
@@ -25,7 +29,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # required for `npm publish --provenance` (OIDC)
+  # id-token: write  # only needed for `npm publish --provenance` (public repos)
 
 jobs:
   publish:
@@ -111,10 +115,10 @@ jobs:
           # them as optionalDependencies) so a first install resolves cleanly.
           for d in npm/dist/secure-code-mcp-*/; do
             echo "publishing $(basename "$d")"
-            npm publish "$d" --provenance --access public
+            npm publish "$d" --access public
           done
           echo "publishing secure-code-mcp (main)"
-          npm publish npm/dist/secure-code-mcp --provenance --access public
+          npm publish npm/dist/secure-code-mcp --access public
 
       - name: Token not configured (no-op)
         if: ${{ env.HAS_NPM_TOKEN != 'true' }}
