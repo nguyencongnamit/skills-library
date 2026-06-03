@@ -3,23 +3,38 @@
 
 // CLI for @namncqualgo/secure-code-skill — a tiny, binary-free installer:
 //
-//   secure-code-skill init [dir]              install the secure-code skills into
-//                                             <dir>/.claude/skills (default: cwd)
-//   secure-code-skill connect-mcp [--user]    register the secure-code MCP server
-//                                             with Claude Code (claude mcp add)
+//   secure-code-skill init [dir] [--tool <name>]
+//        install the secure-code skills into <dir> for the chosen IDE
+//        (default --tool claude). See TOOLS below for the full list.
+//   secure-code-skill connect-mcp [--user]
+//        register the secure-code MCP server with Claude Code (claude mcp add)
 //   secure-code-skill connect-mcp <name> -- <cmd> [args...]
-//                                             register ANY MCP server by name
+//        register ANY MCP server by name
 //
 // The skills are self-contained knowledge (no MCP required); connecting an MCP
-// adds active scanning. This package ships only the skill files — the MCP
-// engine lives in @namncqualgo/secure-code-mcp and is fetched by npx on demand.
+// adds active scanning. This package ships only skill files — the MCP engine
+// lives in @namncqualgo/secure-code-mcp and is fetched by npx on demand.
 
 const path = require('node:path');
 const fs = require('node:fs');
 const { spawnSync } = require('node:child_process');
 
 const MCP_PKG = '@namncqualgo/secure-code-mcp';
+const PKG = '@namncqualgo/secure-code-skill';
 const DEFAULT_MCP_NAME = 'secure-code';
+
+// Each tool's installed path (relative to the project) + whether it gets the
+// context-scoped (progressive-disclosure) format or a single always-on file.
+// The asset tree under assets/<tool>/ already mirrors these paths.
+const TOOLS = {
+  claude: { dest: '.claude/skills/', scoped: true, label: 'Claude Code (native skills)' },
+  cursor: { dest: '.cursor/rules/', scoped: true, label: 'Cursor (scoped rules)' },
+  copilot: { dest: '.github/instructions/', scoped: true, label: 'GitHub Copilot / VS Code (scoped instructions)' },
+  windsurf: { dest: '.windsurf/rules/', scoped: true, label: 'Windsurf (scoped rules)' },
+  cline: { dest: '.clinerules', scoped: false, label: 'Cline (single rules file)' },
+  codex: { dest: 'AGENTS.md', scoped: false, label: 'Codex / AGENTS.md (single file)' },
+  universal: { dest: 'SECURITY-SKILLS.md', scoped: false, label: 'universal (single file, any tool)' },
+};
 
 const argv = process.argv.slice(2);
 const sub = argv[0];
@@ -35,38 +50,49 @@ if (sub === 'init') {
 
 // ----------------------------------------------------------------------------
 
-// initSkills copies the bundled native skills into <dir>/.claude/skills/<id>/SKILL.md.
+// initSkills copies assets/<tool>/ (which mirrors the project layout) into the
+// target dir.
 function initSkills(args) {
-  const targetDir = args[0] ? path.resolve(args[0]) : process.cwd();
-  const srcDir = path.join(__dirname, '..', 'skills-native');
-  if (!fs.existsSync(srcDir)) {
-    process.stderr.write(`secure-code-skill: skills bundle missing from the package (${srcDir}).\n`);
+  let tool = 'claude';
+  const positional = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--tool') tool = args[++i];
+    else if (args[i].startsWith('--tool=')) tool = args[i].slice('--tool='.length);
+    else positional.push(args[i]);
+  }
+
+  const meta = TOOLS[tool];
+  if (!meta) {
+    process.stderr.write(
+      `secure-code-skill: unknown --tool "${tool}".\n` +
+        `Valid tools: ${Object.keys(TOOLS).join(', ')}\n`
+    );
     process.exit(1);
   }
-  const destRoot = path.join(targetDir, '.claude', 'skills');
-  fs.mkdirSync(destRoot, { recursive: true });
 
-  let n = 0;
-  for (const id of fs.readdirSync(srcDir)) {
-    const srcSkill = path.join(srcDir, id, 'SKILL.md');
-    if (!fs.existsSync(srcSkill)) continue;
-    const destDir = path.join(destRoot, id);
-    fs.mkdirSync(destDir, { recursive: true });
-    fs.copyFileSync(srcSkill, path.join(destDir, 'SKILL.md'));
-    n++;
+  const targetDir = positional[0] ? path.resolve(positional[0]) : process.cwd();
+  const assetDir = path.join(__dirname, '..', 'assets', tool);
+  if (!fs.existsSync(assetDir)) {
+    process.stderr.write(`secure-code-skill: assets for "${tool}" missing from the package (${assetDir}).\n`);
+    process.exit(1);
   }
 
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.cpSync(assetDir, targetDir, { recursive: true, force: true });
+
+  const where = path.join(targetDir, meta.dest);
   process.stdout.write(
-    `Installed ${n} secure-code skills into ${destRoot}\n` +
-      `Claude Code will use them automatically in this project — no MCP required.\n\n` +
-      `For active scanning (secrets, deps, Dockerfile, …), connect the MCP engine:\n` +
-      `  npx ${pkgName()} connect-mcp\n`
+    `Installed secure-code skills for ${meta.label}\n` +
+      `  -> ${where}\n` +
+      (meta.scoped
+        ? `  context-scoped: only the rule relevant to the files in play loads (token-efficient).\n`
+        : `  single always-on rules file (this tool has no per-rule scoping).\n`) +
+      `\nFor active scanning (secrets, deps, Dockerfile, …), connect the MCP engine:\n` +
+      `  npx ${PKG} connect-mcp\n`
   );
 }
 
 // connectMcp registers an MCP server with Claude Code via `claude mcp add`.
-// With no args it wires up the secure-code MCP; otherwise it registers any
-// server given as `<name> -- <cmd> [args...]`.
 function connectMcp(args) {
   const userScope = args.includes('--user');
   const rest = args.filter((a) => a !== '--user');
@@ -82,8 +108,8 @@ function connectMcp(args) {
   } else {
     process.stderr.write(
       `secure-code-skill: invalid connect-mcp usage.\n` +
-        `  npx ${pkgName()} connect-mcp                       # the secure-code MCP\n` +
-        `  npx ${pkgName()} connect-mcp <name> -- <cmd> ...   # any MCP server\n`
+        `  npx ${PKG} connect-mcp                       # the secure-code MCP\n` +
+        `  npx ${PKG} connect-mcp <name> -- <cmd> ...   # any MCP server\n`
     );
     process.exit(1);
   }
@@ -103,16 +129,16 @@ function connectMcp(args) {
   process.exit(res.status === null ? 1 : res.status);
 }
 
-function pkgName() {
-  return '@namncqualgo/secure-code-skill';
-}
-
 function printHelp() {
+  const tools = Object.entries(TOOLS)
+    .map(([k, v]) => `      ${k.padEnd(10)} ${v.dest}`)
+    .join('\n');
   process.stdout.write(
-    `${pkgName()} — secure-code skills for Claude Code\n\n` +
+    `${PKG} — secure-code skills for AI coding tools\n\n` +
       `Usage:\n` +
-      `  npx ${pkgName()} init [dir]                        install skills into <dir>/.claude/skills (default: cwd)\n` +
-      `  npx ${pkgName()} connect-mcp [--user]              connect the secure-code MCP server\n` +
-      `  npx ${pkgName()} connect-mcp <name> -- <cmd> ...   connect any MCP server\n`
+      `  npx ${PKG} init [dir] [--tool <name>]   install skills (default --tool claude)\n` +
+      `  npx ${PKG} connect-mcp [--user]         connect the secure-code MCP server\n` +
+      `  npx ${PKG} connect-mcp <name> -- <cmd>  connect any MCP server\n\n` +
+      `Tools (--tool):\n${tools}\n`
   );
 }

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Assemble the publishable @namncqualgo/secure-code-skill package: the thin
-// CLI (init + connect-mcp) plus the native Claude Code skill bundle. No
-// binaries, no platform variants — one package. Nothing is published here.
+// CLI plus, under assets/<tool>/, the exact tree each IDE expects dropped into
+// a project. `init --tool <tool>` copies assets/<tool>/ into the target dir.
+// No binaries, no platform variants. Nothing is published here.
 //
 // Usage:
 //   node npm/build-skill.mjs --root <repo-root> --version <x.y.z> --out <dir>
@@ -13,6 +14,18 @@ import url from 'node:url';
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const REPO_DEFAULT = path.resolve(HERE, '..');
 const PKG = 'secure-code-skill';
+
+// Per-tool source (under the repo's dist/) and the path it lands at inside
+// assets/<tool>/ — which is also the project-relative install path.
+export const TOOLS = {
+  claude: { src: ['dist', 'claude-skills', '.claude'], dest: '.claude', scoped: true },
+  cursor: { src: ['dist', 'cursor-rules', '.cursor'], dest: '.cursor', scoped: true },
+  copilot: { src: ['dist', 'copilot-rules', '.github'], dest: '.github', scoped: true },
+  windsurf: { src: ['dist', 'windsurf-rules', '.windsurf'], dest: '.windsurf', scoped: true },
+  cline: { src: ['dist', '.clinerules'], dest: '.clinerules', scoped: false },
+  codex: { src: ['dist', 'AGENTS.md'], dest: 'AGENTS.md', scoped: false },
+  universal: { src: ['dist', 'SECURITY-SKILLS.md'], dest: 'SECURITY-SKILLS.md', scoped: false },
+};
 
 function parseArgs(argv) {
   const out = { root: REPO_DEFAULT, version: '0.0.0-dev', out: path.join(HERE, 'dist') };
@@ -41,20 +54,23 @@ async function main() {
   await fs.chmod(path.join(pkgOut, 'bin', 'cli.js'), 0o755);
   await fs.copyFile(path.join(skel, 'README.md'), path.join(pkgOut, 'README.md'));
 
-  // native Claude Code skill bundle (name/description frontmatter)
-  const nativeSrc = path.join(root, 'dist', 'claude-skills', '.claude', 'skills');
-  if (!(await exists(nativeSrc))) {
-    throw new Error(`native skills bundle missing: ${nativeSrc} (run skills-check regenerate)`);
+  // assets/<tool>/<dest> — the exact tree `init --tool <tool>` drops in.
+  for (const [tool, spec] of Object.entries(TOOLS)) {
+    const srcPath = path.join(root, ...spec.src);
+    if (!(await exists(srcPath))) {
+      throw new Error(`missing dist source for ${tool}: ${srcPath} (run skills-check regenerate)`);
+    }
+    const destPath = path.join(pkgOut, 'assets', tool, spec.dest);
+    await fs.mkdir(path.dirname(destPath), { recursive: true });
+    await fs.cp(srcPath, destPath, { recursive: true });
   }
-  await fs.cp(nativeSrc, path.join(pkgOut, 'skills-native'), { recursive: true });
 
   // package.json with stamped version
   const pkg = JSON.parse(await fs.readFile(path.join(skel, 'package.json'), 'utf8'));
   pkg.version = version;
   await fs.writeFile(path.join(pkgOut, 'package.json'), JSON.stringify(pkg, null, 2) + '\n');
 
-  const n = (await fs.readdir(path.join(pkgOut, 'skills-native'))).length;
-  console.log(`assembled @namncqualgo/${PKG} @ ${version} (${n} skills)`);
+  console.log(`assembled @namncqualgo/${PKG} @ ${version} (tools: ${Object.keys(TOOLS).join(', ')})`);
   console.log(`output: ${pkgOut}`);
 }
 
