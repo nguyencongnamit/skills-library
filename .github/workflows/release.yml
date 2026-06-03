@@ -59,11 +59,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          out="skills-check-${GOOS}-${GOARCH}"
+          ext=""
           if [ "$GOOS" = "windows" ]; then
-            out="${out}.exe"
+            ext=".exe"
           fi
           mkdir -p dist-build
+          # skills-check: the CLI. Carries the embedded public key + CLI
+          # version via -ldflags -X so `skills-check manifest verify` and
+          # `skills-check version` work on the shipped binary.
           go build \
             -trimpath \
             -ldflags "-s -w \
@@ -71,8 +74,17 @@ jobs:
               -X github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKey=${SKILLS_LIBRARY_PUBKEY_B64:-} \
               -X github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKeyID=${SKILLS_LIBRARY_PUBKEY_ID:-} \
             " \
-            -o "dist-build/${out}" \
+            -o "dist-build/skills-check-${GOOS}-${GOARCH}${ext}" \
             ./cmd/skills-check
+          # skills-mcp: the MCP server. No -X vars to inject (it has no
+          # CLIVersion / embedded-key symbols); ship it stripped. This is
+          # the binary the npm/npx channel wraps and the asset that lets
+          # `go install .../cmd/skills-mcp@latest` be paired with a release.
+          go build \
+            -trimpath \
+            -ldflags "-s -w" \
+            -o "dist-build/skills-mcp-${GOOS}-${GOARCH}${ext}" \
+            ./cmd/skills-mcp
 
       - name: Upload unsigned binary
         uses: actions/upload-artifact@v5
@@ -98,12 +110,14 @@ jobs:
           name: raw-linux-${{ matrix.goarch }}
           path: dist-build/
 
-      - name: SHA-256 of binary
+      - name: SHA-256 of binaries
         shell: bash
         run: |
           set -euo pipefail
           cd dist-build
-          sha256sum skills-check-linux-${{ matrix.goarch }} \
+          sha256sum \
+            skills-check-linux-${{ matrix.goarch }} \
+            skills-mcp-linux-${{ matrix.goarch }} \
             > checksums-linux-${{ matrix.goarch }}.txt
 
       - name: Upload final binary artifact
@@ -146,31 +160,35 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          out="skills-check-darwin-${{ matrix.goarch }}"
           echo "$APPLE_DEVELOPER_ID_CERT_P12_BASE64" | base64 -d > /tmp/cert.p12
           security create-keychain -p actions build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p actions build.keychain
           security import /tmp/cert.p12 -k build.keychain -P "$APPLE_DEVELOPER_ID_CERT_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k actions build.keychain
-          codesign --force --options runtime --timestamp \
-            --sign "$APPLE_DEVELOPER_ID" "dist-build/${out}"
-          ditto -c -k --keepParent "dist-build/${out}" "/tmp/${out}.zip"
-          xcrun notarytool submit "/tmp/${out}.zip" \
-            --apple-id "$APPLE_ID" \
-            --team-id "$APPLE_TEAM_ID" \
-            --password "$APPLE_NOTARY_PASSWORD" \
-            --wait
-          codesign --verify --strict --verbose=2 "dist-build/${out}"
+          # Sign + notarize both shipped binaries with the same identity.
+          for out in skills-check-darwin-${{ matrix.goarch }} skills-mcp-darwin-${{ matrix.goarch }}; do
+            codesign --force --options runtime --timestamp \
+              --sign "$APPLE_DEVELOPER_ID" "dist-build/${out}"
+            ditto -c -k --keepParent "dist-build/${out}" "/tmp/${out}.zip"
+            xcrun notarytool submit "/tmp/${out}.zip" \
+              --apple-id "$APPLE_ID" \
+              --team-id "$APPLE_TEAM_ID" \
+              --password "$APPLE_NOTARY_PASSWORD" \
+              --wait
+            codesign --verify --strict --verbose=2 "dist-build/${out}"
+          done
 
       # `shasum -a 256` is the macOS-native equivalent of `sha256sum`
       # and produces identical output (lowercase hex + two spaces + name).
-      - name: SHA-256 of binary
+      - name: SHA-256 of binaries
         shell: bash
         run: |
           set -euo pipefail
           cd dist-build
-          shasum -a 256 skills-check-darwin-${{ matrix.goarch }} \
+          shasum -a 256 \
+            skills-check-darwin-${{ matrix.goarch }} \
+            skills-mcp-darwin-${{ matrix.goarch }} \
             > checksums-darwin-${{ matrix.goarch }}.txt
 
       - name: Upload final binary artifact
@@ -204,7 +222,6 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $bin = "dist-build/skills-check-windows-amd64.exe"
           $pfxPath = Join-Path $env:RUNNER_TEMP 'cert.pfx'
           [System.IO.File]::WriteAllBytes($pfxPath, [System.Convert]::FromBase64String($env:WINDOWS_CERT_PFX))
           $signtool = (Get-ChildItem 'C:/Program Files (x86)/Windows Kits/10/bin' -Recurse -Filter signtool.exe `
@@ -212,25 +229,30 @@ jobs:
             | Sort-Object FullName -Descending `
             | Select-Object -First 1).FullName
           if (-not $signtool) { throw 'signtool.exe not found on runner' }
-          & $signtool sign `
-            /f $pfxPath `
-            /p $env:WINDOWS_CERT_PFX_PASSWORD `
-            /tr 'http://timestamp.digicert.com' `
-            /td sha256 `
-            /fd sha256 `
-            $bin
-          & $signtool verify /pa $bin
+          # Sign both shipped binaries with the same Authenticode cert.
+          foreach ($bin in @('dist-build/skills-check-windows-amd64.exe', 'dist-build/skills-mcp-windows-amd64.exe')) {
+            & $signtool sign `
+              /f $pfxPath `
+              /p $env:WINDOWS_CERT_PFX_PASSWORD `
+              /tr 'http://timestamp.digicert.com' `
+              /td sha256 `
+              /fd sha256 `
+              $bin
+            & $signtool verify /pa $bin
+          }
 
-      - name: SHA-256 of binary
+      - name: SHA-256 of binaries
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           Set-Location dist-build
-          $hash = (Get-FileHash skills-check-windows-amd64.exe -Algorithm SHA256).Hash.ToLower()
           # Match the `sha256sum` output format: "<hash>  <filename>\n".
           # Use UTF-8 without BOM so the file reads cleanly on Unix tooling.
-          $line = "$hash  skills-check-windows-amd64.exe`n"
-          [System.IO.File]::WriteAllText("checksums-windows-amd64.txt", $line, (New-Object System.Text.UTF8Encoding $false))
+          $lines = foreach ($name in @('skills-check-windows-amd64.exe', 'skills-mcp-windows-amd64.exe')) {
+            $hash = (Get-FileHash $name -Algorithm SHA256).Hash.ToLower()
+            "$hash  $name"
+          }
+          [System.IO.File]::WriteAllText("checksums-windows-amd64.txt", ($lines -join "`n") + "`n", (New-Object System.Text.UTF8Encoding $false))
 
       - name: Upload final binary artifact
         uses: actions/upload-artifact@v5
@@ -306,8 +328,9 @@ jobs:
         run: |
           set -e
           mkdir -p release
-          # Flatten binary artifacts.
-          find artifacts -type f \( -name 'skills-check-*' -o -name 'checksums-*.txt' \) -exec cp {} release/ \;
+          # Flatten binary artifacts (both the skills-check CLI and the
+          # skills-mcp server, per platform) plus their checksum files.
+          find artifacts -type f \( -name 'skills-check-*' -o -name 'skills-mcp-*' -o -name 'checksums-*.txt' \) -exec cp {} release/ \;
           cp manifest.json release/
           # Bundle the distributable library tree into a single tarball so
           # `skills-check update` (default --source) can pull the whole
@@ -378,7 +401,8 @@ jobs:
 
             **Assets:**
             - `skills-check-<goos>-<goarch>[.exe]` — CLI binary (reproducible build).
-            - `checksums-<goos>-<goarch>.txt` — SHA-256 of each binary.
+            - `skills-mcp-<goos>-<goarch>[.exe]` — MCP server binary (reproducible build). The binary the npm/npx channel wraps; reads its library data from `--path` / `$SKILLS_LIBRARY_PATH` (it does not embed the data tree).
+            - `checksums-<goos>-<goarch>.txt` — SHA-256 of both binaries for that platform.
             - `manifest.json` — library manifest (signed out-of-band before publish).
             - `skills-library-data.tar.gz` — library payload (skills, vulnerabilities, dictionaries, dist, rules, compliance, profiles, manifest.json). This is what `skills-check update` downloads by default. The bundled `vulnerabilities/osv/` tree is a small latest-first sample.
             - `osv-cache.tar.gz` — full upstream OSV catalogue (`osv/<eco>/...`). Consumed by `skills-check fetch-vulns --from-release` to populate the user cache with complete coverage without hitting osv.dev.
