@@ -20,14 +20,15 @@ func TestWriteRuleBundlesEmitsPerSkillFiles(t *testing.T) {
 	}
 	cursorDir := filepath.Join(outDir, "cursor-rules", ".cursor", "rules")
 	copilotDir := filepath.Join(outDir, "copilot-rules", ".github", "instructions")
+	windsurfDir := filepath.Join(outDir, "windsurf-rules", ".windsurf", "rules")
 	for _, s := range skills {
 		mdc := filepath.Join(cursorDir, s.Frontmatter.ID+".mdc")
 		ins := filepath.Join(copilotDir, s.Frontmatter.ID+".instructions.md")
-		if info, err := os.Stat(mdc); err != nil || info.Size() == 0 {
-			t.Errorf("missing/empty %s: %v", mdc, err)
-		}
-		if info, err := os.Stat(ins); err != nil || info.Size() == 0 {
-			t.Errorf("missing/empty %s: %v", ins, err)
+		wsf := filepath.Join(windsurfDir, s.Frontmatter.ID+".md")
+		for _, p := range []string{mdc, ins, wsf} {
+			if info, err := os.Stat(p); err != nil || info.Size() == 0 {
+				t.Errorf("missing/empty %s: %v", p, err)
+			}
 		}
 	}
 }

@@ -1,19 +1,35 @@
 # @namncqualgo/secure-code-skill
 
-Installs the **secure-code** security skills into a Claude Code project, and
-optionally connects an MCP server for active scanning. The skills are
-self-contained knowledge (28 skills: secret detection, dependency/CVE hygiene,
-container & IaC hardening, …) — they work **with no MCP required**.
+Installs the **secure-code** security skills (28 skills: secret detection,
+dependency / CVE hygiene, container & IaC hardening, …) into a project for your
+AI coding tool, and optionally connects an MCP server for active scanning. The
+skills are self-contained knowledge — they work **with no MCP required**.
 
 ## Install the skills
 
 ```sh
-npx @namncqualgo/secure-code-skill init          # into ./.claude/skills
-npx @namncqualgo/secure-code-skill init ./app    # into ./app/.claude/skills
+npx @namncqualgo/secure-code-skill init                    # Claude Code (default)
+npx @namncqualgo/secure-code-skill init --tool cursor      # Cursor
+npx @namncqualgo/secure-code-skill init ./app --tool copilot
 ```
 
-Claude Code picks them up automatically in that project — Claude now passively
-knows the security rules and applies them while reading and writing code.
+`--tool` picks the format each tool consumes. Where the tool supports it, the
+skills install as **context-scoped** rules — only the rule relevant to the
+files you're editing loads, instead of one always-on blob (the same
+progressive-disclosure benefit Claude Code gets from `.claude/skills`).
+
+| `--tool` | Installs into | Scoped? |
+|----------|---------------|---------|
+| `claude` *(default)* | `.claude/skills/` (28 native skills) | ✅ per-skill |
+| `cursor` | `.cursor/rules/*.mdc` (globs / agent-requested) | ✅ per-skill |
+| `copilot` | `.github/instructions/*.instructions.md` (`applyTo`) | ✅ per-skill |
+| `windsurf` | `.windsurf/rules/*.md` (glob / model-decision) | ✅ per-skill |
+| `cline` | `.clinerules` | ⚠️ single file |
+| `codex` | `AGENTS.md` | ⚠️ single file |
+| `universal` | `SECURITY-SKILLS.md` | ⚠️ single file |
+
+(`cline` / `codex` / `universal` get a single always-on file — those tools have
+no per-rule scoping mechanism.)
 
 ## Add active scanning (optional)
 
@@ -26,7 +42,7 @@ npx @namncqualgo/secure-code-skill connect-mcp
 # runs: claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp
 ```
 
-`connect-mcp` is generic — it can register **any** MCP server, not just ours:
+`connect-mcp` is generic — it can register **any** MCP server:
 
 ```sh
 npx @namncqualgo/secure-code-skill connect-mcp semgrep -- npx -y @semgrep/mcp
@@ -39,7 +55,7 @@ line (and the JSON config) to run yourself.
 ## Relationship to the other package
 
 - **`@namncqualgo/secure-code-skill`** (this) — the skills + a thin connector.
-  Binary-free, tiny.
+  Binary-free.
 - **`@namncqualgo/secure-code-mcp`** — the MCP engine (Go binary + data),
   agent-agnostic. Use it standalone in any MCP client, or let `connect-mcp`
   wire it into Claude Code.
