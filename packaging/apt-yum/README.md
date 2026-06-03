@@ -4,7 +4,7 @@ This directory holds the tooling that turns the per-release `.deb` and `.rpm`
 artifacts (built by `packaging/linux/`) into APT and YUM repositories hosted on
 GitHub Pages.
 
-> Repository paths (`kennguy3n.github.io/skills-library/{apt,yum}`),
+> Repository paths (`namncqualgo.github.io/skills-library/{apt,yum}`),
 > repository identifiers (`skills-library`), and the YUM `name=Skills
 > Library` display label are stable hosting identifiers and are not renamed
 > when the project's brand changed to **secure-code**.
@@ -13,18 +13,18 @@ Users install with:
 
 ```bash
 # APT (Ubuntu / Debian)
-curl -fsSL https://kennguy3n.github.io/skills-library/apt/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/skills-library.gpg
-echo "deb [signed-by=/etc/apt/keyrings/skills-library.gpg] https://kennguy3n.github.io/skills-library/apt stable main" | sudo tee /etc/apt/sources.list.d/skills-library.list
+curl -fsSL https://namncqualgo.github.io/skills-library/apt/pubkey.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/skills-library.gpg
+echo "deb [signed-by=/etc/apt/keyrings/skills-library.gpg] https://namncqualgo.github.io/skills-library/apt stable main" | sudo tee /etc/apt/sources.list.d/skills-library.list
 sudo apt update && sudo apt install skills-check
 
 # YUM / DNF (RHEL / Fedora)
 sudo tee /etc/yum.repos.d/skills-library.repo <<EOF
 [skills-library]
 name=Skills Library
-baseurl=https://kennguy3n.github.io/skills-library/yum
+baseurl=https://namncqualgo.github.io/skills-library/yum
 enabled=1
 gpgcheck=1
-gpgkey=https://kennguy3n.github.io/skills-library/yum/RPM-GPG-KEY-skills-library
+gpgkey=https://namncqualgo.github.io/skills-library/yum/RPM-GPG-KEY-skills-library
 EOF
 sudo dnf install skills-check
 ```

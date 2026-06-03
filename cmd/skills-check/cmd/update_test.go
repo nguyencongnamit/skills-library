@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 // stagedSignedRelease populates dir with files plus a signed manifest, then

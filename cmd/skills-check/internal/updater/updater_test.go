@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 // stagedRelease creates a directory containing a signed manifest plus files

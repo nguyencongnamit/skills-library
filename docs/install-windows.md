@@ -7,23 +7,23 @@ signed with Authenticode when the release secret is configured — see
 ## MSI installer
 
 Download the signed `.msi` from the
-[latest GitHub Release](https://github.com/kennguy3n/skills-library/releases/latest)
+[latest GitHub Release](https://github.com/namncqualgo/skills-library/releases/latest)
 and double-click to install. The installer places the binary in
 `%ProgramFiles%\Skills-Check\` and adds it to the system `PATH`.
 
 ## winget
 
 ```powershell
-winget install kennguy3n.skills-check
+winget install namncqualgo.skills-check
 ```
 
 The manifest lives at
-[`packaging/winget/kennguy3n.skills-check.yaml`](../packaging/winget/kennguy3n.skills-check.yaml).
+[`packaging/winget/namncqualgo.skills-check.yaml`](../packaging/winget/namncqualgo.skills-check.yaml).
 
 ## Scoop
 
 ```powershell
-scoop bucket add kennguy3n https://github.com/kennguy3n/scoop-bucket
+scoop bucket add namncqualgo https://github.com/namncqualgo/scoop-bucket
 scoop install skills-check
 ```
 
@@ -33,7 +33,7 @@ The bucket manifest lives at
 ## Go install
 
 ```powershell
-go install github.com/kennguy3n/skills-library/cmd/skills-check@latest
+go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 ```
 
 Make sure `%USERPROFILE%\go\bin` is on your `PATH`.

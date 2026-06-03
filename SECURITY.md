@@ -24,7 +24,7 @@ Please **do not** open a public GitHub issue, PR, or discussion for a
 security issue. Instead, report it privately by one of the following
 channels:
 
-- **GitHub private advisory:** https://github.com/kennguy3n/skills-library/security/advisories/new
+- **GitHub private advisory:** https://github.com/namncqualgo/skills-library/security/advisories/new
 - **Email:** `security@shieldnet360.com` (PGP key on request)
 
 Include, where possible:
@@ -72,7 +72,7 @@ Out of scope:
 
 Published security advisories are listed at:
 
-- https://github.com/kennguy3n/skills-library/security/advisories
+- https://github.com/namncqualgo/skills-library/security/advisories
 
 ## Hall of fame
 

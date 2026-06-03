@@ -13,13 +13,13 @@ keeping the library up to date on a machine that cannot reach the internet.
 ```bash
 # Binary for the target OS / arch
 curl -L -o skills-check \
-  https://github.com/kennguy3n/skills-library/releases/latest/download/skills-check-linux-amd64
+  https://github.com/namncqualgo/skills-library/releases/latest/download/skills-check-linux-amd64
 curl -L -o checksums.txt \
-  https://github.com/kennguy3n/skills-library/releases/latest/download/checksums-linux-amd64.txt
+  https://github.com/namncqualgo/skills-library/releases/latest/download/checksums-linux-amd64.txt
 
 # Library payload (manifest + skills + vulnerabilities + dictionaries + dist)
 curl -L -o skills-library-data.tar.gz \
-  https://github.com/kennguy3n/skills-library/releases/latest/download/skills-library-data.tar.gz
+  https://github.com/namncqualgo/skills-library/releases/latest/download/skills-library-data.tar.gz
 ```
 
 ## 2. Verify the binary

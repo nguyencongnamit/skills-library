@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest"
 )
 
 func installPlatform(cfg Config) error {

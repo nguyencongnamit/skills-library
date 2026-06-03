@@ -81,9 +81,9 @@ jobs:
           go build \
             -trimpath \
             -ldflags "-s -w \
-              -X github.com/kennguy3n/skills-library/cmd/skills-check/cmd.CLIVersion=${TAG} \
-              -X github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKey=${SKILLS_LIBRARY_PUBKEY_B64:-} \
-              -X github.com/kennguy3n/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKeyID=${SKILLS_LIBRARY_PUBKEY_ID:-} \
+              -X github.com/namncqualgo/skills-library/cmd/skills-check/cmd.CLIVersion=${TAG} \
+              -X github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKey=${SKILLS_LIBRARY_PUBKEY_B64:-} \
+              -X github.com/namncqualgo/skills-library/cmd/skills-check/internal/manifest.EmbeddedPublicKeyID=${SKILLS_LIBRARY_PUBKEY_ID:-} \
             " \
             -o /tmp/skills-check \
             ./cmd/skills-check

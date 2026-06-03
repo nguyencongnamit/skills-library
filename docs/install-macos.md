@@ -6,7 +6,7 @@ install path matches how you manage other CLI tools.
 ## Homebrew (recommended)
 
 ```bash
-brew tap kennguy3n/tap
+brew tap namncqualgo/tap
 brew install skills-check
 ```
 
@@ -15,7 +15,7 @@ The tap formula lives at [`packaging/homebrew/skills-check.rb`](../packaging/hom
 ## Go install
 
 ```bash
-go install github.com/kennguy3n/skills-library/cmd/skills-check@latest
+go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 ```
 
 Make sure `$(go env GOPATH)/bin` is on your `PATH`.
@@ -23,7 +23,7 @@ Make sure `$(go env GOPATH)/bin` is on your `PATH`.
 ## .pkg installer
 
 Download the signed `.pkg` from the
-[latest GitHub Release](https://github.com/kennguy3n/skills-library/releases/latest)
+[latest GitHub Release](https://github.com/namncqualgo/skills-library/releases/latest)
 and double-click to install. The package places the binary at
 `/usr/local/bin/skills-check`.
 

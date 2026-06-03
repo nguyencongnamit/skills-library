@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/internal/updater"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/updater"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +22,7 @@ import (
 // .github/workflows/release.yml). Operators who fork the repo and
 // publish their own release assets should override the resolved URL
 // via --release-url rather than rebuilding the binary.
-const releaseAssetOwnerRepo = "kennguy3n/skills-library"
+const releaseAssetOwnerRepo = "namncqualgo/skills-library"
 
 // releaseAssetName is the file name of the published OSV cache
 // tarball. The release workflow rebuilds this archive on every tag

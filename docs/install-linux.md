@@ -4,17 +4,17 @@ The `skills-check` CLI is a statically linked Go binary with no runtime
 dependencies, so any glibc or musl Linux distribution can run it.
 
 > The CLI binary name (`skills-check`) and the hosted APT/YUM repository
-> paths (under `kennguy3n.github.io/skills-library/`) are stable technical
+> paths (under `namncqualgo.github.io/skills-library/`) are stable technical
 > identifiers and are not renamed when the project's brand changed to
 > **secure-code**.
 
 ## APT (Debian / Ubuntu)
 
 ```bash
-curl -fsSL https://kennguy3n.github.io/skills-library/apt/pubkey.gpg \
+curl -fsSL https://namncqualgo.github.io/skills-library/apt/pubkey.gpg \
   | sudo gpg --dearmor -o /etc/apt/keyrings/skills-library.gpg
 echo "deb [signed-by=/etc/apt/keyrings/skills-library.gpg] \
-  https://kennguy3n.github.io/skills-library/apt stable main" \
+  https://namncqualgo.github.io/skills-library/apt stable main" \
   | sudo tee /etc/apt/sources.list.d/skills-library.list
 sudo apt update && sudo apt install skills-check
 ```
@@ -25,17 +25,17 @@ sudo apt update && sudo apt install skills-check
 sudo tee /etc/yum.repos.d/skills-library.repo <<'EOF'
 [skills-library]
 name=Skills Library
-baseurl=https://kennguy3n.github.io/skills-library/yum
+baseurl=https://namncqualgo.github.io/skills-library/yum
 enabled=1
 gpgcheck=1
-gpgkey=https://kennguy3n.github.io/skills-library/yum/RPM-GPG-KEY-skills-library
+gpgkey=https://namncqualgo.github.io/skills-library/yum/RPM-GPG-KEY-skills-library
 EOF
 sudo dnf install skills-check
 ```
 
 ## Standalone .deb / .rpm
 
-Download from the [latest GitHub Release](https://github.com/kennguy3n/skills-library/releases/latest):
+Download from the [latest GitHub Release](https://github.com/namncqualgo/skills-library/releases/latest):
 
 ```bash
 sudo dpkg -i skills-check_*.deb     # Debian / Ubuntu
@@ -48,7 +48,7 @@ Reproducible-build / packaging details live in
 ## Go install
 
 ```bash
-go install github.com/kennguy3n/skills-library/cmd/skills-check@latest
+go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 ```
 
 ## Verify

@@ -40,8 +40,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-mcp/internal/mcp"
-	"github.com/kennguy3n/skills-library/internal/tools"
+	"github.com/namncqualgo/skills-library/cmd/skills-mcp/internal/mcp"
+	"github.com/namncqualgo/skills-library/internal/tools"
 )
 
 func main() {

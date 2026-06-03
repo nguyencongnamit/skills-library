@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kennguy3n/skills-library/cmd/skills-check/cmd"
+	"github.com/namncqualgo/skills-library/cmd/skills-check/cmd"
 )
 
 func main() {
