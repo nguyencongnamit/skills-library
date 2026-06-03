@@ -1,6 +1,6 @@
 schema_version: "1.0"
 framework: CIS Docker Benchmark v1.6 + NIST SP 800-190
-last_updated: "2026-06-02"
+last_updated: "2026-06-03"
 generated_from: skills/container-security/SKILL.md
 patterns:
   - id: dkr-multi-stage
