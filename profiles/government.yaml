@@ -24,6 +24,7 @@ skills:
   - serverless-security
   - mobile-security
   - ml-security
+  - llm-app-security
   - compliance-awareness
   - iam-best-practices
 controls:

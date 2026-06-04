@@ -63,9 +63,8 @@ func RenderPointer(spec PointerSpec, skills []*skill.Skill) string {
 		audience = "this project"
 	}
 	fmt.Fprintf(&b, "Use the local security skills when generating or reviewing\n")
-	fmt.Fprintf(&b, "security-sensitive code in %s. For dependencies, secrets, authentication,\n", audience)
-	b.WriteString("crypto, SSRF, deserialization, IaC, CI/CD, and containers, call the\n")
-	b.WriteString("local skills MCP server before finalizing.\n\n")
+	fmt.Fprintf(&b, "security-sensitive code in %s. Call the local skills MCP server\n", audience)
+	b.WriteString("before finalizing.\n\n")
 
 	b.WriteString("Do not treat these skills as a replacement for SAST, SCA, secrets\n")
 	b.WriteString("scanning, or CI policy checks.\n\n")

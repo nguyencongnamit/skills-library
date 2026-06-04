@@ -23,7 +23,9 @@ mapping:
   - skill: "frontend-security"
     owasp_items: ["A03", "A05"]
   - skill: "ml-security"
-    owasp_items: ["A03", "A04", "A08"]
+    owasp_items: ["A04", "A08"]
+  - skill: "llm-app-security"
+    owasp_items: ["A03", "A04"]
   - skill: "protocol-security"
     owasp_items: ["A02"]
   - skill: "logging-security"
