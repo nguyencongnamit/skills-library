@@ -621,6 +621,36 @@ export SKILLS_LIBRARY_PATH=/opt/secure-code   # data tree, set once
 skills-check gate Dockerfile --severity-floor high
 ```
 
+### Gate in pre-commit and CI
+
+The `gate` command is also wired up as a [pre-commit](https://pre-commit.com)
+hook and a GitHub Action, both of which run the published
+`@namncqualgo/secure-code-mcp` package (binary + data bundled, no checkout
+needed).
+
+**pre-commit** — add to `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/namncqualgo/skills-library
+    rev: v0.4.0            # a release tag that ships the CLI
+    hooks:
+      - id: secure-code-gate
+```
+
+It runs `secure-code-check gate` over the staged files and blocks the commit
+when any finding meets the severity floor (default `high`; override with
+`args: ["--severity-floor", "critical"]`).
+
+**GitHub Actions** — gate specific files in a workflow:
+
+```yaml
+- uses: namncqualgo/skills-library@v0.4.0
+  with:
+    files: Dockerfile package-lock.json .github/workflows/ci.yml
+    severity-floor: high
+```
+
 ## Building and running tests
 
 ```bash
