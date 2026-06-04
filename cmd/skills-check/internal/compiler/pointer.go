@@ -84,7 +84,7 @@ func RenderPointer(spec PointerSpec, skills []*skill.Skill) string {
 	b.WriteString("   - `scan_secrets(text | file_path)` / `check_secret_pattern(text)`\n")
 	b.WriteString("     before committing potential credentials.\n")
 	b.WriteString("   - `scan_github_actions(file_path)` / `scan_dockerfile(file_path)`\n")
-	b.WriteString("     / `policy_check(file_path, severity_floor?)` /\n")
+	b.WriteString("     / `gate(file_path, severity_floor?)` /\n")
 	b.WriteString("     `explain_finding(query)` for CI / image / finding triage.\n")
 	b.WriteString("   - `map_compliance_control`, `get_sigma_rule`, `version_status()`\n")
 	b.WriteString("     for controls / Sigma rules / data version respectively.\n")

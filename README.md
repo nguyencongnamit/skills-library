@@ -565,8 +565,9 @@ The server registers fifteen tools on `tools/list`:
 - `explain_finding(query)` — map a CWE / CVE ID or free-text finding
   description to the relevant skills and CVE-pattern entries, so a SAST/SCA
   finding from another scanner can be paired with remediation guidance.
-- `policy_check(file_path, severity_floor?)` — dispatch the appropriate
-  scanner for `file_path` and return a CI-friendly `pass` flag plus
+- `gate(file_path, severity_floor?)` — dispatch the appropriate
+  scanner for `file_path` (falling back to a secret scan for files no
+  specialised scanner claims) and return a CI-friendly `pass` flag plus
   `exit_code` (0 on pass, 1 on fail). Findings at or above
   `severity_floor` (default `high`) fail the check; counts are returned
   per severity so a wrapper can produce a one-line summary.
@@ -596,7 +597,7 @@ skills-check scan-dockerfile      Dockerfile
 skills-check scan-github-actions  .github/workflows/ci.yml
 
 # CI gate — non-zero exit when findings meet --severity-floor
-skills-check policy-check Dockerfile --severity-floor high
+skills-check gate Dockerfile --severity-floor high
 ```
 
 Every scan-/check- subcommand accepts `--format text` (default,
@@ -617,7 +618,7 @@ passing:
 
 ```bash
 export SKILLS_LIBRARY_PATH=/opt/secure-code   # data tree, set once
-skills-check policy-check Dockerfile --severity-floor high
+skills-check gate Dockerfile --severity-floor high
 ```
 
 ## Building and running tests
