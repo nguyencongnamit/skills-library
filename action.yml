@@ -1,0 +1,36 @@
+name: secure-code gate
+description: Fail the build on secrets, vulnerable dependencies, and Dockerfile / GitHub Actions issues at or above a severity floor.
+branding:
+  icon: shield
+  color: orange
+
+inputs:
+  files:
+    description: Space-separated list of files to gate, e.g. "Dockerfile package-lock.json .github/workflows/ci.yml". gate scans exactly the files you name.
+    required: true
+  severity-floor:
+    description: "Lowest severity that fails the gate: critical | high | medium | low."
+    required: false
+    default: high
+  version:
+    description: npm version or dist-tag of @namncqualgo/secure-code-mcp to run (pin for reproducible CI).
+    required: false
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Run secure-code gate
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ -z "${{ inputs.files }}" ]; then
+          echo "secure-code-gate: no files supplied via the 'files' input; nothing to gate." >&2
+          exit 0
+        fi
+        # The published package bundles the skills-check CLI binary + the rule
+        # data; the secure-code-check launcher points it at that data via
+        # $SKILLS_LIBRARY_PATH, so no checkout or --path is needed here.
+        npx -y -p "@namncqualgo/secure-code-mcp@${{ inputs.version }}" \
+          secure-code-check gate ${{ inputs.files }} \
+          --severity-floor "${{ inputs.severity-floor }}"
