@@ -298,6 +298,48 @@ CMD ["node", "server.js"]
 	}
 }
 
+// TestGateMultipleFilesFailsIfAnyFails confirms `gate file1 file2 …` — what a
+// pre-commit hook passes for the whole staged set — gates over every file and
+// fails if ANY of them has a finding at or above the floor.
+func TestGateMultipleFilesFailsIfAnyFails(t *testing.T) {
+	bad := writeFixedNameFixture(t, "Dockerfile", "FROM node:latest\nUSER root\n")
+	clean := writeFixedNameFixture(t, "notes.txt", "nothing secret here\n")
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		bad, clean,
+	)
+	if err == nil {
+		t.Fatalf("gate did not fail when one of two files is bad:\n%s", out)
+	}
+	if !IsPolicyFailure(err) {
+		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
+	}
+	if !strings.Contains(out, "2 file(s), 1 failing") {
+		t.Errorf("multi-file summary missing:\n%s", out)
+	}
+}
+
+// TestGateMultipleFilesPassesWhenAllClean is the inverse: a clean staged set
+// exits 0.
+func TestGateMultipleFilesPassesWhenAllClean(t *testing.T) {
+	a := writeFixedNameFixture(t, "a.txt", "clean one\n")
+	b := writeFixedNameFixture(t, "b.txt", "clean two\n")
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		a, b,
+	)
+	if err != nil {
+		t.Fatalf("gate failed on two clean files (unexpected): %v\n%s", err, out)
+	}
+	if !strings.Contains(out, "2 file(s), 0 failing") {
+		t.Errorf("multi-file summary missing:\n%s", out)
+	}
+}
+
 func TestPolicyFailureSentinelIsDistinguishable(t *testing.T) {
 	// IsPolicyFailure is exported so external callers (and a future
 	// outer wrapper) can branch on "findings found" vs "tool errored".
