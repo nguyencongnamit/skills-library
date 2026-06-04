@@ -80,7 +80,7 @@ jobs:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Cross-compile skills-mcp for every target
+      - name: Cross-compile skills-mcp + skills-check for every target
         shell: bash
         env:
           CGO_ENABLED: "0"
@@ -90,12 +90,14 @@ jobs:
           mkdir -p npm-binaries
           for pair in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
             goos="${pair%/*}"; goarch="${pair#*/}"
-            out="skills-mcp-${goos}-${goarch}"
-            [ "$goos" = "windows" ] && out="${out}.exe"
+            ext=""; [ "$goos" = "windows" ] && ext=".exe"
             GOOS="$goos" GOARCH="$goarch" go build \
               -trimpath -ldflags "-s -w" \
-              -o "npm-binaries/${out}" ./cmd/skills-mcp
-            echo "built ${out}"
+              -o "npm-binaries/skills-mcp-${goos}-${goarch}${ext}" ./cmd/skills-mcp
+            GOOS="$goos" GOARCH="$goarch" go build \
+              -trimpath -ldflags "-s -w" \
+              -o "npm-binaries/skills-check-${goos}-${goarch}${ext}" ./cmd/skills-check
+            echo "built skills-mcp + skills-check for ${goos}/${goarch}"
           done
 
       - name: Assemble npm packages
