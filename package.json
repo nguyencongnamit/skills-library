@@ -1,0 +1,14 @@
+{
+  "name": "@namncqualgo/secure-code-precommit",
+  "version": "0.0.0",
+  "description": "pre-commit hook shim for secure-code: pulls in the published @namncqualgo/secure-code-mcp package so its `secure-code-check gate` CLI is on PATH. Consumed only by .pre-commit-hooks.yaml (language: node); not published.",
+  "private": true,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namncqualgo/skills-library.git"
+  },
+  "dependencies": {
+    "@namncqualgo/secure-code-mcp": "latest"
+  }
+}
