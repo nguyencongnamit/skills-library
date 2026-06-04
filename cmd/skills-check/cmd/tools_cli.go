@@ -30,6 +30,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -51,6 +52,33 @@ var supportedOutputFormats = map[string]bool{
 	"sarif": true,
 }
 
+// resolveLibraryRoot picks the skills-library checkout the file
+// scanners read their rule data from. Precedence:
+//
+//  1. an explicit --path (anything other than the "." default);
+//  2. $SKILLS_LIBRARY_PATH, so the CLI can run inside an arbitrary
+//     project (CI, pre-commit, a hook) while pointed at a bundled data
+//     tree — mirroring how cmd/skills-mcp resolves its own root;
+//  3. the current working directory ("."), the in-repo contributor
+//     default.
+//
+// Treating the "." default the same as "unset" is deliberate: a bare
+// `skills-check scan-dockerfile Dockerfile` run from a user's project
+// should fall through to the env, not fail because that project has no
+// skills/ tree of its own.
+func resolveLibraryRoot(flagVal string) string {
+	if flagVal != "" && flagVal != "." {
+		return flagVal
+	}
+	if env := strings.TrimSpace(os.Getenv("SKILLS_LIBRARY_PATH")); env != "" {
+		return env
+	}
+	if flagVal == "" {
+		return "."
+	}
+	return flagVal
+}
+
 // newLibraryForCmd constructs a Library suitable for one CLI run.
 // vulnSourceStr is parsed via tools.ParseVulnSource; an empty string
 // resolves to SourceLocal, matching the skills-mcp default. fileArg,
@@ -58,9 +86,10 @@ var supportedOutputFormats = map[string]bool{
 // allowed-roots so file-based scanners can read it without the user
 // having to remember the security flag dance.
 func newLibraryForCmd(repoPath, vulnSourceStr, fileArg string) (*tools.Library, error) {
-	abs, err := filepath.Abs(repoPath)
+	root := resolveLibraryRoot(repoPath)
+	abs, err := filepath.Abs(root)
 	if err != nil {
-		return nil, fmt.Errorf("resolve --path %q: %w", repoPath, err)
+		return nil, fmt.Errorf("resolve --path %q: %w", root, err)
 	}
 	vulnSource, err := tools.ParseVulnSource(vulnSourceStr)
 	if err != nil {
@@ -186,7 +215,7 @@ Returns exit 0 always; the result still lists findings — use
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVarP(&pkg, "package", "p", "", "package name (required)")
 	c.Flags().StringVarP(&version, "version", "v", "", "package version (optional; constrains OSV matching)")
 	c.Flags().StringVarP(&ecosystem, "ecosystem", "e", "", "package ecosystem: npm, pypi, crates, go, rubygems, maven, nuget, composer, pub, swift, github-actions, docker (required)")
@@ -257,7 +286,7 @@ func checkTyposquatCmd() *cobra.Command {
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVarP(&pkg, "package", "p", "", "package name to check (required)")
 	c.Flags().StringVarP(&ecosystem, "ecosystem", "e", "", "package ecosystem (optional; empty searches all)")
 	addFormatFlag(c, &format, false)
@@ -306,7 +335,7 @@ func lookupVulnerabilityCmd() *cobra.Command {
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVarP(&pkg, "package", "p", "", "package name (required)")
 	c.Flags().StringVarP(&ecosystem, "ecosystem", "e", "", "ecosystem (optional; empty searches all)")
 	c.Flags().StringVarP(&version, "version", "v", "", "version (optional)")
@@ -359,7 +388,7 @@ func scanSecretsCmd() *cobra.Command {
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout (for rule data)")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout for rule data (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	return c
 }
@@ -409,7 +438,7 @@ pom.xml, gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	addVulnSourceFlag(c, &vulnSource)
 	return c
@@ -457,7 +486,7 @@ func scanDockerfileCmd() *cobra.Command {
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	return c
 }
@@ -504,7 +533,7 @@ func scanGitHubActionsCmd() *cobra.Command {
 			}
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	return c
 }
@@ -571,7 +600,7 @@ shell call from your pre-commit or CI step.`,
 			return nil
 		},
 	}
-	c.Flags().StringVar(&repoPath, "path", ".", "path to the skills-library checkout")
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&severityFloor, "severity-floor", "high",
 		"the lowest severity that causes a non-zero exit: critical | high | medium | low")
 	addFormatFlag(c, &format, false)
