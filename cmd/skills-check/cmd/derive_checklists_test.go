@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -392,5 +393,49 @@ func TestExtractPatternMarkersStripsCommentFromRule(t *testing.T) {
 	}
 	if !strings.Contains(got, "rule: A clean rule statement.") {
 		t.Errorf("expected rule text 'A clean rule statement.' in YAML:\n%s", got)
+	}
+}
+
+// TestDeriveChecklistsPreservesLastUpdatedWhenUnchanged locks the fix for the
+// date-drift regression: re-deriving a checklist whose pattern content has not
+// changed must NOT re-stamp last_updated to today (which made
+// `derive-checklists --check` fail unrelated PRs on a UTC-day rollover).
+func TestDeriveChecklistsPreservesLastUpdatedWhenUnchanged(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, root, "test-skill", `
+## Rules (for AI agents)
+
+### ALWAYS
+- Pin every base image by SHA256 digest.
+  <!-- pattern: { id: tst-pinned, framework: dockerfile_hardening } -->
+
+### NEVER
+
+### KNOWN FALSE POSITIVES
+`)
+	p := filepath.Join(root, "skills", "test-skill", "checklists", "dockerfile_hardening.yaml")
+	os.WriteFile(p, []byte(""), 0o644)
+
+	var out bytes.Buffer
+	if err := runDeriveChecklists(&out, root, "test-skill", "", false); err != nil {
+		t.Fatalf("first derive: %v", err)
+	}
+
+	// Simulate the checklist having been generated on a prior day.
+	const old = "2020-01-01"
+	body := readYAML(t, root, "test-skill", "dockerfile_hardening")
+	rewritten := regexp.MustCompile(`(?m)^last_updated: .*$`).ReplaceAllString(body, `last_updated: "`+old+`"`)
+	if rewritten == body {
+		t.Fatal("could not find a last_updated line to rewrite")
+	}
+	os.WriteFile(p, []byte(rewritten), 0o644)
+
+	// Re-derive with identical patterns.
+	if err := runDeriveChecklists(&out, root, "test-skill", "", false); err != nil {
+		t.Fatalf("second derive: %v", err)
+	}
+	got := readYAML(t, root, "test-skill", "dockerfile_hardening")
+	if !strings.Contains(got, `last_updated: "`+old+`"`) {
+		t.Errorf("last_updated must be preserved (%s) when patterns are unchanged; got:\n%s", old, got)
 	}
 }

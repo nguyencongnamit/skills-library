@@ -9,13 +9,20 @@ on:
 permissions:
   contents: read
 
+# Two consolidated jobs instead of one-job-per-check: a single runner +
+# toolchain setup per group cuts ~10 redundant runner spin-ups (and rebuilds
+# skills-check once instead of 4x). Each check is a named step, so a failure
+# still points at exactly which check broke. Steps are fail-fast within a job.
 jobs:
-  json-yaml-syntax:
-    name: JSON + YAML syntax
+  static-checks:
+    name: Static checks (json/yaml, frontmatter, schema, links, references, data-quality)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # Full history so the last_updated diff (PR only) can reach the base.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -45,16 +52,8 @@ jobs:
           fail=0
           while IFS= read -r f; do
             # mkdocs.yml legitimately uses MkDocs Material's Python-tag
-            # extension syntax — e.g.
-            #   pymdownx.emoji:
-            #     emoji_index: !!python/name:material.extensions.emoji.twemoji
-            # which is the documented Material extension pattern. The
-            # tag's resolver requires `material.extensions.emoji` to be
-            # importable, which it only is inside the MkDocs build
-            # container. Validating this file here would force us to
-            # install MkDocs Material on the CI runner just to syntax-check
-            # one file, so we skip it. The docs.yml workflow runs a real
-            # `mkdocs build` and catches structural problems there.
+            # extension syntax (!!python/name:...), which only resolves inside
+            # the MkDocs build container. docs.yml runs a real mkdocs build.
             if [ "$(basename "$f")" = "mkdocs.yml" ]; then
               continue
             fi
@@ -65,22 +64,7 @@ jobs:
           done < <(find . \( -name '*.yaml' -o -name '*.yml' \) -not -path './.git/*')
           exit "$fail"
 
-  skill-manifest-shape:
-    name: SKILL.md frontmatter shape
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: python -m pip install --quiet pyyaml
-
-      - name: Check every SKILL.md has the required frontmatter fields
+      - name: SKILL.md frontmatter shape
         shell: bash
         run: |
           set -e
@@ -95,8 +79,6 @@ jobs:
           allowed_categories = {"prevention", "detection", "compliance", "supply-chain", "hardening"}
           allowed_severities = {"critical", "high", "medium", "low"}
 
-          # Match YAML frontmatter delimited by lines containing only '---'.
-          # Anchored at start-of-file; the closing '---' must be on its own line.
           frontmatter_re = re.compile(r"\A---\s*\n(.*?)\n---\s*(?:\n|\Z)", re.DOTALL)
 
           fail = 0
@@ -104,11 +86,10 @@ jobs:
               text = path.read_text(encoding="utf-8")
               match = frontmatter_re.match(text)
               if not match:
-                  print(f"::error file={path}::Missing or malformed YAML frontmatter (expected file to start with '---' line and contain a closing '---' line)")
+                  print(f"::error file={path}::Missing or malformed YAML frontmatter")
                   fail = 1
                   continue
-              fm = match.group(1)
-              data = yaml.safe_load(fm) or {}
+              data = yaml.safe_load(match.group(1)) or {}
               missing = required - data.keys()
               if missing:
                   print(f"::error file={path}::Missing fields: {sorted(missing)}")
@@ -127,30 +108,10 @@ jobs:
           sys.exit(fail)
           PY
 
-  dist-skill-manifest-shape:
-    name: dist/ SKILL.md frontmatter shape
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: python -m pip install --quiet pyyaml
-
-      - name: Check every dist/**/SKILL.md has a minimal frontmatter shape
-        # The compiled bundles under dist/ target third-party agent
-        # tools (Claude / Cursor / Codex / etc.) and only need the
-        # cross-tool minimum: `name` + `description`. The richer
-        # source-of-truth frontmatter (token_budget, severity, ...)
-        # is enforced separately by the `skill-manifest-shape` job
-        # on skills/**/SKILL.md. This second job exists to catch a
-        # `regenerate` regression that would otherwise ship a
-        # native bundle missing the required keys.
+      - name: dist/ SKILL.md frontmatter shape
+        # Compiled native bundles only need the cross-tool minimum (name +
+        # description). Catches a regenerate regression that ships a bundle
+        # missing the required keys.
         shell: bash
         run: |
           set -e
@@ -169,7 +130,7 @@ jobs:
               text = path.read_text(encoding="utf-8")
               match = frontmatter_re.match(text)
               if not match:
-                  print(f"::error file={path}::Missing or malformed YAML frontmatter (expected file to start with '---' line and contain a closing '---' line)")
+                  print(f"::error file={path}::Missing or malformed YAML frontmatter")
                   fail = 1
                   continue
               try:
@@ -186,10 +147,6 @@ jobs:
               if missing:
                   print(f"::error file={path}::Missing fields: {sorted(missing)}")
                   fail = 1
-              # A missing key is already reported above; only run
-              # the value-shape check on keys that actually exist
-              # so contributors don't see two errors for the same
-              # field in their CI logs.
               for field in required - missing:
                   val = data.get(field)
                   if not isinstance(val, str) or not val.strip():
@@ -198,25 +155,16 @@ jobs:
           sys.exit(fail)
           PY
 
-  markdown-link-sanity:
-    name: Markdown link sanity
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Check for obviously broken relative links
+      - name: Markdown link sanity
         shell: bash
         run: |
           set -e
           fail=0
           while IFS= read -r md; do
             while IFS= read -r link; do
-              # Strip surrounding ()  and any anchor
               target="${link#(}"
               target="${target%)*}"
               target="${target%%#*}"
-              # Skip external links and template references
               case "$target" in
                 http*|mailto:*|"") continue ;;
               esac
@@ -229,30 +177,13 @@ jobs:
           done < <(find . -name '*.md' -not -path './.git/*' -not -path './dist/*')
           exit "$fail"
 
-  rule-file-schema:
-    name: Rule file schema (skills/**/{rules,checklists,frameworks,tests}/*)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install PyYAML
-        run: python -m pip install --quiet pyyaml
-
-      - name: Check rule and vulnerability files declare schema_version
+      - name: Rule file schema (skills/**/{rules,checklists,frameworks,tests}/*)
         shell: bash
         run: |
           set -e
           python - <<'PY'
           import json, sys, pathlib, yaml
           fail = 0
-          # Skill subdirectories that contain rules / checklists / frameworks /
-          # tests are required to declare schema_version on every JSON/YAML.
           roots = ["rules", "checklists", "frameworks", "tests"]
           checked = []
           for skill_dir in sorted(pathlib.Path("skills").iterdir()):
@@ -265,7 +196,6 @@ jobs:
                   for p in sorted(d.rglob("*")):
                       if p.suffix in {".json", ".yaml", ".yml"}:
                           checked.append(p)
-          # Vulnerability data files all need schema_version + last_updated.
           for p in sorted(pathlib.Path("vulnerabilities").rglob("*.json")):
               if p.name == "manifest.json":
                   continue
@@ -290,127 +220,7 @@ jobs:
           sys.exit(fail)
           PY
 
-  go-build-test:
-    name: skills-check (build, vet, test)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.22"
-          cache: true
-
-      - name: Verify go.mod is tidy
-        run: |
-          go mod tidy
-          if ! git diff --quiet -- go.mod go.sum; then
-            echo "::error::go.mod / go.sum are not tidy. Run 'go mod tidy'."
-            git diff -- go.mod go.sum
-            exit 1
-          fi
-
-      - name: gofmt
-        run: |
-          unformatted=$(gofmt -l ./cmd)
-          if [ -n "$unformatted" ]; then
-            echo "::error::Run gofmt -w on:"
-            echo "$unformatted"
-            exit 1
-          fi
-
-      - name: go vet
-        run: go vet ./...
-
-      - name: go test
-        run: go test ./...
-
-      - name: go build
-        run: go build -trimpath -ldflags "-s -w" -o /tmp/skills-check ./cmd/skills-check
-
-      - name: skills-check validate (enforces token budgets)
-        run: /tmp/skills-check validate --path .
-
-      - name: skills-check derive-checklists --check (SKILL.md ↔ checklists/*.yaml sync)
-        shell: bash
-        run: |
-          set -e
-          fail=0
-          for skill in skills/*/; do
-            skill_id=$(basename "$skill")
-            # Skip any directory that has no SKILL.md.
-            [ -f "$skill/SKILL.md" ] || continue
-            if ! /tmp/skills-check derive-checklists "$skill_id" --path . --check; then
-              fail=1
-            fi
-          done
-          if [ "$fail" -ne 0 ]; then
-            echo "::error::One or more checklists/*.yaml is out of sync with its SKILL.md. Run 'skills-check derive-checklists <skill-id>' and commit the result."
-            exit 1
-          fi
-
-  dist-regeneration:
-    name: dist/ matches skills/
-    needs: go-build-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.22"
-          cache: true
-
-      - name: Build skills-check
-        run: go build -trimpath -ldflags "-s -w" -o /tmp/skills-check ./cmd/skills-check
-
-      - name: Regenerate dist/ and diff
-        shell: bash
-        run: |
-          set -e
-          /tmp/skills-check regenerate --path .
-          if ! git diff --exit-code -- dist/; then
-            echo "::error::dist/ files are out of date. Run 'skills-check regenerate' and commit."
-            exit 1
-          fi
-
-  manifest-checksums:
-    name: manifest checksums match repo contents
-    needs: go-build-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.22"
-          cache: true
-
-      - name: Build skills-check
-        run: go build -trimpath -ldflags "-s -w" -o /tmp/skills-check ./cmd/skills-check
-
-      - name: skills-check manifest verify --checksums-only
-        run: /tmp/skills-check manifest verify --path . --checksums-only
-
-  vulnerability-references:
-    name: every vulnerability entry has at least one external reference URL
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Check references
+      - name: Every vulnerability entry has an external reference URL
         shell: bash
         run: |
           set -e
@@ -418,9 +228,6 @@ jobs:
           import json, sys, pathlib
 
           fail = 0
-          # Every entry under vulnerabilities/ that has a "name" or "cve" must
-          # ship at least one external reference URL. Files that aggregate
-          # entries under "entries" are walked.
           for path in sorted(pathlib.Path("vulnerabilities").rglob("*.json")):
               if path.name == "manifest.json":
                   continue
@@ -434,11 +241,7 @@ jobs:
               if isinstance(data, dict):
                   if isinstance(data.get("entries"), list):
                       entries = data["entries"]
-                  # files like patterns.json with namespace_patterns/heuristics
-                  # also count as entry-bearing; require top-level references too
                   if not entries and not data.get("references"):
-                      # only require this for files with concrete vulnerability or
-                      # CVE content; skip empty schemas
                       if any(k in data for k in ("cve", "name", "entries")):
                           print(f"::error file={path}::Missing top-level 'references' URL")
                           fail = 1
@@ -453,25 +256,11 @@ jobs:
           sys.exit(fail)
           PY
 
-  last-updated-check:
-    name: last_updated is bumped when content changes
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
+      - name: DATA_QUALITY.md is up to date
+        run: python3 scripts/generate-data-quality.py --check
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: python -m pip install --quiet pyyaml
-
-      - name: Verify modified skills / vuln files bumped last_updated
+      - name: last_updated is bumped when content changes
+        if: github.event_name == 'pull_request'
         shell: bash
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
@@ -483,11 +272,10 @@ jobs:
             echo "::warning::could not resolve base ref $BASE_REF; skipping check"
             exit 0
           fi
-          # OSV advisories under vulnerabilities/osv/ are mirrored from
-          # osv.dev: their `last_updated` tracks the upstream advisory's
+          # OSV advisories mirror osv.dev; their last_updated tracks the upstream
           # `modified` date, not when we touch the file, so repackaging edits
-          # (e.g. stripping the `details` field) must not require a bump.
-          # Their integrity is covered by the manifest checksum check instead.
+          # (e.g. stripping `details`) must not require a bump. Manifest
+          # checksums guard their integrity instead.
           mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BASE_SHA"...HEAD -- 'skills/**' 'vulnerabilities/**' ':(exclude)vulnerabilities/osv/**' || true)
           if [ "${#CHANGED[@]}" -eq 0 ]; then
             echo "no skill / vuln changes; skipping"
@@ -530,11 +318,9 @@ jobs:
               p = pathlib.Path(path)
               if not p.exists():
                   continue
-              head_text = p.read_text(encoding="utf-8")
-              head_value = field(head_text, path)
+              head_value = field(p.read_text(encoding="utf-8"), path)
               base_value = field(base_text(path), path)
               if head_value is None:
-                  # file does not declare last_updated; skip — schema is checked elsewhere
                   continue
               if base_value is not None and base_value == head_value:
                   print(f"::error file={path}::last_updated must be bumped when the file changes (was {base_value})")
@@ -542,44 +328,94 @@ jobs:
           sys.exit(fail)
           PY
 
-  data-quality-report:
-    name: DATA_QUALITY.md is up to date
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Verify DATA_QUALITY.md matches the live corpus
-        run: python3 scripts/generate-data-quality.py --check
-
-  scanner-eval:
-    name: Scanner eval (dependencies / cicd / dockerfile)
+  go-checks:
+    name: Go (build, vet, test, validate, dist/manifest sync, scanner eval)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.22"
+          cache: true
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      - name: Build skills-mcp
-        run: go build -o skills-mcp ./cmd/skills-mcp
+      - name: Verify go.mod is tidy
+        run: |
+          go mod tidy
+          if ! git diff --quiet -- go.mod go.sum; then
+            echo "::error::go.mod / go.sum are not tidy. Run 'go mod tidy'."
+            git diff -- go.mod go.sum
+            exit 1
+          fi
 
-      - name: Run scanner-eval harness
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l ./cmd)
+          if [ -n "$unformatted" ]; then
+            echo "::error::Run gofmt -w on:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go test
+        run: go test ./...
+
+      - name: Build skills-check + skills-mcp
+        run: |
+          go build -trimpath -ldflags "-s -w" -o /tmp/skills-check ./cmd/skills-check
+          go build -o /tmp/skills-mcp ./cmd/skills-mcp
+
+      - name: skills-check validate (enforces token budgets)
+        run: /tmp/skills-check validate --path .
+
+      - name: derive-checklists --check (SKILL.md ↔ checklists/*.yaml sync)
+        shell: bash
+        run: |
+          set -e
+          fail=0
+          for skill in skills/*/; do
+            skill_id=$(basename "$skill")
+            [ -f "$skill/SKILL.md" ] || continue
+            if ! /tmp/skills-check derive-checklists "$skill_id" --path . --check; then
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::One or more checklists/*.yaml is out of sync with its SKILL.md. Run 'skills-check derive-checklists <skill-id>' and commit the result."
+            exit 1
+          fi
+
+      - name: manifest checksums match repo contents
+        run: /tmp/skills-check manifest verify --path . --checksums-only
+
+      - name: dist/ matches skills/
+        shell: bash
+        run: |
+          set -e
+          /tmp/skills-check regenerate --path .
+          if ! git diff --exit-code -- dist/; then
+            echo "::error::dist/ files are out of date. Run 'skills-check regenerate' and commit."
+            exit 1
+          fi
+
+      - name: Scanner eval (dependencies / cicd / dockerfile)
+        # skills-mcp resolves its library data from --path / $SKILLS_LIBRARY_PATH
+        # / the binary's own dir. The binary lives in /tmp here, so point it at
+        # the checkout explicitly.
+        env:
+          SKILLS_LIBRARY_PATH: ${{ github.workspace }}
         run: |
           python3 evals/benchmarks/scanner-eval.py \
-            --skills-mcp ./skills-mcp \
+            --skills-mcp /tmp/skills-mcp \
             --out evals/baselines/scanner-eval-static.md \
             --verbose
