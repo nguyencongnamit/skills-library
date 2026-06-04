@@ -50,38 +50,38 @@
     },
     {
       "path": "dist/.clinerules",
-      "sha256": "c41545060a5900464f602cc9505f54dfcdf0648e0bb4d24ecce24ed089daaff0",
-      "size": 4087,
+      "sha256": "d30a6842a8f0c5030127352839ac7d88a5087b381792ea2d5c31ae85067cec3c",
+      "size": 4035,
       "action": "unchanged"
     },
     {
       "path": "dist/.cursorrules",
-      "sha256": "bdda648ca32fb6d58e03dba4c85fa3ee11a71f223a8d0930d61c0cc2af413091",
-      "size": 4078,
+      "sha256": "1f697d7ae57fb7183544aaaa63f7e7215612798e57c4912e16459d8dbef46cbf",
+      "size": 4026,
       "action": "unchanged"
     },
     {
       "path": "dist/.windsurfrules",
-      "sha256": "d9a2ee90187919cd0361b8ff804c111250e53e8310e8707d846b286d24b042fb",
-      "size": 4082,
+      "sha256": "90707ff638244b3f0e4fa769ca97b60c9566ce2fcb9af6c0b3d3841c9a49daf8",
+      "size": 4030,
       "action": "unchanged"
     },
     {
       "path": "dist/AGENTS.md",
-      "sha256": "d1e30242b365b6ae54e4b08adb9d37589c05e50c69da1c4f71df42efa0a6454c",
-      "size": 4019,
+      "sha256": "146b186fc2b6d3d837edf3102b27f6cb372a331e84d2f135ccab5cd4a4b08fc4",
+      "size": 3967,
       "action": "unchanged"
     },
     {
       "path": "dist/CLAUDE.md",
-      "sha256": "4a8ad5bac76c29ee9ea2d0f0af9d56f64e986d26c2db9a36f75bb4efae3d3903",
-      "size": 4009,
+      "sha256": "abc0255c862fcc2234eba200cd3a381cd18ae570c598bf22fd723c350f130a67",
+      "size": 3957,
       "action": "unchanged"
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "ce9db5ebbf5acfe767b5d9111aade203cdc451cec2d13be5cd99ba173dfe3781",
-      "size": 98657,
+      "sha256": "a733d7744151e61af5952b07e76b91b659805c38d298bf355bd842baa77a9c5e",
+      "size": 100500,
       "action": "unchanged"
     },
     {
@@ -289,6 +289,18 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/agent-skills/.agents/skills/llm-app-security/SKILL.md",
+      "sha256": "00e71c02684a7bad9a287acca2e6817140882a92f526c6842fc951baa51b3d25",
+      "size": 3879,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/agent-skills/.agents/skills/llm-app-security/metadata.json",
+      "sha256": "b6a2c471849fb489c2901de6ab21925f66d0e4c5cae07397c6d5b74223e98352",
+      "size": 1260,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/agent-skills/.agents/skills/logging-security/SKILL.md",
       "sha256": "85d5617ac235d6258a9682bead1346cb521930d4339708c7b54ae35474fd618f",
       "size": 3266,
@@ -302,14 +314,14 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/ml-security/SKILL.md",
-      "sha256": "2c17a974cd64768b31bcf3974ef551342dfe1e91229e9b21fb1d8c24181be845",
-      "size": 3933,
+      "sha256": "6cd382075c01bf28d4b37c415c0d1ac32ed2c7703d93dd164c96fa135da2e26b",
+      "size": 2593,
       "action": "unchanged"
     },
     {
       "path": "dist/agent-skills/.agents/skills/ml-security/metadata.json",
-      "sha256": "5335fdd00d67eb9caf13319a0cc8516b41bd0945786fe5f9bdcf98276ae75ead",
-      "size": 1063,
+      "sha256": "a7294d465af7e52d0ddbfe1ad19cbab9094e2c116a2fffe5d71cab5c665c2f62",
+      "size": 1045,
       "action": "unchanged"
     },
     {
@@ -625,6 +637,18 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/claude-skills/.claude/skills/llm-app-security/SKILL.md",
+      "sha256": "efba2d4de6b70325bef7d7504a79c0d3886d024a0298240d4c6628156a726dff",
+      "size": 3854,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/claude-skills/.claude/skills/llm-app-security/metadata.json",
+      "sha256": "b6a2c471849fb489c2901de6ab21925f66d0e4c5cae07397c6d5b74223e98352",
+      "size": 1260,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/claude-skills/.claude/skills/logging-security/SKILL.md",
       "sha256": "490c7f00b0fb7c2aff2a520076554972bd355ab4012d7122150e78604430b967",
       "size": 3241,
@@ -638,14 +662,14 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/ml-security/SKILL.md",
-      "sha256": "6826561319fba649c86fcf7570d521f7796144e1a125fb352f9d497b17f7247e",
-      "size": 3908,
+      "sha256": "d9109615e6484ea4429196c9c08e58a69538f0d52aabd3f679eca01dd5d543c0",
+      "size": 2568,
       "action": "unchanged"
     },
     {
       "path": "dist/claude-skills/.claude/skills/ml-security/metadata.json",
-      "sha256": "5335fdd00d67eb9caf13319a0cc8516b41bd0945786fe5f9bdcf98276ae75ead",
-      "size": 1063,
+      "sha256": "a7294d465af7e52d0ddbfe1ad19cbab9094e2c116a2fffe5d71cab5c665c2f62",
+      "size": 1045,
       "action": "unchanged"
     },
     {
@@ -758,8 +782,8 @@
     },
     {
       "path": "dist/copilot-instructions.md",
-      "sha256": "5e4fb54eec75167ba85c5eb6e53931564bca2b34cf2181e3552b100f9ad9af35",
-      "size": 4026,
+      "sha256": "770de74f4281584121a36ede81a240619a86f1b99b2379adab9075d2321dbf09",
+      "size": 3974,
       "action": "unchanged"
     },
     {
@@ -865,6 +889,12 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/copilot-rules/.github/instructions/llm-app-security.instructions.md",
+      "sha256": "be8090fbae6e166c9d172dd00ec340f288bdc51ae756b3532ecffc417b918266",
+      "size": 3329,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/copilot-rules/.github/instructions/logging-security.instructions.md",
       "sha256": "b5494615d06caff79f6b356e92b1882c3e21ba16668f2db9c1b1225a8e188afa",
       "size": 2936,
@@ -872,8 +902,8 @@
     },
     {
       "path": "dist/copilot-rules/.github/instructions/ml-security.instructions.md",
-      "sha256": "8566b488de51ae2b616babaa06e725a137e0ee310b06e5fbc7f2a9e05ef9278d",
-      "size": 3620,
+      "sha256": "7282f599f669c43f162482095877a6dfd21b1041c3f74124a36379dcb93b8fd6",
+      "size": 2185,
       "action": "unchanged"
     },
     {
@@ -1135,6 +1165,18 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/copilot-skills/.github/skills/llm-app-security/SKILL.md",
+      "sha256": "3888540c9ad6ac2badb814f14cac073eade4144555bd8c7998630f90ae8ba4da",
+      "size": 3857,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/copilot-skills/.github/skills/llm-app-security/metadata.json",
+      "sha256": "b6a2c471849fb489c2901de6ab21925f66d0e4c5cae07397c6d5b74223e98352",
+      "size": 1260,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/copilot-skills/.github/skills/logging-security/SKILL.md",
       "sha256": "9f97b899bd0fc0303aff42325609e672c18111c4edbcda8e8d72d5e95d01520f",
       "size": 3244,
@@ -1148,14 +1190,14 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/ml-security/SKILL.md",
-      "sha256": "b2607841e41301d7b5b0c0e1fad1a44667f8e9b3644cbd70f5c5681ef035884f",
-      "size": 3911,
+      "sha256": "0865e89585d90cb226eeb52a83c0434916ef4e954a5e7dd9949e8511aab47dc5",
+      "size": 2571,
       "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/ml-security/metadata.json",
-      "sha256": "5335fdd00d67eb9caf13319a0cc8516b41bd0945786fe5f9bdcf98276ae75ead",
-      "size": 1063,
+      "sha256": "a7294d465af7e52d0ddbfe1ad19cbab9094e2c116a2fffe5d71cab5c665c2f62",
+      "size": 1045,
       "action": "unchanged"
     },
     {
@@ -1369,6 +1411,12 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/cursor-rules/.cursor/rules/llm-app-security.mdc",
+      "sha256": "0750e11ceb4a75708c981c3cfc54eba005623381a1f2c8cc7c265f259e98d6a3",
+      "size": 3917,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/cursor-rules/.cursor/rules/logging-security.mdc",
       "sha256": "280993bcee853135aa4e042ac56213bf0b2fc2b0ac744b7a3b1e4d173b79e597",
       "size": 3229,
@@ -1376,8 +1424,8 @@
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/ml-security.mdc",
-      "sha256": "e11adc67c3f3638aa61962f40592375781d83c2d077b4ae4ebff193234214447",
-      "size": 3976,
+      "sha256": "4aaef310ab10724a5ba3b8d28b7e875d30296d7e87899549b7ee75e5b4588099",
+      "size": 2576,
       "action": "unchanged"
     },
     {
@@ -1436,8 +1484,8 @@
     },
     {
       "path": "dist/devin.md",
-      "sha256": "77db3937c49b130defaaa8516b5e18e10289f4a7bcd10944ccd20447ce8b290e",
-      "size": 4002,
+      "sha256": "c9cce63fb6cef548489fa4fce410bf1f08f37a3a98f977cd7f9fbb4339a1bf5f",
+      "size": 3950,
       "action": "unchanged"
     },
     {
@@ -1543,6 +1591,12 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/windsurf-rules/.windsurf/rules/llm-app-security.md",
+      "sha256": "353774c502880c4e442d1f8ad6e05ba78ad92b81a8d6d856cf3cc207bc941662",
+      "size": 3398,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/windsurf-rules/.windsurf/rules/logging-security.md",
       "sha256": "64995e5059bceada383bfc0e90b6c42e97b663a9c526e7d983527836e4fff2e4",
       "size": 3236,
@@ -1550,8 +1604,8 @@
     },
     {
       "path": "dist/windsurf-rules/.windsurf/rules/ml-security.md",
-      "sha256": "af5a0c2b0c1219681f9a9e43c27e81b7b3859c2a0bd0e90cf31f14932712a971",
-      "size": 3624,
+      "sha256": "917242d030a3003e55a908134371609f18909c9bb46c86ddf60d20ea10381963",
+      "size": 2189,
       "action": "unchanged"
     },
     {
@@ -1616,14 +1670,14 @@
     },
     {
       "path": "profiles/government.yaml",
-      "sha256": "d35c644362605895e7b3e158ecc8d8a64e714598b135e8ebc8257f7139debbc9",
-      "size": 2332,
+      "sha256": "3d77e46a538ffec8d4ecffb1a70cc7620ba5e034462016ce0e92932b60e438cb",
+      "size": 2353,
       "action": "unchanged"
     },
     {
       "path": "profiles/healthcare.yaml",
-      "sha256": "dc2e5053ea4b9228c5d2f75927e4d8623888d0f80d631dd57a37ff65de5d8748",
-      "size": 1750,
+      "sha256": "1d87addf726b2507104c71b9d4d7580d34600420dd6412cf861708eca0fb37df",
+      "size": 1771,
       "action": "unchanged"
     },
     {
@@ -1856,14 +1910,14 @@
     },
     {
       "path": "skills/compliance-awareness/frameworks/cwe_mapping.yaml",
-      "sha256": "d53488596a43d32736cc728f0b3df0b0e2585b12233f326b250996b22ab201fe",
-      "size": 1881,
+      "sha256": "2ce6182183ca31d9feca34b87d909115f17231918b5c452804ffb2980bc2f997",
+      "size": 1936,
       "action": "unchanged"
     },
     {
       "path": "skills/compliance-awareness/frameworks/owasp_mapping.yaml",
-      "sha256": "7dd178109ff6e54249c7ee943c04f5bec7904dd17b146d6b068863bd56a82b25",
-      "size": 1824,
+      "sha256": "bb6ee0a8742ec50aa3bb7a4a947cfbf264e9d9cfbd26f959d6c627bc6faf3e3b",
+      "size": 1879,
       "action": "unchanged"
     },
     {
@@ -2065,6 +2119,18 @@
       "action": "unchanged"
     },
     {
+      "path": "skills/llm-app-security/SKILL.md",
+      "sha256": "5b0a72b275c9b7e62452caa6d229e23b3cce663ef98f5d0c6e52902499d6f711",
+      "size": 5113,
+      "action": "unchanged"
+    },
+    {
+      "path": "skills/llm-app-security/rules/prompt_injection_patterns.json",
+      "sha256": "13d474e55b6a05d8ed4594d10f641accc2ad5487a39c5e926c541b7fc48be840",
+      "size": 2167,
+      "action": "unchanged"
+    },
+    {
       "path": "skills/logging-security/SKILL.md",
       "sha256": "681e2c547943bf7293e5d7a64206f086677e2f0dee8dc0ff8a77e2dae64877dd",
       "size": 4570,
@@ -2084,14 +2150,8 @@
     },
     {
       "path": "skills/ml-security/SKILL.md",
-      "sha256": "2e299868ef389c4683e97dc3de979728a5c725dcfd76da004b132de8aad402f0",
-      "size": 5250,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/ml-security/rules/prompt_injection_patterns.json",
-      "sha256": "13d474e55b6a05d8ed4594d10f641accc2ad5487a39c5e926c541b7fc48be840",
-      "size": 2167,
+      "sha256": "4745c0b73e6f7912efade0cbc304c46a2895dd6601b7f2f9097986c0f05928e9",
+      "size": 3697,
       "action": "unchanged"
     },
     {

@@ -90,7 +90,7 @@ Two published packages:
 | Package | What it is |
 |---------|------------|
 | [`@namncqualgo/secure-code-mcp`](https://www.npmjs.com/package/@namncqualgo/secure-code-mcp) | the MCP server (Go binary + data), agent-agnostic |
-| [`@namncqualgo/secure-code-skill`](https://www.npmjs.com/package/@namncqualgo/secure-code-skill) | the 28 skills + a connector, for Claude Code |
+| [`@namncqualgo/secure-code-skill`](https://www.npmjs.com/package/@namncqualgo/secure-code-skill) | the 29 skills + a connector, for Claude Code |
 
 **MCP server** — add to any MCP client's config (no install; `npx` fetches and
 runs it on demand):
@@ -110,7 +110,7 @@ Or, in Claude Code: `claude mcp add secure-code -- npx -y @namncqualgo/secure-co
 optionally wire up the MCP for active scanning:
 
 ```bash
-# install the 28 skills into ./.claude/skills (self-contained; no MCP needed)
+# install the 29 skills into ./.claude/skills (self-contained; no MCP needed)
 npx @namncqualgo/secure-code-skill init
 
 # (optional) connect the MCP engine for precise automated scanning
@@ -373,7 +373,7 @@ Select your tier with `skills-check init --budget compact`. Compact is the defau
 ```
 secure-code/
 ├── README.md  PROPOSAL.md  ARCHITECTURE.md  SIGNING.md  LICENSE
-├── skills/                              # 28 skill definitions (the core product)
+├── skills/                              # 29 skill definitions (the core product)
 │   ├── secret-detection/                #   74 DLP patterns + exclusions + test corpus
 │   ├── dependency-audit/                #   known-malicious package corpus
 │   ├── supply-chain-security/           #   typosquat + dependency-confusion rules
@@ -389,7 +389,8 @@ secure-code/
 │   ├── iam-best-practices/              #   least-privilege roles + policies
 │   ├── serverless-security/             #   Lambda / Cloud Functions IAM
 │   ├── mobile-security/                 #   Android exported components, iOS ATS
-│   ├── ml-security/                     #   prompt injection, model poisoning
+│   ├── ml-security/                     #   model artifacts, poisoning, training-data PII
+│   ├── llm-app-security/                #   prompt injection, output handling, RAG
 │   ├── protocol-security/               #   TLS 1.2+, mTLS, HSTS, gRPC
 │   ├── error-handling-security/         #   information disclosure
 │   ├── logging-security/                #   secrets / PII in logs, log injection
@@ -639,7 +640,7 @@ out-of-band YubiKey-backed signing procedure and key management policy.
 
 ## Skill catalogue
 
-All 28 skills are language-agnostic unless otherwise noted.
+All 29 skills are language-agnostic unless otherwise noted.
 
 | Skill | Category | Severity | Languages |
 |-------|----------|----------|-----------|
@@ -660,6 +661,7 @@ All 28 skills are language-agnostic unless otherwise noted.
 | `serverless-security` | hardening | high | python, javascript, typescript, java, yaml |
 | `mobile-security` | hardening | high | java, kotlin, swift, objective-c |
 | `ml-security` | prevention | high | python, jupyter |
+| `llm-app-security` | prevention | critical | python, javascript, typescript, go, * |
 | `protocol-security` | hardening | high | * |
 | `error-handling-security` | prevention | medium | * |
 | `logging-security` | prevention | high | * |
