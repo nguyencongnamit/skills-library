@@ -50,32 +50,32 @@
     },
     {
       "path": "dist/.clinerules",
-      "sha256": "d30a6842a8f0c5030127352839ac7d88a5087b381792ea2d5c31ae85067cec3c",
-      "size": 4035,
+      "sha256": "77faf31499e049910fb6e91f80e65f7285dc51df65e322591f48e0ca5d7c0104",
+      "size": 4027,
       "action": "unchanged"
     },
     {
       "path": "dist/.cursorrules",
-      "sha256": "1f697d7ae57fb7183544aaaa63f7e7215612798e57c4912e16459d8dbef46cbf",
-      "size": 4026,
+      "sha256": "7ea47a2e7c07bab8f267d1c373cb6503a5a1d5d5baf3e3acb540785f41a1d5ca",
+      "size": 4018,
       "action": "unchanged"
     },
     {
       "path": "dist/.windsurfrules",
-      "sha256": "90707ff638244b3f0e4fa769ca97b60c9566ce2fcb9af6c0b3d3841c9a49daf8",
-      "size": 4030,
+      "sha256": "d99f88d90441da107790ee030b4d9455fe8cc59e70ff3030d89ece19e010bc72",
+      "size": 4022,
       "action": "unchanged"
     },
     {
       "path": "dist/AGENTS.md",
-      "sha256": "146b186fc2b6d3d837edf3102b27f6cb372a331e84d2f135ccab5cd4a4b08fc4",
-      "size": 3967,
+      "sha256": "2118c4a4d2053aedceea6e90843cf3a4dd4fc35259064d2319fa6309aaf4b0e7",
+      "size": 3959,
       "action": "unchanged"
     },
     {
       "path": "dist/CLAUDE.md",
-      "sha256": "abc0255c862fcc2234eba200cd3a381cd18ae570c598bf22fd723c350f130a67",
-      "size": 3957,
+      "sha256": "5961f1fbb98b128ebef89118bb9d15c8258e030aff68812e4e53781f6ebff409",
+      "size": 3949,
       "action": "unchanged"
     },
     {
@@ -782,8 +782,8 @@
     },
     {
       "path": "dist/copilot-instructions.md",
-      "sha256": "770de74f4281584121a36ede81a240619a86f1b99b2379adab9075d2321dbf09",
-      "size": 3974,
+      "sha256": "c5bdd5e7c2c473a9905d9addbaef322f9e060c0f5dd11bc83335080368bf71e0",
+      "size": 3966,
       "action": "unchanged"
     },
     {
@@ -1484,8 +1484,8 @@
     },
     {
       "path": "dist/devin.md",
-      "sha256": "c9cce63fb6cef548489fa4fce410bf1f08f37a3a98f977cd7f9fbb4339a1bf5f",
-      "size": 3950,
+      "sha256": "f0b33b60983a0e1bf448e1f01d1823bdf4da59f103a102a74e77499a63ba0a39",
+      "size": 3942,
       "action": "unchanged"
     },
     {

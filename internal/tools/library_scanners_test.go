@@ -276,11 +276,23 @@ USER root
 	}
 }
 
-func TestPolicyCheckUnknownFile(t *testing.T) {
+// TestPolicyCheckFallsBackToSecrets verifies that a file matching no
+// specialised scanner routes to scan_secrets (rather than erroring), so a
+// gate run over an arbitrary set of changed files still catches leaked
+// credentials. A clean text file passes. Positive secret detection is
+// covered by the ScanSecrets tests; here we only assert the routing.
+func TestPolicyCheckFallsBackToSecrets(t *testing.T) {
 	lib := newLibrary(t)
-	p := writeTempFile(t, "random.txt", "hello")
-	if _, err := lib.PolicyCheck(p, "high"); err == nil {
-		t.Fatalf("expected unknown-file error, got nil")
+	p := writeTempFile(t, "random.txt", "hello world, nothing secret here\n")
+	res, err := lib.PolicyCheck(p, "high")
+	if err != nil {
+		t.Fatalf("PolicyCheck(unknown file): unexpected error %v", err)
+	}
+	if res.Scan != "scan_secrets" {
+		t.Errorf("unknown file should route to scan_secrets, got %q", res.Scan)
+	}
+	if !res.Pass || res.ExitCode != 0 {
+		t.Errorf("clean text file should pass at high floor; got %+v", res)
 	}
 }
 
@@ -439,7 +451,9 @@ func TestPickScanRoutesGitHubWorkflows(t *testing.T) {
 			t.Errorf("pickScan(%q) = %q, want %q", path, got, want)
 		}
 	}
-	if _, err := pickScan("/repo/notes.md"); err == nil {
-		t.Errorf("expected pickScan to reject /repo/notes.md")
+	// Files no specialised scanner claims fall back to a secret scan
+	// rather than erroring, so a gate over a mixed file set still runs.
+	if got, err := pickScan("/repo/notes.md"); err != nil || got != "scan_secrets" {
+		t.Errorf("pickScan(/repo/notes.md) = %q, err %v; want scan_secrets, nil", got, err)
 	}
 }

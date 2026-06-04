@@ -997,19 +997,22 @@ type PolicyCheckFinding struct {
 //	Gemfile.lock                                   -> scan_dependencies
 //	*.yml / *.yaml under .github/workflows/        -> scan_github_actions
 //	Dockerfile / *.dockerfile                      -> scan_dockerfile
+//	anything else                                  -> scan_secrets
 //
-// Files that don't match any pattern return an error so a CI gate
-// fails closed.
+// Files that match no specialised scanner fall back to a secret scan
+// (a credential can live in any file), so a gate run over a mixed set
+// of changed files still catches leaked secrets instead of erroring on
+// every unrecognised path. Curated false positives are skipped.
 func (l *Library) PolicyCheck(filePath, severityFloor string) (*PolicyCheckResult, error) {
 	if strings.TrimSpace(filePath) == "" {
-		return nil, fmt.Errorf("policy_check: file_path is required")
+		return nil, fmt.Errorf("gate: file_path is required")
 	}
 	floor := strings.ToLower(strings.TrimSpace(severityFloor))
 	if floor == "" {
 		floor = "high"
 	}
 	if !knownSeverity(floor) {
-		return nil, fmt.Errorf("policy_check: unknown severity %q; want one of critical|high|medium|low|info", severityFloor)
+		return nil, fmt.Errorf("gate: unknown severity %q; want one of critical|high|medium|low|info", severityFloor)
 	}
 	scan, err := pickScan(filePath)
 	if err != nil {
@@ -1071,6 +1074,24 @@ func (l *Library) PolicyCheck(filePath, severityFloor string) (*PolicyCheckResul
 				Snippet:    f.Snippet,
 			})
 		}
+	case "scan_secrets":
+		res, err := l.ScanSecrets("", filePath)
+		if err != nil {
+			return nil, err
+		}
+		out.FileSize = res.FileSize
+		for _, m := range res.Matches {
+			// Curated false positives (the exclusions block in
+			// secret_detection.yaml) must not fail a gate.
+			if m.KnownFalsePositive {
+				continue
+			}
+			out.Findings = append(out.Findings, PolicyCheckFinding{
+				RuleID:   "skills-mcp.secret." + m.Name,
+				Severity: m.Severity,
+				Title:    m.Name,
+			})
+		}
 	}
 	// Aggregate counts and decide pass/fail.
 	out.Pass = true
@@ -1121,7 +1142,12 @@ func pickScan(filePath string) (string, error) {
 			return "scan_github_actions", nil
 		}
 	}
-	return "", fmt.Errorf("policy_check: no scanner is configured for %s", base)
+	// No file-type-specific scanner matched. Fall back to a secret scan:
+	// a credential can live in any file, so for a gate run over an
+	// arbitrary set of changed files this is safer (and quieter) than
+	// failing closed on every unrecognised path. Routable types above
+	// still get their specialised scanner.
+	return "scan_secrets", nil
 }
 
 // knownSeverity validates the severity_floor argument.
