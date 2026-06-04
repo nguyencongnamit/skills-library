@@ -1,9 +1,12 @@
 #!/usr/bin/env node
-// Assemble the publishable npm package set from prebuilt skills-mcp binaries
-// plus the library data tree. Produces, under --out:
+// Assemble the publishable npm package set from prebuilt skills-mcp +
+// skills-check binaries plus the library data tree. Produces, under --out:
 //
-//   secure-code-mcp/                     (platform-agnostic: launcher + data/)
-//   secure-code-mcp-<node-platform-arch> (one per built binary: just the binary)
+//   secure-code-mcp/                     (platform-agnostic: launchers + data/)
+//   secure-code-mcp-<node-platform-arch> (per platform: skills-mcp + skills-check)
+//
+// The main package exposes two bins — `secure-code-mcp` (the MCP server) and
+// `secure-code-check` (the CLI / gate) — both reading the single bundled data/.
 //
 // Each platform package is gated by `os`/`cpu` so npm installs only the one
 // matching the host. The main package lists them all as optionalDependencies
@@ -12,7 +15,7 @@
 // Usage:
 //   node npm/build.mjs --binaries <dir> --root <repo-root> --version <x.y.z> --out <dir>
 //
-// --binaries  dir containing skills-mcp-<goos>-<goarch>[.exe] (e.g. release artifacts)
+// --binaries  dir with skills-mcp-<goos>-<goarch>[.exe] and skills-check-<goos>-<goarch>[.exe]
 // --root      repo root to copy the data tree from (default: repo root of this script)
 // --version   version stamped into every package.json (default: 0.0.0-dev)
 // --out       output dir (default: npm/dist)
@@ -90,10 +93,21 @@ async function main() {
     const destBin = path.join(pkgDir, 'bin', p.exe ? 'skills-mcp.exe' : 'skills-mcp');
     await fs.copyFile(srcBin, destBin);
     await fs.chmod(destBin, 0o755);
+    // The same platform package also carries the skills-check CLI binary
+    // (the `secure-code-check` bin in the main package launches it), so the
+    // data tree is shipped once and both tools share it. Built when present.
+    const srcCheck = path.join(binaries, `skills-check-${p.go}${p.exe ? '.exe' : ''}`);
+    if (await exists(srcCheck)) {
+      const destCheck = path.join(pkgDir, 'bin', p.exe ? 'skills-check.exe' : 'skills-check');
+      await fs.copyFile(srcCheck, destCheck);
+      await fs.chmod(destCheck, 0o755);
+    } else {
+      console.warn(`skip skills-check for ${p.node}: ${path.basename(srcCheck)} not found in --binaries`);
+    }
     await writeJson(path.join(pkgDir, 'package.json'), {
       name: `${SCOPE}/${MAIN}-${p.node}`,
       version,
-      description: `secure-code MCP server binary for ${p.node}.`,
+      description: `secure-code MCP server + CLI binaries for ${p.node}.`,
       license: 'Apache-2.0',
       repository: { type: 'git', url: 'git+https://github.com/namncqualgo/skills-library.git' },
       os: [p.os],
@@ -111,6 +125,8 @@ async function main() {
   await fs.mkdir(path.join(mainOut, 'bin'), { recursive: true });
   await fs.copyFile(path.join(mainSkel, 'bin', 'launch.js'), path.join(mainOut, 'bin', 'launch.js'));
   await fs.chmod(path.join(mainOut, 'bin', 'launch.js'), 0o755);
+  await fs.copyFile(path.join(mainSkel, 'bin', 'check.js'), path.join(mainOut, 'bin', 'check.js'));
+  await fs.chmod(path.join(mainOut, 'bin', 'check.js'), 0o755);
   await fs.copyFile(path.join(mainSkel, 'README.md'), path.join(mainOut, 'README.md'));
 
   // data tree

@@ -28,7 +28,7 @@ binary matching your OS/CPU.
 ### Restricting file access
 
 The file-reading tools (`scan_secrets`, `scan_dependencies`,
-`scan_github_actions`, `scan_dockerfile`, `policy_check`) default to the
+`scan_github_actions`, `scan_dockerfile`, `gate`) default to the
 current working directory. To widen or pin the allow-list, pass through
 flags after the package name:
 
@@ -36,14 +36,31 @@ flags after the package name:
 { "command": "npx", "args": ["-y", "@namncqualgo/secure-code-mcp", "--allowed-roots", "/path/to/project"] }
 ```
 
+## CLI — `secure-code-check` (the gate)
+
+The same package also ships the `skills-check` CLI as a second command,
+`secure-code-check`, for use in scripts, pre-commit hooks, and CI — no
+JSON-RPC, just an exit code:
+
+```bash
+npm i -D @namncqualgo/secure-code-mcp
+# pick the right scanner for a file and fail (exit 1) on findings >= floor
+npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity-floor high
+```
+
+`gate` dispatches to the dependency / Dockerfile / GitHub Actions scanners by
+file shape and falls back to a secret scan for anything else. The bundled
+data tree is located automatically (no `--path` needed).
+
 ## How it's packaged
 
-This is a thin launcher. The server is a Go binary; this package declares one
-optional dependency per platform (`-darwin-arm64`, `-linux-x64`, …) gated by
-`os`/`cpu`, so npm installs **only** the binary for your machine — no
-postinstall download, works offline and under `npm ci --ignore-scripts`. The
-library data (skills, the OSV cache, checklists) ships once inside this
-package and is handed to the binary via `--path`.
+This is a thin launcher. The server and CLI are Go binaries; this package
+declares one optional dependency per platform (`-darwin-arm64`, `-linux-x64`,
+…) gated by `os`/`cpu`, so npm installs **only** the binaries for your machine
+— no postinstall download, works offline and under `npm ci --ignore-scripts`.
+The library data (skills, the OSV cache, checklists) ships once inside this
+package and is shared by both bins (`secure-code-mcp` via `--path`,
+`secure-code-check` via `$SKILLS_LIBRARY_PATH`).
 
 ## Also available
 

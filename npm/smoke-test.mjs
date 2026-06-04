@@ -54,18 +54,23 @@ async function main() {
 
   // 1. build host binary
   const binName = `skills-mcp-${target.go}${target.exe ? '.exe' : ''}`;
-  console.log(`[1/4] building ${binName}`);
+  const checkName = `skills-check-${target.go}${target.exe ? '.exe' : ''}`;
+  console.log(`[1/5] building ${binName} + ${checkName}`);
   run('go', ['build', '-trimpath', '-ldflags', '-s -w', '-o', path.join(binDir, binName), './cmd/skills-mcp'], {
+    cwd: REPO,
+    env: { ...process.env, CGO_ENABLED: '0' },
+  });
+  run('go', ['build', '-trimpath', '-ldflags', '-s -w', '-o', path.join(binDir, checkName), './cmd/skills-check'], {
     cwd: REPO,
     env: { ...process.env, CGO_ENABLED: '0' },
   });
 
   // 2. assemble packages
-  console.log('[2/4] assembling npm packages');
+  console.log('[2/5] assembling npm packages');
   run('node', [path.join(HERE, 'build.mjs'), '--binaries', binDir, '--root', REPO, '--version', '0.0.0-smoke', '--out', outDir]);
 
   // 3. wire the platform package into the main package's node_modules
-  console.log('[3/4] wiring optionalDependency into node_modules');
+  console.log('[3/5] wiring optionalDependency into node_modules');
   const mainPkg = path.join(outDir, MAIN);
   const platPkg = path.join(outDir, `${MAIN}-${key}`);
   if (!(await stat(platPkg))) die(`platform package not assembled for ${key}`);
@@ -74,7 +79,7 @@ async function main() {
   await fs.cp(platPkg, nm, { recursive: true });
 
   // 4. launch + initialize handshake
-  console.log('[4/4] launching server and sending initialize');
+  console.log('[4/5] launching server and sending initialize');
   const launcher = path.join(mainPkg, 'bin', 'launch.js');
   const req =
     JSON.stringify({
@@ -104,8 +109,18 @@ async function main() {
   const name = resp?.result?.serverInfo?.name;
   if (name !== 'skills-mcp') die(`unexpected initialize response: ${JSON.stringify(resp)}`);
 
+  // 5. run the CLI gate via the check launcher; it must resolve the
+  //    skills-check binary + the bundled data tree (via SKILLS_LIBRARY_PATH)
+  //    and exit 1 on a deliberately bad Dockerfile.
+  console.log('[5/5] running `secure-code-check gate` on a bad Dockerfile');
+  const checker = path.join(mainPkg, 'bin', 'check.js');
+  const df = path.join(work, 'Dockerfile');
+  await fs.writeFile(df, 'FROM node:latest\nUSER root\n');
+  const gate = spawnSync(process.execPath, [checker, 'gate', df, '--severity-floor', 'high'], { stdio: 'inherit' });
+  if (gate.status !== 1) die(`expected \`gate\` to exit 1 on a bad Dockerfile, got ${gate.status}`);
+
   await fs.rm(work, { recursive: true, force: true });
-  console.log(`smoke-test: PASS — ${SCOPE}/${MAIN} (${key}) handshakes; serverInfo.name=${name}`);
+  console.log(`smoke-test: PASS — ${SCOPE}/${MAIN} (${key}) MCP handshakes (serverInfo.name=${name}) and \`secure-code-check gate\` gates`);
 }
 
 async function stat(p) {
