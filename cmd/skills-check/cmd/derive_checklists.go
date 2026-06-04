@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"sort"
 	"strings"
@@ -293,7 +294,8 @@ func mergeChecklist(path string, markers []bulletWithMarker, skillID, fwName str
 		existing.Framework = fwName
 	}
 	existing.GeneratedFrom = fmt.Sprintf("skills/%s/SKILL.md", skillID)
-	existing.LastUpdated = time.Now().UTC().Format("2006-01-02")
+	prevPatterns := existing.Patterns
+	prevLastUpdated := existing.LastUpdated
 	desired := map[string]derivedPattern{}
 	for _, b := range markers {
 		sev := b.marker.Severity
@@ -333,6 +335,15 @@ func mergeChecklist(path string, markers []bulletWithMarker, skillID, fwName str
 		merged = append(merged, desired[id])
 	}
 	existing.Patterns = merged
+	// Stamp today's date ONLY when the derived patterns actually changed (or
+	// the checklist is new). Stamping unconditionally with time.Now made
+	// `derive-checklists --check` report spurious drift on a UTC-day rollover
+	// and fail unrelated PRs the day after a checklist was last generated.
+	if !had || !reflect.DeepEqual(prevPatterns, merged) {
+		existing.LastUpdated = time.Now().UTC().Format("2006-01-02")
+	} else {
+		existing.LastUpdated = prevLastUpdated
+	}
 	return existing, had, nil
 }
 
