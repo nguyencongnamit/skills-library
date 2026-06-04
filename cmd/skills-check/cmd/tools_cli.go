@@ -545,7 +545,7 @@ func scanGitHubActionsCmd() *cobra.Command {
 func policyCheckCmd() *cobra.Command {
 	var repoPath, severityFloor, format string
 	c := &cobra.Command{
-		Use:     "gate <file>",
+		Use:     "gate <file>...",
 		Aliases: []string{"policy-check"},
 		Short:   "Scan <file> with the matching scanner and exit non-zero when any finding meets the severity floor",
 		Long: `gate chooses between scan-dependencies / scan-dockerfile /
@@ -558,47 +558,71 @@ This is the canonical "fail the build" CLI entry point. Wrap it in a
 shell call from your pre-commit or CI step.
 
 (Formerly named "policy-check"; that name still works as an alias.)`,
-		Args: cobra.ExactArgs(1),
+		Args: cobra.MinimumNArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, false); err != nil {
 				return err
 			}
-			file := args[0]
-			lib, err := newLibraryForCmd(repoPath, "", file)
-			if err != nil {
-				return err
-			}
-			fileAbs, _ := filepath.Abs(file)
-			res, err := lib.PolicyCheck(fileAbs, severityFloor)
-			if err != nil {
-				return err
+			// Gate over every file argument so a pre-commit hook can pass
+			// the whole staged set (and a CI step a changed-file list) in
+			// one invocation. The gate fails if ANY file has a finding at
+			// or above the floor.
+			var results []*tools.PolicyCheckResult
+			floor := severityFloor
+			failures, totalFindings := 0, 0
+			for _, file := range args {
+				lib, err := newLibraryForCmd(repoPath, "", file)
+				if err != nil {
+					return err
+				}
+				fileAbs, _ := filepath.Abs(file)
+				res, err := lib.PolicyCheck(fileAbs, severityFloor)
+				if err != nil {
+					return err
+				}
+				results = append(results, res)
+				floor = res.SeverityFloor
+				if !res.Pass {
+					failures++
+					totalFindings += len(res.Findings)
+				}
 			}
 			switch format {
 			case "json":
-				_ = emitJSON(c.OutOrStdout(), res)
-			default:
-				verdict := "PASS"
-				if !res.Pass {
-					verdict = "FAIL"
+				// Single file → one object (back-compat); many → an array.
+				if len(results) == 1 {
+					_ = emitJSON(c.OutOrStdout(), results[0])
+				} else {
+					_ = emitJSON(c.OutOrStdout(), results)
 				}
-				fmt.Fprintf(c.OutOrStdout(), "=== gate %s ===\n", file)
-				fmt.Fprintf(c.OutOrStdout(), "Verdict:        %s\n", verdict)
-				fmt.Fprintf(c.OutOrStdout(), "Severity floor: %s\n", res.SeverityFloor)
-				fmt.Fprintf(c.OutOrStdout(), "Scanner used:   %s\n", res.Scan)
-				fmt.Fprintf(c.OutOrStdout(), "Findings: %d\n", len(res.Findings))
-				for sev, n := range res.Counts {
-					fmt.Fprintf(c.OutOrStdout(), "  %s: %d\n", sev, n)
+			default:
+				for i, res := range results {
+					verdict := "PASS"
+					if !res.Pass {
+						verdict = "FAIL"
+					}
+					fmt.Fprintf(c.OutOrStdout(), "=== gate %s ===\n", args[i])
+					fmt.Fprintf(c.OutOrStdout(), "Verdict:        %s\n", verdict)
+					fmt.Fprintf(c.OutOrStdout(), "Severity floor: %s\n", res.SeverityFloor)
+					fmt.Fprintf(c.OutOrStdout(), "Scanner used:   %s\n", res.Scan)
+					fmt.Fprintf(c.OutOrStdout(), "Findings: %d\n", len(res.Findings))
+					for sev, n := range res.Counts {
+						fmt.Fprintf(c.OutOrStdout(), "  %s: %d\n", sev, n)
+					}
+				}
+				if len(results) > 1 {
+					fmt.Fprintf(c.OutOrStdout(), "=== %d file(s), %d failing ===\n", len(results), failures)
 				}
 			}
-			// Surface the result via exit code so a CI step can gate
-			// on a single command. We return a sentinel error here
-			// rather than os.Exit so the Cobra layer can still print
-			// any final state and tests can observe the failure.
-			if !res.Pass {
+			// Surface the result via exit code so a CI / pre-commit step
+			// can gate on a single command. We return a sentinel error
+			// rather than os.Exit so the Cobra layer can still print any
+			// final state and tests can observe the failure.
+			if failures > 0 {
 				// Hide usage on a policy failure — this is not a
 				// flag-error, just findings.
 				c.SilenceUsage = true
-				return &policyFailureError{count: len(res.Findings), floor: res.SeverityFloor}
+				return &policyFailureError{count: totalFindings, floor: floor}
 			}
 			return nil
 		},
