@@ -28,6 +28,41 @@ func repoRootForTest(t *testing.T) string {
 	return ""
 }
 
+// TestResolveLibraryRoot locks in the precedence that lets the file
+// scanners run inside an arbitrary project: explicit --path wins, then
+// $SKILLS_LIBRARY_PATH, then the "." cwd default. The env step is what
+// makes `skills-check policy-check` usable from a user's CI / pre-commit
+// without a skills-library checkout in the working directory.
+func TestResolveLibraryRoot(t *testing.T) {
+	cases := []struct {
+		name    string
+		flagVal string
+		env     string // "" means unset
+		want    string
+	}{
+		{"explicit path beats env", "/explicit/root", "/env/root", "/explicit/root"},
+		{"explicit path, no env", "/explicit/root", "", "/explicit/root"},
+		{"dot default falls through to env", ".", "/env/root", "/env/root"},
+		{"empty falls through to env", "", "/env/root", "/env/root"},
+		{"dot default, no env, stays cwd", ".", "", "."},
+		{"empty, no env, becomes cwd", "", "", "."},
+		{"env is trimmed", ".", "  /env/root  ", "/env/root"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.env == "" {
+				os.Unsetenv("SKILLS_LIBRARY_PATH")
+			} else {
+				t.Setenv("SKILLS_LIBRARY_PATH", tc.env)
+			}
+			if got := resolveLibraryRoot(tc.flagVal); got != tc.want {
+				t.Errorf("resolveLibraryRoot(%q) with env %q = %q; want %q",
+					tc.flagVal, tc.env, got, tc.want)
+			}
+		})
+	}
+}
+
 // run executes one subcommand against the real repo and returns
 // stdout, stderr, and the resulting error. The returned error is
 // whatever the RunE handler produced — *not* an os.Exit — so tests
