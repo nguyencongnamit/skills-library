@@ -312,7 +312,7 @@ func TestPolicyFailureSentinelIsDistinguishable(t *testing.T) {
 	if IsPolicyFailure(nil) {
 		t.Error("IsPolicyFailure should reject nil")
 	}
-	want := "policy-check: 3 finding(s) at or above high"
+	want := "gate: 3 finding(s) at or above high"
 	if got := err.Error(); got != want {
 		t.Errorf("Error() = %q, want %q", got, want)
 	}

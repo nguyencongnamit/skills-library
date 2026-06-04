@@ -21,7 +21,7 @@ import (
 // check_dependency, check_typosquat, map_compliance_control,
 // get_sigma_rule, version_status, scan_dependencies,
 // scan_github_actions, scan_dockerfile, explain_finding, and
-// policy_check.
+// gate (formerly policy_check).
 type Server struct {
 	lib *tools.Library
 }
@@ -379,7 +379,9 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 		return s.lib.ListExternalTools()
 	case "explain_finding":
 		return s.lib.ExplainFinding(stringArg(args, "query"))
-	case "policy_check":
+	case "gate", "policy_check":
+		// "policy_check" kept as a back-compat alias for the renamed
+		// "gate" tool so existing callers keep working.
 		return s.lib.PolicyCheck(
 			stringArg(args, "file_path"),
 			stringArg(args, "severity_floor"),

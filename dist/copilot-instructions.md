@@ -23,7 +23,7 @@ scanning, or CI policy checks.
    - `scan_secrets(text | file_path)` / `check_secret_pattern(text)`
      before committing potential credentials.
    - `scan_github_actions(file_path)` / `scan_dockerfile(file_path)`
-     / `policy_check(file_path, severity_floor?)` /
+     / `gate(file_path, severity_floor?)` /
      `explain_finding(query)` for CI / image / finding triage.
    - `map_compliance_control`, `get_sigma_rule`, `version_status()`
      for controls / Sigma rules / data version respectively.

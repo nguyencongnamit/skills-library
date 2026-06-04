@@ -186,7 +186,7 @@ the OSV advisory set. With --vuln-source hybrid (or external), live
 api.osv.dev results are merged in too.
 
 Returns exit 0 always; the result still lists findings — use
-'skills-check policy-check' when you need a CI-failing scan.`,
+'skills-check gate' when you need a CI-failing scan.`,
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
@@ -539,22 +539,25 @@ func scanGitHubActionsCmd() *cobra.Command {
 }
 
 // =============================================================================
-// policy-check
+// gate (formerly policy-check)
 // =============================================================================
 
 func policyCheckCmd() *cobra.Command {
 	var repoPath, severityFloor, format string
 	c := &cobra.Command{
-		Use:   "policy-check <file>",
-		Short: "Dispatch the appropriate scanner for <file> and exit non-zero when any finding meets the severity floor",
-		Long: `policy-check chooses between scan-dependencies / scan-dockerfile /
-scan-github-actions / scan-secrets based on the input file shape and
-returns a CI-friendly exit code: 0 when nothing meets the severity
-floor, 1 when at least one finding does. severity-floor defaults to
-"high".
+		Use:     "gate <file>",
+		Aliases: []string{"policy-check"},
+		Short:   "Scan <file> with the matching scanner and exit non-zero when any finding meets the severity floor",
+		Long: `gate chooses between scan-dependencies / scan-dockerfile /
+scan-github-actions based on the input file shape, falling back to
+scan-secrets for any other file, and returns a CI-friendly exit code:
+0 when nothing meets the severity floor, 1 when at least one finding
+does. severity-floor defaults to "high".
 
 This is the canonical "fail the build" CLI entry point. Wrap it in a
-shell call from your pre-commit or CI step.`,
+shell call from your pre-commit or CI step.
+
+(Formerly named "policy-check"; that name still works as an alias.)`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, false); err != nil {
@@ -578,7 +581,7 @@ shell call from your pre-commit or CI step.`,
 				if !res.Pass {
 					verdict = "FAIL"
 				}
-				fmt.Fprintf(c.OutOrStdout(), "=== policy-check %s ===\n", file)
+				fmt.Fprintf(c.OutOrStdout(), "=== gate %s ===\n", file)
 				fmt.Fprintf(c.OutOrStdout(), "Verdict:        %s\n", verdict)
 				fmt.Fprintf(c.OutOrStdout(), "Severity floor: %s\n", res.SeverityFloor)
 				fmt.Fprintf(c.OutOrStdout(), "Scanner used:   %s\n", res.Scan)
@@ -618,7 +621,7 @@ type policyFailureError struct {
 }
 
 func (e *policyFailureError) Error() string {
-	return fmt.Sprintf("policy-check: %d finding(s) at or above %s", e.count, e.floor)
+	return fmt.Sprintf("gate: %d finding(s) at or above %s", e.count, e.floor)
 }
 
 // IsPolicyFailure reports whether err is the sentinel above. Used by

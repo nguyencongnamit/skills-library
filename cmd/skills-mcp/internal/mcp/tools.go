@@ -218,8 +218,8 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
-			"name":        "policy_check",
-			"description": "Pick the right scanner for file_path and report a CI-friendly pass/fail with a per-severity count. Dispatches to scan_dependencies for lockfiles, scan_github_actions for `.github/workflows/*.{yml,yaml}` files, and scan_dockerfile for Dockerfiles. Findings at or above `severity_floor` (default: high) fail the check; the response includes `pass` and `exit_code` (0 on pass, 1 on fail) so a CI wrapper can branch on it.",
+			"name":        "gate",
+			"description": "Pick the right scanner for file_path and report a CI-friendly pass/fail with a per-severity count. Dispatches to scan_dependencies for lockfiles, scan_github_actions for `.github/workflows/*.{yml,yaml}` files, and scan_dockerfile for Dockerfiles, falling back to scan_secrets for any other file. Findings at or above `severity_floor` (default: high) fail the check; the response includes `pass` and `exit_code` (0 on pass, 1 on fail) so a CI wrapper can branch on it. (Formerly `policy_check`; that name is still accepted.)",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{
