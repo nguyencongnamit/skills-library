@@ -606,6 +606,20 @@ schema field-for-field), and where the underlying scanner supports it,
 threaded through to the same `local | external | hybrid` modes
 documented in [Live OSV.dev lookups](#live-osvdev-lookups-via---vuln-source-opt-in-enrichment).
 
+The file scanners read their rule data from a skills-library checkout.
+When you run them outside this repo — in a CI step, a pre-commit hook, or
+another project — point them at the data tree once via the
+`SKILLS_LIBRARY_PATH` environment variable instead of passing `--path` on
+every call (resolution order: explicit `--path` → `$SKILLS_LIBRARY_PATH` →
+current directory). If no rule data is found the command exits non-zero
+with an error, so a misconfigured gate fails loudly rather than silently
+passing:
+
+```bash
+export SKILLS_LIBRARY_PATH=/opt/secure-code   # data tree, set once
+skills-check policy-check Dockerfile --severity-floor high
+```
+
 ## Building and running tests
 
 ```bash
