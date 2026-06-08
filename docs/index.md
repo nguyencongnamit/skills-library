@@ -13,7 +13,7 @@ Structured security skills + supply-chain vulnerability intelligence for AI codi
 <div class="ss-hero-shields">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="MIT">
   <img src="https://img.shields.io/github/actions/workflow/status/namncqualgo/skills-library/validate.yml?branch=main&label=CI" alt="CI">
-  <img src="https://img.shields.io/badge/skills-28-blue" alt="Skills">
+  <img src="https://img.shields.io/badge/skills-29-blue" alt="Skills">
   <img src="https://img.shields.io/badge/CVE%20patterns-58-orange" alt="CVE patterns">
   <img src="https://img.shields.io/badge/supply--chain%20ecosystems-9-purple" alt="Supply-chain ecosystems">
   <img src="https://img.shields.io/badge/DLP%20patterns-74-red" alt="DLP patterns">
@@ -22,7 +22,7 @@ Structured security skills + supply-chain vulnerability intelligence for AI codi
 </div>
 
 ```
-git clone https://github.com/namncqualgo/skills-library.git && cd skills-library && go build ./cmd/...
+npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity-floor high
 ```
 
 <div class="ss-hero-badges">
@@ -34,7 +34,7 @@ git clone https://github.com/namncqualgo/skills-library.git && cd skills-library
 </div>
 
 <div class="ss-stats">
-  <div class="ss-stat"><span class="ss-stat-value">28</span><span class="ss-stat-label">Skills</span></div>
+  <div class="ss-stat"><span class="ss-stat-value">29</span><span class="ss-stat-label">Skills</span></div>
   <div class="ss-stat"><span class="ss-stat-value">58</span><span class="ss-stat-label">CVE Patterns</span></div>
   <div class="ss-stat"><span class="ss-stat-value">9</span><span class="ss-stat-label">Supply-Chain Ecosystems</span></div>
   <div class="ss-stat"><span class="ss-stat-value">74</span><span class="ss-stat-label">DLP Patterns</span></div>
@@ -61,33 +61,27 @@ Your developers use Claude Code, Cursor, Copilot, and a dozen other AI coding as
 
 ## Embed in 3 commands
 
-Clone, build, point your AI assistant at the generated config file or wire up the MCP server.
+Everything ships on npm — no checkout, no Go toolchain. The package bundles the
+platform binary and the rule data; pick a surface.
 
 ```bash
-git clone https://github.com/namncqualgo/skills-library.git
-cd skills-library && go build -trimpath -ldflags "-s -w" -o skills-check ./cmd/skills-check
-./skills-check init --tool claude --skills secret-detection,dependency-audit,secure-code-review --budget compact
-```
-
-That writes a `CLAUDE.md` into the current project containing only the skills you picked, at the token budget you specified.
-
-```bash
-# Or wire the MCP server so any MCP-speaking client can call its 15 tools on demand
-go build -trimpath -ldflags "-s -w" -o skills-mcp ./cmd/skills-mcp
-claude mcp add skillshield $(pwd)/skills-mcp -- --path $(pwd)
+# Drop the skills into a project (writes IDE config, e.g. CLAUDE.md)
+npx @namncqualgo/secure-code-skill init --tool claude
 ```
 
 ```bash
-# Verify the corpus is intact and check a dependency
-./skills-check validate                                    # 28 skills · 1382 checksums green
-./skills-check list                                        # token counts per tier per skill
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/call",
-  "params":{"name":"lookup_vulnerability",
-    "arguments":{"package":"event-stream","ecosystem":"npm","version":"3.3.6"}}}' \
-  | ./skills-mcp --path .
+# Or wire the MCP server so any MCP-speaking client can call its tools on demand
+claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp
 ```
 
-The library works fully offline from the first `git clone`. Remote updates are signed deltas pulled from GitHub Releases when you want them.
+```bash
+# Or gate files from the terminal / CI / pre-commit (deterministic, exit code)
+npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile package-lock.json --severity-floor high
+```
+
+`gate` picks the right scanner per file (Dockerfile / lockfile / workflow → specialised
+scanner; anything else → secret scan) and exits non-zero when a finding meets the floor.
+The data is bundled, so it runs fully offline.
 
 </div>
 
@@ -101,7 +95,7 @@ flowchart LR
     AI -->|JSON-RPC on demand| MCP["skills-mcp<br/>server"]
     subgraph LIB [" SkillShield library "]
         direction TB
-        SK["skills/<br/>28 SKILL.md"]
+        SK["skills/<br/>29 SKILL.md"]
         VU["vulnerabilities/<br/>npm · pypi · cargo · gem · go ·<br/>nuget · maven · gh-actions · docker"]
         CV["CVE patterns<br/>58 code-relevant"]
         DLP["DLP patterns<br/>74 secret-detection"]
@@ -126,7 +120,7 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <a class="ss-card" data-pkg="skills" href="https://github.com/namncqualgo/skills-library/tree/main/skills">
 <span class="ss-card-icon">🧠</span>
 <span class="ss-card-body"><span class="ss-card-title">Skill Catalogue</span>
-<span class="ss-card-desc">28 structured security skills, machine-readable, ranked by severity. Three token tiers (minimal / compact / full) per skill.</span></span>
+<span class="ss-card-desc">29 structured security skills, machine-readable, ranked by severity. Three token tiers (minimal / compact / full) per skill.</span></span>
 </a>
 <a class="ss-card" data-pkg="cve" href="https://github.com/namncqualgo/skills-library/tree/main/vulnerabilities/cve">
 <span class="ss-card-icon">🛡️</span>
@@ -151,7 +145,7 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <a class="ss-card" data-pkg="cli" href="quickstart/">
 <span class="ss-card-icon">⚡</span>
 <span class="ss-card-body"><span class="ss-card-title">CLI + MCP Server</span>
-<span class="ss-card-desc"><code>skills-check</code> Go binary for init / validate / update / regenerate. <code>skills-mcp</code> exposes 15 JSON-RPC tools.</span></span>
+<span class="ss-card-desc"><code>skills-check</code> Go binary for init / validate / update / regenerate / gate. <code>skills-mcp</code> exposes 16 JSON-RPC tools.</span></span>
 </a>
 <a class="ss-card" data-pkg="compliance" href="https://github.com/namncqualgo/skills-library/tree/main/compliance">
 <span class="ss-card-icon">📋</span>
@@ -185,7 +179,7 @@ Eight first-class targets. Same skills, same library, eight rendered output form
 
 Native skill bundles are also produced for the three clients that support per-skill directories: `agent-skills/.agents/skills/`, `claude-skills/.claude/skills/`, `copilot-skills/.github/skills/`.
 
-For MCP-aware clients (Claude Code, Cursor, etc.), `skills-mcp` exposes 15 JSON-RPC tools — `lookup_vulnerability`, `scan_dependencies`, `scan_dockerfile`, `scan_github_actions`, `check_secret_pattern`, `map_compliance_control`, `policy_check`, and 8 more — so the assistant can ask for security context on demand instead of loading the whole rule corpus into its prompt.
+For MCP-aware clients (Claude Code, Cursor, etc.), `skills-mcp` exposes 16 JSON-RPC tools — `lookup_vulnerability`, `scan_dependencies`, `scan_dockerfile`, `scan_github_actions`, `check_secret_pattern`, `map_compliance_control`, `gate`, and 9 more — so the assistant can ask for security context on demand instead of loading the whole rule corpus into its prompt.
 
 </div>
 
