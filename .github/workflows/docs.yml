@@ -20,6 +20,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      contents: read   # required for actions/checkout on a private repo;
+                       # job-level permissions REPLACE the workflow-level
+                       # `contents: read`, so it must be re-declared here.
       pages: write
       id-token: write
     environment:

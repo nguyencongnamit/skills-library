@@ -1,55 +1,46 @@
 # Quick Start
 
-Get SkillShield into a project in under five minutes. The fastest path is the static `CLAUDE.md` drop; the most powerful path is the MCP server.
+Get secure-code into a project in minutes. The easiest path is npm; building from source is for contributors.
 
 !!! note "Prerequisites"
-    - **Go 1.22+** to build from source (or grab a release binary once v1.0 ships)
-    - **An AI coding assistant**: Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, Antigravity, or Devin
-    - **No network needed at runtime.** The library works fully offline from the first `git clone`. Updates are optional.
+    - **Node.js 18+** for the npm path (recommended), or **Go 1.22+** to build from source
+    - **An AI coding assistant**: Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, or Devin
+    - **No network needed at runtime.** The npm package bundles the rule data and runs fully offline. Updates are optional.
 
-## 1. Clone and build
+## 1. Install
+
+Everything ships on npm — the package bundles the platform binary and the rule data, so there's no checkout and no Go toolchain.
 
 ```bash
-git clone https://github.com/namncqualgo/skills-library.git
-cd skills-library
-go build -trimpath -ldflags "-s -w" -o skills-check ./cmd/skills-check
-go build -trimpath -ldflags "-s -w" -o skills-mcp   ./cmd/skills-mcp
+npm i -g @namncqualgo/secure-code-mcp
 ```
 
-That produces two single-file binaries. The CLI generates IDE config files; the MCP server exposes 15 JSON-RPC tools.
+That puts two commands on your PATH: `secure-code-mcp` (the MCP server) and `secure-code-check` (the CLI — the scanners plus the `gate`). Both read the bundled data, so they run fully offline.
 
 !!! tip "Sanity check"
-    Run `./skills-check validate` — it should report `28 skills validated`. If you see anything else, your clone is incomplete or corrupted.
+    `secure-code-check check-dependency --package event-stream --version 3.3.6 --ecosystem npm` flags the famous 2018 npm supply-chain attack.
 
-## 2. Drop a static config into a project (fastest path)
+!!! note "Other channels"
+    Run without installing: `npx -p @namncqualgo/secure-code-mcp secure-code-check <cmd>`. From source / contributors: `go install github.com/namncqualgo/skills-library/cmd/skills-check@latest` (bare binary — point it at a data tree via `$SKILLS_LIBRARY_PATH`).
+
+## 2. Drop the skills into a project (fastest path)
 
 ```bash
 # in any project you want to make security-aware:
-/path/to/skills-library/skills-check init \
-  --tool claude \
-  --skills secret-detection,dependency-audit,secure-code-review \
-  --budget compact
+npx @namncqualgo/secure-code-skill init --tool claude
 ```
 
-That writes a `CLAUDE.md` containing only the skills you picked, at the compact (~2k tokens) budget tier. The next time you open the project in Claude Code, those rules are in the assistant's context.
+That installs the native security skills (e.g. `.claude/skills/`) — context-scoped, so only the rule relevant to the files in play loads. The next time you open the project in Claude Code, those rules are available to the assistant.
 
-Other targets: `--tool cursor | copilot | codex | windsurf | cline | devin | universal`. Other tiers: `--budget minimal | compact | full`.
-
-!!! note "Pre-compiled bundles"
-    If you don't care about cherry-picking, just copy the pre-compiled file from `dist/`:
-    ```bash
-    cp /path/to/skills-library/dist/CLAUDE.md /your-project/CLAUDE.md
-    ```
-    Symlink instead of copy if you want it to auto-update when you `git pull` the library.
+Other targets: `--tool cursor | copilot | codex | windsurf | cline | universal`.
 
 ## 3. Wire the MCP server (most powerful path)
 
-This gives the assistant on-demand access to 15 JSON-RPC tools — vulnerability lookups, dependency scans, Dockerfile hardening, GitHub Actions audits — without spending tokens until the tools are actually called.
+This gives the assistant on-demand access to the JSON-RPC tools — vulnerability lookups, dependency scans, Dockerfile hardening, GitHub Actions audits, and the `gate` — without spending tokens until the tools are actually called.
 
 ```bash
-# For Claude Code:
-claude mcp add skillshield /path/to/skills-library/skills-mcp \
-  -- --path /path/to/skills-library
+# For Claude Code (no install — npx fetches the package on first run):
+claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp
 ```
 
 Or hand-edit your client's MCP config:
@@ -57,34 +48,32 @@ Or hand-edit your client's MCP config:
 ```json
 {
   "mcpServers": {
-    "skillshield": {
-      "command": "/path/to/skills-library/skills-mcp",
-      "args": ["--path", "/path/to/skills-library"]
+    "secure-code": {
+      "command": "npx",
+      "args": ["-y", "@namncqualgo/secure-code-mcp"]
     }
   }
 }
 ```
 
-After restarting your client, ask the assistant something like *"scan this Dockerfile for hardening issues"* or *"is `event-stream@3.3.6` known malicious?"* — it'll route through the SkillShield tools.
+After restarting your client, ask the assistant something like *"scan this Dockerfile for hardening issues"* or *"is `event-stream@3.3.6` known malicious?"* — it'll route through the secure-code tools.
 
 ## 4. Try a single tool call directly
 
-You don't need an AI client to use `skills-mcp`. It speaks JSON-RPC 2.0 over stdio, so any script can drive it.
+You don't need an AI client to use the MCP server. It speaks JSON-RPC 2.0 over stdio, so any script can drive it.
 
 ```bash
-cd /path/to/skills-library
-
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call",
   "params":{"name":"lookup_vulnerability",
     "arguments":{"package":"event-stream","ecosystem":"npm","version":"3.3.6"}}}' \
-  | ./skills-mcp --path .
+  | npx -y @namncqualgo/secure-code-mcp
 ```
 
-That returns the known compromise entry for the infamous 2018 supply-chain attack. Substitute any of the 15 tools listed in [`cmd/skills-mcp`](https://github.com/namncqualgo/skills-library/tree/main/cmd/skills-mcp).
+That returns the known compromise entry for the infamous 2018 supply-chain attack. Substitute any of the server's tools.
 
 !!! note "List all available tools"
     ```bash
-    echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | ./skills-mcp --path .
+    echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | npx -y @namncqualgo/secure-code-mcp
     ```
 
 ## 5. Keep it current
