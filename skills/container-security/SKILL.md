@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.4.0"
+version: "1.5.0"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -11,12 +11,12 @@ applies_to:
   - "when reviewing container changes in PR"
 languages: ["dockerfile", "yaml", "go", "python"]
 token_budget:
-  minimal: 1200
-  compact: 1450
-  full: 2800
+  minimal: 1750
+  compact: 2200
+  full: 3500
 rules_path: "checklists/"
-related_skills: ["iac-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-06"
+related_skills: ["iac-security", "secret-detection", "iam-best-practices", "electron-security"]
+last_updated: "2026-06-10"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -64,6 +64,16 @@ external_tools:
 - Scan every image in CI (Trivy, Grype, Snyk, or your registry's scanner) and
   fail builds on CRITICAL or HIGH severity findings.
 - Pull base images by SHA256 digest in production manifests, not by mutable tag.
+- For **multi-tenant** workloads (per-user/per-customer sessions on shared
+  infra), isolate tenants at the **kernel boundary**: a separate VM — or
+  gVisor / Kata — per tenant, never just separate containers on one shared
+  daemon. Drop `privileged`, enable user namespaces, and give each tenant its
+  own network. A privileged container on a shared host escapes to the host
+  trivially, so on shared infra that is full compromise of *every* co-tenant.
+- Expose container orchestration to clients only through a **scoped,
+  authenticated broker API** that performs the few operations a client may
+  request (start/stop *my* session). The client must never hold direct daemon
+  or cluster access.
 
 ### NEVER
 - Run containers as root or with `privileged: true` / `allowPrivilegeEscalation:
@@ -77,6 +87,20 @@ external_tools:
   <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application
   container. It's effectively root on the host.
+- Expose the container **daemon API over the network** (`tcp://…:2375`, or
+  `:2376` even with TLS) to clients or apps. The daemon API is root-on-host:
+  whoever reaches it runs arbitrary privileged containers and mounts the host
+  filesystem. (A desktop/CLI app talking straight to a remote daemon is the
+  same anti-pattern as a mounted `docker.sock`, just over TCP.)
+- Ship a **single shared client credential** (one mTLS cert/key, token, or
+  kubeconfig bundled into every copy of a distributed app) to reach that daemon
+  or cluster. Every install holds the same key — trivially extracted from the
+  app bundle — so it grants every user identical access and cannot be revoked
+  per-user. Issue per-user / per-session, short-lived, scoped credentials.
+- Run a tenant's container `privileged` on a host shared with other tenants, or
+  attach tenant containers to a **shared external bridge network** — the first
+  gives container-escape → co-tenant takeover, the second gives cross-tenant
+  L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them
   to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
 - Use `latest`, `stable`, `slim`, or unversioned tags as the final image base —
@@ -99,6 +123,14 @@ external_tools:
 - One-shot debugging pods (kubectl debug, ephemeral containers) intentionally
   bypass many of these controls; they should not be persisted as YAML in the
   repo.
+- A remote Docker / K8s endpoint over mTLS (`:2376`) is acceptable for an
+  **operator's own** CI / build farm where each operator holds a personal,
+  revocable cert — the anti-pattern is shipping **one shared** cert inside a
+  distributed end-user app.
+- `privileged` or a shared bridge network within a **single trust domain** (one
+  team's own microservices, or a sim stack on the developer's own machine) is
+  lower-risk than the multi-tenant case; these rules target the shared-host,
+  cross-tenant blast radius specifically.
 
 ## Context (for humans)
 
@@ -111,6 +143,15 @@ AI assistants almost always generate Dockerfiles that work and ship — fast —
 they default to a single-stage `FROM node` / `FROM python` and `USER root`. This
 skill is the counterweight; pair it with `iam-best-practices` for cluster
 RBAC and `supply-chain-security` for image provenance beyond the pod.
+
+A distinct, often-missed class is **remote-daemon and multi-tenancy** exposure.
+Handing a client app direct daemon access (`tcp://host:2375` + a cert shipped in
+the app bundle) makes every user root on the host; running multiple tenants'
+privileged containers on one shared daemon with a shared network means one
+tenant's escape compromises all of them. The container hardening flags
+(`privileged`, host namespaces, capabilities) matter most precisely where the
+blast radius is multi-tenant — isolate at the VM/kernel boundary, and never let
+a client touch the daemon directly.
 
 ## References
 

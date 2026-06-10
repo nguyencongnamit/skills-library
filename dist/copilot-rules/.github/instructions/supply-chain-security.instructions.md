@@ -16,6 +16,7 @@ Defend against typosquats, dependency confusion, and malicious package contribut
 - Pin the registry URL in lockfiles to prevent registry redirection attacks.
 - Check that any newly added package has a verified maintainer (`npm` provenance, `sigstore` signature, or GPG-signed git tag) when published in the last 90 days.
 - Treat install scripts (`postinstall`, `preinstall`, `setup.py` arbitrary code, `build.rs`) as high-risk surface and flag them in the PR description for human review.
+- Secure your application's **own update / release channel**, not just third-party deps. Require authentication **and** a release-manager role on the endpoint that publishes a release, and have the client **verify a signature (or pinned checksum) over the downloaded artifact before executing it**. The publish-then-clients-auto-download path is a supply chain too: poison one release and every client runs it.
 
 ## NEVER
 
@@ -25,10 +26,13 @@ Defend against typosquats, dependency confusion, and malicious package contribut
 - Disable the package manager's integrity check (`--no-package-lock`, `--ignore-scripts = false` when defending against it, `npm config set audit false` in production).
 - Auto-merge dependency-bump PRs without a reviewer when the bump crosses a major version.
 - Suggest installing tools via `curl | sh` patterns from untrusted sources.
+- Let any authenticated user — or, worse, an unauthenticated request — publish or overwrite a release artifact that other users' clients auto-download, or have the client execute an update without verifying a signature / pinned checksum. Either one is a one-poison-many-RCE supply-chain break.
 
 ## KNOWN FALSE POSITIVES
 
 - Legitimate orgs forking and republishing maintained packages with a `-fork` or `-community` suffix; verify the fork's repo URL before flagging.
 - Beta / alpha releases of well-known packages (e.g. `next@canary`) appear "newly published" but are part of a known release cadence.
 - Internal namespace packages (`@yourco/internal-tools`) intentionally not on the public registry — these are fine when the `.npmrc` is configured correctly.
+- Auto-update frameworks that verify a signature by default (Sparkle, electron-updater with a pinned public key, Omaha) are the *correct* pattern — flagging "the app auto-updates" is an FP; the control is signature / checksum verification, not the absence of auto-update.
+- A staging / dev update feed without signing is acceptable when it's gated behind an env flag or internal network and never serves production clients.
 
