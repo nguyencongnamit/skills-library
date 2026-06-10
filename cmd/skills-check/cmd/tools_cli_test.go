@@ -298,6 +298,51 @@ CMD ["node", "server.js"]
 	}
 }
 
+// TestGateSARIFEmitsOnFailure verifies `gate --format sarif` against a
+// failing file: it must print schema-shaped SARIF 2.1.0 *and* still
+// surface the policy-failure sentinel (non-zero exit). CI needs both —
+// the artifact to upload to Code Scanning, and the failure to block the
+// PR.
+func TestGateSARIFEmitsOnFailure(t *testing.T) {
+	path := writeFixedNameFixture(t, "Dockerfile", "FROM node:latest\nUSER root\n")
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		path,
+	)
+	if err == nil {
+		t.Fatalf("gate --format sarif did not signal failure for bad Dockerfile:\n%s", out)
+	}
+	if !IsPolicyFailure(err) {
+		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
+	}
+	var log struct {
+		Version string `json:"version"`
+		Runs    []struct {
+			Tool struct {
+				Driver struct {
+					Name string `json:"name"`
+				} `json:"driver"`
+			} `json:"tool"`
+			Results []map[string]any `json:"results"`
+		} `json:"runs"`
+	}
+	if jerr := json.Unmarshal([]byte(out), &log); jerr != nil {
+		t.Fatalf("gate --format sarif output is not valid JSON: %v\n%s", jerr, out)
+	}
+	if log.Version != "2.1.0" {
+		t.Errorf("sarif version = %q, want 2.1.0", log.Version)
+	}
+	if len(log.Runs) != 1 || log.Runs[0].Tool.Driver.Name != "vibe-guard-gate" {
+		t.Errorf("expected one run with driver vibe-guard-gate, got %+v", log.Runs)
+	}
+	if len(log.Runs[0].Results) == 0 {
+		t.Errorf("expected at least one SARIF result for a failing gate:\n%s", out)
+	}
+}
+
 // TestGateMultipleFilesFailsIfAnyFails confirms `gate file1 file2 …` — what a
 // pre-commit hook passes for the whole staged set — gates over every file and
 // fails if ANY of them has a finding at or above the floor.

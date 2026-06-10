@@ -34,6 +34,15 @@ const (
 // Security category filters) can pin against it.
 const SARIFToolName = "skills-mcp"
 
+// SARIFGateToolName is the driver name for SARIF emitted by the `gate`
+// CLI. We give gate its own driver identity (distinct from the MCP
+// server's "skills-mcp") so a Code Scanning consumer can filter gate
+// findings — the CI "fail the build" path — separately from per-tool
+// MCP output. Rule IDs are NOT renamed: PolicyCheck already emits them
+// in the established "skills-mcp.*" namespace, and rule identity must
+// stay stable across surfaces.
+const SARIFGateToolName = "vibe-guard-gate"
+
 // SARIFLog is the top-level SARIF document.
 type SARIFLog struct {
 	Schema  string     `json:"$schema"`
@@ -394,6 +403,148 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 			Results: results,
 		}},
 	}
+}
+
+// PolicyCheckSARIF aggregates one or more PolicyCheckResult values
+// (one per file argument to `gate`) into a single SARIF 2.1.0 log with
+// one Run. gate flattens every scanner into a homogeneous
+// PolicyCheckFinding, so the SARIF mapping is uniform regardless of
+// which scanner produced a finding:
+//
+//   - driver.rules: one rule per distinct RuleID across all findings,
+//     with DefaultConfiguration.Level set from the rule's severity.
+//   - results: one SARIFResult per finding, located at the owning
+//     result's FilePath (file:// URI) with region.startLine when the
+//     scanner reported a line.
+//
+// A clean run (no findings) yields a well-formed log with empty rules
+// and results arrays — never null — matching the invariant the other
+// transformers hold so GitHub Advanced Security accepts the upload.
+// Emitting even on a failing gate is intentional: CI needs both the
+// SARIF artifact (to surface findings in Code Scanning) and the
+// non-zero exit (to fail the PR).
+func PolicyCheckSARIF(results []*PolicyCheckResult) *SARIFLog {
+	rules := make([]SARIFRule, 0)
+	ruleIndex := map[string]int{}      // RuleID -> index in rules
+	ruleSeverity := map[string]string{} // RuleID -> most severe level seen
+
+	ensureRule := func(id, severity string) {
+		if id == "" {
+			id = "vibe-guard-gate.finding"
+		}
+		if _, ok := ruleIndex[id]; ok {
+			// Escalate the rule's default level if this finding is more
+			// severe than what we've recorded so far.
+			if sarifSeverityRank(severity) > sarifSeverityRank(ruleSeverity[id]) {
+				ruleSeverity[id] = severity
+			}
+			return
+		}
+		ruleIndex[id] = len(rules)
+		ruleSeverity[id] = severity
+		rules = append(rules, SARIFRule{
+			ID:   id,
+			Name: id,
+			ShortDescription: &SARIFMultiformat{
+				Text: fmt.Sprintf("gate rule %q", id),
+			},
+		})
+	}
+
+	sarifResults := make([]SARIFResult, 0)
+	for _, res := range results {
+		if res == nil {
+			continue
+		}
+		uri := ""
+		if res.FilePath != "" {
+			uri = fileURI(res.FilePath)
+		}
+		for _, f := range res.Findings {
+			id := f.RuleID
+			if id == "" {
+				id = "vibe-guard-gate.finding"
+			}
+			ensureRule(id, f.Severity)
+			var region *SARIFRegion
+			if f.Line > 0 {
+				region = &SARIFRegion{StartLine: f.Line}
+			}
+			loc := []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: uri},
+					Region:           region,
+				},
+			}}
+			props := map[string]any{"severity": f.Severity, "scan": res.Scan}
+			if f.Confidence != "" {
+				props["confidence"] = f.Confidence
+			}
+			if f.Package != "" {
+				props["package"] = f.Package
+			}
+			if f.Version != "" {
+				props["version"] = f.Version
+			}
+			if f.Snippet != "" {
+				props["snippet"] = f.Snippet
+			}
+			sarifResults = append(sarifResults, SARIFResult{
+				RuleID:     id,
+				RuleIndex:  ruleIndex[id],
+				Level:      sarifLevel(f.Severity),
+				Message:    SARIFMultiformat{Text: f.Title},
+				Locations:  loc,
+				Properties: props,
+			})
+		}
+	}
+
+	// Apply the escalated default level to each rule now that every
+	// finding has been seen.
+	for i := range rules {
+		rules[i].DefaultConfig = &SARIFRuleConfig{Level: sarifLevel(ruleSeverity[rules[i].ID])}
+	}
+
+	// Sort rules by ID for deterministic output, then re-anchor every
+	// result's RuleIndex to the post-sort position.
+	sort.Slice(rules, func(i, j int) bool { return rules[i].ID < rules[j].ID })
+	idxAfterSort := map[string]int{}
+	for i, r := range rules {
+		idxAfterSort[r.ID] = i
+	}
+	for i := range sarifResults {
+		sarifResults[i].RuleIndex = idxAfterSort[sarifResults[i].RuleID]
+	}
+
+	return &SARIFLog{
+		Schema:  SARIFSchema,
+		Version: SARIFVersion,
+		Runs: []SARIFRun{{
+			Tool: SARIFTool{Driver: SARIFDriver{
+				Name:           SARIFGateToolName,
+				InformationURI: "https://github.com/namncqualgo/skills-library",
+				Rules:          rules,
+			}},
+			Results: sarifResults,
+		}},
+	}
+}
+
+// sarifSeverityRank orders the library's severity vocabulary so a
+// rule's default SARIF level reflects its most severe finding.
+func sarifSeverityRank(severity string) int {
+	switch severity {
+	case "critical":
+		return 4
+	case "high":
+		return 3
+	case "medium", "moderate":
+		return 2
+	case "low":
+		return 1
+	}
+	return 0
 }
 
 // fileURI converts a local absolute path to an RFC 3986 file:// URI.
