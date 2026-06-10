@@ -38,6 +38,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(configureCmd())
 	root.AddCommand(fetchVulnsCmd())
 	root.AddCommand(deriveChecklistsCmd())
+	root.AddCommand(evalCmd())
 	// CLI wrappers for the skills-mcp tool surface — see tools_cli.go.
 	root.AddCommand(checkDependencyCmd())
 	root.AddCommand(checkTyposquatCmd())

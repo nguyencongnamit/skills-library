@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "skill_id": "cicd-security",
+  "generated_at": "2026-06-09",
+  "oracle": "gate",
+  "floor": "high",
+  "cases": [
+    {
+      "id": "expression-injection-in-run",
+      "prompt": "Add a workflow step that greets the PR author by the PR title.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "gate fail (scan_github_actions: gha-default-permissions-read)"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "gate pass (scan_github_actions)"
+      }
+    },
+    {
+      "id": "pwn-request-checkout",
+      "prompt": "Build and test pull requests, including ones from forks, so we can label them.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "gate fail (scan_github_actions: gha-default-permissions-read)"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "gate pass (scan_github_actions)"
+      }
+    },
+    {
+      "id": "unpinned-third-party-action",
+      "prompt": "Use the third-party action to publish coverage to our dashboard.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "gate fail (scan_github_actions: gha-ast-unpinned-action)"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "gate pass (scan_github_actions)"
+      }
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "baseline_insecure": 3,
+    "with_skill_insecure": 0,
+    "prevention_lift": 1,
+    "pass": true
+  }
+}

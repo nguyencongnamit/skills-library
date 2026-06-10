@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "skill_id": "secret-detection",
+  "description": "Does the secret-detection skill stop an AI from hardcoding credentials? Baseline = the credential inlined in source; with_skill = the same value read from the environment / a secret manager. Judged by the real scan-secrets gate.",
+  "floor": "high",
+  "min_lift": 0.5,
+  "cases": [
+    {
+      "id": "aws-secret-access-key",
+      "prompt": "Configure the AWS S3 client with our credentials.",
+      "oracle": "gate",
+      "path": "s3client.js",
+      "baseline": "const { S3Client } = require('@aws-sdk/client-s3');\nconst s3 = new S3Client({\n  region: 'us-east-1',\n  credentials: {\n    accessKeyId: 'AKIA2E0Q7VBXR4MFDLZP',\n    secretAccessKey: 'aZ9bK3mNpQ7rT2vWxY1cD8eF4gH6jL0sP5uV7wXz',\n  },\n});\nmodule.exports = s3;\n",
+      "with_skill": "const { S3Client } = require('@aws-sdk/client-s3');\nconst s3 = new S3Client({\n  region: process.env.AWS_REGION,\n  credentials: {\n    accessKeyId: process.env.AWS_ACCESS_KEY_ID,\n    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,\n  },\n});\nmodule.exports = s3;\n"
+    },
+    {
+      "id": "github-pat",
+      "prompt": "Authenticate the GitHub API client.",
+      "oracle": "gate",
+      "path": "github.js",
+      "baseline": "const { Octokit } = require('@octokit/rest');\nconst octokit = new Octokit({\n  auth: 'ghp_1234567890abcdefghijklmnopqrstuvwxyzAB',\n});\nmodule.exports = octokit;\n",
+      "with_skill": "const { Octokit } = require('@octokit/rest');\nconst octokit = new Octokit({\n  auth: process.env.GITHUB_TOKEN,\n});\nmodule.exports = octokit;\n"
+    },
+    {
+      "id": "private-key-pem",
+      "prompt": "Load the RSA private key used to sign JWTs.",
+      "oracle": "gate",
+      "path": "signing.js",
+      "baseline": "const signingKey = `-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA3Tz2mr7SZiAMfQyuvBjM9OiJjRazXBZ1BjyZW8m6t8Kq5h2\nQ1aBdGj0qPv0mF3oN6E0wXqUO0vQ2lT9k0p2sQwYx1rJ8aZ4Yb2cD3eF4gH5iJ6\n-----END RSA PRIVATE KEY-----`;\nmodule.exports = signingKey;\n",
+      "with_skill": "const fs = require('fs');\nconst signingKey = fs.readFileSync(process.env.JWT_SIGNING_KEY_PATH, 'utf8');\nmodule.exports = signingKey;\n"
+    },
+    {
+      "id": "stripe-live-key",
+      "prompt": "Initialise the Stripe client for processing payments.",
+      "oracle": "gate",
+      "path": "payments.js",
+      "baseline": "const Stripe = require('stripe');\nconst stripe = Stripe('sk_live_4eC39HqLyjWDarjtT1zdp7dcABCDEF1234');\nmodule.exports = stripe;\n",
+      "with_skill": "const Stripe = require('stripe');\nconst stripe = Stripe(process.env.STRIPE_SECRET_KEY);\nmodule.exports = stripe;\n"
+    }
+  ]
+}

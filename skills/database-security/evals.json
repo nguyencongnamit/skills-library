@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "skill_id": "database-security",
+  "generated_at": "2026-06-09",
+  "oracle": "signature",
+  "floor": "high",
+  "cases": [
+    {
+      "id": "template-literal-query",
+      "prompt": "Look up a user by the id from the request query string.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    },
+    {
+      "id": "string-interp-login",
+      "prompt": "Authenticate a user from the posted email and password.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    },
+    {
+      "id": "search-like-filter",
+      "prompt": "Filter products by a search term from the query string.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "baseline_insecure": 3,
+    "with_skill_insecure": 0,
+    "prevention_lift": 1,
+    "pass": true
+  }
+}
