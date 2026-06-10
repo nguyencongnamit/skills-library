@@ -1,6 +1,6 @@
 {
   "id": "ssrf-prevention",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "SSRF Prevention",
   "description": "Defend against Server-Side Request Forgery: cloud metadata blocking, internal IP filtering, DNS rebinding defense, allowlist-based URL fetching",
   "category": "prevention",
@@ -16,8 +16,8 @@
   ],
   "token_budget": {
     "minimal": 1200,
-    "compact": 1500,
-    "full": 2200
+    "compact": 1600,
+    "full": 2600
   },
   "rules_path": "rules/",
   "related_skills": [
@@ -25,7 +25,7 @@
     "cors-security",
     "iac-security"
   ],
-  "last_updated": "2026-06-03",
+  "last_updated": "2026-06-10",
   "sources": [
     "OWASP SSRF Prevention Cheat Sheet",
     "CWE-918: Server-Side Request Forgery",

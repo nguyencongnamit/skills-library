@@ -1,6 +1,6 @@
 {
   "id": "supply-chain-security",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Supply Chain Security",
   "description": "Defend against typosquats, dependency confusion, and malicious package contributions",
   "category": "supply-chain",
@@ -15,17 +15,18 @@
     "*"
   ],
   "token_budget": {
-    "minimal": 550,
-    "compact": 800,
-    "full": 2100
+    "minimal": 750,
+    "compact": 1100,
+    "full": 2500
   },
   "rules_path": "rules/",
   "tests_path": "tests/",
   "related_skills": [
     "dependency-audit",
-    "secret-detection"
+    "secret-detection",
+    "container-security"
   ],
-  "last_updated": "2026-05-12",
+  "last_updated": "2026-06-10",
   "sources": [
     "Alex Birsan, Dependency Confusion (2021)",
     "OpenSSF Best Practices for OSS Developers",

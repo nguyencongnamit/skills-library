@@ -1,6 +1,6 @@
 ---
 id: electron-security
-version: "1.1.0"
+version: "1.2.0"
 title: "Electron Desktop Security"
 description: "Harden Electron apps: renderer trust boundary (nodeIntegration, contextIsolation, sandbox), contextBridge/IPC allowlists, shell.openExternal, navigation guards, deep-link auth, safeStorage"
 category: hardening
@@ -13,12 +13,12 @@ applies_to:
   - "when reviewing Electron IPC, navigation, or window configuration"
 languages: ["javascript", "typescript"]
 token_budget:
-  minimal: 1000
-  compact: 1400
-  full: 2600
+  minimal: 1400
+  compact: 1900
+  full: 3300
 rules_path: "checklists/"
-related_skills: ["frontend-security", "secret-detection", "auth-security"]
-last_updated: "2026-06-06"
+related_skills: ["frontend-security", "secret-detection", "auth-security", "container-security"]
+last_updated: "2026-06-10"
 sources:
   - "Electron Security Checklist (official docs)"
   - "OWASP — Electron / desktop application security"
@@ -60,6 +60,12 @@ renderer.
 - Add navigation guards: `app.on('web-contents-created', …)` with
   `contents.on('will-navigate', …)` and `contents.setWindowOpenHandler(…)`
   that **deny by default** against a strict origin allowlist.
+- Remember the contextBridge surface is exposed to **whatever origin the
+  webContents currently holds** — `exposeInMainWorld` does *not* re-check origin
+  after a navigation. So a single missing `will-navigate` guard lets a remote /
+  attacker origin inherit your *entire* IPC surface (this is how a stored
+  hyperlink → navigation becomes 1-click RCE). The nav guard is the primary
+  control; as defense-in-depth, gate the preload on `location` before exposing.
 - Before attaching session tokens / cookies to an outbound request, verify the
   target host is on your own-API allowlist. Never attach credentials to a
   renderer-supplied URL.
@@ -67,6 +73,17 @@ renderer.
   app generated and is waiting for; validate before storing any token.
 - Store tokens with Electron `safeStorage` (OS keychain / DPAPI / libsecret),
   not app-level crypto. Enable ASAR integrity + code signing for release.
+- Treat **every server the app connects to** — backend, simulation / compute
+  node, auto-update channel, a multi-tenant cloud session — as potentially
+  attacker-controlled (compromised, co-tenant, or MITM). Never load a server URL
+  into a `BrowserWindow` / `<webview>` that carries your preload, and never feed
+  a server response into an IPC sink (file path, shell arg, `openExternal` URL)
+  without the same validation you apply to renderer input.
+- Harden parsers that consume untrusted server / stream data (binary frames,
+  SDF / XML, model files): bound every length field before allocating, cap
+  recursion and `<include>`-style expansion (circular refs → infinite loop /
+  fetch), and wrap the parse in try/catch. Otherwise a malicious server crashes
+  or hangs the renderer (DoS), even when memory-safety prevents RCE.
 
 ### NEVER
 - Set `nodeIntegration: true`, disable `contextIsolation`, disable
@@ -85,6 +102,13 @@ renderer.
 - Encrypt tokens at rest with AES-CBC (no integrity) or a key derived solely
   from a locally recoverable machine ID, and never keep a `PLAINTEXT:`
   fallback path.
+- Ship a frameless / chromeless **navigable** window (`frame: false`, no address
+  bar): after a redirect the user has no visual cue they left the app, so a
+  phished navigation can silently clone your UI. Frameless is acceptable only
+  behind a hard navigation guard.
+- Assume the renderer (or its rendered content) is the *only* untrusted input —
+  a backend / sim / update server the app trusts can itself be compromised or,
+  in multi-tenant deployments, driven by another tenant.
 
 ### KNOWN FALSE POSITIVES
 - Dev builds that load over `http://localhost:<port>` with relaxed settings —
@@ -96,6 +120,13 @@ renderer.
   exists.
 - `shell.openExternal` on a hard-coded `https://` constant (not user input) is
   fine.
+- A frameless window that loads **only** local first-party content (`file://` /
+  packaged app) behind a deny-by-default nav guard is fine — the risk is
+  frameless **plus** navigable to remote origins.
+- Connecting to a backend and rendering its **data** (telemetry JSON, numbers,
+  binary frames) is normal desktop behaviour. The control is bounding /
+  validating that data and never treating it as HTML, a filesystem path, or a
+  shell argument — not avoiding the connection itself.
 
 ## Context (for humans)
 
@@ -111,6 +142,15 @@ AI assistants frequently generate Electron windows with `nodeIntegration: true`
 template-string interpolation, `shell.openExternal(url)` with no validation,
 and custom token crypto instead of `safeStorage`. This skill is the
 counterweight: keep the renderer sandboxed and every IPC sink validated.
+
+The renderer is the first untrusted boundary, but not the only one: a desktop
+app also trusts every server it connects to. In multi-tenant or cloud-compute
+setups (a shared simulation backend, a per-session remote node), a co-tenant who
+compromises that server becomes an attacker feeding your privileged renderer —
+so server URLs must never load into a preload-bearing window, and server data is
+input to be validated, not trusted. The worst observed chain is the reverse of
+the obvious one: server-controlled content → a navigable preload window →
+`electronAPI` → local RCE.
 
 ## References
 

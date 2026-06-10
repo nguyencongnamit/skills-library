@@ -64,11 +64,15 @@ _Apply OWASP API Top 10 patterns to authentication, authorization, and input val
 - Disable CSRF protection on state-changing endpoints used by browsers.
 - Return stack traces or framework error pages to the client in production.
 - Use `HTTP GET` for any state-changing operation — GET should be safe and idempotent.
+- Rely on **network position** (IP allowlist, VPN, private subnet, "internal only", a WAF/edge rule) as the *only* control on a sensitive endpoint. Reachability is not authentication: the moment there's an SSRF, a compromised internal host, a tenant on the network, or a boundary change, an unauthenticated "internal" endpoint (`permission_classes = [AllowAny]`, no `RequireAuth`) is wide open. Enforce auth/authz at the service itself, behind any network control.
+- Place security controls (auth, field-stripping, CSRF, rate-limit, input validation) only at a gateway / BFF / proxy while the backend service is **also directly reachable**. An attacker calls the service directly and bypasses every proxy-layer control — controls must live at the service that owns the data. (A common variant: the gateway checks that a JWT is *present* but the service never checks the caller's *role*.)
 
 **Known false positives:**
 - Public marketing-site endpoints serving anonymous traffic legitimately have no auth and no rate limits beyond the load balancer.
 - Sequential IDs in paths are fine for genuinely public, non-tenant-scoped resources (e.g. blog post slugs, public product catalog items).
 - Health-check endpoints (`/healthz`, `/ready`) intentionally bypass auth.
+- A network control (mTLS service mesh, NetworkPolicy, private ingress) is fine as **defense-in-depth** — the anti-pattern is only when it's the *sole* control and the service itself authenticates nothing.
+- Mutual-TLS / SPIFFE workload identity between services **is** authentication (a cryptographic caller identity), not mere network position — mTLS-authenticated service-to-service calls are fine even on a private network.
 
 ## Authentication & Authorization Security (`auth-security`)
 
@@ -170,11 +174,16 @@ _Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm char
 - Mark filesystem read-only: `readOnlyRootFilesystem: true`; use `emptyDir` volumes for the few paths that must be writable.
 - Scan every image in CI (Trivy, Grype, Snyk, or your registry's scanner) and fail builds on CRITICAL or HIGH severity findings.
 - Pull base images by SHA256 digest in production manifests, not by mutable tag.
+- For **multi-tenant** workloads (per-user/per-customer sessions on shared infra), isolate tenants at the **kernel boundary**: a separate VM — or gVisor / Kata — per tenant, never just separate containers on one shared daemon. Drop `privileged`, enable user namespaces, and give each tenant its own network. A privileged container on a shared host escapes to the host trivially, so on shared infra that is full compromise of *every* co-tenant.
+- Expose container orchestration to clients only through a **scoped, authenticated broker API** that performs the few operations a client may request (start/stop *my* session). The client must never hold direct daemon or cluster access.
 
 **Never:**
 - Run containers as root or with `privileged: true` / `allowPrivilegeEscalation: true` outside of explicit, audited system pods (e.g., CNI plugins).
 - Use **end-of-life base images**. As of mid-2026 this includes `node:< 18`, `python:< 3.10`, `alpine:< 3.17`, `debian:< 11 (bullseye)`, `ubuntu:< 20.04`, `centos:*`, `ruby:< 3.1`, and any non-LTS Node/Python release. EOL images stop receiving security patches; a maintained image with no public CVEs is still safer than an EOL one. Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar. <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application container. It's effectively root on the host.
+- Expose the container **daemon API over the network** (`tcp://…:2375`, or `:2376` even with TLS) to clients or apps. The daemon API is root-on-host: whoever reaches it runs arbitrary privileged containers and mounts the host filesystem. (A desktop/CLI app talking straight to a remote daemon is the same anti-pattern as a mounted `docker.sock`, just over TCP.)
+- Ship a **single shared client credential** (one mTLS cert/key, token, or kubeconfig bundled into every copy of a distributed app) to reach that daemon or cluster. Every install holds the same key — trivially extracted from the app bundle — so it grants every user identical access and cannot be revoked per-user. Issue per-user / per-session, short-lived, scoped credentials.
+- Run a tenant's container `privileged` on a host shared with other tenants, or attach tenant containers to a **shared external bridge network** — the first gives container-escape → co-tenant takeover, the second gives cross-tenant L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
 - Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs.
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with a checksum verify and `RUN` instead, or vendor the artifact).
@@ -186,6 +195,8 @@ _Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm char
 - Operators that legitimately need cluster-admin access (kubelet, CSI drivers, CNI plugins) require elevated privileges; they belong in `kube-system` or a dedicated namespace with auditing, not in application namespaces.
 - Bare-metal Kubernetes nodes sometimes legitimately disable `seccomp` for drivers that aren't compatible; document the exception.
 - One-shot debugging pods (kubectl debug, ephemeral containers) intentionally bypass many of these controls; they should not be persisted as YAML in the repo.
+- A remote Docker / K8s endpoint over mTLS (`:2376`) is acceptable for an **operator's own** CI / build farm where each operator holds a personal, revocable cert — the anti-pattern is shipping **one shared** cert inside a distributed end-user app.
+- `privileged` or a shared bridge network within a **single trust domain** (one team's own microservices, or a sim stack on the developer's own machine) is lower-risk than the multi-tenant case; these rules target the shared-host, cross-tenant blast radius specifically.
 
 ## CORS Security (`cors-security`)
 
@@ -332,9 +343,12 @@ _Harden Electron apps: renderer trust boundary (nodeIntegration, contextIsolatio
 - Confine filesystem paths: `path.resolve(base, input)` then verify the result `startsWith(base + path.sep)`. Reject absolute paths and `..` segments.
 - Allowlist `shell.openExternal` to `https:` (and `mailto:` if needed) after parsing the URL. Reject `file:`, custom schemes, and anything else.
 - Add navigation guards: `app.on('web-contents-created', …)` with `contents.on('will-navigate', …)` and `contents.setWindowOpenHandler(…)` that **deny by default** against a strict origin allowlist.
+- Remember the contextBridge surface is exposed to **whatever origin the webContents currently holds** — `exposeInMainWorld` does *not* re-check origin after a navigation. So a single missing `will-navigate` guard lets a remote / attacker origin inherit your *entire* IPC surface (this is how a stored hyperlink → navigation becomes 1-click RCE). The nav guard is the primary control; as defense-in-depth, gate the preload on `location` before exposing.
 - Before attaching session tokens / cookies to an outbound request, verify the target host is on your own-API allowlist. Never attach credentials to a renderer-supplied URL.
 - Bind custom-protocol / deep-link auth to a one-time `state` / PKCE value the app generated and is waiting for; validate before storing any token.
 - Store tokens with Electron `safeStorage` (OS keychain / DPAPI / libsecret), not app-level crypto. Enable ASAR integrity + code signing for release.
+- Treat **every server the app connects to** — backend, simulation / compute node, auto-update channel, a multi-tenant cloud session — as potentially attacker-controlled (compromised, co-tenant, or MITM). Never load a server URL into a `BrowserWindow` / `<webview>` that carries your preload, and never feed a server response into an IPC sink (file path, shell arg, `openExternal` URL) without the same validation you apply to renderer input.
+- Harden parsers that consume untrusted server / stream data (binary frames, SDF / XML, model files): bound every length field before allocating, cap recursion and `<include>`-style expansion (circular refs → infinite loop / fetch), and wrap the parse in try/catch. Otherwise a malicious server crashes or hangs the renderer (DoS), even when memory-safety prevents RCE.
 
 **Never:**
 - Set `nodeIntegration: true`, disable `contextIsolation`, disable `webSecurity`, or set `allowRunningInsecureContent: true` — especially when the window loads remote or navigable content.
@@ -344,12 +358,16 @@ _Harden Electron apps: renderer trust boundary (nodeIntegration, contextIsolatio
 - Attach `Authorization` / session cookies to a URL the renderer chose without a host allowlist — XSS then exfiltrates the token.
 - Accept a deep-link auth token (`myapp://auth?refresh-token=…`) without origin / `state` validation — login CSRF / session fixation.
 - Encrypt tokens at rest with AES-CBC (no integrity) or a key derived solely from a locally recoverable machine ID, and never keep a `PLAINTEXT:` fallback path.
+- Ship a frameless / chromeless **navigable** window (`frame: false`, no address bar): after a redirect the user has no visual cue they left the app, so a phished navigation can silently clone your UI. Frameless is acceptable only behind a hard navigation guard.
+- Assume the renderer (or its rendered content) is the *only* untrusted input — a backend / sim / update server the app trusts can itself be compromised or, in multi-tenant deployments, driven by another tenant.
 
 **Known false positives:**
 - Dev builds that load over `http://localhost:<port>` with relaxed settings — the rules apply to **release** builds; ensure dev config never ships.
 - A custom protocol (`myapp://`) for OAuth callbacks is expected — the control is `state`/PKCE validation, not the scheme's existence.
 - `contextBridge`-exposed functions are intentional capabilities; review what each one does (and whether it validates input), not the fact that the bridge exists.
 - `shell.openExternal` on a hard-coded `https://` constant (not user input) is fine.
+- A frameless window that loads **only** local first-party content (`file://` / packaged app) behind a deny-by-default nav guard is fine — the risk is frameless **plus** navigable to remote origins.
+- Connecting to a backend and rendering its **data** (telemetry JSON, numbers, binary frames) is normal desktop behaviour. The control is bounding / validating that data and never treating it as HTML, a filesystem path, or a shell argument — not avoiding the connection itself.
 
 ## Error-Handling Security (`error-handling-security`)
 
@@ -794,12 +812,15 @@ _Defend against Server-Side Request Forgery: cloud metadata blocking, internal I
 - Trust `0.0.0.0`, `127.0.0.1`, `[::]`, `[::1]`, `localhost`, or `*.localhost.test` — all of them reach the local instance. The list also must include link-local `169.254.0.0/16`, IPv4-mapped IPv6 `::ffff:127.0.0.1`, and IPv6 ULA `fc00::/7`.
 - Use the user's URL string in a logging line or an error response — it can be the SSRF reflection oracle that turns blind SSRF into data-exfiltration SSRF.
 - Run a metadata-blocking sidecar / proxy as the **only** defense — an attacker who finds a Unix-domain-socket pseudo-URL or a misconfigured hostname can route around the proxy. Application-level allowlist remains required.
+- Ship a generic request forwarder that switches to fetching a **full, caller-supplied URL** when the input "looks absolute" (`path.startsWith('http') ? path : base + path`). It is a latent SSRF: the day any caller passes user-influenced input, the server fetches an attacker URL — internal hosts and cloud metadata included. Keep the internal-base fetcher and the user-URL fetcher as distinct, type-separated clients.
+- Treat "this endpoint is only reachable from our internal / VPN / allowlisted network" as mitigation for an unsafe server-side fetch. SSRF *originates from inside* that network, so it reaches exactly the internal services the network control was meant to protect — an IP allowlist is not an authentication boundary against SSRF.
 - Allow IDN / Punycode in user URLs without normalization — IDN homograph attacks bypass naive string-allowlist checks (`gооgle.com` Cyrillic-o ≠ `google.com`).
 
 **Known false positives:**
 - Server-to-server integrations where both sides are operator-controlled and the URL is hard-coded in config (not user-supplied) — the allowlist here is the static config itself.
 - Cluster-local Kubernetes service-to-service calls — these don't go through user input, but be aware of any cross-namespace network policy.
 - Outbound webhooks **to** the customer (e.g. Slack, Discord, Microsoft Teams webhooks). Validate that the URL host is in the integration's documented allowlist, not arbitrary.
+- A forwarder that uses a **hard-coded** absolute URL constant (the base is a literal, only a query string or path *segment* is appended from input) does not change host — the SSRF exists only when the absolute URL itself can be influenced by user input.
 
 ## Supply Chain Security (`supply-chain-security`)
 
@@ -811,6 +832,7 @@ _Defend against typosquats, dependency confusion, and malicious package contribu
 - Pin the registry URL in lockfiles to prevent registry redirection attacks.
 - Check that any newly added package has a verified maintainer (`npm` provenance, `sigstore` signature, or GPG-signed git tag) when published in the last 90 days.
 - Treat install scripts (`postinstall`, `preinstall`, `setup.py` arbitrary code, `build.rs`) as high-risk surface and flag them in the PR description for human review.
+- Secure your application's **own update / release channel**, not just third-party deps. Require authentication **and** a release-manager role on the endpoint that publishes a release, and have the client **verify a signature (or pinned checksum) over the downloaded artifact before executing it**. The publish-then-clients-auto-download path is a supply chain too: poison one release and every client runs it.
 
 **Never:**
 - Add a public package whose name matches an internal namespace pattern.
@@ -819,11 +841,14 @@ _Defend against typosquats, dependency confusion, and malicious package contribu
 - Disable the package manager's integrity check (`--no-package-lock`, `--ignore-scripts = false` when defending against it, `npm config set audit false` in production).
 - Auto-merge dependency-bump PRs without a reviewer when the bump crosses a major version.
 - Suggest installing tools via `curl | sh` patterns from untrusted sources.
+- Let any authenticated user — or, worse, an unauthenticated request — publish or overwrite a release artifact that other users' clients auto-download, or have the client execute an update without verifying a signature / pinned checksum. Either one is a one-poison-many-RCE supply-chain break.
 
 **Known false positives:**
 - Legitimate orgs forking and republishing maintained packages with a `-fork` or `-community` suffix; verify the fork's repo URL before flagging.
 - Beta / alpha releases of well-known packages (e.g. `next@canary`) appear "newly published" but are part of a known release cadence.
 - Internal namespace packages (`@yourco/internal-tools`) intentionally not on the public registry — these are fine when the `.npmrc` is configured correctly.
+- Auto-update frameworks that verify a signature by default (Sparkle, electron-updater with a pinned public key, Omaha) are the *correct* pattern — flagging "the app auto-updates" is an FP; the control is signature / checksum verification, not the absence of auto-update.
+- A staging / dev update feed without signing is acceptable when it's gated behind an env flag or internal network and never serves production clients.
 
 ## WebSocket Security (`websocket-security`)
 
