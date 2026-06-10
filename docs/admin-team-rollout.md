@@ -1,4 +1,4 @@
-# Roll out secure-code to a team
+# Roll out vibe-guard to a team
 
 This guide is for the engineering / security lead who wants every developer
 on the team to have the same security rules injected into their AI coding

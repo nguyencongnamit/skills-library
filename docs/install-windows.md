@@ -1,4 +1,4 @@
-# Install secure-code on Windows
+# Install vibe-guard on Windows
 
 The `skills-check` CLI runs on Windows 10 and newer (x64). The CLI binary is
 signed with Authenticode when the release secret is configured — see

@@ -6,7 +6,7 @@ hide:
 
 <div class="ss-hero" markdown>
 
-# SkillShield
+# vibe-guard
 
 Structured security skills + supply-chain vulnerability intelligence for AI coding assistants — Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, Antigravity, Devin.
 
@@ -93,7 +93,7 @@ The data is bundled, so it runs fully offline.
 flowchart LR
     AI["🤖 AI coding<br/>assistant"] -->|reads at session start| DIST["dist/CLAUDE.md<br/>(or 7 other formats)"]
     AI -->|JSON-RPC on demand| MCP["skills-mcp<br/>server"]
-    subgraph LIB [" SkillShield library "]
+    subgraph LIB [" vibe-guard library "]
         direction TB
         SK["skills/<br/>29 SKILL.md"]
         VU["vulnerabilities/<br/>npm · pypi · cargo · gem · go ·<br/>nuget · maven · gh-actions · docker"]

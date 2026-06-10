@@ -1,4 +1,4 @@
-# Install secure-code on macOS
+# Install vibe-guard on macOS
 
 The `skills-check` CLI runs natively on Intel and Apple Silicon. Pick whichever
 install path matches how you manage other CLI tools.

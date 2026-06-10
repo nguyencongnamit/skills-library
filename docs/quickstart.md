@@ -1,6 +1,6 @@
 # Quick Start
 
-Get secure-code into a project in minutes. The easiest path is npm; building from source is for contributors.
+Get vibe-guard into a project in minutes. The easiest path is npm; building from source is for contributors.
 
 !!! note "Prerequisites"
     - **Node.js 18+** for the npm path (recommended), or **Go 1.22+** to build from source

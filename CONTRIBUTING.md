@@ -8,17 +8,39 @@ secure-code is released under the [MIT license](./LICENSE) and maintained by
 [ShieldNet360](https://www.shieldnet360.com).
 
 > [!IMPORTANT]
-> **AI-assisted contributions:** this project does *not* accept pull
-> requests that are fully or predominantly AI-generated. AI tools may
-> be used solely in an assistive capacity, and all AI usage must be
-> disclosed in the PR description. Please read
-> [AGENTS.md](./AGENTS.md) before submitting any PR.
+> **AI-assisted contributions are welcome.** We don't gatekeep on who — or
+> what — wrote a contribution. We *gate* on whether it passes. Every PR,
+> human- or AI-authored, must clear the same objective bar: `validate`,
+> corpus tests, `derive-checklists`, `regenerate`, manifest checksums, and
+> signing. Trust comes from green gates, not from authorship. See
+> [AGENTS.md](./AGENTS.md) for the agent-facing recipe to author a skill.
+
+## Vibe path: the 60-second contribution
+
+You don't need to read this whole document to add a skill. Scaffold, edit,
+preflight:
+
+```bash
+# 1. Scaffold a complete skill (SKILL.md + rules/ + tests/corpus.json)
+skills-check new my-skill --title "My Skill" --category prevention --severity high
+
+# 2. Edit skills/my-skill/SKILL.md — fill out ALWAYS / NEVER / KNOWN FALSE
+#    POSITIVES and at least one external reference. Add corpus fixtures if
+#    your rules are regex-driven.
+
+# 3. One command runs every gate CI runs and prints a single green/red:
+./scripts/preflight.sh
+```
+
+If `preflight` is green, your contribution passes — open the PR. The
+remaining sections explain each gate in depth for when you need them.
 
 ## Where to contribute
 
 | Kind of change | Where it lives | Notes |
 |----------------|----------------|-------|
 | **New skill** | `skills/<id>/SKILL.md` plus rule files in `skills/<id>/rules/` or `checklists/` | Use [`skills/secret-detection/`](./skills/secret-detection) as the reference implementation. Add a `tests/corpus.json` if the rules are regex-driven. |
+| **Eval corpus** (prevention lift) | `skills/<id>/evals/cases.json`; results recorded in `skills/<id>/evals.json` | Each case is a prompt plus the code an AI wrote *without* the skill (`baseline`) and *with* it (`with_skill`), judged by the real `gate` scanners (`oracle: gate`) or a regex (`oracle: signature`) for code-level vulns. Run `skills-check eval <id> --write`. See [`skills/secret-detection/evals/`](./skills/secret-detection/evals). |
 | **Vulnerability entry** | `vulnerabilities/supply-chain/malicious-packages/<ecosystem>.json`, `typosquat-db/known_typosquats.json`, `cve/code-relevant/cve_patterns.json` | Every entry needs at least one external reference (CVE ID, vendor advisory URL, or a reputable disclosure write-up). No anonymous "trust me" entries. |
 | **DLP pattern** | `skills/secret-detection/checklists/secret_detection.yaml` (`checks:` block, `type: secret_pattern`) and matching test in `skills/secret-detection/tests/corpus.json` | Provide a regex, severity, hotwords, and at least one valid + one invalid (false-positive) test fixture. PR-B1 unified the legacy `rules/dlp_patterns.json` + `rules/dlp_exclusions.json` into this single YAML; the i18n locale sidecar was dropped. |
 | **False-positive fix** | The relevant `*_exclusions.json` or a skill-specific exclusion file | These PRs are merged quickly. |
@@ -50,7 +72,9 @@ go test ./...
 
 ## PR checklist
 
-Before opening a pull request, please run these in order:
+The fastest path is `./scripts/preflight.sh`, which runs all of the gates
+below in order and prints a single pass/fail summary. The individual steps
+are spelled out here for when you need to run or debug one in isolation:
 
 1. `./skills-check validate` — passes on every committed `SKILL.md`, rule file,
    and checklist.
@@ -62,9 +86,11 @@ Before opening a pull request, please run these in order:
 5. `./skills-check manifest compute --path . --write` — manifest checksums are
    in sync. CI re-runs `./skills-check manifest verify --checksums-only` and
    rejects drift.
-6. `last_updated` bumped on any modified `SKILL.md`. CI enforces this.
-7. New / updated entries include at least one external reference URL.
-8. Commit messages follow the convention used in `git log` (no force-pushing to
+6. `./skills-check eval <skill-id> --write` for any skill that ships an
+   `evals/cases.json`, so its `evals.json` (prevention-lift result) stays current.
+7. `last_updated` bumped on any modified `SKILL.md`. CI enforces this.
+8. New / updated entries include at least one external reference URL.
+9. Commit messages follow the convention used in `git log` (no force-pushing to
    `main`; do not amend other contributors' commits).
 
 CI runs the same checks plus `go vet`, `gofmt`, `staticcheck`, the markdown

@@ -1,13 +1,13 @@
-# secure-code
+# vibe-guard
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
+[![Skills](https://img.shields.io/badge/skills-29-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
 
-**secure-code** is a structured, machine-readable library of security skills and
+**vibe-guard** is a structured, machine-readable library of security skills and
 supply-chain vulnerability intelligence designed to be embedded directly into AI
 coding assistants — Claude Code, Cursor, GitHub Copilot, Codex, Windsurf,
 Cline / OpenCode, Antigravity, and Devin. It ships bundled rules offline and
@@ -21,7 +21,7 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 
 ## Table of contents
 
-- [Why secure-code](#why-secure-code)
+- [Why vibe-guard](#why-vibe-guard)
 - [What's inside](#whats-inside)
 - [Install & run](#install--run)
 - [Quick start — embed in your IDE](#quick-start--embed-in-your-ide)
@@ -40,13 +40,12 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 - [Compliance evidence](#compliance-evidence)
 - [Private repositories](#private-repositories)
 - [SDKs](#sdks)
-- [Localization](#localization)
 - [Contributing](#contributing)
 - [License and attribution](#license-and-attribution)
 
 ---
 
-## Why secure-code
+## Why vibe-guard
 
 - **AI coding assistants don't ship with current security knowledge.** Training
   data is months or years stale: a package compromised yesterday is happily
@@ -57,18 +56,18 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 - **No standardized way to inject security context** into AI tools today — every
   team writes its own `CLAUDE.md`, `.cursorrules`, or `copilot-instructions.md`,
   and most contain only style rules.
-- **Existing answers are proprietary, expensive, or infra-heavy.** secure-code is
+- **Existing answers are proprietary, expensive, or infra-heavy.** vibe-guard is
   MIT-licensed, runs entirely offline, and ships as plain files in a Git repo plus
   a single static Go binary.
 
-secure-code closes the loop by shipping security knowledge *at the point of code
+vibe-guard closes the loop by shipping security knowledge *at the point of code
 generation*, before the diff ever touches your repo.
 
 ## What's inside
 
 | Area | Path | Description |
 |------|------|-------------|
-| **Skills** | [`skills/`](./skills) | 28 self-contained `SKILL.md` manifests with rules, patterns, and checklists. Each skill is a security capability the AI tool consults at generation time. |
+| **Skills** | [`skills/`](./skills) | 29 self-contained `SKILL.md` manifests with rules, patterns, and checklists. Each skill is a security capability the AI tool consults at generation time. |
 | **Vulnerability database** | [`vulnerabilities/`](./vulnerabilities) | Curated supply-chain corpus (malicious packages, typosquats, CVE detection patterns, dependency-confusion rules) plus an offline OSV cache. Delta-updatable. See the [Vulnerability database](#vulnerability-database--repo-sample-vs-full-upstream) section below for ecosystem coverage and counts. |
 | **Detection rules** | [`rules/`](./rules) | Sigma-format detection rules for AWS, GCP, Azure, K8s, Linux, macOS, Windows, O365, Google Workspace, Salesforce, and Slack — designed to complement the prevention-time rules in `skills/`. |
 | **Compliance maps** | [`compliance/`](./compliance) | OWASP Top 10, CWE Top 25, SANS Top 25 framework mappings plus developer-facing compliance coverage maps (SOC 2, HIPAA, PCI-DSS, FedRAMP). |
@@ -79,7 +78,7 @@ generation*, before the diff ever touches your repo.
 
 ## Install & run
 
-There are three ways to use secure-code, depending on whether you want the
+There are three ways to use vibe-guard, depending on whether you want the
 **MCP server** (16 scanning tools, any agent), the **skills** (knowledge for
 Claude Code), or both. Pick one — they're independent.
 
@@ -351,7 +350,7 @@ changes to skill content. Re-run weekly (or wire up the
 
 AI coding tools have finite context windows, and every byte of instructions you
 inject costs either tokens (for API tools) or working memory (for IDE tools).
-secure-code is designed around three principles:
+vibe-guard is designed around three principles:
 
 - **Skills are loaded on demand, not all at once.** The CLI lets you pick exactly
   which skills your project needs.
@@ -434,7 +433,11 @@ secure-code/
 ├── dist/                                # Pre-compiled IDE-specific files
 │   ├── CLAUDE.md   .cursorrules   copilot-instructions.md   AGENTS.md
 │   ├── .windsurfrules   devin.md   .clinerules
-│   └── SECURITY-SKILLS.md               #   universal format
+│   ├── SECURITY-SKILLS.md               #   universal format
+│   ├── claude-skills/ agent-skills/     #   native skill bundles
+│   │   copilot-skills/                  #   (skills-check generate-native)
+│   └── cursor-rules/ copilot-rules/     #   per-skill scoped rule files
+│       windsurf-rules/
 ├── cmd/
 │   ├── skills-check/                    # CLI (Go, single binary)
 │   └── skills-mcp/                      # MCP server over JSON-RPC stdio
@@ -462,7 +465,13 @@ secure-code/
 ├── manifest.json                        # Root manifest for signed remote updates
 └── .github/workflows/
     ├── validate.yml                     # CI: validate all skills, rules, manifests
-    └── release.yml                      # CI: build CLI, tag release, publish manifests
+    ├── release.yml                      # CI: build CLI, tag release, publish manifests
+    ├── sign-and-publish.yml             # CI: Ed25519-sign + publish signed manifests
+    ├── npm-publish.yml                  # CI: publish the npm packages
+    └── docs.yml                         # CI: build + deploy the MkDocs site to Pages
+
+action.yml                              # Composite GitHub Action: secure-code gate
+.pre-commit-hooks.yaml                  # pre-commit hook: secure-code-gate
 ```
 
 ## Documentation
@@ -483,12 +492,20 @@ secure-code/
 ```
 cmd/skills-check/
 ├── main.go                    # Cobra root command
-├── cmd/                       # init / update / validate / list / regenerate
-│                              # / version / manifest / scheduler / self-update
-│                              # / configure / evidence / new / test
+├── cmd/                       # lifecycle:  init / update / validate / list /
+│                              #   regenerate / generate-native / version /
+│                              #   manifest / scheduler / self-update /
+│                              #   configure / evidence / new / test /
+│                              #   derive-checklists / fetch-vulns
+│                              # scanners (tools_cli.go): check-dependency /
+│                              #   check-typosquat / lookup-vulnerability /
+│                              #   scan-secrets / scan-dependencies /
+│                              #   scan-dockerfile / scan-github-actions /
+│                              #   gate (alias: policy-check)
 └── internal/
     ├── token/                 # tiktoken-go counter + 1.3x Claude multiplier
-    ├── compiler/              # 8 IDE-specific formatters + core compile loop
+    ├── compiler/              # 8 IDE formatters + native skill-bundle emitter
+    │                          #   + core compile loop
     ├── manifest/              # manifest.json: load, checksum, Ed25519 sign /
     │                          # verify, delta, atomic write
     ├── updater/               # Remote update: HTTP / dir / tarball sources,
@@ -499,16 +516,17 @@ cmd/skills-check/
 cmd/skills-mcp/                # Model Context Protocol server (JSON-RPC 2.0 over stdio)
 ├── main.go
 └── internal/
-    ├── mcp/                   # JSON-RPC dispatch + tool definitions
-    └── tools/                 # lookup_vulnerability, check_secret_pattern,
-                               # get_skill, search_skills
+    ├── mcp/ (server.go)       # JSON-RPC dispatch + initialize / tools/list
+    └── tools/ (tools.go)      # the 16 tools/call handlers (lookup_vulnerability,
+                               # scan_*, check_*, gate, get_skill, search_skills,
+                               # list_external_tools, explain_finding, …)
 
 internal/skill/                # SKILL.md parser (shared by skills-check and skills-mcp)
 ```
 
 ## MCP server
 
-`skills-mcp` exposes secure-code to AI tools that speak the
+`skills-mcp` exposes vibe-guard to AI tools that speak the
 [Model Context Protocol](https://modelcontextprotocol.io). It runs as a
 short-lived child process spoken to over stdio:
 
@@ -517,7 +535,7 @@ go build -o skills-mcp ./cmd/skills-mcp
 skills-mcp --path /path/to/secure-code
 ```
 
-The server registers fifteen tools on `tools/list`:
+The server registers sixteen tools on `tools/list`:
 
 - `lookup_vulnerability(package, ecosystem?, version?)` — search the supply-chain
   malicious-packages database, the typosquat DB, AND the local OSV cache
@@ -528,6 +546,10 @@ The server registers fifteen tools on `tools/list`:
 - `get_skill(skill_id, budget?)` — return the requested skill at the requested
   tier (`minimal` / `compact` / `full`).
 - `search_skills(query)` — substring match across skill metadata.
+- `list_external_tools(skill_id?)` — list the external scanners/tools a skill
+  declares in its `external_tools` frontmatter (optionally filtered to one
+  skill), so an agent can discover which third-party tools complement a given
+  skill.
 - `scan_secrets(text | file_path, format?)` — DLP scan of inline text or a path
   under the configured allowed roots; supports the `sarif` output format.
 - `check_dependency(package, version?, ecosystem, format?)` — check a dependency
@@ -813,7 +835,7 @@ To report a security issue privately, see [SECURITY.md](./SECURITY.md).
 
 ## License and attribution
 
-secure-code is released under the [MIT License](./LICENSE).
+vibe-guard is released under the [MIT License](./LICENSE).
 
 > Copyright (c) 2024-2026 **ShieldNet360** — https://www.shieldnet360.com
 

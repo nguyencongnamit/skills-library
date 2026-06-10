@@ -7,58 +7,99 @@ are stable technical identifiers.
 
 ## System Overview
 
+secure-code operates at **two enforcement points** in the developer workflow:
+
+1. **Prevention (generation-time).** Compiled rule files (`dist/`) and the MCP
+   server feed security knowledge *into* the AI before any code is written.
+2. **Enforcement (commit / CI-time).** The `gate` command — exposed as a CLI
+   subcommand, a pre-commit hook, and a GitHub Action — *blocks* code that
+   carries secrets, vulnerable dependencies, or unsafe Dockerfile / workflow
+   configuration after the fact.
+
+The same Go library backs both points, so a finding is identical whether it
+surfaces inside the AI session or in CI.
+
 ```mermaid
 graph TD
-    subgraph "secure-code Repository"
-        A["skills/<br/>SKILL.md manifests"] --> D["dist/ compiler"]
-        B["vulnerabilities/<br/>Supply chain DB"] --> D
-        C["rules/<br/>Sigma detection rules"] --> D
-        E["dictionaries/<br/>Reference data"] --> D
+    subgraph repo["secure-code Repository (source of truth)"]
+        A["skills/<br/>29 SKILL.md manifests"]
+        B["vulnerabilities/<br/>supply-chain DB + OSV cache + CVE patterns"]
+        C["rules/<br/>Sigma detection rules"]
+        E["dictionaries/<br/>terms · CWE · ATT&amp;CK"]
     end
 
-    subgraph "Distribution"
-        D --> F["dist/CLAUDE.md"]
-        D --> G["dist/.cursorrules"]
-        D --> H["dist/copilot-instructions.md"]
-        D --> I["dist/AGENTS.md"]
-        D --> J["dist/.windsurfrules"]
-        D --> K["dist/devin.md"]
-        D --> L["dist/.clinerules"]
-        D --> M["dist/SECURITY-SKILLS.md"]
-    end
+    A --> D["compiler<br/>(internal/compiler)"]
+    B --> D
+    C --> D
+    E --> D
 
-    subgraph "Update channel"
-        N["GitHub Releases"] --> O["manifest.json<br/>+ checksums<br/>+ Ed25519 sig"]
-        O --> P["skills-check CLI<br/>(Go binary)"]
-        P --> Q["Delta download<br/>changed files only"]
-        Q --> R["Verify signature<br/>+ checksums"]
-        R --> S["Update local<br/>secure-code/"]
-        S --> D
+    subgraph dist["Compiled outputs (dist/)"]
+        F["IDE config files<br/>CLAUDE.md · .cursorrules ·<br/>copilot · AGENTS.md ·<br/>.windsurfrules · devin · .clinerules ·<br/>SECURITY-SKILLS.md"]
+        G["native skill bundles<br/>claude-skills/ · agent-skills/ ·<br/>copilot-skills/  (generate-native)"]
+        H["per-skill scoped rules<br/>cursor-rules/ · copilot-rules/ ·<br/>windsurf-rules/"]
     end
+    D --> F
+    D --> G
+    D --> H
 
-    subgraph "Scheduled updates"
-        T["macOS: launchd plist"] --> P
-        U["Linux: systemd timer"] --> P
-        V["Windows: Task Scheduler"] --> P
+    subgraph chan["Distribution channels"]
+        NPM["npm / npx<br/>@namncqualgo/secure-code-mcp<br/>@namncqualgo/secure-code-skill"]
+        GO["go install · brew · winget · .deb/.rpm"]
+        REL["GitHub Releases<br/>signed manifest + binaries"]
     end
+    F --> GO
+    G --> NPM
 
-    subgraph "Developer workflow"
-        F --> W["AI Coding Tool<br/>reads config on<br/>session start"]
-        W --> X["AI applies security<br/>rules during<br/>code generation"]
+    subgraph consume["Consumption — ① prevention (gen-time)"]
+        W["AI coding tool<br/>(Claude · Cursor · Copilot · Codex ·<br/>Windsurf · Cline · Devin)"]
+        MCP["skills-mcp<br/>16 tools over JSON-RPC/stdio"]
     end
+    F --> W
+    G --> W
+    NPM --> MCP
+    GO --> MCP
+    W -->|"queries on demand"| MCP
+
+    subgraph gate["Consumption — ② enforcement (commit / CI-time)"]
+        PC["pre-commit hook<br/>(.pre-commit-hooks.yaml)"]
+        GHA["GitHub Action<br/>(action.yml)"]
+        GT["gate &lt;files&gt;<br/>routes to scan-secrets /<br/>scan-dependencies / scan-dockerfile /<br/>scan-github-actions; exit 1 ≥ floor"]
+    end
+    NPM --> PC
+    NPM --> GHA
+    PC --> GT
+    GHA --> GT
+    GO --> GT
+
+    subgraph upd["Update channel (signed, GET-only, no telemetry)"]
+        P["skills-check update"]
+        Q["delta download → verify Ed25519 sig + sha256 → atomic rename"]
+    end
+    REL --> P --> Q --> repo
+    SCHED["launchd / systemd / Task Scheduler"] --> P
 ```
 
-The diagram shows the four runtime subsystems and how the developer experience flows
+The diagram shows the runtime subsystems and how the developer experience flows
 through them:
 
 - **Repository** — the canonical source of truth. Skills, vulnerability data, detection
   rules, and dictionaries are checked into Git. Everything is plain JSON / YAML /
   Markdown so PRs are reviewable.
-- **Distribution** — the `dist/` compiler reads every input source and produces one
-  IDE-specific file per supported tool. Each output is pinned to a token budget tier.
-- **Update channel** — signed releases on GitHub (or a self-hosted CDN) carry deltas
-  forward to installed CLIs. The CLI verifies signatures before writing any file.
-- **Scheduled updates** — each OS uses its native scheduling mechanism; no daemons.
+- **Compiler** — `internal/compiler` reads every input source and produces (a) one
+  IDE-specific config file per supported tool, each pinned to a token-budget tier;
+  (b) native skill bundles for agents that load `agentskills.io`-style skill
+  directories (`generate-native`); and (c) per-skill scoped rule files for editors
+  that support rule scoping.
+- **Distribution channels** — three independent paths: `npx`/npm (no Go, no clone),
+  `go install` / Homebrew / winget / system packages, and signed GitHub Releases.
+- **Prevention (gen-time)** — IDE files inject rules at session start; the MCP server
+  answers scan/lookup queries on demand during the session.
+- **Enforcement (commit/CI-time)** — the `gate` command, wired into pre-commit and a
+  GitHub Action via the published npm package, fails the build on findings at or above
+  a severity floor.
+- **Update channel** — signed releases carry deltas forward to installed CLIs; the CLI
+  verifies signatures before writing any file. Each OS schedules updates with its
+  native mechanism; no daemons.
 
 ## `SKILL.md` Schema (Detailed)
 
@@ -216,6 +257,19 @@ cmd/skills-check/
 │   ├── test.go                # skills-check test <id> (test corpus runner)
 │   ├── evidence.go            # skills-check evidence --framework SOC2|HIPAA|PCI-DSS
 │   ├── configure.go           # skills-check configure (writes .skills-check.yaml)
+│   ├── fetch_vulns.go         # skills-check fetch-vulns [--from-release|--check|--only]
+│   ├── generate_native.go     # skills-check generate-native (native skill bundles
+│   │                          #   → dist/{claude,agent,copilot}-skills)
+│   ├── derive_checklists.go   # skills-check derive-checklists <skill-id>
+│   │                          #   (build checklists/*.yaml from SKILL.md markers)
+│   ├── eval.go                # skills-check eval [--all] — prevention-lift bench:
+│   │                          #   judges baseline vs with-skill generations via the
+│   │                          #   gate scanners or a signature regex → evals.json
+│   ├── tools_cli.go           # scanner subcommands sharing the MCP library:
+│   │                          #   check-dependency / check-typosquat /
+│   │                          #   lookup-vulnerability / scan-secrets /
+│   │                          #   scan-dependencies / scan-dockerfile /
+│   │                          #   scan-github-actions / gate (alias policy-check)
 │   └── cmd_test.go            # integration tests for every subcommand
 └── internal/
     ├── token/                 # tiktoken-go counter + 1.3x Claude multiplier + budget enforcer
@@ -230,6 +284,9 @@ cmd/skills-check/
     │   ├── devin.go           # devin.md formatter (defaults to full tier)
     │   ├── cline.go           # .clinerules formatter
     │   ├── universal.go       # SECURITY-SKILLS.md formatter
+    │   ├── native.go          # native skill-bundle emitter (claude/agent/copilot skills)
+    │   ├── rule_bundles.go    # per-skill scoped rule files (cursor/copilot/windsurf-rules/)
+    │   ├── pointer.go         # pointer/loader stubs that reference the scoped rules
     │   ├── profiles.go        # LoadProfile, ListProfiles, FilterSkillsByProfile
     │   ├── packaging_test.go  # validates packaging/* manifests are well-formed
     │   └── rules_test.go      # walks rules/**/*.yml and asserts the Sigma schema
@@ -240,8 +297,13 @@ cmd/skills-check/
 cmd/skills-mcp/                # Model Context Protocol server
 ├── main.go                    # resolve library root, wire stdio JSON-RPC loop
 └── internal/
-    ├── mcp/                   # JSON-RPC 2.0 dispatch + tool/list definitions
-    └── tools/                 # lookup_vulnerability, check_secret_pattern, get_skill, search_skills
+    ├── mcp/   (server.go)     # JSON-RPC 2.0 dispatch + tools/list definitions
+    └── tools/ (tools.go)      # the 16 tools/call handlers (lookup_vulnerability,
+                               #   check_secret_pattern, get_skill, search_skills,
+                               #   list_external_tools, scan_secrets, scan_dependencies,
+                               #   scan_dockerfile, scan_github_actions, check_dependency,
+                               #   check_typosquat, map_compliance_control, get_sigma_rule,
+                               #   explain_finding, version_status, gate)
 
 internal/skill/                # SKILL.md parser (frontmatter + markdown body + tier extraction)
                                # — shared between skills-check and skills-mcp
@@ -264,23 +326,34 @@ spawned by the AI client and talks to it over stdio.
 - **Transport.** JSON-RPC 2.0, one message per line. Requests arrive on
   stdin; responses go to stdout. Notifications (no `id`) produce no response.
 - **Methods.** `initialize` returns `serverInfo`. `tools/list` returns the
-  four tool definitions with input schemas. `tools/call` dispatches by name.
+  sixteen tool definitions with input schemas. `tools/call` dispatches by name.
 - **Library root resolution.** `--path <dir>`, then `$SKILLS_LIBRARY_PATH`,
   then the directory containing the binary. The root must contain a
   `skills/` subdirectory.
-- **Tools.** `lookup_vulnerability` reads
-  `vulnerabilities/supply-chain/malicious-packages/{ecosystem}.json`
-  (npm, pypi, crates, go, rubygems, maven, nuget, github-actions, docker)
-  and the typosquat DB; `check_secret_pattern` runs the regex rules from
-  the `checks:` block of
-  `skills/secret-detection/checklists/secret_detection.yaml` and applies
-  its `exclusions:` block; `get_skill` parses `skills/{id}/SKILL.md` and
-  returns the requested tier; `search_skills` substring-matches across all
-  skill manifests.
+- **Tools (16).** They fall into four groups:
+  - *Knowledge lookups* — `get_skill` (parse `skills/{id}/SKILL.md`, return the
+    requested tier), `search_skills` (substring match across manifests),
+    `list_external_tools` (read a skill's `external_tools` frontmatter),
+    `get_sigma_rule`, `map_compliance_control`, `explain_finding`,
+    `version_status`.
+  - *Package intelligence* — `lookup_vulnerability` and `check_dependency` read
+    `vulnerabilities/supply-chain/malicious-packages/{ecosystem}.json`
+    (npm, pypi, crates, go, rubygems, maven, nuget, github-actions, docker),
+    the typosquat DB, and the OSV cache; `check_typosquat` flags candidates.
+  - *File scanners* — `scan_secrets` runs the regex rules from the `checks:`
+    block of `skills/secret-detection/checklists/secret_detection.yaml` (applying
+    its `exclusions:`); `scan_dependencies`, `scan_dockerfile`, and
+    `scan_github_actions` parse the respective file types.
+  - *Enforcement* — `gate` routes a file to the matching scanner (falling back to
+    a secret scan) and returns a CI-friendly `pass` flag + `exit_code` keyed off a
+    severity floor.
+- **`check_secret_pattern`** is the legacy inline-text variant of `scan_secrets`,
+  kept for callers that pass raw text rather than a path.
 
 The MCP server reuses the parser at `internal/skill/` rather than duplicating
-the SKILL.md format implementation. No new external dependencies were added —
-the whole transport is pure stdlib (`net/http` is not used).
+the SKILL.md format implementation. The stdio transport is pure stdlib; `net/http`
+is used only for the opt-in live OSV.dev enrichment path (`--vuln-source
+external|hybrid`), never for telemetry.
 
 ## Scheduler Implementation Details
 

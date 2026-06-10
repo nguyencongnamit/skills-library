@@ -6,6 +6,7 @@ on:
     paths:
       - 'mkdocs.yml'
       - 'docs/**'
+      - 'landing/**'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
@@ -40,6 +41,11 @@ jobs:
 
       - name: Build site
         run: mkdocs build --config-file mkdocs.yml --site-dir _site
+
+      - name: Publish landing decks (HTML + PDF)
+        run: |
+          mkdir -p _site/decks
+          cp landing/*.html landing/*.pdf _site/decks/ 2>/dev/null || true
 
       - uses: actions/configure-pages@v5
 
