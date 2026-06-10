@@ -1,6 +1,6 @@
 ---
 id: api-security
-version: "1.0.0"
+version: "1.1.0"
 title: "API Security"
 description: "Apply OWASP API Top 10 patterns to authentication, authorization, and input validation"
 category: prevention
@@ -12,12 +12,12 @@ applies_to:
   - "when reviewing API endpoint changes"
 languages: ["*"]
 token_budget:
-  minimal: 500
-  compact: 750
-  full: 2300
+  minimal: 750
+  compact: 1100
+  full: 2700
 rules_path: "checklists/"
-related_skills: ["secure-code-review", "secret-detection"]
-last_updated: "2026-05-12"
+related_skills: ["secure-code-review", "secret-detection", "ssrf-prevention"]
+last_updated: "2026-06-10"
 sources:
   - "OWASP API Security Top 10 2023"
   - "OWASP Authentication Cheat Sheet"
@@ -58,6 +58,19 @@ sources:
 - Return stack traces or framework error pages to the client in production.
 - Use `HTTP GET` for any state-changing operation — GET should be safe and
   idempotent.
+- Rely on **network position** (IP allowlist, VPN, private subnet, "internal
+  only", a WAF/edge rule) as the *only* control on a sensitive endpoint.
+  Reachability is not authentication: the moment there's an SSRF, a compromised
+  internal host, a tenant on the network, or a boundary change, an
+  unauthenticated "internal" endpoint (`permission_classes = [AllowAny]`,
+  no `RequireAuth`) is wide open. Enforce auth/authz at the service itself,
+  behind any network control.
+- Place security controls (auth, field-stripping, CSRF, rate-limit, input
+  validation) only at a gateway / BFF / proxy while the backend service is
+  **also directly reachable**. An attacker calls the service directly and
+  bypasses every proxy-layer control — controls must live at the service that
+  owns the data. (A common variant: the gateway checks that a JWT is *present*
+  but the service never checks the caller's *role*.)
 
 ### KNOWN FALSE POSITIVES
 - Public marketing-site endpoints serving anonymous traffic legitimately have no auth
@@ -65,6 +78,12 @@ sources:
 - Sequential IDs in paths are fine for genuinely public, non-tenant-scoped resources
   (e.g. blog post slugs, public product catalog items).
 - Health-check endpoints (`/healthz`, `/ready`) intentionally bypass auth.
+- A network control (mTLS service mesh, NetworkPolicy, private ingress) is fine
+  as **defense-in-depth** — the anti-pattern is only when it's the *sole* control
+  and the service itself authenticates nothing.
+- Mutual-TLS / SPIFFE workload identity between services **is** authentication
+  (a cryptographic caller identity), not mere network position — mTLS-authenticated
+  service-to-service calls are fine even on a private network.
 
 ## Context (for humans)
 
@@ -72,6 +91,14 @@ The OWASP API Top 10 differs from the web Top 10 mostly because APIs have weaker
 defaults: they often skip CSRF, they expose object IDs directly, and they tend to
 trust developer-provided client-side state. This skill codifies the most common
 high-impact mistakes.
+
+A recurring architectural failure is **trusting the perimeter instead of the
+service**: a BFF/gateway enforces auth, strips fields, and checks CSRF, while the
+core service is also directly reachable and authenticates nothing because it's
+"internal". Anyone who can reach the core service — via SSRF, a foothold inside
+the allowlisted network, or simply a public DNS name that resolves to the same
+backend — bypasses every perimeter control. Network position is a mitigation, not
+an authentication boundary; the owning service must enforce auth/authz itself.
 
 ## References
 

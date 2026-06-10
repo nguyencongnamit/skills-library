@@ -1,6 +1,6 @@
 ---
 id: ssrf-prevention
-version: "1.0.0"
+version: "1.1.0"
 title: "SSRF Prevention"
 description: "Defend against Server-Side Request Forgery: cloud metadata blocking, internal IP filtering, DNS rebinding defense, allowlist-based URL fetching"
 category: prevention
@@ -13,11 +13,11 @@ applies_to:
 languages: ["*"]
 token_budget:
   minimal: 1200
-  compact: 1500
-  full: 2200
+  compact: 1600
+  full: 2600
 rules_path: "rules/"
 related_skills: ["api-security", "cors-security", "iac-security"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-10"
 sources:
   - "OWASP SSRF Prevention Cheat Sheet"
   - "CWE-918: Server-Side Request Forgery"
@@ -74,6 +74,17 @@ sources:
   attacker who finds a Unix-domain-socket pseudo-URL or a misconfigured
   hostname can route around the proxy. Application-level allowlist
   remains required.
+- Ship a generic request forwarder that switches to fetching a **full,
+  caller-supplied URL** when the input "looks absolute"
+  (`path.startsWith('http') ? path : base + path`). It is a latent SSRF: the
+  day any caller passes user-influenced input, the server fetches an attacker
+  URL — internal hosts and cloud metadata included. Keep the internal-base
+  fetcher and the user-URL fetcher as distinct, type-separated clients.
+- Treat "this endpoint is only reachable from our internal / VPN / allowlisted
+  network" as mitigation for an unsafe server-side fetch. SSRF *originates from
+  inside* that network, so it reaches exactly the internal services the network
+  control was meant to protect — an IP allowlist is not an authentication
+  boundary against SSRF.
 - Allow IDN / Punycode in user URLs without normalization — IDN homograph
   attacks bypass naive string-allowlist checks (`gооgle.com` Cyrillic-o
   ≠ `google.com`).
@@ -87,6 +98,10 @@ sources:
 - Outbound webhooks **to** the customer (e.g. Slack, Discord, Microsoft
   Teams webhooks). Validate that the URL host is in the integration's
   documented allowlist, not arbitrary.
+- A forwarder that uses a **hard-coded** absolute URL constant (the base is a
+  literal, only a query string or path *segment* is appended from input) does
+  not change host — the SSRF exists only when the absolute URL itself can be
+  influenced by user input.
 
 ## Context (for humans)
 

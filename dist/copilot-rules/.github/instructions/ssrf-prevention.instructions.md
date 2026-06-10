@@ -26,6 +26,8 @@ Defend against Server-Side Request Forgery: cloud metadata blocking, internal IP
 - Trust `0.0.0.0`, `127.0.0.1`, `[::]`, `[::1]`, `localhost`, or `*.localhost.test` — all of them reach the local instance. The list also must include link-local `169.254.0.0/16`, IPv4-mapped IPv6 `::ffff:127.0.0.1`, and IPv6 ULA `fc00::/7`.
 - Use the user's URL string in a logging line or an error response — it can be the SSRF reflection oracle that turns blind SSRF into data-exfiltration SSRF.
 - Run a metadata-blocking sidecar / proxy as the **only** defense — an attacker who finds a Unix-domain-socket pseudo-URL or a misconfigured hostname can route around the proxy. Application-level allowlist remains required.
+- Ship a generic request forwarder that switches to fetching a **full, caller-supplied URL** when the input "looks absolute" (`path.startsWith('http') ? path : base + path`). It is a latent SSRF: the day any caller passes user-influenced input, the server fetches an attacker URL — internal hosts and cloud metadata included. Keep the internal-base fetcher and the user-URL fetcher as distinct, type-separated clients.
+- Treat "this endpoint is only reachable from our internal / VPN / allowlisted network" as mitigation for an unsafe server-side fetch. SSRF *originates from inside* that network, so it reaches exactly the internal services the network control was meant to protect — an IP allowlist is not an authentication boundary against SSRF.
 - Allow IDN / Punycode in user URLs without normalization — IDN homograph attacks bypass naive string-allowlist checks (`gооgle.com` Cyrillic-o ≠ `google.com`).
 
 ## KNOWN FALSE POSITIVES
@@ -33,4 +35,5 @@ Defend against Server-Side Request Forgery: cloud metadata blocking, internal IP
 - Server-to-server integrations where both sides are operator-controlled and the URL is hard-coded in config (not user-supplied) — the allowlist here is the static config itself.
 - Cluster-local Kubernetes service-to-service calls — these don't go through user input, but be aware of any cross-namespace network policy.
 - Outbound webhooks **to** the customer (e.g. Slack, Discord, Microsoft Teams webhooks). Validate that the URL host is in the integration's documented allowlist, not arbitrary.
+- A forwarder that uses a **hard-coded** absolute URL constant (the base is a literal, only a query string or path *segment* is appended from input) does not change host — the SSRF exists only when the absolute URL itself can be influenced by user input.
 

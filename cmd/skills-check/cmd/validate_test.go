@@ -248,7 +248,7 @@ func TestValidateUnwrapsAccumulatedValidateErrors(t *testing.T) {
 	for find, replace := range map[string]string{
 		`title: "API Security"`: `title: ""`,
 		`description: "Apply OWASP API Top 10 patterns to authentication, authorization, and input validation"`: `description: ""`,
-		`last_updated: "2026-05-12"`: `last_updated: ""`,
+		`last_updated: "2026-06-10"`: `last_updated: ""`,
 	} {
 		next := strings.Replace(body, find, replace, 1)
 		if next == body {

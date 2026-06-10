@@ -23,12 +23,17 @@ Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm chart
 - Mark filesystem read-only: `readOnlyRootFilesystem: true`; use `emptyDir` volumes for the few paths that must be writable.
 - Scan every image in CI (Trivy, Grype, Snyk, or your registry's scanner) and fail builds on CRITICAL or HIGH severity findings.
 - Pull base images by SHA256 digest in production manifests, not by mutable tag.
+- For **multi-tenant** workloads (per-user/per-customer sessions on shared infra), isolate tenants at the **kernel boundary**: a separate VM — or gVisor / Kata — per tenant, never just separate containers on one shared daemon. Drop `privileged`, enable user namespaces, and give each tenant its own network. A privileged container on a shared host escapes to the host trivially, so on shared infra that is full compromise of *every* co-tenant.
+- Expose container orchestration to clients only through a **scoped, authenticated broker API** that performs the few operations a client may request (start/stop *my* session). The client must never hold direct daemon or cluster access.
 
 ## NEVER
 
 - Run containers as root or with `privileged: true` / `allowPrivilegeEscalation: true` outside of explicit, audited system pods (e.g., CNI plugins).
 - Use **end-of-life base images**. As of mid-2026 this includes `node:< 18`, `python:< 3.10`, `alpine:< 3.17`, `debian:< 11 (bullseye)`, `ubuntu:< 20.04`, `centos:*`, `ruby:< 3.1`, and any non-LTS Node/Python release. EOL images stop receiving security patches; a maintained image with no public CVEs is still safer than an EOL one. Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar. <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application container. It's effectively root on the host.
+- Expose the container **daemon API over the network** (`tcp://…:2375`, or `:2376` even with TLS) to clients or apps. The daemon API is root-on-host: whoever reaches it runs arbitrary privileged containers and mounts the host filesystem. (A desktop/CLI app talking straight to a remote daemon is the same anti-pattern as a mounted `docker.sock`, just over TCP.)
+- Ship a **single shared client credential** (one mTLS cert/key, token, or kubeconfig bundled into every copy of a distributed app) to reach that daemon or cluster. Every install holds the same key — trivially extracted from the app bundle — so it grants every user identical access and cannot be revoked per-user. Issue per-user / per-session, short-lived, scoped credentials.
+- Run a tenant's container `privileged` on a host shared with other tenants, or attach tenant containers to a **shared external bridge network** — the first gives container-escape → co-tenant takeover, the second gives cross-tenant L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
 - Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs.
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with a checksum verify and `RUN` instead, or vendor the artifact).
@@ -41,4 +46,6 @@ Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm chart
 - Operators that legitimately need cluster-admin access (kubelet, CSI drivers, CNI plugins) require elevated privileges; they belong in `kube-system` or a dedicated namespace with auditing, not in application namespaces.
 - Bare-metal Kubernetes nodes sometimes legitimately disable `seccomp` for drivers that aren't compatible; document the exception.
 - One-shot debugging pods (kubectl debug, ephemeral containers) intentionally bypass many of these controls; they should not be persisted as YAML in the repo.
+- A remote Docker / K8s endpoint over mTLS (`:2376`) is acceptable for an **operator's own** CI / build farm where each operator holds a personal, revocable cert — the anti-pattern is shipping **one shared** cert inside a distributed end-user app.
+- `privileged` or a shared bridge network within a **single trust domain** (one team's own microservices, or a sim stack on the developer's own machine) is lower-risk than the multi-tenant case; these rules target the shared-host, cross-tenant blast radius specifically.
 
