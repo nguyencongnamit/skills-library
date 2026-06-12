@@ -396,6 +396,126 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 	}
 }
 
+// PolicyCheckSARIF converts the aggregated results of a `gate` run —
+// one PolicyCheckResult per file argument — into a single SARIF 2.1.0
+// log so a CI step can `upload-sarif` the gate's verdict to GitHub
+// Code Scanning. Every finding across every file becomes one result in
+// a single run; the rules table is deduplicated by the finding's
+// RuleID so a dashboard can hyperlink each result back to its rule.
+//
+// Findings carry an artifactLocation only (no byte region): the gate
+// flattens line-indexed scanner findings, whereas SARIFRegion is
+// byte-indexed (built for the secret scanner), so emitting a region
+// would force a misleading byteOffset=0/byteLength=0. The line number
+// is carried in result.properties.line instead. Emitting SARIF never
+// changes the gate's exit code — it only shapes stdout.
+func PolicyCheckSARIF(results []*PolicyCheckResult) *SARIFLog {
+	if len(results) == 0 {
+		return emptyLog("gate")
+	}
+	// Deduplicate the rules table by RuleID across every file. The
+	// first finding to use a RuleID defines its rule metadata.
+	ruleIndex := map[string]int{}
+	rules := make([]SARIFRule, 0)
+	registerRule := func(f PolicyCheckFinding) string {
+		id := f.RuleID
+		if id == "" {
+			id = "skills-mcp.gate.unspecified"
+		}
+		if _, seen := ruleIndex[id]; !seen {
+			desc := f.Title
+			if desc == "" {
+				desc = id
+			}
+			ruleIndex[id] = len(rules)
+			rules = append(rules, SARIFRule{
+				ID:               id,
+				Name:             f.Title,
+				ShortDescription: &SARIFMultiformat{Text: desc},
+				DefaultConfig:    &SARIFRuleConfig{Level: sarifLevel(f.Severity)},
+			})
+		}
+		return id
+	}
+
+	out := make([]SARIFResult, 0)
+	for _, res := range results {
+		if res == nil {
+			continue
+		}
+		uri := fileURI(res.FilePath)
+		for _, f := range res.Findings {
+			id := registerRule(f)
+			msg := f.Title
+			if msg == "" {
+				msg = id
+			}
+			if f.Package != "" {
+				msg = fmt.Sprintf("%s [%s", msg, f.Package)
+				if f.Version != "" {
+					msg += "@" + f.Version
+				}
+				msg += "]"
+			}
+			props := map[string]any{
+				"severity": f.Severity,
+				"scan":     res.Scan,
+			}
+			if f.Confidence != "" {
+				props["confidence"] = f.Confidence
+			}
+			if f.Line > 0 {
+				props["line"] = f.Line
+			}
+			if f.Snippet != "" {
+				props["snippet"] = f.Snippet
+			}
+			if f.Package != "" {
+				props["package"] = f.Package
+			}
+			if f.Version != "" {
+				props["version"] = f.Version
+			}
+			out = append(out, SARIFResult{
+				RuleID:    id,
+				RuleIndex: ruleIndex[id],
+				Level:     sarifLevel(f.Severity),
+				Message:   SARIFMultiformat{Text: msg},
+				Locations: []SARIFLocation{{
+					PhysicalLocation: SARIFPhysicalLocation{
+						ArtifactLocation: SARIFArtifactLocation{URI: uri},
+					},
+				}},
+				Properties: props,
+			})
+		}
+	}
+
+	// Stable rule order + re-anchored ruleIndex so the document is
+	// deterministic across runs (mirrors ScanSecretsSARIF).
+	sort.Slice(rules, func(i, j int) bool { return rules[i].ID < rules[j].ID })
+	idxAfterSort := map[string]int{}
+	for i, r := range rules {
+		idxAfterSort[r.ID] = i
+	}
+	for i := range out {
+		out[i].RuleIndex = idxAfterSort[out[i].RuleID]
+	}
+
+	return &SARIFLog{
+		Schema:  SARIFSchema,
+		Version: SARIFVersion,
+		Runs: []SARIFRun{{
+			Tool: SARIFTool{Driver: SARIFDriver{
+				Name:           SARIFToolName,
+				InformationURI: "https://github.com/namncqualgo/skills-library",
+				Rules:          rules,
+			}},
+			Results: out,
+		}},
+	}
+}
+
 // fileURI converts a local absolute path to an RFC 3986 file:// URI.
 // validateScanPath guarantees the path is absolute when reaching
 // the SARIF emitter; if a non-absolute or empty path slips through
