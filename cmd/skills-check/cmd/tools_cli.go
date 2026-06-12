@@ -543,7 +543,7 @@ func scanGitHubActionsCmd() *cobra.Command {
 // =============================================================================
 
 func policyCheckCmd() *cobra.Command {
-	var repoPath, severityFloor, format string
+	var repoPath, severityFloor, format, sarifBase string
 	c := &cobra.Command{
 		Use:     "gate <file>...",
 		Aliases: []string{"policy-check"},
@@ -599,7 +599,13 @@ shell call from your pre-commit or CI step.
 				// One SARIF run covering every scanned file. Emitted here,
 				// before the exit-code decision below, so a FAILING gate
 				// still writes a valid SARIF document for `upload-sarif`.
-				_ = emitJSON(c.OutOrStdout(), tools.PolicyCheckSARIF(results))
+				// URIs are made relative to --sarif-base (default cwd) so
+				// GitHub Code Scanning anchors alerts to repo files.
+				base, err := filepath.Abs(sarifBase)
+				if err != nil {
+					base = ""
+				}
+				_ = emitJSON(c.OutOrStdout(), tools.PolicyCheckSARIF(results, base))
 			default:
 				for i, res := range results {
 					verdict := "PASS"
@@ -635,6 +641,8 @@ shell call from your pre-commit or CI step.
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&severityFloor, "severity-floor", "high",
 		"the lowest severity that causes a non-zero exit: critical | high | medium | low")
+	c.Flags().StringVar(&sarifBase, "sarif-base", ".",
+		"directory SARIF artifact URIs are made relative to (files outside it fall back to absolute file:// URIs); only used with --format sarif")
 	addFormatFlag(c, &format, true)
 	return c
 }

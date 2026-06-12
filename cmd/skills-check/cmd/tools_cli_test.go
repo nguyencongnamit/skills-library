@@ -420,6 +420,68 @@ RUN curl http://example.com | sh
 	}
 }
 
+// TestGateSARIFRelativeURIs locks the URI contract that GitHub Code
+// Scanning anchoring depends on (verified on a live fixture repo:
+// absolute file:// URIs ingest but render as dead paths; repo-relative
+// URIs anchor to the file). With --sarif-base pointing at the
+// directory containing the scanned file, the artifact URI must be the
+// bare relative path; without it (default cwd, which the temp fixture
+// lives outside of), the URI must fall back to an absolute file:// —
+// never a ../../ escape path.
+func TestGateSARIFRelativeURIs(t *testing.T) {
+	const docker = `FROM node:latest
+USER root
+`
+	path := writeFixedNameFixture(t, "Dockerfile", docker)
+
+	uriOf := func(out string) string {
+		t.Helper()
+		var log tools.SARIFLog
+		if err := json.Unmarshal([]byte(out), &log); err != nil {
+			t.Fatalf("not valid SARIF JSON: %v\n%s", err, out)
+		}
+		res := log.Runs[0].Results
+		if len(res) == 0 {
+			t.Fatalf("no results in SARIF:\n%s", out)
+		}
+		return res[0].Locations[0].PhysicalLocation.ArtifactLocation.URI
+	}
+
+	// --sarif-base = the fixture's dir → bare relative path.
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		"--sarif-base", filepath.Dir(path),
+		path,
+	)
+	if err == nil {
+		t.Fatal("gate should fail on the planted Dockerfile")
+	}
+	if got := uriOf(out); got != "Dockerfile" {
+		t.Errorf("with --sarif-base, uri = %q, want %q", got, "Dockerfile")
+	}
+
+	// Default base (cwd) — fixture lives outside it → absolute
+	// file:// fallback, never a ../.. escape.
+	out, _, err = run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		path,
+	)
+	if err == nil {
+		t.Fatal("gate should fail on the planted Dockerfile")
+	}
+	if got := uriOf(out); !strings.HasPrefix(got, "file://") {
+		t.Errorf("outside-base uri = %q, want absolute file:// fallback", got)
+	} else if strings.Contains(got, "..") {
+		t.Errorf("outside-base uri %q contains a path escape", got)
+	}
+}
+
 // TestGateSARIFOnCleanFileIsWellFormed confirms a passing gate still
 // emits well-formed SARIF with empty-but-non-null results/rules arrays
 // (GitHub Advanced Security rejects the JSON `null` form) and exits 0.

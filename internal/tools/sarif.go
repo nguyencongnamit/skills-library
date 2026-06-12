@@ -19,6 +19,7 @@ package tools
 import (
 	"fmt"
 	"net/url"
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -409,7 +410,16 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 // would force a misleading byteOffset=0/byteLength=0. The line number
 // is carried in result.properties.line instead. Emitting SARIF never
 // changes the gate's exit code — it only shapes stdout.
-func PolicyCheckSARIF(results []*PolicyCheckResult) *SARIFLog {
+//
+// baseDir controls the artifact URI shape. GitHub Code Scanning only
+// anchors an alert to a file when the URI is RELATIVE to the checkout
+// root — an absolute file:// URI ingests fine but renders as a dead
+// /Users/... path (verified on a live fixture repo). When baseDir is
+// non-empty, any finding whose file lives under it gets a clean
+// repo-relative URI; files outside baseDir (and the baseDir=="" case)
+// fall back to the absolute file:// form so the document stays
+// well-formed rather than emitting a ../../ escape path.
+func PolicyCheckSARIF(results []*PolicyCheckResult, baseDir string) *SARIFLog {
 	if len(results) == 0 {
 		return emptyLog("gate")
 	}
@@ -444,6 +454,12 @@ func PolicyCheckSARIF(results []*PolicyCheckResult) *SARIFLog {
 			continue
 		}
 		uri := fileURI(res.FilePath)
+		if baseDir != "" {
+			if rel, err := filepath.Rel(baseDir, res.FilePath); err == nil &&
+				rel != "." && !strings.HasPrefix(rel, "..") {
+				uri = filepath.ToSlash(rel)
+			}
+		}
 		for _, f := range res.Findings {
 			id := registerRule(f)
 			msg := f.Title

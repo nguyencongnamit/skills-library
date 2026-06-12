@@ -16,14 +16,30 @@ inputs:
     description: npm version or dist-tag of @namncqualgo/secure-code-mcp to run (pin for reproducible CI).
     required: false
     default: latest
+  sarif-file:
+    description: >-
+      When set (e.g. "gate.sarif"), gate emits SARIF 2.1.0 to this path and the
+      action uploads it to GitHub Code Scanning — findings appear in the
+      Security tab and as PR annotations, and the job still fails when any
+      finding meets the severity floor. The calling workflow needs
+      `permissions: security-events: write` (and a package version whose gate
+      supports `--format sarif`). Leave empty for plain text output and no
+      upload.
+    required: false
+    default: ""
+  category:
+    description: Code Scanning category for the SARIF upload; change it when one workflow uploads several SARIF files.
+    required: false
+    default: secure-code-gate
 
 runs:
   using: composite
   steps:
     - name: Run secure-code gate
+      id: gate
       shell: bash
       run: |
-        set -euo pipefail
+        set -uo pipefail
         if [ -z "${{ inputs.files }}" ]; then
           echo "secure-code-gate: no files supplied via the 'files' input; nothing to gate." >&2
           exit 0
@@ -31,6 +47,38 @@ runs:
         # The published package bundles the skills-check CLI binary + the rule
         # data; the secure-code-check launcher points it at that data via
         # $SKILLS_LIBRARY_PATH, so no checkout or --path is needed here.
-        npx -y -p "@namncqualgo/secure-code-mcp@${{ inputs.version }}" \
-          secure-code-check gate ${{ inputs.files }} \
-          --severity-floor "${{ inputs.severity-floor }}"
+        if [ -z "${{ inputs.sarif-file }}" ]; then
+          npx -y -p "@namncqualgo/secure-code-mcp@${{ inputs.version }}" \
+            secure-code-check gate ${{ inputs.files }} \
+            --severity-floor "${{ inputs.severity-floor }}"
+        else
+          # SARIF mode: capture the exit code instead of failing here, so the
+          # upload step below always runs — a FAILING gate still publishes its
+          # findings to Code Scanning. The last step re-asserts the failure.
+          # --sarif-base defaults to the working directory, which is the
+          # checkout root in a standard job, so artifact URIs come out
+          # repo-relative and Code Scanning anchors alerts to the files.
+          set +e
+          npx -y -p "@namncqualgo/secure-code-mcp@${{ inputs.version }}" \
+            secure-code-check gate ${{ inputs.files }} \
+            --severity-floor "${{ inputs.severity-floor }}" \
+            --format sarif > "${{ inputs.sarif-file }}"
+          code=$?
+          set -e
+          echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+          echo "secure-code-gate: exit $code; SARIF written to ${{ inputs.sarif-file }}"
+        fi
+
+    - name: Upload SARIF to GitHub Code Scanning
+      if: ${{ inputs.sarif-file != '' }}
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ inputs.sarif-file }}
+        category: ${{ inputs.category }}
+
+    - name: Fail when the gate found issues
+      if: ${{ inputs.sarif-file != '' && steps.gate.outputs.exit-code != '0' }}
+      shell: bash
+      run: |
+        echo "secure-code gate: findings at or above '${{ inputs.severity-floor }}' (exit ${{ steps.gate.outputs.exit-code }}). See the Security tab / PR annotations." >&2
+        exit 1
