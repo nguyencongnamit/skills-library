@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,6 +13,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/namncqualgo/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/tools"
 )
 
 type corpusFixture struct {
@@ -19,12 +21,29 @@ type corpusFixture struct {
 	Text            string `json:"text"`
 	Expected        string `json:"expected"` // "detect" or "ignore"
 	ExpectedPattern string `json:"expected_pattern,omitempty"`
-	Reason          string `json:"reason,omitempty"`
+	// Filename and ExpectedRule belong to the gate-driven shape:
+	// Filename is the path the fixture text is written to before the
+	// gate scans it (the basename drives scanner dispatch, so lockfiles
+	// and workflows must use their real names, e.g. "package-lock.json"
+	// or ".github/workflows/ci.yml"); ExpectedRule, when set, requires
+	// that specific finding rule_id among the results of a "detect".
+	Filename     string `json:"filename,omitempty"`
+	ExpectedRule string `json:"expected_rule,omitempty"`
+	Reason       string `json:"reason,omitempty"`
 }
 
 type corpusFile struct {
-	SchemaVersion string          `json:"schema_version"`
-	Description   string          `json:"description"`
+	SchemaVersion string `json:"schema_version"`
+	Description   string `json:"description"`
+	// Scanner selects the corpus shape. Empty = legacy behavior
+	// (regex-driven when the skill has secret_pattern checklist
+	// entries, schema-only smoke otherwise). "gate" = each fixture is
+	// written to a temp file and run through the same Library
+	// PolicyCheck the `gate` command uses, judged against
+	// SeverityFloor ("high" when empty) — the corpus literally tests
+	// what the CI gate would block.
+	Scanner       string          `json:"scanner,omitempty"`
+	SeverityFloor string          `json:"severity_floor,omitempty"`
 	Fixtures      []corpusFixture `json:"fixtures"`
 }
 
@@ -58,8 +77,13 @@ func testCmd() *cobra.Command {
 		Long: `Load skills/<id>/tests/corpus.json and validate each fixture
 against the skill's bundled rule files.
 
-The runner supports two corpus shapes:
+The runner supports three corpus shapes:
 
+  * Gate-driven ("scanner": "gate"): each fixture's text is written to
+    its "filename" in a temp dir and run through the same PolicyCheck
+    the gate command uses. "detect" expects the gate to FAIL the file at
+    the corpus severity_floor (default high), optionally requiring a
+    specific "expected_rule"; "ignore" expects it to pass clean.
   * Regex-driven (e.g., secret-detection): the corpus declares "detect" or
     "ignore" per fixture, and the runner matches the text against any
     type: secret_pattern entry declared in
@@ -102,9 +126,19 @@ Exits non-zero on any failure.
 				return fmt.Errorf("parse corpus: %w", err)
 			}
 
-			patterns := loadRulePatterns(skillDir)
 			passed, failed := 0, 0
 			out := c.OutOrStdout()
+
+			if corpus.Scanner == "gate" {
+				passed, failed = runGateFixtures(out, lib, corpus, verbose)
+				fmt.Fprintf(out, "%s: %d passed, %d failed (skill v%s)\n", id, passed, failed, s.Frontmatter.Version)
+				if failed > 0 {
+					return fmt.Errorf("%d fixture(s) failed", failed)
+				}
+				return nil
+			}
+
+			patterns := loadRulePatterns(skillDir)
 
 			for _, fx := range corpus.Fixtures {
 				if fx.Expected != "detect" && fx.Expected != "ignore" {
@@ -149,6 +183,96 @@ Exits non-zero on any failure.
 	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root")
 	c.Flags().BoolVar(&verbose, "verbose", false, "Print one line per fixture")
 	return c
+}
+
+// runGateFixtures executes a gate-driven corpus: each fixture is
+// materialised under a temp dir at its declared filename (basename
+// drives PolicyCheck's scanner dispatch; workflows need their
+// .github/workflows/ prefix) and judged the way CI's gate would judge
+// it. "detect" fixtures must FAIL the gate at the corpus floor —
+// optionally with a specific rule id among the findings — and
+// "ignore" fixtures must pass clean. libraryRoot is the skills-library
+// checkout the scanners load their rule data from.
+func runGateFixtures(out io.Writer, libraryRoot string, corpus corpusFile, verbose bool) (passed, failed int) {
+	floor := corpus.SeverityFloor
+	if floor == "" {
+		floor = "high"
+	}
+	for _, fx := range corpus.Fixtures {
+		fail := func(format string, args ...any) {
+			failed++
+			fmt.Fprintf(out, "FAIL [%s]: "+format+"\n", append([]any{fx.ID}, args...)...)
+		}
+		if fx.Expected != "detect" && fx.Expected != "ignore" {
+			fail("expected must be 'detect' or 'ignore', got %q", fx.Expected)
+			continue
+		}
+		if fx.Filename == "" {
+			fail("gate-driven fixture needs a filename (it drives scanner dispatch)")
+			continue
+		}
+		tmp, err := os.MkdirTemp("", "skills-corpus-*")
+		if err != nil {
+			fail("temp dir: %v", err)
+			continue
+		}
+		full := filepath.Join(tmp, filepath.FromSlash(fx.Filename))
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			fail("mkdir: %v", err)
+			os.RemoveAll(tmp)
+			continue
+		}
+		if err := os.WriteFile(full, []byte(fx.Text), 0o644); err != nil {
+			fail("write fixture: %v", err)
+			os.RemoveAll(tmp)
+			continue
+		}
+		lib, err := newLibraryForCmd(libraryRoot, "", full)
+		if err == nil {
+			var res *tools.PolicyCheckResult
+			res, err = lib.PolicyCheck(full, floor)
+			if err == nil {
+				gateFailed := !res.Pass
+				wantDetect := fx.Expected == "detect"
+				switch {
+				case gateFailed != wantDetect:
+					fail("expected=%s actual=%s (floor=%s, %d finding(s))",
+						fx.Expected, boolStr(gateFailed), floor, len(res.Findings))
+				case wantDetect && fx.ExpectedRule != "" && !hasRule(res.Findings, fx.ExpectedRule):
+					fail("gate failed but rule %q not among findings %v",
+						fx.ExpectedRule, ruleIDs(res.Findings))
+				default:
+					passed++
+					if verbose {
+						fmt.Fprintf(out, "ok   [%s] -> gate %s (%d finding(s))\n",
+							fx.ID, boolStr(gateFailed), len(res.Findings))
+					}
+				}
+			}
+		}
+		if err != nil {
+			fail("gate run: %v", err)
+		}
+		os.RemoveAll(tmp)
+	}
+	return passed, failed
+}
+
+func hasRule(findings []tools.PolicyCheckFinding, rule string) bool {
+	for _, f := range findings {
+		if f.RuleID == rule {
+			return true
+		}
+	}
+	return false
+}
+
+func ruleIDs(findings []tools.PolicyCheckFinding) []string {
+	out := make([]string, 0, len(findings))
+	for _, f := range findings {
+		out = append(out, f.RuleID)
+	}
+	return out
 }
 
 func boolStr(b bool) string {

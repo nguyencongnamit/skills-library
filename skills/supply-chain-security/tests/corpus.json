@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "last_updated": "2026-05-12",
-  "description": "Test corpus for the supply-chain-security skill. Each entry is a candidate package name (or package manifest snippet) plus the expected detection outcome.",
+  "description": "Test corpus for the supply-chain-security skill. Each entry is a candidate package name (or package manifest snippet) plus the expected detection outcome. The legacy typosquat_fixtures / dependency_confusion_fixtures blocks below are kept as documentation; the runnable corpus is the gate-driven 'fixtures' array (scanner: gate), which the skills-check test runner executes through the same PolicyCheck the CI gate uses.",
   "typosquat_fixtures": [
     {
       "id": "axios-typo-axois",
@@ -107,6 +107,32 @@
       "internal_namespace": "@acme/*",
       "expected": "ignore",
       "reason": "Public package, not within internal namespace pattern"
+    }
+  ],
+  "scanner": "gate",
+  "severity_floor": "medium",
+  "fixtures": [
+    {
+      "id": "typosquat-axois-in-lockfile",
+      "filename": "package-lock.json",
+      "text": "{\n  \"name\": \"fixture\",\n  \"lockfileVersion\": 3,\n  \"packages\": {\n    \"node_modules/axois\": { \"version\": \"1.0.0\" }\n  }\n}\n",
+      "expected": "detect",
+      "reason": "axois is a Levenshtein-1 typosquat of axios (legacy fixture axios-typo-axois, now executable)",
+      "expected_rule": "skills-mcp.typosquat"
+    },
+    {
+      "id": "malicious-flatmap-stream",
+      "filename": "package-lock.json",
+      "text": "{\n  \"name\": \"fixture\",\n  \"lockfileVersion\": 3,\n  \"packages\": {\n    \"node_modules/flatmap-stream\": { \"version\": \"0.1.1\" }\n  }\n}\n",
+      "expected": "detect",
+      "reason": "flatmap-stream@0.1.1 is the payload package of the event-stream incident"
+    },
+    {
+      "id": "clean-scoped-package",
+      "filename": "package-lock.json",
+      "text": "{\n  \"name\": \"fixture\",\n  \"lockfileVersion\": 3,\n  \"packages\": {\n    \"node_modules/lodash\": { \"version\": \"4.17.21\" }\n  }\n}\n",
+      "expected": "ignore",
+      "reason": "healthy popular package must pass; also pins the two FP fixes (self-popular sweep + target-side curated hits)"
     }
   ]
 }

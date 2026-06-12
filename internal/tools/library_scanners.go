@@ -187,6 +187,16 @@ func (l *Library) ScanDependencies(filePath string) (*ScanDependenciesResult, er
 			// names a known-good target and a known-bad squat that
 			// has already been validated by a human reviewer, so the
 			// match here is structural, not heuristic — "high".
+			//
+			// CheckTyposquat matches an entry from EITHER side (so the
+			// interactive tool can answer "does X have known squats?"),
+			// but for a lockfile scan only the squat side is a finding:
+			// depending on the legitimate TARGET of someone else's
+			// squat (lodash, when lodahs→lodash is in the DB) is not a
+			// vulnerability in this dependency tree.
+			if !strings.EqualFold(t.Typosquat, dep.Name) {
+				continue
+			}
 			out.Findings = append(out.Findings, DependencyFinding{
 				Package:    dep.Name,
 				Version:    dep.Version,

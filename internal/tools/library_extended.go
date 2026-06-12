@@ -358,7 +358,24 @@ func (l *Library) CheckTyposquat(pkg, ecosystem string) (*CheckTyposquatResult, 
 		popular, perr := l.loadPopularPackages(ecosystem)
 		if perr == nil {
 			needle := typosquatCompareKey(ecosystem, pkg)
+			// A package that is itself on the popular list cannot be a
+			// squat of a neighbouring popular name — popular names sit
+			// within Levenshtein 2 of EACH OTHER all the time (chalk,
+			// express, react, lodash all trip it), and before this guard
+			// every popular package in a lockfile produced a medium
+			// typosquat finding. Membership disables the heuristic sweep
+			// only; curated-DB hits above still apply.
+			selfPopular := false
 			for _, target := range popular {
+				if typosquatCompareKey(ecosystem, target) == needle {
+					selfPopular = true
+					break
+				}
+			}
+			for _, target := range popular {
+				if selfPopular {
+					break
+				}
 				targetKey := typosquatCompareKey(ecosystem, target)
 				if targetKey == needle {
 					// Exact match: the caller is using the popular
