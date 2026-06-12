@@ -419,3 +419,24 @@ jobs:
             --skills-mcp /tmp/skills-mcp \
             --out evals/baselines/scanner-eval-static.md \
             --verbose
+
+      - name: Per-skill corpus tests (WARN mode — flip to hard gate after burn-in)
+        # Runs every skills/<id>/tests/corpus.json through `skills-check test`.
+        # Gate-driven corpora scan their fixtures with the same PolicyCheck the
+        # CI gate command uses, so this step is the quality floor for the gate
+        # itself. continue-on-error keeps it advisory while the corpora burn
+        # in; remove that line to make corpus regressions fail the build.
+        continue-on-error: true
+        shell: bash
+        run: |
+          fail=0
+          for corpus in skills/*/tests/corpus.json; do
+            skill_id=$(basename "$(dirname "$(dirname "$corpus")")")
+            echo "::group::skills-check test $skill_id"
+            if ! /tmp/skills-check test "$skill_id" --library .; then
+              fail=1
+              echo "::warning::corpus failures in $skill_id"
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
