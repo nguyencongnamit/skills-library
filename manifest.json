@@ -1870,7 +1870,7 @@
       "path": "skills/api-security/tests/corpus.json",
       "sha256": "ca1325b33771f7fbfb32f8ebf8ca8cdf852739da607b417cd976bbf6ea057037",
       "size": 2083,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/auth-security/SKILL.md",
@@ -1894,7 +1894,7 @@
       "path": "skills/auth-security/tests/corpus.json",
       "sha256": "96a15c4ec7e8e6d04b1c7028ec337a7515a27b30330f8f75f229e3ab92423c49",
       "size": 1787,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/cicd-security/SKILL.md",
@@ -1918,7 +1918,7 @@
       "path": "skills/cicd-security/tests/corpus.json",
       "sha256": "b8f3a7314099a83801951380761ac0abb97e67a4fca15f537e5f238ca8093c17",
       "size": 2250,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/compliance-awareness/SKILL.md",
@@ -1960,7 +1960,7 @@
       "path": "skills/container-security/tests/corpus.json",
       "sha256": "709ec28422d3f257a8acd62fba61e5866485a92a594a366efc884cccf17226f8",
       "size": 2631,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/cors-security/SKILL.md",
@@ -2026,7 +2026,7 @@
       "path": "skills/dependency-audit/tests/corpus.json",
       "sha256": "1ef397e67aca2f438bbef18c4728ca5e32f7b66e2e17731ddbc4ca9b63c7faac",
       "size": 1094,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/deserialization-security/SKILL.md",
@@ -2164,7 +2164,7 @@
       "path": "skills/llm-app-security/tests/corpus.json",
       "sha256": "85edb1e87ea779cb78bd1c97c3e5db1ec851a4e262772812fa05b486ff46fe8f",
       "size": 2140,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/logging-security/SKILL.md",
@@ -2420,7 +2420,7 @@
     },
     {
       "path": "skills/supply-chain-security/tests/corpus.json",
-      "sha256": "f4610151b65d460a4c3bcdf891d634d4b7e3d9e736d63176a1968ea924e086e0",
+      "sha256": "2180168575dac3e7ea587d254204a546aae3448272365f4dbdf39d23107916ea",
       "size": 4722,
       "action": "unchanged"
     },
