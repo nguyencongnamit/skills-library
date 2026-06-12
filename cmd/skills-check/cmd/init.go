@@ -93,6 +93,7 @@ func initCmd() *cobra.Command {
 			out := c.OutOrStdout()
 			fmt.Fprintf(out, "wrote %s (%s tier, %d skills, %d openai / %d claude tokens)\n",
 				filepath.Join(outDir, f.OutputName()), tier, len(all), report.Total.OpenAI, report.Total.Claude)
+			fmt.Fprintln(out, nextStepHint(tool))
 			for _, w := range warns {
 				fmt.Fprintln(c.ErrOrStderr(), "warn:", w)
 			}
@@ -113,6 +114,20 @@ func initCmd() *cobra.Command {
 	c.Flags().BoolVar(&fullInline, "full-inline", false, "render the legacy monolithic per-tool dist/ output that inlines every skill body (default is the minimal pointer file)")
 	c.Flags().BoolVar(&legacy, "legacy", false, "alias for --full-inline")
 	return c
+}
+
+// nextStepHint is the one-line "what now" printed after init writes a
+// config, so a first run ends with a concrete action instead of a bare
+// file path. Per-tool because activation differs: IDE rule files load
+// on the next session, while the universal surface is consumed by
+// whatever the user wires it into and is never auto-loaded.
+func nextStepHint(tool string) string {
+	switch tool {
+	case "universal":
+		return "next: wire the generated SECURITY-SKILLS.md into your agent's prompt or rules (it is not auto-loaded); re-running init refreshes it in place"
+	default:
+		return "next: reload your " + tool + " session so it picks up the new config; re-running init refreshes it in place"
+	}
 }
 
 // filterSkillsBySkillList returns only those skills whose ID appears in

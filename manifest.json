@@ -1867,6 +1867,12 @@
       "action": "unchanged"
     },
     {
+      "path": "skills/api-security/tests/corpus.json",
+      "sha256": "ca1325b33771f7fbfb32f8ebf8ca8cdf852739da607b417cd976bbf6ea057037",
+      "size": 2083,
+      "action": "unchanged"
+    },
+    {
       "path": "skills/auth-security/SKILL.md",
       "sha256": "bb8e76c92682580b61d490417ce9af20c5b42286363b744942de9bd7d8df1ffc",
       "size": 5080,
@@ -1885,6 +1891,12 @@
       "action": "unchanged"
     },
     {
+      "path": "skills/auth-security/tests/corpus.json",
+      "sha256": "96a15c4ec7e8e6d04b1c7028ec337a7515a27b30330f8f75f229e3ab92423c49",
+      "size": 1787,
+      "action": "unchanged"
+    },
+    {
       "path": "skills/cicd-security/SKILL.md",
       "sha256": "88c63d5c4fef52deb3a98cb227bd2c148878ee169d22dfda7640ff46bbffc393",
       "size": 6527,
@@ -1900,6 +1912,12 @@
       "path": "skills/cicd-security/checklists/gitlab_ci_hardening.yaml",
       "sha256": "25fafed303575c8dd555a20ca4639ccb4f0293bee3225ae139dc6289ca387a83",
       "size": 3391,
+      "action": "unchanged"
+    },
+    {
+      "path": "skills/cicd-security/tests/corpus.json",
+      "sha256": "b8f3a7314099a83801951380761ac0abb97e67a4fca15f537e5f238ca8093c17",
+      "size": 2250,
       "action": "unchanged"
     },
     {
@@ -1936,6 +1954,12 @@
       "path": "skills/container-security/checklists/k8s_pod_security.yaml",
       "sha256": "a2950ed8bc1407ddcd08decd5d887a5648a31b3343e98f269071e249337fe51a",
       "size": 2606,
+      "action": "unchanged"
+    },
+    {
+      "path": "skills/container-security/tests/corpus.json",
+      "sha256": "709ec28422d3f257a8acd62fba61e5866485a92a594a366efc884cccf17226f8",
+      "size": 2631,
       "action": "unchanged"
     },
     {
@@ -1996,6 +2020,12 @@
       "path": "skills/dependency-audit/rules/known_malicious.json",
       "sha256": "49a80cdabb07befdf4675e7d2ff1d40aaae58a423e382647b44d97d47a328189",
       "size": 925,
+      "action": "unchanged"
+    },
+    {
+      "path": "skills/dependency-audit/tests/corpus.json",
+      "sha256": "1ef397e67aca2f438bbef18c4728ca5e32f7b66e2e17731ddbc4ca9b63c7faac",
+      "size": 1094,
       "action": "unchanged"
     },
     {
@@ -2128,6 +2158,12 @@
       "path": "skills/llm-app-security/rules/prompt_injection_patterns.json",
       "sha256": "13d474e55b6a05d8ed4594d10f641accc2ad5487a39c5e926c541b7fc48be840",
       "size": 2167,
+      "action": "unchanged"
+    },
+    {
+      "path": "skills/llm-app-security/tests/corpus.json",
+      "sha256": "85edb1e87ea779cb78bd1c97c3e5db1ec851a4e262772812fa05b486ff46fe8f",
+      "size": 2140,
       "action": "unchanged"
     },
     {
@@ -2384,8 +2420,8 @@
     },
     {
       "path": "skills/supply-chain-security/tests/corpus.json",
-      "sha256": "67edc96230a868070b58303ee9f08801dcad2d497d66e7e2dad937e3da57f96a",
-      "size": 3166,
+      "sha256": "2180168575dac3e7ea587d254204a546aae3448272365f4dbdf39d23107916ea",
+      "size": 4722,
       "action": "unchanged"
     },
     {

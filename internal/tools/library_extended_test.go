@@ -375,18 +375,22 @@ func TestCheckTyposquatPotentialFromPopularList(t *testing.T) {
 	}
 }
 
-// TestCheckTyposquatExactPopularDoesNotSurface confirms an exact
-// match against the popular-packages list is NOT flagged as a
-// potential typosquat (distance 0 is excluded).
+// TestCheckTyposquatExactPopularDoesNotSurface confirms a package
+// that IS on the popular list yields no potential typosquats at all —
+// not merely "not flagged against itself". Popular names sit within
+// Levenshtein 2 of each other constantly (chalk/express/react/lodash
+// all do), and before the self-popular guard every popular package in
+// a lockfile produced a medium typosquat finding through the gate.
 func TestCheckTyposquatExactPopularDoesNotSurface(t *testing.T) {
 	lib := newLibrary(t)
-	res, err := lib.CheckTyposquat("react", "npm")
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, p := range res.PotentialTyposquats {
-		if strings.EqualFold(p.Target, "react") {
-			t.Errorf("exact match against popular list should not surface; got %+v", p)
+	for _, pkg := range []string{"react", "chalk", "express", "lodash"} {
+		res, err := lib.CheckTyposquat(pkg, "npm")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(res.PotentialTyposquats) != 0 {
+			t.Errorf("%s is itself popular and must yield no potential typosquats; got %+v",
+				pkg, res.PotentialTyposquats)
 		}
 	}
 }
