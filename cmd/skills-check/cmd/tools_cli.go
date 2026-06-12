@@ -543,7 +543,7 @@ func scanGitHubActionsCmd() *cobra.Command {
 // =============================================================================
 
 func policyCheckCmd() *cobra.Command {
-	var repoPath, severityFloor, format string
+	var repoPath, severityFloor, format, sarifBase string
 	c := &cobra.Command{
 		Use:     "gate <file>...",
 		Aliases: []string{"policy-check"},
@@ -560,7 +560,7 @@ shell call from your pre-commit or CI step.
 (Formerly named "policy-check"; that name still works as an alias.)`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
-			if err := validateFormat(format, false); err != nil {
+			if err := validateFormat(format, true); err != nil {
 				return err
 			}
 			// Gate over every file argument so a pre-commit hook can pass
@@ -595,6 +595,17 @@ shell call from your pre-commit or CI step.
 				} else {
 					_ = emitJSON(c.OutOrStdout(), results)
 				}
+			case "sarif":
+				// One SARIF run covering every scanned file. Emitted here,
+				// before the exit-code decision below, so a FAILING gate
+				// still writes a valid SARIF document for `upload-sarif`.
+				// URIs are made relative to --sarif-base (default cwd) so
+				// GitHub Code Scanning anchors alerts to repo files.
+				base, err := filepath.Abs(sarifBase)
+				if err != nil {
+					base = ""
+				}
+				_ = emitJSON(c.OutOrStdout(), tools.PolicyCheckSARIF(results, base))
 			default:
 				for i, res := range results {
 					verdict := "PASS"
@@ -630,7 +641,9 @@ shell call from your pre-commit or CI step.
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&severityFloor, "severity-floor", "high",
 		"the lowest severity that causes a non-zero exit: critical | high | medium | low")
-	addFormatFlag(c, &format, false)
+	c.Flags().StringVar(&sarifBase, "sarif-base", ".",
+		"directory SARIF artifact URIs are made relative to (files outside it fall back to absolute file:// URIs); only used with --format sarif")
+	addFormatFlag(c, &format, true)
 	return c
 }
 

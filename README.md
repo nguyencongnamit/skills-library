@@ -651,6 +651,24 @@ when any finding meets the severity floor (default `high`; override with
     severity-floor: high
 ```
 
+To also surface the findings in GitHub Code Scanning (Security tab + PR
+annotations), set `sarif-file` and grant the workflow the upload permission —
+the job still fails when any finding meets the severity floor:
+
+```yaml
+permissions:
+  contents: read
+  security-events: write
+
+steps:
+  - uses: actions/checkout@v4
+  - uses: namncqualgo/skills-library@vNEXT   # first tag with gate --format sarif
+    with:
+      files: Dockerfile package-lock.json .github/workflows/ci.yml
+      severity-floor: high
+      sarif-file: gate.sarif
+```
+
 ## Building and running tests
 
 ```bash
