@@ -312,6 +312,65 @@ CMD ["node", "server.js"]
 	}
 }
 
+// TestScanDependenciesDirectoryDiscovery locks in directory
+// auto-discovery: every recognised lockfile beneath the target is
+// scanned, while node_modules / vendor / .git are skipped so installed
+// dependency trees do not flood the results.
+func TestScanDependenciesDirectoryDiscovery(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "go.sum"),
+		[]byte("github.com/stretchr/testify v1.8.4 h1:abc=\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	sub := filepath.Join(dir, "service")
+	if err := os.MkdirAll(sub, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(sub, "requirements.txt"),
+		[]byte("requests==2.31.0\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// A lockfile inside node_modules must be skipped by discovery.
+	nm := filepath.Join(dir, "node_modules", "dep")
+	if err := os.MkdirAll(nm, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(nm, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	out, _, err := run(t, "scan-dependencies", "--path", repoRootForTest(t), dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	if !strings.Contains(out, "Scanned 2 lockfile(s)") {
+		t.Errorf("expected 2 lockfiles discovered (go.sum + requirements.txt), got:\n%s", out)
+	}
+	if strings.Contains(out, "node_modules") {
+		t.Errorf("node_modules lockfile should have been skipped:\n%s", out)
+	}
+	if !strings.Contains(out, "go.sum") || !strings.Contains(out, "requirements.txt") {
+		t.Errorf("discovery did not scan both lockfiles:\n%s", out)
+	}
+}
+
+// TestScanDependenciesDirectoryNoLockfile confirms a directory with no
+// recognised lockfile is a clear error rather than a silent success.
+func TestScanDependenciesDirectoryNoLockfile(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte("# nope\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	_, _, err := run(t, "scan-dependencies", "--path", repoRootForTest(t), dir)
+	if err == nil {
+		t.Fatal("expected an error for a directory with no lockfile, got nil")
+	}
+	if !strings.Contains(err.Error(), "no recognised lockfile") {
+		t.Errorf("error did not mention missing lockfile: %v", err)
+	}
+}
+
 // policy_check dispatches scanners by file basename: "Dockerfile" →
 // scan_dockerfile, lockfile names → scan_dependencies, etc. So tests
 // for policy-check must use the canonical basename inside an
