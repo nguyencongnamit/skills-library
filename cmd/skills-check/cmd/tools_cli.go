@@ -27,9 +27,11 @@
 package cmd
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -351,39 +353,76 @@ func lookupVulnerabilityCmd() *cobra.Command {
 func scanSecretsCmd() *cobra.Command {
 	var repoPath, format string
 	c := &cobra.Command{
-		Use:   "scan-secrets <file>",
-		Short: "DLP-style scan of a file for credentials, API keys, tokens, and PEM material",
+		Use:   "scan-secrets <file-or-dir>",
+		Short: "DLP-style scan of a file (or, recursively, a directory of text files) for credentials, API keys, tokens, and PEM material",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
 			}
-			file := args[0]
-			lib, err := newLibraryForCmd(repoPath, "", file)
+			target := args[0]
+			lib, err := newLibraryForCmd(repoPath, "", target)
 			if err != nil {
 				return err
 			}
-			fileAbs, _ := filepath.Abs(file)
-			res, err := lib.ScanSecrets("", fileAbs)
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("scan-secrets: stat %s: %w", target, err)
+			}
+
+			// Single file: behaviour is unchanged from the original
+			// implementation (label echoes the raw argument).
+			if !info.IsDir() {
+				res, err := lib.ScanSecrets("", targetAbs)
+				if err != nil {
+					return err
+				}
+				switch format {
+				case "json":
+					return emitJSON(c.OutOrStdout(), res)
+				case "sarif":
+					return emitJSON(c.OutOrStdout(), tools.ScanSecretsSARIF(res))
+				default:
+					printScanSecretsText(c.OutOrStdout(), target, res)
+					return nil
+				}
+			}
+
+			// Directory: scope the allow-list to the directory itself so
+			// every descendant passes validateScanPath, then walk it and
+			// scan each text file. Per-file ScanSecrets calls keep their
+			// full policy enforcement (size cap, sensitive-path deny-list,
+			// symlink resolution); files that fail are reported on stderr
+			// and skipped so one bad file never aborts the whole scan.
+			if err := lib.SetAllowedRoots([]string{targetAbs}); err != nil {
+				return fmt.Errorf("scan-secrets: scope library to %s: %w", targetAbs, err)
+			}
+			results, err := scanSecretsDir(c, lib, targetAbs)
 			if err != nil {
 				return err
 			}
 			switch format {
 			case "json":
-				return emitJSON(c.OutOrStdout(), res)
+				return emitJSON(c.OutOrStdout(), results)
 			case "sarif":
-				return emitJSON(c.OutOrStdout(), tools.ScanSecretsSARIF(res))
-			default:
-				fmt.Fprintf(c.OutOrStdout(), "=== scan-secrets %s ===\n", file)
-				fmt.Fprintf(c.OutOrStdout(), "Matches: %d\n", len(res.Matches))
-				for _, m := range res.Matches {
-					kfp := ""
-					if m.KnownFalsePositive {
-						kfp = "  (known-FP)"
-					}
-					fmt.Fprintf(c.OutOrStdout(), "  ! [%s] %s at offset %d-%d%s\n",
-						m.Severity, m.Name, m.Start, m.End, kfp)
+				log := &tools.SARIFLog{
+					Schema:  tools.SARIFSchema,
+					Version: tools.SARIFVersion,
+					Runs:    []tools.SARIFRun{},
 				}
+				for _, res := range results {
+					log.Runs = append(log.Runs, tools.ScanSecretsSARIF(res).Runs...)
+				}
+				return emitJSON(c.OutOrStdout(), log)
+			default:
+				total := 0
+				for _, res := range results {
+					printScanSecretsText(c.OutOrStdout(), res.FilePath, res)
+					total += len(res.Matches)
+				}
+				fmt.Fprintf(c.OutOrStdout(), "Scanned %d text file(s); %d match(es) total\n",
+					len(results), total)
 				return nil
 			}
 		},
@@ -391,6 +430,81 @@ func scanSecretsCmd() *cobra.Command {
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout for rule data (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	return c
+}
+
+// printScanSecretsText renders one ScanSecretsResult in the
+// human-readable --format text shape. Extracted so the single-file
+// and directory code paths emit byte-identical per-file output.
+func printScanSecretsText(w io.Writer, label string, res *tools.ScanSecretsResult) {
+	fmt.Fprintf(w, "=== scan-secrets %s ===\n", label)
+	fmt.Fprintf(w, "Matches: %d\n", len(res.Matches))
+	for _, m := range res.Matches {
+		kfp := ""
+		if m.KnownFalsePositive {
+			kfp = "  (known-FP)"
+		}
+		fmt.Fprintf(w, "  ! [%s] %s at offset %d-%d%s\n",
+			m.Severity, m.Name, m.Start, m.End, kfp)
+	}
+}
+
+// scanSecretsDir walks dir recursively and runs ScanSecrets on every
+// regular text file beneath it. Non-regular entries (symlinks,
+// sockets, devices) are skipped so the walk cannot be redirected out
+// of the tree; binary files are skipped via a NUL-byte heuristic.
+// Per-file errors (unreadable, over the size cap, inside a sensitive
+// directory) are reported on stderr and skipped rather than aborting.
+func scanSecretsDir(c *cobra.Command, lib *tools.Library, dir string) ([]*tools.ScanSecretsResult, error) {
+	results := make([]*tools.ScanSecretsResult, 0)
+	walkErr := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
+			return nil
+		}
+		if d.IsDir() || !d.Type().IsRegular() {
+			return nil
+		}
+		isText, err := isProbablyTextFile(path)
+		if err != nil {
+			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
+			return nil
+		}
+		if !isText {
+			return nil
+		}
+		res, err := lib.ScanSecrets("", path)
+		if err != nil {
+			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
+			return nil
+		}
+		results = append(results, res)
+		return nil
+	})
+	if walkErr != nil {
+		return nil, fmt.Errorf("scan-secrets: walk %s: %w", dir, walkErr)
+	}
+	return results, nil
+}
+
+// isProbablyTextFile reports whether path looks like a text file using
+// the classic git heuristic: read a prefix and treat the file as
+// binary if it contains a NUL byte. Empty files are treated as
+// non-text since there is nothing to scan.
+func isProbablyTextFile(path string) (bool, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
+	buf := make([]byte, 8000)
+	n, err := f.Read(buf)
+	if err != nil && err != io.EOF {
+		return false, err
+	}
+	if n == 0 {
+		return false, nil
+	}
+	return !bytes.ContainsRune(buf[:n], 0), nil
 }
 
 // =============================================================================

@@ -210,6 +210,77 @@ func TestScanSecretsOnFixture(t *testing.T) {
 	}
 }
 
+// TestScanSecretsDirectory locks in the recursive directory behaviour:
+// every text file under the target (including nested subdirectories)
+// is scanned, binary files are skipped, and the run finishes with a
+// summary line rather than erroring on the directory itself.
+func TestScanSecretsDirectory(t *testing.T) {
+	dir := t.TempDir()
+	// A real-looking AKIA key the bundled DLP rules catch, in a nested
+	// subdirectory to prove the walk recurses.
+	sub := filepath.Join(dir, "nested")
+	if err := os.MkdirAll(sub, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(sub, "leak.txt"),
+		[]byte("aws_key = AKIA1234567890ABCDEF\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// A clean text file: scanned, zero matches.
+	if err := os.WriteFile(filepath.Join(dir, "clean.txt"),
+		[]byte("nothing to see here\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// A binary file (contains a NUL byte): must be skipped, not scanned.
+	if err := os.WriteFile(filepath.Join(dir, "blob.bin"),
+		[]byte{0x00, 0x01, 0x02, 0x03}, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	out, _, err := run(t, "scan-secrets", "--path", repoRootForTest(t), dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	// Two text files scanned (leak.txt + clean.txt); blob.bin skipped.
+	if !strings.Contains(out, "Scanned 2 text file(s)") {
+		t.Errorf("expected 2 text files scanned, got:\n%s", out)
+	}
+	if strings.Contains(out, "blob.bin") {
+		t.Errorf("binary file should have been skipped:\n%s", out)
+	}
+	if !strings.Contains(out, "leak.txt") {
+		t.Errorf("nested leak.txt was not scanned (walk did not recurse):\n%s", out)
+	}
+	if strings.HasSuffix(strings.TrimSpace(out), "0 match(es) total") {
+		t.Errorf("directory scan found no secrets; expected the AKIA key:\n%s", out)
+	}
+}
+
+// TestScanSecretsDirectoryJSON confirms the directory branch emits a
+// JSON array of per-file results (distinct from the single-file object
+// shape) so machine consumers can iterate files.
+func TestScanSecretsDirectoryJSON(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "a.txt"),
+		[]byte("aws_key = AKIA1234567890ABCDEF\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "scan-secrets", "--path", repoRootForTest(t), "--format", "json", dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var results []tools.ScanSecretsResult
+	if err := json.Unmarshal([]byte(out), &results); err != nil {
+		t.Fatalf("directory JSON output is not an array of results: %v\n%s", err, out)
+	}
+	if len(results) != 1 {
+		t.Fatalf("want 1 file result, got %d:\n%s", len(results), out)
+	}
+	if results[0].FilePath == "" || len(results[0].Matches) == 0 {
+		t.Errorf("expected a populated file result with matches:\n%s", out)
+	}
+}
+
 func TestScanDockerfileOnFixture(t *testing.T) {
 	tmp, err := os.CreateTemp(t.TempDir(), "Dockerfile-*")
 	if err != nil {
