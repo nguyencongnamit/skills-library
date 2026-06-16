@@ -15,6 +15,7 @@ package tools
 import (
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -1123,6 +1124,69 @@ func (l *Library) PolicyCheck(filePath, severityFloor string) (*PolicyCheckResul
 
 // pickScan returns the scan name that policy_check should dispatch to
 // for the given file path, or an error if no scan applies.
+// gateNoiseDirs are directory names skipped when a gate argument is a
+// directory: version control, dependency installs, virtualenvs, and
+// build output. Walking them would (at best) waste time and (at worst)
+// scan thousands of vendored files for zero signal. ".git" is matched
+// exactly so ".github" — which holds the workflows we DO want to gate —
+// is still traversed.
+var gateNoiseDirs = map[string]bool{
+	".git": true, "node_modules": true, "vendor": true,
+	".venv": true, "venv": true, "__pycache__": true,
+	"dist": true, "build": true, "target": true,
+	".next": true, ".nuxt": true, ".idea": true, ".vscode": true,
+	".terraform": true, ".gradle": true, ".mvn": true,
+}
+
+// ExpandGateFiles flattens a mix of file and directory arguments into the
+// concrete file list the gate should scan. File arguments pass through
+// unchanged (so naming a file explicitly always scans it, including the
+// secret-scan fallback). A directory argument is walked — skipping
+// gateNoiseDirs — and every file a SPECIALISED scanner claims
+// (Dockerfiles, lockfiles, .github/workflows/*.yml) is collected.
+//
+// The secret-scan fallback is deliberately NOT applied across a walked
+// tree: implicitly DLP-scanning every source file in a repository is
+// slow and noisy and would surprise anyone who just meant "check my
+// config files". To secret-scan a file, name it directly.
+//
+// The returned list preserves argument order and, within a directory,
+// lexical walk order, so a gate run is deterministic.
+func ExpandGateFiles(args []string) ([]string, error) {
+	var files []string
+	for _, arg := range args {
+		info, err := os.Stat(arg)
+		if err != nil {
+			return nil, err
+		}
+		if !info.IsDir() {
+			files = append(files, arg)
+			continue
+		}
+		walkErr := filepath.WalkDir(arg, func(p string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if d.IsDir() {
+				if gateNoiseDirs[d.Name()] {
+					return fs.SkipDir
+				}
+				return nil
+			}
+			// Only specialised scanners run in directory mode; the
+			// scan_secrets fallback is reserved for explicitly-named files.
+			if scan, _ := pickScan(p); scan != "scan_secrets" {
+				files = append(files, p)
+			}
+			return nil
+		})
+		if walkErr != nil {
+			return nil, walkErr
+		}
+	}
+	return files, nil
+}
+
 func pickScan(filePath string) (string, error) {
 	base := filepath.Base(filePath)
 	switch base {
