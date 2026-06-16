@@ -420,13 +420,12 @@ jobs:
             --out evals/baselines/scanner-eval-static.md \
             --verbose
 
-      - name: Per-skill corpus tests (WARN mode — flip to hard gate after burn-in)
+      - name: Per-skill corpus tests (hard gate)
         # Runs every skills/<id>/tests/corpus.json through `skills-check test`.
         # Gate-driven corpora scan their fixtures with the same PolicyCheck the
         # CI gate command uses, so this step is the quality floor for the gate
         # itself. continue-on-error keeps it advisory while the corpora burn
-        # in; remove that line to make corpus regressions fail the build.
-        continue-on-error: true
+        # in (burned in: PR #37 run + main run, both green).
         shell: bash
         run: |
           fail=0
