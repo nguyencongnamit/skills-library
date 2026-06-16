@@ -20,15 +20,41 @@ func TestWriteRuleBundlesEmitsPerSkillFiles(t *testing.T) {
 	}
 	cursorDir := filepath.Join(outDir, "cursor-rules", ".cursor", "rules")
 	copilotDir := filepath.Join(outDir, "copilot-rules", ".github", "instructions")
-	windsurfDir := filepath.Join(outDir, "windsurf-rules", ".windsurf", "rules")
+	devinDir := filepath.Join(outDir, "devin-rules", ".devin", "rules")
 	for _, s := range skills {
 		mdc := filepath.Join(cursorDir, s.Frontmatter.ID+".mdc")
 		ins := filepath.Join(copilotDir, s.Frontmatter.ID+".instructions.md")
-		wsf := filepath.Join(windsurfDir, s.Frontmatter.ID+".md")
-		for _, p := range []string{mdc, ins, wsf} {
+		dvn := filepath.Join(devinDir, s.Frontmatter.ID+".md")
+		for _, p := range []string{mdc, ins, dvn} {
 			if info, err := os.Stat(p); err != nil || info.Size() == 0 {
 				t.Errorf("missing/empty %s: %v", p, err)
 			}
+		}
+	}
+}
+
+// TestDevinBundleFormat confirms the Devin bundle is emitted under
+// .devin/rules with a trigger frontmatter (glob | model_decision) and a
+// Devin-branded generated-by banner.
+func TestDevinBundleFormat(t *testing.T) {
+	skills := loadAllSkills(t)
+	if len(skills) == 0 {
+		t.Skip("no skills available")
+	}
+	outDir := t.TempDir()
+	if err := WriteRuleBundles(skills, outDir); err != nil {
+		t.Fatalf("WriteRuleBundles: %v", err)
+	}
+	devinDir := filepath.Join(outDir, "devin-rules", ".devin", "rules")
+	for _, s := range skills {
+		id := s.Frontmatter.ID
+		dvn := readFile(t, filepath.Join(devinDir, id+".md"))
+		fm := frontmatter(dvn)
+		if !strings.Contains(fm, "trigger:") {
+			t.Errorf("%s: devin rule missing trigger frontmatter:\n%s", id, firstLines(dvn, 5))
+		}
+		if !strings.Contains(dvn, "secure-code rule for Devin") {
+			t.Errorf("%s: devin rule missing Devin-branded banner:\n%s", id, firstLines(dvn, 3))
 		}
 	}
 }

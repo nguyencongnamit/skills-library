@@ -20,6 +20,8 @@ import (
 //	           apply everywhere, no globs + description (Agent Requested).
 //	Copilot  dist/copilot-rules/.github/instructions/<id>.instructions.md
 //	           applyTo: <file patterns>
+//	Devin    dist/devin-rules/.devin/rules/<id>.md
+//	           trigger: glob | model_decision
 //
 // This gives Cursor / VS Code Copilot the same progressive-disclosure benefit
 // that Claude Code gets from .claude/skills: only the rule relevant to the
@@ -95,12 +97,12 @@ func dedupeSorted(in []string) []string {
 	return out
 }
 
-// WriteRuleBundles emits the Cursor, Copilot, and Windsurf per-skill rule
+// WriteRuleBundles emits the Cursor, Copilot, and Devin per-skill rule
 // trees under outDir, purging stale per-skill files first.
 func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 	cursorDir := filepath.Join(outDir, "cursor-rules", ".cursor", "rules")
 	copilotDir := filepath.Join(outDir, "copilot-rules", ".github", "instructions")
-	windsurfDir := filepath.Join(outDir, "windsurf-rules", ".windsurf", "rules")
+	devinDir := filepath.Join(outDir, "devin-rules", ".devin", "rules")
 
 	if err := purgeStale(cursorDir, ".mdc", skills); err != nil {
 		return fmt.Errorf("cursor-rules purge: %w", err)
@@ -108,10 +110,10 @@ func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 	if err := purgeStale(copilotDir, ".instructions.md", skills); err != nil {
 		return fmt.Errorf("copilot-rules purge: %w", err)
 	}
-	if err := purgeStale(windsurfDir, ".md", skills); err != nil {
-		return fmt.Errorf("windsurf-rules purge: %w", err)
+	if err := purgeStale(devinDir, ".md", skills); err != nil {
+		return fmt.Errorf("devin-rules purge: %w", err)
 	}
-	for _, d := range []string{cursorDir, copilotDir, windsurfDir} {
+	for _, d := range []string{cursorDir, copilotDir, devinDir} {
 		if err := os.MkdirAll(d, 0o755); err != nil {
 			return err
 		}
@@ -125,7 +127,7 @@ func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
 		if err := os.WriteFile(filepath.Join(copilotDir, id+".instructions.md"), []byte(renderCopilotInstruction(s)), 0o644); err != nil {
 			return err
 		}
-		if err := os.WriteFile(filepath.Join(windsurfDir, id+".md"), []byte(renderWindsurfRule(s)), 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(devinDir, id+".md"), []byte(renderDevinRule(s)), 0o644); err != nil {
 			return err
 		}
 	}
@@ -194,11 +196,12 @@ func renderCopilotInstruction(s *skill.Skill) string {
 	return b.String()
 }
 
-// renderWindsurfRule produces a Windsurf `.windsurf/rules/<id>.md` rule.
-// Windsurf activation modes mirror Cursor: a `glob` trigger auto-attaches by
-// file pattern; a `model_decision` trigger lets the agent pull the rule based
-// on its description (used for broad skills, so they're never always-on).
-func renderWindsurfRule(s *skill.Skill) string {
+// renderDevinRule produces a Devin `.devin/rules/<id>.md` rule.
+// Activation modes mirror Cursor: a `glob` trigger auto-attaches by
+// file pattern; a `model_decision` trigger lets the agent pull the rule
+// based on its description (used for broad skills, so they're never
+// always-on).
+func renderDevinRule(s *skill.Skill) string {
 	globs, _ := skillGlobs(s)
 	var b strings.Builder
 	b.WriteString("---\n")
@@ -210,7 +213,7 @@ func renderWindsurfRule(s *skill.Skill) string {
 		fmt.Fprintf(&b, "description: %s\n", yamlQuote(nativeDescription(s)))
 	}
 	b.WriteString("---\n\n")
-	b.WriteString(renderRuleBody(s, "Windsurf"))
+	b.WriteString(renderRuleBody(s, "Devin"))
 	return b.String()
 }
 
