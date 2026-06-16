@@ -351,11 +351,15 @@ func lookupVulnerabilityCmd() *cobra.Command {
 // =============================================================================
 
 func scanSecretsCmd() *cobra.Command {
-	var repoPath, format string
+	var repoPath, format, report string
 	c := &cobra.Command{
 		Use:   "scan-secrets <file-or-dir>",
 		Short: "DLP-style scan of a file (or, recursively, a directory of text files) for credentials, API keys, tokens, and PEM material",
-		Args:  cobra.ExactArgs(1),
+		Long: `DLP-style scan of a file, or recursively of a directory of text
+files, for credentials, API keys, tokens, and PEM material.
+
+` + reportHelpParagraph,
+		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
@@ -377,6 +381,11 @@ func scanSecretsCmd() *cobra.Command {
 				res, err := lib.ScanSecrets("", targetAbs)
 				if err != nil {
 					return err
+				}
+				if report != "" {
+					rep := newReport("scan-secrets", []string{target})
+					rep.Sections = append(rep.Sections, secretSection(target, res))
+					return writeReport(c, report, rep)
 				}
 				switch format {
 				case "json":
@@ -402,6 +411,13 @@ func scanSecretsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if report != "" {
+				rep := newReport("scan-secrets", []string{target})
+				for _, res := range results {
+					rep.Sections = append(rep.Sections, secretSection(res.FilePath, res))
+				}
+				return writeReport(c, report, rep)
+			}
 			switch format {
 			case "json":
 				return emitJSON(c.OutOrStdout(), results)
@@ -416,8 +432,14 @@ func scanSecretsCmd() *cobra.Command {
 				}
 				return emitJSON(c.OutOrStdout(), log)
 			default:
+				// Only files with matches are printed; clean files would
+				// just be noise across a large tree. The summary still
+				// reports the full count scanned.
 				total := 0
 				for _, res := range results {
+					if len(res.Matches) == 0 {
+						continue
+					}
 					printScanSecretsText(c.OutOrStdout(), res.FilePath, res)
 					total += len(res.Matches)
 				}
@@ -429,6 +451,7 @@ func scanSecretsCmd() *cobra.Command {
 	}
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout for rule data (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
+	addReportFlag(c, &report)
 	return c
 }
 
@@ -512,7 +535,7 @@ func isProbablyTextFile(path string) (bool, error) {
 // =============================================================================
 
 func scanDependenciesCmd() *cobra.Command {
-	var repoPath, format, vulnSource string
+	var repoPath, format, vulnSource, report string
 	c := &cobra.Command{
 		Use:   "scan-dependencies <lockfile-or-dir>",
 		Short: "Parse a lockfile (or auto-discover lockfiles under a directory) and check every resolved (name, version) against malicious / typosquat / CVE / OSV databases",
@@ -525,7 +548,9 @@ build.gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
 Pass a single lockfile to scan just that file, or a directory to
 auto-discover and scan every recognised lockfile beneath it
 (node_modules, vendor, and .git are skipped). Scanning a directory
-with no recognised lockfile is an error.`,
+with no recognised lockfile is an error.
+
+` + reportHelpParagraph,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
@@ -547,6 +572,11 @@ with no recognised lockfile is an error.`,
 				res, err := lib.ScanDependencies(targetAbs)
 				if err != nil {
 					return err
+				}
+				if report != "" {
+					rep := newReport("scan-dependencies", []string{target})
+					rep.Sections = append(rep.Sections, dependencySection(res))
+					return writeReport(c, report, rep)
 				}
 				switch format {
 				case "json":
@@ -580,6 +610,13 @@ with no recognised lockfile is an error.`,
 				}
 				results = append(results, res)
 			}
+			if report != "" {
+				rep := newReport("scan-dependencies", []string{target})
+				for _, res := range results {
+					rep.Sections = append(rep.Sections, dependencySection(res))
+				}
+				return writeReport(c, report, rep)
+			}
 			switch format {
 			case "json":
 				return emitJSON(c.OutOrStdout(), results)
@@ -594,8 +631,13 @@ with no recognised lockfile is an error.`,
 				}
 				return emitJSON(c.OutOrStdout(), log)
 			default:
+				// Only lockfiles with findings are printed; clean ones are
+				// omitted. The summary still reports the full count scanned.
 				totalFindings := 0
 				for _, res := range results {
+					if len(res.Findings) == 0 {
+						continue
+					}
 					printScanDependenciesText(c.OutOrStdout(), res.FilePath, res)
 					totalFindings += len(res.Findings)
 				}
@@ -608,6 +650,7 @@ with no recognised lockfile is an error.`,
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
 	addVulnSourceFlag(c, &vulnSource)
+	addReportFlag(c, &report)
 	return c
 }
 
@@ -686,11 +729,15 @@ func knownLockfileName(base string) bool {
 // =============================================================================
 
 func scanDockerfileCmd() *cobra.Command {
-	var repoPath, format string
+	var repoPath, format, report string
 	c := &cobra.Command{
 		Use:   "scan-dockerfile <Dockerfile>",
 		Short: "Hardening pass over a Dockerfile (USER root, unpinned base, ADD remote, curl|sh, secrets in env, etc.)",
-		Args:  cobra.ExactArgs(1),
+		Long: `Hardening pass over a Dockerfile (USER root, unpinned base, ADD
+remote, curl|sh, secrets in env, etc.).
+
+` + reportHelpParagraph,
+		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
@@ -704,6 +751,11 @@ func scanDockerfileCmd() *cobra.Command {
 			res, err := lib.ScanDockerfile(fileAbs)
 			if err != nil {
 				return err
+			}
+			if report != "" {
+				rep := newReport("scan-dockerfile", []string{file})
+				rep.Sections = append(rep.Sections, dockerfileSection(file, res))
+				return writeReport(c, report, rep)
 			}
 			switch format {
 			case "json":
@@ -725,6 +777,7 @@ func scanDockerfileCmd() *cobra.Command {
 	}
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
+	addReportFlag(c, &report)
 	return c
 }
 
@@ -733,11 +786,15 @@ func scanDockerfileCmd() *cobra.Command {
 // =============================================================================
 
 func scanGitHubActionsCmd() *cobra.Command {
-	var repoPath, format string
+	var repoPath, format, report string
 	c := &cobra.Command{
 		Use:   "scan-github-actions <workflow.yml>",
 		Short: "Lint a GitHub Actions workflow for pwn-request, script-injection, unpinned actions, missing permissions, and credential exposure",
-		Args:  cobra.ExactArgs(1),
+		Long: `Lint a GitHub Actions workflow for pwn-request, script-injection,
+unpinned actions, missing permissions, and credential exposure.
+
+` + reportHelpParagraph,
+		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
@@ -751,6 +808,11 @@ func scanGitHubActionsCmd() *cobra.Command {
 			res, err := lib.ScanGitHubActions(fileAbs)
 			if err != nil {
 				return err
+			}
+			if report != "" {
+				rep := newReport("scan-github-actions", []string{file})
+				rep.Sections = append(rep.Sections, githubActionsSection(file, res))
+				return writeReport(c, report, rep)
 			}
 			switch format {
 			case "json":
@@ -772,6 +834,7 @@ func scanGitHubActionsCmd() *cobra.Command {
 	}
 	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	addFormatFlag(c, &format, true)
+	addReportFlag(c, &report)
 	return c
 }
 
