@@ -3,6 +3,7 @@ module github.com/namncqualgo/skills-library
 go 1.22
 
 require (
+	github.com/go-pdf/fpdf v0.9.0
 	github.com/pkoukk/tiktoken-go v0.1.8
 	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1

@@ -344,14 +344,46 @@ func TestScanDependenciesDirectoryDiscovery(t *testing.T) {
 	if err != nil {
 		t.Fatalf("run: %v", err)
 	}
+	// The summary count proves both lockfiles were discovered and
+	// scanned; per-file sections are only printed for files with
+	// findings (see TestScanDependenciesOmitsCleanFiles).
 	if !strings.Contains(out, "Scanned 2 lockfile(s)") {
 		t.Errorf("expected 2 lockfiles discovered (go.sum + requirements.txt), got:\n%s", out)
 	}
 	if strings.Contains(out, "node_modules") {
 		t.Errorf("node_modules lockfile should have been skipped:\n%s", out)
 	}
-	if !strings.Contains(out, "go.sum") || !strings.Contains(out, "requirements.txt") {
-		t.Errorf("discovery did not scan both lockfiles:\n%s", out)
+}
+
+// TestScanDependenciesOmitsCleanFiles confirms that, on a directory
+// scan, the terminal output prints only lockfiles with findings and
+// omits clean ones (while the summary still counts every file scanned).
+func TestScanDependenciesOmitsCleanFiles(t *testing.T) {
+	dir := t.TempDir()
+	// event-stream@3.3.6 is the canonical compromised release in the
+	// bundled malicious-package DB, so this finding is deterministic
+	// and offline.
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/event-stream":{"version":"3.3.6"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// A clean lockfile that produces no findings.
+	if err := os.WriteFile(filepath.Join(dir, "go.sum"),
+		[]byte("github.com/stretchr/testify v1.8.4 h1:abc=\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "scan-dependencies", "--path", repoRootForTest(t), dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	if !strings.Contains(out, "Scanned 2 lockfile(s)") {
+		t.Errorf("summary should count both lockfiles scanned:\n%s", out)
+	}
+	if !strings.Contains(out, "package-lock.json") {
+		t.Errorf("lockfile with findings should be printed:\n%s", out)
+	}
+	if strings.Contains(out, "go.sum") {
+		t.Errorf("clean lockfile should be omitted from terminal output:\n%s", out)
 	}
 }
 

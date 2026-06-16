@@ -590,11 +590,16 @@ skills-check check-dependency  --package axios   --version 0.21.1 --ecosystem np
 skills-check check-typosquat   --package lodahs  --ecosystem npm
 skills-check lookup-vulnerability --package event-stream --ecosystem npm
 
-# File scanners
+# File scanners (a file, or a directory to scan recursively)
 skills-check scan-secrets         src/server.js
+skills-check scan-secrets         ./src                 # walks the tree
 skills-check scan-dependencies    package-lock.json
+skills-check scan-dependencies    .                     # auto-discovers lockfiles
 skills-check scan-dockerfile      Dockerfile
 skills-check scan-github-actions  .github/workflows/ci.yml
+
+# Write an HTML + PDF report into a folder instead of the terminal
+skills-check scan-dependencies    . --report-dir ./reports
 
 # CI gate — non-zero exit when findings meet --severity-floor
 skills-check gate Dockerfile --severity-floor high
@@ -606,6 +611,18 @@ schema field-for-field), and where the underlying scanner supports it,
 `--format sarif` for CI ingestion. The `--vuln-source` flag is
 threaded through to the same `local | external | hybrid` modes
 documented in [Live OSV.dev lookups](#live-osvdev-lookups-via---vuln-source-opt-in-enrichment).
+
+Every `scan-*` subcommand also accepts `--report-dir <dir>`. When set,
+the scanner writes a self-contained, styled **HTML report** and a
+matching **PDF** (`<command>-report.html` and `<command>-report.pdf`)
+into that directory instead of printing to the terminal; the directory
+is created if it does not exist. The HTML report has a clickable
+summary bar — **file(s) scanned** shows every file (including clean
+ones), **finding(s)** shows only files with findings, and each severity
+badge filters to that severity — and you can Print → Save as PDF from a
+browser as well. On a directory scan the PDF and terminal output list
+only files that actually have findings, while the summary still counts
+every file scanned.
 
 The file scanners read their rule data from a skills-library checkout.
 When you run them outside this repo — in a CI step, a pre-commit hook, or
