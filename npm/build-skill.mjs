@@ -21,7 +21,7 @@ export const TOOLS = {
   claude: { src: ['dist', 'claude-skills', '.claude'], dest: '.claude', scoped: true },
   cursor: { src: ['dist', 'cursor-rules', '.cursor'], dest: '.cursor', scoped: true },
   copilot: { src: ['dist', 'copilot-rules', '.github'], dest: '.github', scoped: true },
-  windsurf: { src: ['dist', 'windsurf-rules', '.windsurf'], dest: '.windsurf', scoped: true },
+  devin: { src: ['dist', 'devin-rules', '.devin'], dest: '.devin', scoped: true },
   cline: { src: ['dist', '.clinerules'], dest: '.clinerules', scoped: false },
   codex: { src: ['dist', 'AGENTS.md'], dest: 'AGENTS.md', scoped: false },
   universal: { src: ['dist', 'SECURITY-SKILLS.md'], dest: 'SECURITY-SKILLS.md', scoped: false },

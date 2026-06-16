@@ -30,7 +30,7 @@ const TOOLS = {
   claude: { dest: '.claude/skills/', scoped: true, label: 'Claude Code (native skills)' },
   cursor: { dest: '.cursor/rules/', scoped: true, label: 'Cursor (scoped rules)' },
   copilot: { dest: '.github/instructions/', scoped: true, label: 'GitHub Copilot / VS Code (scoped instructions)' },
-  windsurf: { dest: '.windsurf/rules/', scoped: true, label: 'Windsurf (scoped rules)' },
+  devin: { dest: '.devin/rules/', scoped: true, label: 'Devin (scoped rules)' },
   cline: { dest: '.clinerules', scoped: false, label: 'Cline (single rules file)' },
   codex: { dest: 'AGENTS.md', scoped: false, label: 'Codex / AGENTS.md (single file)' },
   universal: { dest: 'SECURITY-SKILLS.md', scoped: false, label: 'universal (single file, any tool)' },

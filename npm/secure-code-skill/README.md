@@ -23,7 +23,7 @@ progressive-disclosure benefit Claude Code gets from `.claude/skills`).
 | `claude` *(default)* | `.claude/skills/` (28 native skills) | ✅ per-skill |
 | `cursor` | `.cursor/rules/*.mdc` (globs / agent-requested) | ✅ per-skill |
 | `copilot` | `.github/instructions/*.instructions.md` (`applyTo`) | ✅ per-skill |
-| `windsurf` | `.windsurf/rules/*.md` (glob / model-decision) | ✅ per-skill |
+| `devin` | `.devin/rules/*.md` (glob / model-decision) | ✅ per-skill |
 | `cline` | `.clinerules` | ⚠️ single file |
 | `codex` | `AGENTS.md` | ⚠️ single file |
 | `universal` | `SECURITY-SKILLS.md` | ⚠️ single file |
