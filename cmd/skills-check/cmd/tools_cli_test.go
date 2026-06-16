@@ -342,6 +342,67 @@ func TestGateMultipleFilesPassesWhenAllClean(t *testing.T) {
 	}
 }
 
+// TestGateDirectoryModeWalksAndSkips confirms a directory argument is
+// walked for specialised-scanner files (Dockerfile + workflow here),
+// that noise dirs (node_modules) are skipped, and that the secret-scan
+// fallback is NOT applied across the tree (a stray .env is ignored).
+func TestGateDirectoryModeWalksAndSkips(t *testing.T) {
+	root := t.TempDir()
+	mustWrite := func(rel, body string) {
+		full := filepath.Join(root, rel)
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(full, []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	mustWrite("svc/Dockerfile", "FROM node:latest\nUSER root\n")
+	mustWrite("svc/.github/workflows/ci.yml",
+		"name: ci\non: push\njobs:\n  b:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@main\n")
+	mustWrite("node_modules/evil/Dockerfile", "FROM node:latest\nUSER root\n")
+	mustWrite("secrets.env", "AKIAIOSFODNN7EXAMPLE\n")
+
+	out, _, err := run(t,
+		"gate", "--path", repoRootForTest(t),
+		"--severity-floor", "medium", root,
+	)
+	if err == nil {
+		t.Fatalf("directory gate should fail on the bad Dockerfile + workflow:\n%s", out)
+	}
+	if !IsPolicyFailure(err) {
+		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
+	}
+	if !strings.Contains(out, filepath.Join("svc", "Dockerfile")) {
+		t.Errorf("svc/Dockerfile not gated:\n%s", out)
+	}
+	if !strings.Contains(out, filepath.FromSlash("svc/.github/workflows/ci.yml")) {
+		t.Errorf("workflow not gated:\n%s", out)
+	}
+	if strings.Contains(out, "node_modules") {
+		t.Errorf("node_modules must be skipped:\n%s", out)
+	}
+	if strings.Contains(out, "secrets.env") {
+		t.Errorf("secret-scan fallback must not run across a directory walk:\n%s", out)
+	}
+}
+
+// TestGateEmptyDirectoryPassesQuietly confirms a directory with no
+// scannable files exits 0 with a clear message rather than erroring.
+func TestGateEmptyDirectoryPassesQuietly(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte("# hi\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "gate", "--path", repoRootForTest(t), dir)
+	if err != nil {
+		t.Fatalf("empty-scannable directory should pass: %v\n%s", err, out)
+	}
+	if !strings.Contains(out, "nothing to gate") {
+		t.Errorf("expected a 'nothing to gate' message:\n%s", out)
+	}
+}
+
 func TestPolicyFailureSentinelIsDistinguishable(t *testing.T) {
 	// IsPolicyFailure is exported so external callers (and a future
 	// outer wrapper) can branch on "findings found" vs "tool errored".
