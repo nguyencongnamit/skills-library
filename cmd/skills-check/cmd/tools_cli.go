@@ -514,40 +514,93 @@ func isProbablyTextFile(path string) (bool, error) {
 func scanDependenciesCmd() *cobra.Command {
 	var repoPath, format, vulnSource string
 	c := &cobra.Command{
-		Use:   "scan-dependencies <lockfile>",
-		Short: "Parse a lockfile and check every resolved (name, version) against malicious / typosquat / CVE / OSV databases",
-		Long: `Supported lockfiles: package-lock.json, yarn.lock, pnpm-lock.yaml,
-requirements.txt, Pipfile.lock, poetry.lock, go.sum, Cargo.lock,
-pom.xml, gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
-*.vbproj, and Gemfile.lock.`,
+		Use:   "scan-dependencies <lockfile-or-dir>",
+		Short: "Parse a lockfile (or auto-discover lockfiles under a directory) and check every resolved (name, version) against malicious / typosquat / CVE / OSV databases",
+		Long: `Supported lockfiles: package-lock.json, npm-shrinkwrap.json,
+yarn.lock, pnpm-lock.yaml, requirements*.txt, Pipfile.lock,
+poetry.lock, go.sum, Cargo.lock, pom.xml, gradle.lockfile,
+build.gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
+*.vbproj, and Gemfile.lock.
+
+Pass a single lockfile to scan just that file, or a directory to
+auto-discover and scan every recognised lockfile beneath it
+(node_modules, vendor, and .git are skipped). Scanning a directory
+with no recognised lockfile is an error.`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
 				return err
 			}
-			file := args[0]
-			lib, err := newLibraryForCmd(repoPath, vulnSource, file)
+			target := args[0]
+			lib, err := newLibraryForCmd(repoPath, vulnSource, target)
 			if err != nil {
 				return err
 			}
-			fileAbs, _ := filepath.Abs(file)
-			res, err := lib.ScanDependencies(fileAbs)
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("scan-dependencies: stat %s: %w", target, err)
+			}
+
+			// Single lockfile: behaviour is unchanged.
+			if !info.IsDir() {
+				res, err := lib.ScanDependencies(targetAbs)
+				if err != nil {
+					return err
+				}
+				switch format {
+				case "json":
+					return emitJSON(c.OutOrStdout(), res)
+				case "sarif":
+					return emitJSON(c.OutOrStdout(), tools.ScanDependenciesSARIF(res))
+				default:
+					printScanDependenciesText(c.OutOrStdout(), target, res)
+					return nil
+				}
+			}
+
+			// Directory: scope the allow-list to the directory and
+			// auto-discover every recognised lockfile beneath it.
+			if err := lib.SetAllowedRoots([]string{targetAbs}); err != nil {
+				return fmt.Errorf("scan-dependencies: scope library to %s: %w", targetAbs, err)
+			}
+			lockfiles, err := discoverLockfiles(targetAbs)
 			if err != nil {
 				return err
+			}
+			if len(lockfiles) == 0 {
+				return fmt.Errorf("scan-dependencies: no recognised lockfile found under %s", target)
+			}
+			results := make([]*tools.ScanDependenciesResult, 0, len(lockfiles))
+			for _, lf := range lockfiles {
+				res, err := lib.ScanDependencies(lf)
+				if err != nil {
+					fmt.Fprintf(c.ErrOrStderr(), "scan-dependencies: skip %s: %v\n", lf, err)
+					continue
+				}
+				results = append(results, res)
 			}
 			switch format {
 			case "json":
-				return emitJSON(c.OutOrStdout(), res)
+				return emitJSON(c.OutOrStdout(), results)
 			case "sarif":
-				return emitJSON(c.OutOrStdout(), tools.ScanDependenciesSARIF(res))
-			default:
-				fmt.Fprintf(c.OutOrStdout(), "=== scan-dependencies %s ===\n", file)
-				fmt.Fprintf(c.OutOrStdout(), "Dependencies parsed: %d  ecosystem=%s\n", res.Dependencies, res.Ecosystem)
-				fmt.Fprintf(c.OutOrStdout(), "Findings: %d\n", len(res.Findings))
-				for _, f := range res.Findings {
-					fmt.Fprintf(c.OutOrStdout(), "  ! [%s] %s@%s — %s: %s\n",
-						f.Severity, f.Package, f.Version, f.Category, f.Message)
+				log := &tools.SARIFLog{
+					Schema:  tools.SARIFSchema,
+					Version: tools.SARIFVersion,
+					Runs:    []tools.SARIFRun{},
 				}
+				for _, res := range results {
+					log.Runs = append(log.Runs, tools.ScanDependenciesSARIF(res).Runs...)
+				}
+				return emitJSON(c.OutOrStdout(), log)
+			default:
+				totalFindings := 0
+				for _, res := range results {
+					printScanDependenciesText(c.OutOrStdout(), res.FilePath, res)
+					totalFindings += len(res.Findings)
+				}
+				fmt.Fprintf(c.OutOrStdout(), "Scanned %d lockfile(s); %d finding(s) total\n",
+					len(results), totalFindings)
 				return nil
 			}
 		},
@@ -556,6 +609,76 @@ pom.xml, gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
 	addFormatFlag(c, &format, true)
 	addVulnSourceFlag(c, &vulnSource)
 	return c
+}
+
+// printScanDependenciesText renders one ScanDependenciesResult in the
+// human-readable --format text shape. Extracted so the single-file and
+// directory code paths emit byte-identical per-lockfile output.
+func printScanDependenciesText(w io.Writer, label string, res *tools.ScanDependenciesResult) {
+	fmt.Fprintf(w, "=== scan-dependencies %s ===\n", label)
+	fmt.Fprintf(w, "Dependencies parsed: %d  ecosystem=%s\n", res.Dependencies, res.Ecosystem)
+	fmt.Fprintf(w, "Findings: %d\n", len(res.Findings))
+	for _, f := range res.Findings {
+		fmt.Fprintf(w, "  ! [%s] %s@%s — %s: %s\n",
+			f.Severity, f.Package, f.Version, f.Category, f.Message)
+	}
+}
+
+// discoverLockfiles walks dir recursively and returns the absolute
+// paths of every recognised dependency lockfile, skipping common
+// vendor directories (node_modules, vendor, .git) so a project's own
+// manifests are scanned without descending into installed-dependency
+// trees. Non-regular entries are skipped so the walk cannot be
+// redirected out of the tree via a symlink.
+func discoverLockfiles(dir string) ([]string, error) {
+	var found []string
+	walkErr := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if d.IsDir() {
+			switch d.Name() {
+			case "node_modules", "vendor", ".git":
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if !d.Type().IsRegular() {
+			return nil
+		}
+		if knownLockfileName(d.Name()) {
+			found = append(found, path)
+		}
+		return nil
+	})
+	if walkErr != nil {
+		return nil, fmt.Errorf("scan-dependencies: walk %s: %w", dir, walkErr)
+	}
+	return found, nil
+}
+
+// knownLockfileName reports whether base is a lockfile name that
+// parsers.Parse recognises. Kept in sync with the dispatch table in
+// internal/tools/parsers/parsers.go; if a parser is added there, add
+// its base name here so directory discovery picks it up.
+func knownLockfileName(base string) bool {
+	switch base {
+	case "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
+		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
+		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
+		"packages.lock.json", "Gemfile.lock":
+		return true
+	}
+	lower := strings.ToLower(base)
+	if strings.HasSuffix(lower, ".csproj") ||
+		strings.HasSuffix(lower, ".fsproj") ||
+		strings.HasSuffix(lower, ".vbproj") {
+		return true
+	}
+	if strings.HasSuffix(base, ".txt") && strings.HasPrefix(base, "requirements") {
+		return true
+	}
+	return false
 }
 
 // =============================================================================
