@@ -37,7 +37,7 @@ async function main() {
   const cases = [
     { tool: 'claude', check: '.claude/skills/secret-detection/SKILL.md', needle: /^name:\s*secret-detection/m },
     { tool: 'cursor', check: '.cursor/rules/container-security.mdc', needle: /^globs:/m },
-    { tool: 'windsurf', check: '.windsurf/rules/secret-detection.md', needle: /^trigger:\s*model_decision/m },
+    { tool: 'devin', check: '.devin/rules/secret-detection.md', needle: /^trigger:\s*model_decision/m },
     { tool: 'copilot', check: '.github/instructions/cicd-security.instructions.md', needle: /^applyTo:/m },
     { tool: 'cline', check: '.clinerules', needle: /secure-code|secret/i },
   ];
