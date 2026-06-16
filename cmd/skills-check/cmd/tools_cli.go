@@ -545,14 +545,21 @@ func scanGitHubActionsCmd() *cobra.Command {
 func policyCheckCmd() *cobra.Command {
 	var repoPath, severityFloor, format, sarifBase string
 	c := &cobra.Command{
-		Use:     "gate <file>...",
+		Use:     "gate <file-or-dir>...",
 		Aliases: []string{"policy-check"},
-		Short:   "Scan <file> with the matching scanner and exit non-zero when any finding meets the severity floor",
+		Short:   "Scan files (or every config file under a directory) and exit non-zero when any finding meets the severity floor",
 		Long: `gate chooses between scan-dependencies / scan-dockerfile /
 scan-github-actions based on the input file shape, falling back to
 scan-secrets for any other file, and returns a CI-friendly exit code:
 0 when nothing meets the severity floor, 1 when at least one finding
 does. severity-floor defaults to "high".
+
+Arguments may be files or directories. A named file is always scanned
+(including the secret-scan fallback). A directory is walked — skipping
+.git, node_modules, vendor, build output, etc. — and every file a
+specialised scanner recognises (Dockerfiles, lockfiles, and
+.github/workflows/*.yml) is gated. Secret scanning is not applied
+across a directory; name a file to secret-scan it.
 
 This is the canonical "fail the build" CLI entry point. Wrap it in a
 shell call from your pre-commit or CI step.
@@ -565,12 +572,24 @@ shell call from your pre-commit or CI step.
 			}
 			// Gate over every file argument so a pre-commit hook can pass
 			// the whole staged set (and a CI step a changed-file list) in
-			// one invocation. The gate fails if ANY file has a finding at
-			// or above the floor.
+			// one invocation. Directory arguments are expanded to the
+			// specialised-scanner files beneath them (Dockerfiles,
+			// lockfiles, workflows), skipping noise dirs. The gate fails
+			// if ANY resulting file has a finding at or above the floor.
+			files, err := tools.ExpandGateFiles(args)
+			if err != nil {
+				return err
+			}
+			if len(files) == 0 {
+				fmt.Fprintf(c.OutOrStdout(),
+					"gate: no Dockerfiles, lockfiles, or workflows found under %s; nothing to gate.\n",
+					strings.Join(args, " "))
+				return nil
+			}
 			var results []*tools.PolicyCheckResult
 			floor := severityFloor
 			failures, totalFindings := 0, 0
-			for _, file := range args {
+			for _, file := range files {
 				lib, err := newLibraryForCmd(repoPath, "", file)
 				if err != nil {
 					return err
@@ -612,7 +631,7 @@ shell call from your pre-commit or CI step.
 					if !res.Pass {
 						verdict = "FAIL"
 					}
-					fmt.Fprintf(c.OutOrStdout(), "=== gate %s ===\n", args[i])
+					fmt.Fprintf(c.OutOrStdout(), "=== gate %s ===\n", files[i])
 					fmt.Fprintf(c.OutOrStdout(), "Verdict:        %s\n", verdict)
 					fmt.Fprintf(c.OutOrStdout(), "Severity floor: %s\n", res.SeverityFloor)
 					fmt.Fprintf(c.OutOrStdout(), "Scanner used:   %s\n", res.Scan)

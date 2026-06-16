@@ -621,6 +621,17 @@ export SKILLS_LIBRARY_PATH=/opt/secure-code   # data tree, set once
 skills-check gate Dockerfile --severity-floor high
 ```
 
+Arguments can be files or directories. A directory is walked — skipping
+`.git`, `node_modules`, `vendor`, and build output — and every Dockerfile,
+lockfile, and `.github/workflows/*.yml` beneath it is gated in one call:
+
+```bash
+skills-check gate . --severity-floor high      # gate every config file in the repo
+```
+
+Secret scanning is only applied to files you name explicitly, not across a
+directory walk, so a repo gate stays fast and quiet.
+
 ### Gate in pre-commit and CI
 
 The `gate` command is also wired up as a [pre-commit](https://pre-commit.com)
