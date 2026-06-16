@@ -1483,183 +1483,183 @@
       "action": "unchanged"
     },
     {
+      "path": "dist/devin-rules/.devin/rules/api-security.md",
+      "sha256": "19fbaa87aaf6bfa22b3f7033d8647963f42643599f4bb09c3ba684691507dd8c",
+      "size": 3928,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/auth-security.md",
+      "sha256": "674fcd3aa34aa1bec97800c21dfe9fd8d4691777923ef1219df1a7a457b9cf3b",
+      "size": 3788,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/cicd-security.md",
+      "sha256": "8c8a9aa686dbf60bf4d34258e40ad8f4858ac43edbfb8284de98724724236ded",
+      "size": 4063,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/compliance-awareness.md",
+      "sha256": "a7585c209daa8ea480137989024a77e631258cecb6c06623f4ebda294d99d6f0",
+      "size": 2250,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/container-security.md",
+      "sha256": "5ce00e3e6ba4327234cfc1e34bc6c43ede0059bbc608336a904eae82e4f3d5c9",
+      "size": 6643,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/cors-security.md",
+      "sha256": "579090935d23721a0e3262e5ddb7b23e90f17a3e6d9cd20dc6e74fcfe4dfd2fd",
+      "size": 3336,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/crypto-misuse.md",
+      "sha256": "915fffc047a24881b6efdce04e6dfb4b550156838c9102653671b18d70cbacae",
+      "size": 3299,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/database-security.md",
+      "sha256": "9186aad046ad8ab01cddaa69c5486a8a07e67988e4b9d46061873c1a3f706162",
+      "size": 3287,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/dependency-audit.md",
+      "sha256": "40c7852cc69389c72c41b8697177bfd572742ab3545f9dd88dd60aac027dc46f",
+      "size": 2330,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/deserialization-security.md",
+      "sha256": "b4b3132f868ecbe95f50870704ab45c5f9462a01992155e9b93d5d04bd83f5ef",
+      "size": 4193,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/electron-security.md",
+      "sha256": "314cfa7d033c20f9fb66c2b2e59c722ab13d105f610425ac30be8fbd6df1764a",
+      "size": 6039,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/error-handling-security.md",
+      "sha256": "92066660a25cda244b92636fd5267690b3b75d3333fbed44c46a9259736a0175",
+      "size": 3262,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/file-upload-security.md",
+      "sha256": "4a7c195ddc26de947cea97d64764a39f337505eff2cd059510d210e5723a354b",
+      "size": 4785,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/frontend-security.md",
+      "sha256": "2e878024c9f235b8eb45c27665f478e5abb8857e7a652ea84893134a4e17eef2",
+      "size": 3078,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/graphql-security.md",
+      "sha256": "86d6fdf2732e70b9c796c9d20981675d212ab42f337697d0f70f8a7ecb547685",
+      "size": 3809,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/iac-security.md",
+      "sha256": "0d89d7ec1c6ad51a940cb95235d38c20c675f2b78a4125eb2cef132af8219c16",
+      "size": 3123,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/iam-best-practices.md",
+      "sha256": "ef41d50a4e027e65037ba532bdf7ad440b1ce1e711ce06c92c57830385d36cce",
+      "size": 4565,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/llm-app-security.md",
+      "sha256": "132c9eb577fceb948d0771ec0817a10bf4e255ee55121bded5b5da5288fd4729",
+      "size": 3395,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/logging-security.md",
+      "sha256": "f2b890456e9bed02bb6b8b0140fd5f13af269400fc727fa92636105aa9193469",
+      "size": 3233,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/ml-security.md",
+      "sha256": "bd8bd8e315c282c64f19f204f44c50b6429683313b85107a988a05357cc1344a",
+      "size": 2186,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/mobile-security.md",
+      "sha256": "7f1c51d5301965e2b1e6ee12da23919edc3a959b7dd1d55df3958bd323013103",
+      "size": 3639,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/protocol-security.md",
+      "sha256": "dfe884b37013954b632ca0130e08738b7048243cd6a69871214cb334cb214e1e",
+      "size": 3504,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/saas-security.md",
+      "sha256": "52d7602621a857323175aad678fde8620f4d7d2def934e1ab67e8a31133904a0",
+      "size": 7534,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/secret-detection.md",
+      "sha256": "c2e680eefd6c272fdb8ae4822dc247d074a6be51f02e2b7d5e8ce38e76d2772d",
+      "size": 3039,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/secure-code-review.md",
+      "sha256": "b8e2abbf5bc9eb829533570d873553dfc67d032ba775bdd3816fb01afe307b42",
+      "size": 3002,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/serverless-security.md",
+      "sha256": "d380d8c6e498d0a68f7fe9100aafe2b178926f43751f4218a1ba14d7b3e705ac",
+      "size": 3082,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/ssrf-prevention.md",
+      "sha256": "8b20374b4cb246500bc93f528b1e2878a1be829befb0ca0eb727b0ebaef4ee67",
+      "size": 5125,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/supply-chain-security.md",
+      "sha256": "ebb3ac0e367b76c909a17df0df4edd2d51db3f9dc980b138c0fd23c9f57411d6",
+      "size": 3819,
+      "action": "unchanged"
+    },
+    {
+      "path": "dist/devin-rules/.devin/rules/websocket-security.md",
+      "sha256": "4f670894bac65847236545823cadf2349f674f27fbf0512bbe7a638982873ca6",
+      "size": 4049,
+      "action": "unchanged"
+    },
+    {
       "path": "dist/devin.md",
       "sha256": "f0b33b60983a0e1bf448e1f01d1823bdf4da59f103a102a74e77499a63ba0a39",
       "size": 3942,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/api-security.md",
-      "sha256": "fb0fc2c49ddab7425b43e096d33448e25f5b4dd715aec43767a0a8e289af208d",
-      "size": 3931,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/auth-security.md",
-      "sha256": "cbb9bda336ca9dd1eb053a358e867457836c9dc2a44a530d72e41f8f20965356",
-      "size": 3791,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/cicd-security.md",
-      "sha256": "9cd3070e81a39234356065c4060235d459037ccdd6521781bf8d8c17021ab4ad",
-      "size": 4066,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/compliance-awareness.md",
-      "sha256": "daf87be5dda97959112f5bc65d4f229dca1720921922775bdce6df45fc26a7bc",
-      "size": 2253,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/container-security.md",
-      "sha256": "02de8d68b7fef854ca51aef45035d0ba835ca1dd85870c02a7ec687741442064",
-      "size": 6646,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/cors-security.md",
-      "sha256": "1e3e139ae8ab36b02a39f7da9f31d67d3e3d1ccb978d48ef51220b6fb39fd3e0",
-      "size": 3339,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/crypto-misuse.md",
-      "sha256": "d2e106dc7fdd3996b780195311501b71a2d86e80040578e223b06405fdec9e8d",
-      "size": 3302,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/database-security.md",
-      "sha256": "1cf301fccba51bcb84ed424ad1e5956c647aeddbc431c027310239f82c34497e",
-      "size": 3290,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/dependency-audit.md",
-      "sha256": "eb8774ddb25d00c105e50ab2570431897cb6b5dac25ce664c02338b2b874ab15",
-      "size": 2333,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/deserialization-security.md",
-      "sha256": "79c1cdbf380e1db7e3703daff028c1fafba7274cdffb5df9c82ed62df5d74aaf",
-      "size": 4196,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/electron-security.md",
-      "sha256": "b6baefae3f975151fc7861d6a3a4f17473f0d17cccc35da6585e27e03b2010b1",
-      "size": 6042,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/error-handling-security.md",
-      "sha256": "cbc30b70c7d4f36540a1fbe300b0242b0d52b6819024d1bf6a3e859fe3760941",
-      "size": 3265,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/file-upload-security.md",
-      "sha256": "7f9d182050d629cb22fcc24407abdea060bd2579c831d1a89b1d8ac3c8548978",
-      "size": 4788,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/frontend-security.md",
-      "sha256": "0dc913538cfae4b09dbca41942596ee5e7c6b87e2be83d7591e7d3fcdba9652a",
-      "size": 3081,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/graphql-security.md",
-      "sha256": "b894833151ff50e452931733464b156841a4f4e0ff7390a43dcac1d5998bd5aa",
-      "size": 3812,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/iac-security.md",
-      "sha256": "f507a9a81d020a255d21226948605c23966561042c520dfde2bcf8c87fb2d277",
-      "size": 3126,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/iam-best-practices.md",
-      "sha256": "7f1ac6dad2354d5efd0d40f2177f6e1a1e9bf08461daa889fb2cbe8d271f6a7f",
-      "size": 4568,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/llm-app-security.md",
-      "sha256": "353774c502880c4e442d1f8ad6e05ba78ad92b81a8d6d856cf3cc207bc941662",
-      "size": 3398,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/logging-security.md",
-      "sha256": "64995e5059bceada383bfc0e90b6c42e97b663a9c526e7d983527836e4fff2e4",
-      "size": 3236,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/ml-security.md",
-      "sha256": "917242d030a3003e55a908134371609f18909c9bb46c86ddf60d20ea10381963",
-      "size": 2189,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/mobile-security.md",
-      "sha256": "6c8a75e48c07bca1a01acbf417f65b95aaafd4df3acf2650143ffaa6b55c73cd",
-      "size": 3642,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/protocol-security.md",
-      "sha256": "21cce64f0431d5fad2678a4b986f31ed346380e9b11faaa5f6f2a0167f458254",
-      "size": 3507,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/saas-security.md",
-      "sha256": "09284c8d174f069d5dcfd73cb21d6cdbc4fe2fdcf322c5a120c60a23fb0186b9",
-      "size": 7537,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/secret-detection.md",
-      "sha256": "1937369b32fd8d55c284ddf706bab2e7f21f3323078290339dca2b2df5d27a8c",
-      "size": 3042,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/secure-code-review.md",
-      "sha256": "e359826e97c1ba9d1b4eb5715704d93810a74a15fc226de6a4031345e44ae91c",
-      "size": 3005,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/serverless-security.md",
-      "sha256": "79e0a5acca1f0d4a51e18dc4e25586917c1f1aa97798e6ebb787f35d7f42e033",
-      "size": 3085,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/ssrf-prevention.md",
-      "sha256": "5be050b505adc796a1bed256e3760ec3cc16a78f2c3d50a3c67d2b1d8077e302",
-      "size": 5128,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/supply-chain-security.md",
-      "sha256": "35f209db73b57d612ae20bedb2d84a94fa180bda1dd07ded74fa1b41e12e4aa6",
-      "size": 3822,
-      "action": "unchanged"
-    },
-    {
-      "path": "dist/windsurf-rules/.windsurf/rules/websocket-security.md",
-      "sha256": "a37523b5028b4f199c4accfe264bd4ef306b796f1f71493bc6da03e8026cb3bc",
-      "size": 4052,
       "action": "unchanged"
     },
     {

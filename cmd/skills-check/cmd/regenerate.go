@@ -111,7 +111,7 @@ func regenerateCmd() *cobra.Command {
 				}
 				fmt.Fprintf(out, "%-10s -> dist/cursor-rules/.cursor/rules/<skill-id>.mdc  (%d skills, scoped rules)\n", "cursor-rules", len(skills))
 				fmt.Fprintf(out, "%-10s -> dist/copilot-rules/.github/instructions/<skill-id>.instructions.md  (%d skills, scoped rules)\n", "copilot-rules", len(skills))
-				fmt.Fprintf(out, "%-10s -> dist/windsurf-rules/.windsurf/rules/<skill-id>.md  (%d skills, scoped rules)\n", "windsurf-rules", len(skills))
+				fmt.Fprintf(out, "%-10s -> dist/devin-rules/.devin/rules/<skill-id>.md  (%d skills, scoped rules)\n", "devin-rules", len(skills))
 			}
 			return nil
 		},
