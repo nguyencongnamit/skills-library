@@ -10,6 +10,6 @@
     {"rule": "dkr-no-secrets-in-env", "ecosystem": "docker"},
     {"rule": "dkr-no-add-remote", "ecosystem": "docker"},
     {"rule": "dkr-no-curl-pipe-sh", "ecosystem": "docker"},
-    {"rule": "dkr-apt-pin-versions", "ecosystem": "docker"}
+    {"rule": "dkr-apt-version-pin", "ecosystem": "docker"}
   ]
 }

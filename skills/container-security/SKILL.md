@@ -1,6 +1,6 @@
 ---
 id: container-security
-version: "1.5.0"
+version: "1.5.1"
 title: "Container Security"
 description: "Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm charts"
 category: hardening
@@ -16,7 +16,7 @@ token_budget:
   full: 3500
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices", "electron-security"]
-last_updated: "2026-06-10"
+last_updated: "2026-06-17"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -105,6 +105,7 @@ external_tools:
   to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
 - Use `latest`, `stable`, `slim`, or unversioned tags as the final image base —
   builds become non-reproducible and quietly pick up CVEs.
+  <!-- pattern: { id: dkr-explicit-latest-tag, severity: high, framework: dockerfile_hardening } -->
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with
   a checksum verify and `RUN` instead, or vendor the artifact).
 - Disable `automountServiceAccountToken` when the workload needs the K8s API,

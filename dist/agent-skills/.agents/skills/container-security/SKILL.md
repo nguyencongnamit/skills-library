@@ -35,7 +35,7 @@ Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm chart
 - Ship a **single shared client credential** (one mTLS cert/key, token, or kubeconfig bundled into every copy of a distributed app) to reach that daemon or cluster. Every install holds the same key — trivially extracted from the app bundle — so it grants every user identical access and cannot be revoked per-user. Issue per-user / per-session, short-lived, scoped credentials.
 - Run a tenant's container `privileged` on a host shared with other tenants, or attach tenant containers to a **shared external bridge network** — the first gives container-escape → co-tenant takeover, the second gives cross-tenant L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
-- Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs.
+- Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs. <!-- pattern: { id: dkr-explicit-latest-tag, severity: high, framework: dockerfile_hardening } -->
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with a checksum verify and `RUN` instead, or vendor the artifact).
 - Disable `automountServiceAccountToken` when the workload needs the K8s API, but DO disable it (`automountServiceAccountToken: false`) when it doesn't.
 - Use `hostNetwork: true`, `hostPID: true`, or `hostIPC: true` for application pods.

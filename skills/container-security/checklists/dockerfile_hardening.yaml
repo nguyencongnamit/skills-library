@@ -1,6 +1,6 @@
 schema_version: "1.0"
 framework: CIS Docker Benchmark v1.6 + NIST SP 800-190
-last_updated: "2026-06-03"
+last_updated: "2026-06-17"
 generated_from: skills/container-security/SKILL.md
 patterns:
   - id: dkr-multi-stage
@@ -62,3 +62,6 @@ patterns:
     severity: critical
     rule: Secrets are never passed via `ARG` — build args are recorded in `docker history` and image metadata. Use `RUN --mount=type=secret` (BuildKit) or runtime injection instead.
     cwe: 798
+  - id: dkr-explicit-latest-tag
+    severity: high
+    rule: Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs.

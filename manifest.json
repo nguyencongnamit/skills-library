@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "b4f050f583eb77e5fb51d41df602c4a39d037ed5b98d4b89acb501b722691d0b",
-      "size": 108407,
+      "sha256": "aef1d3ada75178ea8107de24e6c9f45087eec2814e12a6ccff8f196d797b81a7",
+      "size": 108506,
       "action": "unchanged"
     },
     {
@@ -134,13 +134,13 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/SKILL.md",
-      "sha256": "3aacc11a36d00e2113c160f9bd7189504e2e5bd4d5ff564e7e9584af4423f937",
-      "size": 6858,
+      "sha256": "d58c29aee5271810e8ebbd6723d9f9501ddfd174046038717506aefca1ae461f",
+      "size": 6957,
       "action": "unchanged"
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "f1061d236ffb44a023c1e3d9f0b60fe9afc562bd06184e8651ff3c50fe3502f7",
+      "sha256": "271a55ccbc40336d7e88ca18e38d36f82e9f029f04c7248406218fc1866834c9",
       "size": 944,
       "action": "unchanged"
     },
@@ -482,13 +482,13 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/SKILL.md",
-      "sha256": "934cd5cc9575ee0fec533c763200df3ebb98acb0f8da401932e5155d392d1ffb",
-      "size": 6833,
+      "sha256": "725df3fb540b2ea9b4463607563feda9029281091abae61b3fd89d5686ed6825",
+      "size": 6932,
       "action": "unchanged"
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "f1061d236ffb44a023c1e3d9f0b60fe9afc562bd06184e8651ff3c50fe3502f7",
+      "sha256": "271a55ccbc40336d7e88ca18e38d36f82e9f029f04c7248406218fc1866834c9",
       "size": 944,
       "action": "unchanged"
     },
@@ -812,8 +812,8 @@
     },
     {
       "path": "dist/copilot-rules/.github/instructions/container-security.instructions.md",
-      "sha256": "4c8b27ad3688c354260eb3344668d643083ec87a310ee1c717ae7a625c6f4045",
-      "size": 6642,
+      "sha256": "b3e5b1d157553728ec5563a0792f43fc1efcfa3eb29e324bee82db70ab09da59",
+      "size": 6741,
       "action": "unchanged"
     },
     {
@@ -1010,13 +1010,13 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/SKILL.md",
-      "sha256": "a740f4bd46d0f950134fb9baa9d981b974545f730b1259f85d884321b0bd982f",
-      "size": 6836,
+      "sha256": "15cf1915c6d21a5931e896bde955d6559237de029f32bfc4604d562e30924780",
+      "size": 6935,
       "action": "unchanged"
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "f1061d236ffb44a023c1e3d9f0b60fe9afc562bd06184e8651ff3c50fe3502f7",
+      "sha256": "271a55ccbc40336d7e88ca18e38d36f82e9f029f04c7248406218fc1866834c9",
       "size": 944,
       "action": "unchanged"
     },
@@ -1334,8 +1334,8 @@
     },
     {
       "path": "dist/cursor-rules/.cursor/rules/container-security.mdc",
-      "sha256": "4974246b7ecdb55f4099cd16a40231c4b9321026a8a7b5a497be9f0eca6cc9ec",
-      "size": 6907,
+      "sha256": "c8c128f2ea452cb8763959f1ba3074761bde83930101dbaf41a5503f4f044fc9",
+      "size": 7006,
       "action": "unchanged"
     },
     {
@@ -1508,8 +1508,8 @@
     },
     {
       "path": "dist/devin-rules/.devin/rules/container-security.md",
-      "sha256": "5ce00e3e6ba4327234cfc1e34bc6c43ede0059bbc608336a904eae82e4f3d5c9",
-      "size": 6643,
+      "sha256": "e7f0fa8c10791ff35f788ba8b63e2edcc55c4dc5b832e2f9fc043785bd8bbffb",
+      "size": 6742,
       "action": "unchanged"
     },
     {
@@ -1940,14 +1940,14 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "73108a79d499f0fbb22f040c1b9b0227579d1ff616465c95bc8218666f9b582f",
-      "size": 9085,
+      "sha256": "40fb89d05bfb741e19a91e7a4cd5df232aa38ee8d1114a1241a441dced928e8d",
+      "size": 9186,
       "action": "unchanged"
     },
     {
       "path": "skills/container-security/checklists/dockerfile_hardening.yaml",
-      "sha256": "504d57a70db3a3141b76f7c9c2ff9b9fef04ba37644cde8e0a5959d927367233",
-      "size": 3550,
+      "sha256": "50ad76c1c362f9125f559ef70a2d6b9b3c0ab589a63cb2d29be6c25e52d91b00",
+      "size": 3748,
       "action": "unchanged"
     },
     {
