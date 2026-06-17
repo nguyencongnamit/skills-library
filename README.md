@@ -639,15 +639,16 @@ skills-check gate Dockerfile --severity-floor high
 ```
 
 Arguments can be files or directories. A directory is walked — skipping
-`.git`, `node_modules`, `vendor`, and build output — and every Dockerfile,
-lockfile, and `.github/workflows/*.yml` beneath it is gated in one call:
+`.git`, `node_modules`, `vendor`, and build output — and gated in one call
+for both specialised findings (every Dockerfile, lockfile, and
+`.github/workflows/*.yml`) and secrets in any other text file:
 
 ```bash
-skills-check gate . --severity-floor high      # gate every config file in the repo
+skills-check gate . --severity-floor high      # gate the whole repo
 ```
 
-Secret scanning is only applied to files you name explicitly, not across a
-directory walk, so a repo gate stays fast and quiet.
+Empty, oversized, and binary files are skipped during the walk so the scan
+stays fast and avoids entropy false positives on images and build artefacts.
 
 ### Gate in pre-commit and CI
 

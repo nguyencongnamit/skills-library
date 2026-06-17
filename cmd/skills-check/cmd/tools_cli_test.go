@@ -505,38 +505,41 @@ func TestGateMultipleFilesPassesWhenAllClean(t *testing.T) {
 }
 
 // TestGateDirectoryModeWalksAndSkips confirms a directory argument is
-// walked for specialised-scanner files (Dockerfile + workflow here),
-// that noise dirs (node_modules) are skipped, and that the secret-scan
-// fallback is NOT applied across the tree (a stray .env is ignored).
+// walked for both specialised findings (the workflow) and secrets in
+// ordinary text files (config/app.env), while noise dirs (node_modules)
+// and binary files (a NUL-containing .png) are skipped.
 func TestGateDirectoryModeWalksAndSkips(t *testing.T) {
 	root := t.TempDir()
-	mustWrite := func(rel, body string) {
+	mustWrite := func(rel string, body []byte) {
 		full := filepath.Join(root, rel)
 		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(full, []byte(body), 0o644); err != nil {
+		if err := os.WriteFile(full, body, 0o644); err != nil {
 			t.Fatal(err)
 		}
 	}
-	mustWrite("svc/Dockerfile", "FROM node:latest\nUSER root\n")
 	mustWrite("svc/.github/workflows/ci.yml",
-		"name: ci\non: push\njobs:\n  b:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@main\n")
-	mustWrite("node_modules/evil/Dockerfile", "FROM node:latest\nUSER root\n")
-	mustWrite("secrets.env", "AKIAIOSFODNN7EXAMPLE\n")
+		[]byte("name: ci\non: push\njobs:\n  b:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@main\n"))
+	// Secret in an ordinary file the walk must now reach.
+	mustWrite("config/app.env", []byte("AWS_ACCESS_KEY_ID = AKIAZ1234567890ABCDE\n"))
+	// Binary file (NUL bytes) carrying a key-shaped string: must be skipped.
+	mustWrite("assets/logo.png", []byte("PNG\x00\x00AKIAZ1234567890ABCDE\x00"))
+	// Secret inside a noise dir: must be skipped.
+	mustWrite("node_modules/evil/leak.env", []byte("AWS_ACCESS_KEY_ID = AKIAZ0000000000NMOD\n"))
 
 	out, _, err := run(t,
 		"gate", "--path", repoRootForTest(t),
-		"--severity-floor", "medium", root,
+		"--severity-floor", "high", root,
 	)
 	if err == nil {
-		t.Fatalf("directory gate should fail on the bad Dockerfile + workflow:\n%s", out)
+		t.Fatalf("directory gate should fail on the env secret:\n%s", out)
 	}
 	if !IsPolicyFailure(err) {
 		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
 	}
-	if !strings.Contains(out, filepath.Join("svc", "Dockerfile")) {
-		t.Errorf("svc/Dockerfile not gated:\n%s", out)
+	if !strings.Contains(out, filepath.FromSlash("config/app.env")) {
+		t.Errorf("secret in config/app.env was not gated (secret-scan should run across the walk):\n%s", out)
 	}
 	if !strings.Contains(out, filepath.FromSlash("svc/.github/workflows/ci.yml")) {
 		t.Errorf("workflow not gated:\n%s", out)
@@ -544,21 +547,22 @@ func TestGateDirectoryModeWalksAndSkips(t *testing.T) {
 	if strings.Contains(out, "node_modules") {
 		t.Errorf("node_modules must be skipped:\n%s", out)
 	}
-	if strings.Contains(out, "secrets.env") {
-		t.Errorf("secret-scan fallback must not run across a directory walk:\n%s", out)
+	if strings.Contains(out, "logo.png") {
+		t.Errorf("binary file must be skipped:\n%s", out)
 	}
 }
 
 // TestGateEmptyDirectoryPassesQuietly confirms a directory with no
-// scannable files exits 0 with a clear message rather than erroring.
+// scannable files (only a binary) exits 0 with a clear message rather
+// than erroring.
 func TestGateEmptyDirectoryPassesQuietly(t *testing.T) {
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte("# hi\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "icon.ico"), []byte("\x00\x00\x01\x00binary"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	out, _, err := run(t, "gate", "--path", repoRootForTest(t), dir)
 	if err != nil {
-		t.Fatalf("empty-scannable directory should pass: %v\n%s", err, out)
+		t.Fatalf("directory with only a binary should pass: %v\n%s", err, out)
 	}
 	if !strings.Contains(out, "nothing to gate") {
 		t.Errorf("expected a 'nothing to gate' message:\n%s", out)

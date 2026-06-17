@@ -13,6 +13,7 @@
 package tools
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"io/fs"
@@ -1140,15 +1141,17 @@ var gateNoiseDirs = map[string]bool{
 
 // ExpandGateFiles flattens a mix of file and directory arguments into the
 // concrete file list the gate should scan. File arguments pass through
-// unchanged (so naming a file explicitly always scans it, including the
-// secret-scan fallback). A directory argument is walked — skipping
-// gateNoiseDirs — and every file a SPECIALISED scanner claims
-// (Dockerfiles, lockfiles, .github/workflows/*.yml) is collected.
+// unchanged (so naming a file explicitly always scans it). A directory
+// argument is walked, skipping gateNoiseDirs, and collects:
 //
-// The secret-scan fallback is deliberately NOT applied across a walked
-// tree: implicitly DLP-scanning every source file in a repository is
-// slow and noisy and would surprise anyone who just meant "check my
-// config files". To secret-scan a file, name it directly.
+//   - every file a specialised scanner claims (Dockerfiles, lockfiles,
+//     .github/workflows/*.yml), and
+//   - every other file, for the secret-scan fallback — EXCEPT empty,
+//     oversized (> maxFileScanBytes), and binary files. scan_secrets has
+//     no binary detection of its own and errors on oversized input, so
+//     filtering here keeps a repo walk fast and stops a stray image or
+//     build artefact from aborting the gate or spraying entropy false
+//     positives.
 //
 // The returned list preserves argument order and, within a directory,
 // lexical walk order, so a gate run is deterministic.
@@ -1173,11 +1176,21 @@ func ExpandGateFiles(args []string) ([]string, error) {
 				}
 				return nil
 			}
-			// Only specialised scanners run in directory mode; the
-			// scan_secrets fallback is reserved for explicitly-named files.
 			if scan, _ := pickScan(p); scan != "scan_secrets" {
+				// Specialised config file: always gated.
 				files = append(files, p)
+				return nil
 			}
+			// Secret-scan fallback across the tree: skip empty, oversized,
+			// and binary files.
+			fi, e := d.Info()
+			if e != nil || fi.Size() == 0 || fi.Size() > maxFileScanBytes {
+				return nil
+			}
+			if isProbablyBinary(p) {
+				return nil
+			}
+			files = append(files, p)
 			return nil
 		})
 		if walkErr != nil {
@@ -1185,6 +1198,24 @@ func ExpandGateFiles(args []string) ([]string, error) {
 		}
 	}
 	return files, nil
+}
+
+// isProbablyBinary reports whether the file at p looks binary, using the
+// classic NUL-byte heuristic over the first 8 KiB. It catches images,
+// fonts, and compiled artefacts — including extensionless ones an
+// extension denylist would miss — so the directory-mode secret scan
+// doesn't waste time or emit entropy false positives on them. A read
+// error is treated as binary so an unreadable file is skipped, not
+// handed to the scanner.
+func isProbablyBinary(p string) bool {
+	f, err := os.Open(p)
+	if err != nil {
+		return true
+	}
+	defer f.Close()
+	buf := make([]byte, 8192)
+	n, _ := f.Read(buf)
+	return bytes.IndexByte(buf[:n], 0) >= 0
 }
 
 func pickScan(filePath string) (string, error) {
