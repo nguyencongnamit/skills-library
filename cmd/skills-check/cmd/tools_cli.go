@@ -27,11 +27,9 @@
 package cmd
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -471,63 +469,26 @@ func printScanSecretsText(w io.Writer, label string, res *tools.ScanSecretsResul
 	}
 }
 
-// scanSecretsDir walks dir recursively and runs ScanSecrets on every
-// regular text file beneath it. Non-regular entries (symlinks,
-// sockets, devices) are skipped so the walk cannot be redirected out
-// of the tree; binary files are skipped via a NUL-byte heuristic.
-// Per-file errors (unreadable, over the size cap, inside a sensitive
-// directory) are reported on stderr and skipped rather than aborting.
+// scanSecretsDir runs ScanSecrets on every text file beneath dir,
+// discovered via the shared tools.WalkScanFiles walker (noise dirs,
+// non-regular entries, and empty/oversized/binary files are pruned
+// there). Per-file scan errors — e.g. a path inside a sensitive
+// directory — are reported on stderr and skipped rather than aborting.
 func scanSecretsDir(c *cobra.Command, lib *tools.Library, dir string) ([]*tools.ScanSecretsResult, error) {
-	results := make([]*tools.ScanSecretsResult, 0)
-	walkErr := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
-			return nil
-		}
-		if d.IsDir() || !d.Type().IsRegular() {
-			return nil
-		}
-		isText, err := isProbablyTextFile(path)
-		if err != nil {
-			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
-			return nil
-		}
-		if !isText {
-			return nil
-		}
+	files, err := tools.WalkScanFiles(dir, nil)
+	if err != nil {
+		return nil, fmt.Errorf("scan-secrets: walk %s: %w", dir, err)
+	}
+	results := make([]*tools.ScanSecretsResult, 0, len(files))
+	for _, path := range files {
 		res, err := lib.ScanSecrets("", path)
 		if err != nil {
 			fmt.Fprintf(c.ErrOrStderr(), "scan-secrets: skip %s: %v\n", path, err)
-			return nil
+			continue
 		}
 		results = append(results, res)
-		return nil
-	})
-	if walkErr != nil {
-		return nil, fmt.Errorf("scan-secrets: walk %s: %w", dir, walkErr)
 	}
 	return results, nil
-}
-
-// isProbablyTextFile reports whether path looks like a text file using
-// the classic git heuristic: read a prefix and treat the file as
-// binary if it contains a NUL byte. Empty files are treated as
-// non-text since there is nothing to scan.
-func isProbablyTextFile(path string) (bool, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return false, err
-	}
-	defer f.Close()
-	buf := make([]byte, 8000)
-	n, err := f.Read(buf)
-	if err != nil && err != io.EOF {
-		return false, err
-	}
-	if n == 0 {
-		return false, nil
-	}
-	return !bytes.ContainsRune(buf[:n], 0), nil
 }
 
 // =============================================================================
@@ -667,35 +628,19 @@ func printScanDependenciesText(w io.Writer, label string, res *tools.ScanDepende
 	}
 }
 
-// discoverLockfiles walks dir recursively and returns the absolute
-// paths of every recognised dependency lockfile, skipping common
-// vendor directories (node_modules, vendor, .git) so a project's own
+// discoverLockfiles returns the paths of every recognised dependency
+// lockfile beneath dir, via the shared tools.WalkScanFiles walker. The
+// keep predicate narrows the walk to known lockfile names; the walker
+// handles the noise-dir pruning (node_modules, vendor, build output, …)
+// and the non-regular / oversized / binary skips so a project's own
 // manifests are scanned without descending into installed-dependency
-// trees. Non-regular entries are skipped so the walk cannot be
-// redirected out of the tree via a symlink.
+// trees.
 func discoverLockfiles(dir string) ([]string, error) {
-	var found []string
-	walkErr := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return nil
-		}
-		if d.IsDir() {
-			switch d.Name() {
-			case "node_modules", "vendor", ".git":
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		if !d.Type().IsRegular() {
-			return nil
-		}
-		if knownLockfileName(d.Name()) {
-			found = append(found, path)
-		}
-		return nil
+	found, err := tools.WalkScanFiles(dir, func(path string) bool {
+		return knownLockfileName(filepath.Base(path))
 	})
-	if walkErr != nil {
-		return nil, fmt.Errorf("scan-dependencies: walk %s: %w", dir, walkErr)
+	if err != nil {
+		return nil, fmt.Errorf("scan-dependencies: walk %s: %w", dir, err)
 	}
 	return found, nil
 }
