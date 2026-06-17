@@ -788,7 +788,7 @@ unpinned actions, missing permissions, and credential exposure.
 // =============================================================================
 
 func policyCheckCmd() *cobra.Command {
-	var repoPath, severityFloor, format, sarifBase string
+	var repoPath, severityFloor, format, sarifBase, report string
 	c := &cobra.Command{
 		Use:     "gate <file-or-dir>...",
 		Aliases: []string{"policy-check"},
@@ -808,7 +808,9 @@ Empty, oversized, and binary files are skipped during the walk.
 This is the canonical "fail the build" CLI entry point. Wrap it in a
 shell call from your pre-commit or CI step.
 
-(Formerly named "policy-check"; that name still works as an alias.)`,
+(Formerly named "policy-check"; that name still works as an alias.)
+
+` + reportHelpParagraph,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := validateFormat(format, true); err != nil {
@@ -849,6 +851,24 @@ shell call from your pre-commit or CI step.
 					failures++
 					totalFindings += len(res.Findings)
 				}
+			}
+			if report != "" {
+				// HTML + PDF report covering every gated file. Written
+				// here, before the exit-code decision below, so a FAILING
+				// gate still produces its report. --report-dir takes
+				// precedence over --format (which targets stdout).
+				rep := newReport("gate", args)
+				for _, res := range results {
+					rep.Sections = append(rep.Sections, gateSection(res))
+				}
+				if err := writeReport(c, report, rep); err != nil {
+					return err
+				}
+				if failures > 0 {
+					c.SilenceUsage = true
+					return &policyFailureError{count: totalFindings, floor: floor}
+				}
+				return nil
 			}
 			switch format {
 			case "json":
@@ -907,6 +927,7 @@ shell call from your pre-commit or CI step.
 	c.Flags().StringVar(&sarifBase, "sarif-base", ".",
 		"directory SARIF artifact URIs are made relative to (files outside it fall back to absolute file:// URIs); only used with --format sarif")
 	addFormatFlag(c, &format, true)
+	addReportFlag(c, &report)
 	return c
 }
 

@@ -391,6 +391,37 @@ func dockerfileSection(label string, res *tools.ScanDockerfileResult) reportSect
 	return s
 }
 
+// gateSection renders one gated file (a PolicyCheckResult) as a report
+// section. gate flattens every scanner into PolicyCheckFinding, so the
+// section is built from that homogeneous shape: line-based findings show
+// "rule · line N", dependency findings show "rule · pkg@ver".
+func gateSection(res *tools.PolicyCheckResult) reportSection {
+	s := reportSection{
+		Title:    res.FilePath,
+		Subtitle: fmt.Sprintf("scanner=%s, floor=%s", res.Scan, res.SeverityFloor),
+	}
+	for _, f := range res.Findings {
+		loc := f.RuleID
+		switch {
+		case f.Line > 0:
+			loc = fmt.Sprintf("%s · line %d", f.RuleID, f.Line)
+		case f.Package != "":
+			pv := f.Package
+			if f.Version != "" {
+				pv += "@" + f.Version
+			}
+			loc = fmt.Sprintf("%s · %s", f.RuleID, pv)
+		}
+		s.Findings = append(s.Findings, reportFinding{
+			Severity: f.Severity,
+			Title:    f.Title,
+			Location: loc,
+			Detail:   f.Snippet,
+		})
+	}
+	return s
+}
+
 func githubActionsSection(label string, res *tools.ScanGitHubActionsResult) reportSection {
 	s := reportSection{Title: label}
 	for _, f := range res.Findings {

@@ -569,6 +569,43 @@ func TestGateEmptyDirectoryPassesQuietly(t *testing.T) {
 	}
 }
 
+// TestGateReportDir confirms gate --report-dir writes an HTML + PDF
+// report for a directory of files AND still fails the build (the report
+// is written before the exit-code decision, like SARIF).
+func TestGateReportDir(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "Dockerfile"),
+		[]byte("FROM node:latest\nUSER root\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	reportDir := t.TempDir()
+	out, _, err := run(t, "gate",
+		"--path", repoRootForTest(t), "--severity-floor", "medium",
+		"--report-dir", reportDir, root,
+	)
+	if err == nil {
+		t.Fatalf("gate --report-dir should still fail on the bad Dockerfile:\n%s", out)
+	}
+	if !IsPolicyFailure(err) {
+		t.Errorf("expected policy-failure sentinel, got %T: %v", err, err)
+	}
+	html := filepath.Join(reportDir, "gate-report.html")
+	pdf := filepath.Join(reportDir, "gate-report.pdf")
+	for _, p := range []string{html, pdf} {
+		fi, statErr := os.Stat(p)
+		if statErr != nil {
+			t.Fatalf("expected report file %s: %v", p, statErr)
+		}
+		if fi.Size() == 0 {
+			t.Errorf("report file %s is empty", p)
+		}
+	}
+	body, _ := os.ReadFile(html)
+	if !strings.Contains(string(body), "Dockerfile") {
+		t.Errorf("HTML report does not mention the scanned Dockerfile:\n%s", body)
+	}
+}
+
 func TestPolicyFailureSentinelIsDistinguishable(t *testing.T) {
 	// IsPolicyFailure is exported so external callers (and a future
 	// outer wrapper) can branch on "findings found" vs "tool errored".
