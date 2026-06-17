@@ -1139,22 +1139,65 @@ var gateNoiseDirs = map[string]bool{
 	".terraform": true, ".gradle": true, ".mvn": true,
 }
 
+// WalkScanFiles walks root recursively and returns the regular text
+// files beneath it that keep selects, applying the filters every
+// directory-mode scanner needs: gateNoiseDirs are pruned; non-regular
+// entries (symlinks, sockets, devices) are skipped so the walk can't be
+// redirected out of the tree; and empty, oversized (> maxFileScanBytes),
+// and binary files are dropped — scan_secrets has no binary detection of
+// its own and errors on oversized input, so filtering here keeps a repo
+// walk fast and stops a stray image or build artefact from aborting a
+// scan or spraying entropy false positives.
+//
+// A nil keep accepts every surviving file; pass a predicate (e.g. "is
+// this a lockfile?") to narrow the set. The keep check runs before the
+// size/binary I/O so a name-based predicate stays cheap. Unreadable
+// entries are skipped rather than aborting the walk.
+//
+// This is the single walker behind `gate <dir>`, `scan-secrets <dir>`,
+// and `scan-dependencies <dir>`, so all three prune the same directories
+// and binaries.
+func WalkScanFiles(root string, keep func(path string) bool) ([]string, error) {
+	var files []string
+	err := filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if d.IsDir() {
+			if gateNoiseDirs[d.Name()] {
+				return fs.SkipDir
+			}
+			return nil
+		}
+		if !d.Type().IsRegular() {
+			return nil
+		}
+		if keep != nil && !keep(p) {
+			return nil
+		}
+		fi, e := d.Info()
+		if e != nil || fi.Size() == 0 || fi.Size() > maxFileScanBytes {
+			return nil
+		}
+		if isProbablyBinary(p) {
+			return nil
+		}
+		files = append(files, p)
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
 // ExpandGateFiles flattens a mix of file and directory arguments into the
 // concrete file list the gate should scan. File arguments pass through
 // unchanged (so naming a file explicitly always scans it). A directory
-// argument is walked, skipping gateNoiseDirs, and collects:
-//
-//   - every file a specialised scanner claims (Dockerfiles, lockfiles,
-//     .github/workflows/*.yml), and
-//   - every other file, for the secret-scan fallback — EXCEPT empty,
-//     oversized (> maxFileScanBytes), and binary files. scan_secrets has
-//     no binary detection of its own and errors on oversized input, so
-//     filtering here keeps a repo walk fast and stops a stray image or
-//     build artefact from aborting the gate or spraying entropy false
-//     positives.
-//
-// The returned list preserves argument order and, within a directory,
-// lexical walk order, so a gate run is deterministic.
+// argument is walked via WalkScanFiles with a nil predicate: gate scans
+// every text file under it, and PolicyCheck routes each to its
+// specialised scanner (Dockerfile / lockfile / workflow) or to the
+// secret scan. The returned list preserves argument order.
 func ExpandGateFiles(args []string) ([]string, error) {
 	var files []string
 	for _, arg := range args {
@@ -1166,36 +1209,11 @@ func ExpandGateFiles(args []string) ([]string, error) {
 			files = append(files, arg)
 			continue
 		}
-		walkErr := filepath.WalkDir(arg, func(p string, d fs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if d.IsDir() {
-				if gateNoiseDirs[d.Name()] {
-					return fs.SkipDir
-				}
-				return nil
-			}
-			if scan, _ := pickScan(p); scan != "scan_secrets" {
-				// Specialised config file: always gated.
-				files = append(files, p)
-				return nil
-			}
-			// Secret-scan fallback across the tree: skip empty, oversized,
-			// and binary files.
-			fi, e := d.Info()
-			if e != nil || fi.Size() == 0 || fi.Size() > maxFileScanBytes {
-				return nil
-			}
-			if isProbablyBinary(p) {
-				return nil
-			}
-			files = append(files, p)
-			return nil
-		})
-		if walkErr != nil {
-			return nil, walkErr
+		found, err := WalkScanFiles(arg, nil)
+		if err != nil {
+			return nil, err
 		}
+		files = append(files, found...)
 	}
 	return files, nil
 }
