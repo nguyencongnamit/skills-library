@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 )
 
 // writeTempFile drops `body` into a fresh dir under t.TempDir and
@@ -189,7 +191,7 @@ RUN apt-get update && apt-get install curl
 		"dkr-no-secrets-in-env":   false,
 		"dkr-no-add-remote":       false,
 		"dkr-no-curl-pipe-sh":     false,
-		"dkr-apt-pin-versions":    false,
+		"dkr-apt-version-pin":     false,
 	}
 	for _, f := range res.Findings {
 		if _, ok := want[f.RuleID]; ok {
@@ -507,5 +509,39 @@ func TestWalkScanFiles(t *testing.T) {
 	}
 	if len(goOnly) != 1 || !has(goOnly, "app.go") {
 		t.Errorf("keep predicate (*.go): want app.go only, got %v", goOnly)
+	}
+}
+
+// TestDockerfileRuleIDsTraceToSkill is the drift guard: every rule the
+// dockerfile scanner can emit MUST have a matching entry in the
+// container-security skill's checklist YAML (dkr-* id). This keeps the
+// gate's findings traceable to documented skill knowledge — if someone
+// adds a Go check without a skill entry (or renames one), this fails.
+// (GitHub Actions has an analogous but trickier AST/regex overlap that
+// is tracked separately for the YAML-rule migration.)
+func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
+	root := repoRoot(t)
+	data, err := os.ReadFile(filepath.Join(root,
+		"skills", "container-security", "checklists", "dockerfile_hardening.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc struct {
+		Patterns []struct {
+			ID string `yaml:"id"`
+		} `yaml:"patterns"`
+	}
+	if err := yaml.Unmarshal(data, &doc); err != nil {
+		t.Fatal(err)
+	}
+	skillIDs := map[string]bool{}
+	for _, p := range doc.Patterns {
+		skillIDs[p.ID] = true
+	}
+	for _, c := range dockerfileChecks {
+		if !skillIDs[c.id] {
+			t.Errorf("dockerfile scanner emits %q but the container-security checklist YAML "+
+				"has no such entry — add a marker in SKILL.md (regenerate) or rename the Go id", c.id)
+		}
 	}
 }

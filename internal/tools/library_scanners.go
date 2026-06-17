@@ -600,7 +600,7 @@ var dockerfileChecks = []dockerfileCheck{
 		pattern:  regexp.MustCompile(`(?im)(?:curl|wget)\s+[^|]*\|\s*(?:ba)?sh\b`),
 	},
 	{
-		id:       "dkr-apt-pin-versions",
+		id:       "dkr-apt-version-pin",
 		severity: "medium",
 		title:    "apt-get install without version pins",
 		fix:      "Pin every package: `apt-get install -y --no-install-recommends pkg=1.2.3-4`.",
@@ -708,8 +708,8 @@ func (l *Library) ScanDockerfile(filePath string) (*ScanDockerfileResult, error)
 	// already populate `flagged`, so this pass only ADDS findings
 	// the regex layer missed.
 	joinedRules := map[string]int{
-		"dkr-no-curl-pipe-sh":  0,
-		"dkr-apt-pin-versions": 0,
+		"dkr-no-curl-pipe-sh": 0,
+		"dkr-apt-version-pin": 0,
 	}
 	for _, ln := range ast.Lines {
 		for _, c := range dockerfileChecks {
