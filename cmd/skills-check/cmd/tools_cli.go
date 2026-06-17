@@ -854,12 +854,11 @@ scan-secrets for any other file, and returns a CI-friendly exit code:
 0 when nothing meets the severity floor, 1 when at least one finding
 does. severity-floor defaults to "high".
 
-Arguments may be files or directories. A named file is always scanned
-(including the secret-scan fallback). A directory is walked — skipping
-.git, node_modules, vendor, build output, etc. — and every file a
-specialised scanner recognises (Dockerfiles, lockfiles, and
-.github/workflows/*.yml) is gated. Secret scanning is not applied
-across a directory; name a file to secret-scan it.
+Arguments may be files or directories. A named file is always scanned.
+A directory is walked — skipping .git, node_modules, vendor, build
+output, etc. — and gated for both specialised findings (Dockerfiles,
+lockfiles, .github/workflows/*.yml) and secrets in any other text file.
+Empty, oversized, and binary files are skipped during the walk.
 
 This is the canonical "fail the build" CLI entry point. Wrap it in a
 shell call from your pre-commit or CI step.
@@ -882,7 +881,7 @@ shell call from your pre-commit or CI step.
 			}
 			if len(files) == 0 {
 				fmt.Fprintf(c.OutOrStdout(),
-					"gate: no Dockerfiles, lockfiles, or workflows found under %s; nothing to gate.\n",
+					"gate: no scannable files found under %s; nothing to gate.\n",
 					strings.Join(args, " "))
 				return nil
 			}
