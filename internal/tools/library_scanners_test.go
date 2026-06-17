@@ -457,3 +457,55 @@ func TestPickScanRoutesGitHubWorkflows(t *testing.T) {
 		t.Errorf("pickScan(/repo/notes.md) = %q, err %v; want scan_secrets, nil", got, err)
 	}
 }
+
+// TestWalkScanFiles locks the shared directory walker behind gate /
+// scan-secrets / scan-dependencies: noise dirs, binary, and empty files
+// are pruned, and a keep predicate narrows the set.
+func TestWalkScanFiles(t *testing.T) {
+	root := t.TempDir()
+	mk := func(rel string, body []byte) {
+		full := filepath.Join(root, rel)
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(full, body, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	mk("src/app.go", []byte("package main\n"))
+	mk("README.md", []byte("# hi\n"))
+	mk("empty.txt", nil)                           // empty -> skipped
+	mk("logo.png", []byte("PNG\x00\x00data"))      // binary (NUL) -> skipped
+	mk("node_modules/dep/index.js", []byte("x\n")) // noise dir -> skipped
+	mk(".git/config", []byte("[core]\n"))          // noise dir -> skipped
+
+	has := func(files []string, base string) bool {
+		for _, f := range files {
+			if filepath.Base(f) == base {
+				return true
+			}
+		}
+		return false
+	}
+
+	all, err := WalkScanFiles(root, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(all) != 2 || !has(all, "app.go") || !has(all, "README.md") {
+		t.Fatalf("nil keep: want app.go + README.md only, got %v", all)
+	}
+	for _, bad := range []string{"empty.txt", "logo.png", "index.js", "config"} {
+		if has(all, bad) {
+			t.Errorf("%s should have been pruned (empty/binary/noise-dir); got %v", bad, all)
+		}
+	}
+
+	goOnly, err := WalkScanFiles(root, func(p string) bool { return strings.HasSuffix(p, ".go") })
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(goOnly) != 1 || !has(goOnly, "app.go") {
+		t.Errorf("keep predicate (*.go): want app.go only, got %v", goOnly)
+	}
+}
