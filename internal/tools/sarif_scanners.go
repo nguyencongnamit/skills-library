@@ -67,18 +67,7 @@ func ScanDependenciesSARIF(res *ScanDependenciesResult) *SARIFLog {
 		})
 	}
 	sortRulesAndResults(rules, ruleIndex, results)
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: results,
-		}},
-	}
+	return sarifLogWithCWE(rules, results)
 }
 
 func depsProperties(f DependencyFinding) map[string]any {
@@ -153,18 +142,7 @@ func ScanGitHubActionsSARIF(res *ScanGitHubActionsResult) *SARIFLog {
 		})
 	}
 	sortRulesAndResults(rules, ruleIndex, results)
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: results,
-		}},
-	}
+	return sarifLogWithCWE(rules, results)
 }
 
 // ScanDockerfileSARIF converts a ScanDockerfileResult into a SARIF
@@ -211,18 +189,7 @@ func ScanDockerfileSARIF(res *ScanDockerfileResult) *SARIFLog {
 		})
 	}
 	sortRulesAndResults(rules, ruleIndex, results)
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: results,
-		}},
-	}
+	return sarifLogWithCWE(rules, results)
 }
 
 // sortRulesAndResults sorts the rules slice alphabetically by ID and

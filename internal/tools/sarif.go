@@ -43,9 +43,26 @@ type SARIFLog struct {
 }
 
 // SARIFRun is one analyzer invocation.
+//
+// Taxonomies carries the CWE taxonomy referenced by this run's rules (DQ.2):
+// the set of weakness identifiers the findings map to, so a SARIF consumer
+// can group/filter by CWE. Omitted when no rule carries a CWE.
 type SARIFRun struct {
-	Tool    SARIFTool     `json:"tool"`
-	Results []SARIFResult `json:"results"`
+	Tool       SARIFTool       `json:"tool"`
+	Results    []SARIFResult   `json:"results"`
+	Taxonomies []SARIFTaxonomy `json:"taxonomies,omitempty"`
+}
+
+// SARIFTaxonomy is a named set of taxa (SARIF 2.1.0 §3.19). We emit a single
+// "CWE" taxonomy listing every CWE the run's rules reference.
+type SARIFTaxonomy struct {
+	Name string       `json:"name"`
+	Taxa []SARIFTaxon `json:"taxa"`
+}
+
+// SARIFTaxon is one taxonomy entry — here, one CWE identifier (e.g. "CWE-798").
+type SARIFTaxon struct {
+	ID string `json:"id"`
 }
 
 // SARIFTool wraps the analyzer's identity.
@@ -251,18 +268,7 @@ func ScanSecretsSARIF(res *ScanSecretsResult) *SARIFLog {
 	for i := range results {
 		results[i].RuleIndex = idxAfterSort[results[i].RuleID]
 	}
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: results,
-		}},
-	}
+	return sarifLogWithCWE(rules, results)
 }
 
 // CheckDependencySARIF converts a CheckDependencyResult into a SARIF
@@ -383,18 +389,7 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 			},
 		})
 	}
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: results,
-		}},
-	}
+	return sarifLogWithCWE(rules, results)
 }
 
 // PolicyCheckSARIF converts the aggregated results of a `gate` run —
@@ -518,18 +513,7 @@ func PolicyCheckSARIF(results []*PolicyCheckResult, baseDir string) *SARIFLog {
 		out[i].RuleIndex = idxAfterSort[out[i].RuleID]
 	}
 
-	return &SARIFLog{
-		Schema:  SARIFSchema,
-		Version: SARIFVersion,
-		Runs: []SARIFRun{{
-			Tool: SARIFTool{Driver: SARIFDriver{
-				Name:           SARIFToolName,
-				InformationURI: "https://github.com/namncqualgo/skills-library",
-				Rules:          rules,
-			}},
-			Results: out,
-		}},
-	}
+	return sarifLogWithCWE(rules, out)
 }
 
 // fileURI converts a local absolute path to an RFC 3986 file:// URI.
