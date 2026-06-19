@@ -29,6 +29,8 @@ Thumbs.db
 *-OSS-Strategy-Report.pdf
 /test-report.pdf
 /secure-code-team-guide.pdf
+*-team-guide.html
+*-team-guide.pdf
 
 # Python build/test
 __pycache__/
