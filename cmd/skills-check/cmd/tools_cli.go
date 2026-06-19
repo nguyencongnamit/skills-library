@@ -858,17 +858,19 @@ for.`,
 			if err != nil {
 				return fmt.Errorf("sbom: stat %s: %w", target, err)
 			}
-			// GenerateSBOM walks a directory; scope the allow-list to the
-			// directory (or, for a single lockfile target, its parent) so
-			// readScanFile permits the inventory reads.
-			root := targetAbs
+			// A directory target inventories every lockfile beneath it; a
+			// single lockfile target inventories only that file (so e.g.
+			// `sbom go.sum` describes the project's own deps, not sibling
+			// fixtures). Either way the allow-list is scoped to the directory
+			// so readScanFile permits the reads.
+			allowRoot := targetAbs
 			if !info.IsDir() {
-				root = filepath.Dir(targetAbs)
+				allowRoot = filepath.Dir(targetAbs)
 			}
-			if err := lib.SetAllowedRoots([]string{root}); err != nil {
-				return fmt.Errorf("sbom: scope library to %s: %w", root, err)
+			if err := lib.SetAllowedRoots([]string{allowRoot}); err != nil {
+				return fmt.Errorf("sbom: scope library to %s: %w", allowRoot, err)
 			}
-			bom, err := lib.GenerateSBOM(root)
+			bom, err := lib.GenerateSBOM(targetAbs)
 			if err != nil {
 				return err
 			}

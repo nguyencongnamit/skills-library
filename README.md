@@ -6,6 +6,8 @@
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
+[![CodeQL](https://github.com/namncqualgo/skills-library/actions/workflows/codeql.yml/badge.svg)](https://github.com/namncqualgo/skills-library/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/namncqualgo/skills-library/badge)](https://securityscorecards.dev/viewer/?uri=github.com/namncqualgo/skills-library)
 
 **secure-code** is a structured, machine-readable library of security skills and
 supply-chain vulnerability intelligence designed to be embedded directly into AI

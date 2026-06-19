@@ -1,0 +1,47 @@
+name: SBOM
+
+# Generate a CycloneDX 1.5 software bill of materials for the project's own
+# Go dependencies, using the engine's built-in `skills-check sbom` (DQ-H.4) —
+# the tool we ship for users runs against ourselves. Deterministic and
+# offline; the artifact is diffable across runs. Naming go.sum (not ".")
+# scopes the BOM to the project's dependencies and excludes eval-fixture
+# lockfiles elsewhere in the tree.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate CycloneDX SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.22"
+
+      - name: Build skills-check
+        run: go build -o skills-check ./cmd/skills-check
+
+      - name: Generate SBOM (project Go dependencies)
+        run: ./skills-check sbom go.sum --format json > sbom.cdx.json
+
+      - name: Summary
+        run: ./skills-check sbom go.sum
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cdx.json
+          retention-days: 30

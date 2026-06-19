@@ -450,6 +450,37 @@ func TestSBOMTextSummary(t *testing.T) {
 	}
 }
 
+// TestSBOMSingleFileScopesToThatFile confirms naming one lockfile
+// inventories only it, even when sibling lockfiles exist — so `sbom
+// go.sum` describes the project's own deps, not fixture lockfiles that
+// happen to live in the same tree.
+func TestSBOMSingleFileScopesToThatFile(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "go.sum"),
+		[]byte("github.com/stretchr/testify v1.8.4 h1:abc=\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// A sibling npm lockfile that must NOT appear when go.sum is named.
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.0"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "sbom", "--path", repoRootForTest(t), "--format", "json", filepath.Join(dir, "go.sum"))
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var bom tools.SBOM
+	if err := json.Unmarshal([]byte(out), &bom); err != nil {
+		t.Fatalf("invalid JSON: %v\n%s", err, out)
+	}
+	if len(bom.Components) != 1 {
+		t.Fatalf("expected only go.sum's 1 component, got %d:\n%s", len(bom.Components), out)
+	}
+	if !strings.HasPrefix(bom.Components[0].PURL, "pkg:golang/") {
+		t.Errorf("expected the go component, got purl %q", bom.Components[0].PURL)
+	}
+}
+
 // TestScanReachabilityImportedJSON confirms `scan-reachability --format
 // json` flags a malicious lockfile package as imported when first-party
 // source actually imports it, with the import site.
