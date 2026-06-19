@@ -73,6 +73,92 @@ type npmV1Entry struct {
 	Dependencies map[string]npmV1Entry `json:"dependencies,omitempty"`
 }
 
+// NPMPackageLockGraph parses a package-lock.json / npm-shrinkwrap.json (v1,
+// v2, or v3) into a package-name -> []dependency-name adjacency map: the
+// declared edges of the dependency graph. Versions/ranges are dropped — only
+// reachability edges by name are kept. Used by DQ-H.3 transitive reachability.
+//
+// v2/v3 read the flat `packages` map (each entry's dependencies +
+// optionalDependencies + peerDependencies; the install path is reduced to the
+// bare package name, matching how source imports name a package). v1 reads the
+// recursive `dependencies` tree, whose edges are each node's `requires`.
+// devDependencies are intentionally excluded — npm does not install a
+// dependency's dev deps, so they are not part of the runtime reachability graph.
+func NPMPackageLockGraph(body []byte) (map[string][]string, error) {
+	var doc struct {
+		Packages map[string]struct {
+			Dependencies         map[string]string `json:"dependencies,omitempty"`
+			OptionalDependencies map[string]string `json:"optionalDependencies,omitempty"`
+			PeerDependencies     map[string]string `json:"peerDependencies,omitempty"`
+		} `json:"packages,omitempty"`
+		Dependencies map[string]npmV1GraphEntry `json:"dependencies,omitempty"`
+	}
+	if err := json.Unmarshal(body, &doc); err != nil {
+		return nil, fmt.Errorf("npm: parse package-lock graph: %w", err)
+	}
+	g := map[string]map[string]bool{}
+	add := func(from, to string) {
+		if from == "" || to == "" {
+			return
+		}
+		if g[from] == nil {
+			g[from] = map[string]bool{}
+		}
+		g[from][to] = true
+	}
+	if len(doc.Packages) > 0 {
+		for k, e := range doc.Packages {
+			from := npmNameFromLockKey(k)
+			for dep := range e.Dependencies {
+				add(from, dep)
+			}
+			for dep := range e.OptionalDependencies {
+				add(from, dep)
+			}
+			for dep := range e.PeerDependencies {
+				add(from, dep)
+			}
+		}
+	} else {
+		var walk func(map[string]npmV1GraphEntry)
+		walk = func(deps map[string]npmV1GraphEntry) {
+			for name, e := range deps {
+				for req := range e.Requires {
+					add(name, req)
+				}
+				walk(e.Dependencies)
+			}
+		}
+		walk(doc.Dependencies)
+	}
+	out := make(map[string][]string, len(g))
+	for from, tos := range g {
+		lst := make([]string, 0, len(tos))
+		for t := range tos {
+			lst = append(lst, t)
+		}
+		sort.Strings(lst)
+		out[from] = lst
+	}
+	return out, nil
+}
+
+type npmV1GraphEntry struct {
+	Requires     map[string]string          `json:"requires,omitempty"`
+	Dependencies map[string]npmV1GraphEntry `json:"dependencies,omitempty"`
+}
+
+// npmNameFromLockKey reduces a v2/v3 packages-map key ("node_modules/foo",
+// "node_modules/a/node_modules/b") to the bare package name ("foo", "b"). The
+// root key "" maps to "".
+func npmNameFromLockKey(k string) string {
+	name := strings.TrimPrefix(k, "node_modules/")
+	if i := strings.LastIndex(name, "/node_modules/"); i >= 0 {
+		name = name[i+len("/node_modules/"):]
+	}
+	return name
+}
+
 func flattenNPMv1(deps map[string]npmV1Entry, prefix string, out *[]Dependency) {
 	if len(deps) == 0 {
 		return

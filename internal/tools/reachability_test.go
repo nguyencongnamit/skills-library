@@ -189,6 +189,43 @@ func TestAnalyzeReachabilityNotImported(t *testing.T) {
 	}
 }
 
+// TestAnalyzeReachabilityTransitiveVia covers DQ-H.3: a flagged package that
+// first-party source does not import directly, but which a directly-imported
+// package pulls in via the lockfile dependency graph, is recognised as
+// reachable-via with the full root → … → package path.
+func TestAnalyzeReachabilityTransitiveVia(t *testing.T) {
+	lib := newLibrary(t)
+	dir := t.TempDir()
+	// event-stream depends on flatmap-stream (the real compromise edge); source
+	// imports only event-stream.
+	mkProjFile(t, filepath.Join(dir, "package-lock.json"),
+		`{"lockfileVersion":3,"packages":{`+
+			`"node_modules/event-stream":{"version":"3.3.6","dependencies":{"flatmap-stream":"0.1.1"}},`+
+			`"node_modules/flatmap-stream":{"version":"0.1.1"}}}`)
+	mkProjFile(t, filepath.Join(dir, "src", "index.js"),
+		"const es = require('event-stream');\n")
+	rep, err := lib.AnalyzeReachability(dir)
+	if err != nil {
+		t.Fatalf("AnalyzeReachability: %v", err)
+	}
+	fm := reachOf(rep, "flatmap-stream")
+	if fm == nil {
+		t.Fatalf("expected a finding for flatmap-stream; got %+v", rep.Findings)
+	}
+	if fm.Imported {
+		t.Error("flatmap-stream is not directly imported; should be reachable only transitively")
+	}
+	if !fm.TransitiveAnalyzed {
+		t.Error("flatmap-stream should be marked transitive-analyzed (npm graph was available)")
+	}
+	if len(fm.TransitiveVia) < 2 || fm.TransitiveVia[0] != "event-stream" || fm.TransitiveVia[len(fm.TransitiveVia)-1] != "flatmap-stream" {
+		t.Errorf("via path should be event-stream → flatmap-stream, got %v", fm.TransitiveVia)
+	}
+	if rep.TransitiveCount < 1 {
+		t.Errorf("transitive_reachable_count should be >=1, got %d", rep.TransitiveCount)
+	}
+}
+
 func TestAnalyzeReachabilityNoFindings(t *testing.T) {
 	lib := newLibrary(t)
 	dir := t.TempDir()

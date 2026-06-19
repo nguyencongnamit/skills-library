@@ -14,10 +14,13 @@ package tools
 //
 // HONESTY (this matches the project's eval discipline): an "imported:
 // false" verdict means "no direct import of a module matching this name
-// was found in scanned source" — NOT "unreachable" and NOT "safe". Two
-// gaps are deliberately out of scope for v1 and documented rather than
-// hidden: (1) transitive reachability — a flagged package pulled in by
-// another dependency rather than imported directly — waits for DQ-V.3;
+// was found in scanned source" — NOT "unreachable" and NOT "safe".
+// DQ-H.3 extends this for npm: a flagged package you do not import
+// directly but which a package you DO import pulls in is surfaced as
+// reachable-via, with the dependency path, by walking the package-lock
+// graph. Remaining gaps are documented rather than hidden: (1) transitive
+// reachability for non-npm ecosystems (yarn/pnpm expose no usable graph
+// here; Cargo/Maven/NuGet/RubyGems have no import analysis at all);
 // (2) Python distribution-vs-module name divergence (e.g. the PyYAML
 // distribution is imported as `yaml`) can hide a real import. Reachability
 // is therefore purely ADDITIVE triage: it annotates findings, it never
@@ -29,6 +32,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/namncqualgo/skills-library/internal/tools/parsers"
 )
 
 // reachabilityLangs maps each analyzable ecosystem to the source-file
@@ -60,6 +65,13 @@ type ReachabilityFinding struct {
 	Analyzed  bool         `json:"analyzed"`
 	Imported  bool         `json:"imported"`
 	Sites     []ImportSite `json:"sites,omitempty"`
+	// TransitiveAnalyzed is true when dependency-graph reachability was
+	// computed for this finding (npm only — when a package-lock graph and
+	// import roots were both available). TransitiveVia, when non-empty, is the
+	// path imported-root → … → this package: it is reachable via a parent you
+	// import, even though it is not itself directly imported. (DQ-H.3)
+	TransitiveAnalyzed bool     `json:"transitive_analyzed,omitempty"`
+	TransitiveVia      []string `json:"transitive_via,omitempty"`
 }
 
 // ReachabilityReport is what scan-reachability / check_reachability return.
@@ -69,6 +81,7 @@ type ReachabilityReport struct {
 	ScanPath         string                `json:"scan_path"`
 	Findings         []ReachabilityFinding `json:"findings"`
 	ImportedCount    int                   `json:"imported_count"`
+	TransitiveCount  int                   `json:"transitive_reachable_count"`
 	NotImportedCount int                   `json:"not_imported_count"`
 	NotAnalyzedCount int                   `json:"not_analyzed_count"`
 }
@@ -133,6 +146,29 @@ func (l *Library) AnalyzeReachability(scanPath string) (*ReachabilityReport, err
 		return nil, err
 	}
 
+	// 2b. Transitive reachability (DQ-H.3, npm only): from the packages
+	//     actually imported in source, walk the lockfile dependency graph so a
+	//     flagged package that a directly-imported package pulls in is
+	//     recognised as reachable-via even when it is not itself imported.
+	var npmVia map[string][]string
+	npmGraphReady := false
+	if needEco["npm"] {
+		roots := map[string]bool{}
+		for _, r := range imports["npm"] {
+			roots[r.spec] = true
+		}
+		if len(roots) > 0 {
+			if graph, ok := l.buildNPMGraph(scanPath); ok {
+				rs := make([]string, 0, len(roots))
+				for n := range roots {
+					rs = append(rs, n)
+				}
+				npmVia = npmReachableVia(graph, rs)
+				npmGraphReady = true
+			}
+		}
+	}
+
 	// 3. Match each flagged package against the extracted imports.
 	for _, key := range order {
 		fl := seen[key]
@@ -150,19 +186,109 @@ func (l *Library) AnalyzeReachability(scanPath string) (*ReachabilityReport, err
 			if sites := matchImport(eco, fl.pkg, imports[eco]); len(sites) > 0 {
 				rf.Imported = true
 				rf.Sites = sites
+			} else if eco == "npm" && npmGraphReady {
+				rf.TransitiveAnalyzed = true
+				if path, ok := npmVia[fl.pkg]; ok && len(path) > 1 {
+					rf.TransitiveVia = path
+				}
 			}
 		}
 		report.Findings = append(report.Findings, rf)
+		// Buckets are mutually exclusive so they sum to the finding count:
+		// transitive-reachable is its own category, not also counted as
+		// not-imported.
 		switch {
 		case !analyzable:
 			report.NotAnalyzedCount++
 		case rf.Imported:
 			report.ImportedCount++
+		case len(rf.TransitiveVia) > 0:
+			report.TransitiveCount++
 		default:
 			report.NotImportedCount++
 		}
 	}
 	return report, nil
+}
+
+// buildNPMGraph merges the dependency graphs of every package-lock.json /
+// npm-shrinkwrap.json under scanPath into one name -> []name adjacency map.
+// Returns (graph, true) only if at least one npm lockfile graph was parsed;
+// (nil, false) for a project with no npm lockfile (yarn/pnpm expose no edges,
+// so transitive reachability is npm-first by design).
+func (l *Library) buildNPMGraph(scanPath string) (map[string][]string, bool) {
+	files, err := WalkScanFiles(scanPath, func(p string) bool {
+		b := filepath.Base(p)
+		return b == "package-lock.json" || b == "npm-shrinkwrap.json"
+	})
+	if err != nil || len(files) == 0 {
+		return nil, false
+	}
+	merged := map[string]map[string]bool{}
+	parsed := false
+	for _, f := range files {
+		body, _, rerr := l.readScanFile("check_reachability", f)
+		if rerr != nil {
+			continue
+		}
+		g, perr := parsers.NPMPackageLockGraph(body)
+		if perr != nil {
+			continue
+		}
+		parsed = true
+		for from, tos := range g {
+			if merged[from] == nil {
+				merged[from] = map[string]bool{}
+			}
+			for _, t := range tos {
+				merged[from][t] = true
+			}
+		}
+	}
+	if !parsed {
+		return nil, false
+	}
+	out := make(map[string][]string, len(merged))
+	for from, tos := range merged {
+		lst := make([]string, 0, len(tos))
+		for t := range tos {
+			lst = append(lst, t)
+		}
+		sort.Strings(lst)
+		out[from] = lst
+	}
+	return out, true
+}
+
+// npmReachableVia does a BFS from the imported-package roots over the
+// dependency graph and returns, for each reachable package, the path
+// root → … → package (including the package itself). Roots map to a
+// single-element path. Deterministic: roots and adjacency are pre-sorted.
+func npmReachableVia(graph map[string][]string, roots []string) map[string][]string {
+	via := map[string][]string{}
+	sort.Strings(roots)
+	queue := make([]string, 0, len(roots))
+	for _, r := range roots {
+		if _, ok := via[r]; !ok {
+			via[r] = []string{r}
+			queue = append(queue, r)
+		}
+	}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		for _, dep := range graph[cur] {
+			if _, ok := via[dep]; ok {
+				continue
+			}
+			path := make([]string, len(via[cur])+1)
+			copy(path, via[cur])
+			path[len(path)-1] = dep
+			via[dep] = path
+			queue = append(queue, dep)
+		}
+	}
+	return via
 }
 
 // extractImports walks first-party source under scanPath (WalkScanFiles

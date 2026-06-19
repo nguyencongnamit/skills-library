@@ -931,12 +931,14 @@ import sites.
 
 This is DB-guided import reachability, not generic SAST: reachability
 is resolved only for the packages the vulnerability DB already flagged.
-Two limits are reported honestly — "imported: false" means no direct
+For npm, a flagged package you do not import directly but which an
+imported package pulls in is surfaced as "transitive" with its dependency
+path. Limits are reported honestly — "imported: false" means no direct
 import of that name was found, NOT that the package is unreachable or
-safe. Transitive reachability (a flagged package pulled in by another
-dependency) is out of scope, and a Python distribution imported under a
-different module name (e.g. PyYAML -> yaml) can read as not-imported.
-Reachability is additive triage; it never suppresses a finding.
+safe; transitive reachability for non-npm ecosystems is out of scope, and
+a Python distribution imported under a different module name (e.g.
+PyYAML -> yaml) can read as not-imported. Reachability is additive triage;
+it never suppresses a finding.
 
 Ecosystems without import analysis (Cargo, Maven, NuGet, RubyGems) are
 reported as "not analyzed", never as "not imported".`,
@@ -982,8 +984,8 @@ reported as "not analyzed", never as "not imported".`,
 // JSON document is emitted only under --format json.
 func printReachabilityText(w io.Writer, target string, rep *tools.ReachabilityReport) {
 	fmt.Fprintf(w, "=== scan-reachability %s ===\n", target)
-	fmt.Fprintf(w, "Flagged dependencies: %d  (imported: %d · not imported: %d · not analyzed: %d)\n",
-		len(rep.Findings), rep.ImportedCount, rep.NotImportedCount, rep.NotAnalyzedCount)
+	fmt.Fprintf(w, "Flagged dependencies: %d  (imported: %d · transitive: %d · not imported: %d · not analyzed: %d)\n",
+		len(rep.Findings), rep.ImportedCount, rep.TransitiveCount, rep.NotImportedCount, rep.NotAnalyzedCount)
 	for _, f := range rep.Findings {
 		verdict := "not imported"
 		switch {
@@ -991,6 +993,8 @@ func printReachabilityText(w io.Writer, target string, rep *tools.ReachabilityRe
 			verdict = "not analyzed"
 		case f.Imported:
 			verdict = "IMPORTED"
+		case len(f.TransitiveVia) > 0:
+			verdict = "transitive"
 		}
 		pv := f.Package
 		if f.Version != "" {
@@ -999,6 +1003,9 @@ func printReachabilityText(w io.Writer, target string, rep *tools.ReachabilityRe
 		fmt.Fprintf(w, "  [%-12s] %-8s %-7s %s (%s)\n", verdict, f.Severity, f.Ecosystem, pv, f.Category)
 		for _, s := range f.Sites {
 			fmt.Fprintf(w, "        %s:%d\n", s.File, s.Line)
+		}
+		if len(f.TransitiveVia) > 0 {
+			fmt.Fprintf(w, "        via %s\n", strings.Join(f.TransitiveVia, " → "))
 		}
 	}
 }
@@ -1093,9 +1100,11 @@ reachability:
   P1 (reachable)     a flagged package you directly import, or a CVE code
                      pattern present in your source — the risk is in code
                      you wrote or import.
-  P2 (present only)  a flagged package in a lockfile you do not import
-                     (likely transitive — verify) or whose ecosystem has no
-                     import analysis.
+  P2 (transitive /   a flagged package you do not import directly but which an
+      present)       imported package pulls in (npm — shown with the dependency
+                     path), or one whose ecosystem has no import analysis.
+  P3 (unreachable)   a flagged package the npm dependency graph shows no import
+                     path to — likely unused or dev-only.
 
 Within a tier, findings sort by severity. This is ADVISORY (it composes
 advisory legs) and is not wired into the build-failing gate.`,
@@ -1140,8 +1149,8 @@ advisory legs) and is not wired into the build-failing gate.`,
 // finding with its P-tier, severity, kind, and the one-line rationale.
 func printDeepScanText(w io.Writer, target string, rep *tools.DeepScanReport) {
 	fmt.Fprintf(w, "=== scan-deep %s ===\n", target)
-	fmt.Fprintf(w, "Prioritized findings: %d  (P1 reachable: %d · P2 present: %d)\n",
-		len(rep.Findings), rep.P1Count, rep.P2Count)
+	fmt.Fprintf(w, "Prioritized findings: %d  (P1 reachable: %d · P2 present: %d · P3 unreachable: %d)\n",
+		len(rep.Findings), rep.P1Count, rep.P2Count, rep.P3Count)
 	for _, f := range rep.Findings {
 		loc := ""
 		if f.File != "" {
