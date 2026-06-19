@@ -1,13 +1,21 @@
-# secure-code
+<div align="center">
+
+# 🛡️ secure-code
+
+**Security knowledge &amp; supply-chain intelligence, compiled into your AI coding assistant.**
+
+Prevent insecure code at generation · detect it with 22 MCP tools + a CLI · prove it with signed, verifiable compliance.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
+[![Skills](https://img.shields.io/badge/skills-29-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
 [![CodeQL](https://github.com/namncqualgo/skills-library/actions/workflows/codeql.yml/badge.svg)](https://github.com/namncqualgo/skills-library/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/namncqualgo/skills-library/badge)](https://securityscorecards.dev/viewer/?uri=github.com/namncqualgo/skills-library)
+
+</div>
 
 **secure-code** is a structured, machine-readable library of security skills and
 supply-chain vulnerability intelligence designed to be embedded directly into AI
