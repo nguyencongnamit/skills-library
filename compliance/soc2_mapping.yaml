@@ -2,16 +2,23 @@ schema_version: "2.0"
 framework: "SOC 2"
 version: "Trust Services Criteria (2017, updated 2022)"
 last_updated: "2026-06-19"
+# Maps SOC 2 Common Criteria to prevention skills (advisory) and, where an
+# automated detection exists, to runnable checks (verification). Controls that
+# are monitoring/process oriented carry CWE identifiers (the cross-framework
+# spine) but no `checks:`, so the evidence report reports them as advisory
+# rather than falsely "verified". Control IDs follow the 2017 TSC numbering.
 controls:
   - id: "CC6.1"
     title: "Logical and Physical Access Controls"
     description: "The entity implements logical access security software, infrastructure, and architectures over protected information assets."
     skills: ["auth-security", "iam-best-practices", "api-security"]
+    cwe: ["CWE-284", "CWE-287"]
     references: ["https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2"]
   - id: "CC6.6"
     title: "Boundary Protection"
     description: "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
     skills: ["protocol-security", "cors-security", "api-security"]
+    cwe: ["CWE-942", "CWE-346"]
   - id: "CC6.7"
     title: "Restriction of Information Transmission, Movement, and Removal"
     description: "The entity restricts the transmission, movement, and removal of information to authorized internal and external users."
@@ -34,18 +41,23 @@ controls:
     title: "System Monitoring"
     description: "The entity monitors system components and the operation of those components for anomalies indicative of malicious acts, natural disasters, and errors."
     skills: ["logging-security"]
+    cwe: ["CWE-778"]
   - id: "CC7.3"
     title: "Evaluation of Security Events"
     description: "The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives."
     skills: ["logging-security", "error-handling-security"]
+    cwe: ["CWE-778", "CWE-209"]
   - id: "CC7.4"
     title: "Security Incident Response"
     description: "The entity responds to identified security incidents by executing a defined incident response program."
     skills: ["logging-security", "error-handling-security"]
+    cwe: ["CWE-778"]
   - id: "CC8.1"
     title: "Change Management"
     description: "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure, data, software, and procedures."
     skills: ["iac-security", "supply-chain-security"]
+    checks: ["scan_github_actions", "scan_dependencies"]
+    cwe: ["CWE-1104", "CWE-1188"]
   - id: "C1.1"
     title: "Confidentiality of Information"
     description: "The entity identifies and maintains confidential information to meet the entity's objectives related to confidentiality."

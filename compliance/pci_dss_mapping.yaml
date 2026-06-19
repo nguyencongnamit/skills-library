@@ -1,66 +1,94 @@
-schema_version: "1.0"
+schema_version: "2.0"
 framework: "PCI-DSS"
 version: "v4.0 (2022)"
-last_updated: "2026-05-13"
+last_updated: "2026-06-19"
+# Maps PCI DSS v4.0 requirements to prevention skills (advisory) and, where
+# an automated detection exists, to runnable checks (verification). Many PCI
+# requirements are organizational/process controls that source-code scanning
+# cannot prove; those carry CWE identifiers (the cross-framework spine) but no
+# `checks:` so the evidence report reports them as advisory, never falsely
+# "verified". Control IDs follow the PCI DSS v4.0 numbering.
 controls:
   - id: "1.4"
     title: "Network Security Controls between Trusted and Untrusted Networks"
     description: "Network security controls (NSCs) are implemented between trusted and untrusted networks."
     skills: ["iac-security", "container-security"]
+    cwe: ["CWE-923", "CWE-1327"]
     references: ["https://www.pcisecuritystandards.org/document_library"]
   - id: "2.2"
     title: "Secure Configuration Standards"
     description: "System components are configured and managed securely."
     skills: ["iac-security", "container-security"]
+    checks: ["scan_dockerfile", "scan_github_actions"]
+    cwe: ["CWE-1188", "CWE-16", "CWE-250"]
   - id: "3.5.1"
     title: "Cryptographic Keys are Protected"
     description: "Cryptographic keys used to protect stored account data are protected against disclosure and misuse."
     skills: ["crypto-misuse", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-312", "CWE-320"]
   - id: "3.6.1"
     title: "Procedures for Cryptographic Keys"
     description: "Procedures and processes for protecting cryptographic keys used to secure stored account data."
     skills: ["crypto-misuse", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-320", "CWE-798"]
   - id: "4.2.1"
     title: "Strong Cryptography for PAN over Open Networks"
     description: "PAN is protected with strong cryptography during transmission over open, public networks."
     skills: ["protocol-security", "crypto-misuse"]
+    cwe: ["CWE-319", "CWE-326"]
   - id: "6.2.4"
     title: "Software Engineering Techniques to Prevent Common Software Attacks"
     description: "Software engineering techniques or other methods are defined and in use by software development personnel to prevent or mitigate common software attacks."
     skills: ["database-security", "frontend-security", "api-security", "error-handling-security"]
+    cwe: ["CWE-89", "CWE-79", "CWE-352", "CWE-94"]
   - id: "6.3.2"
     title: "Inventory of Bespoke and Custom Software, Including Third-Party Components"
     description: "An inventory of bespoke and custom software, including third-party components, is maintained."
     skills: ["supply-chain-security"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
   - id: "6.3.3"
     title: "Security Vulnerabilities in Custom Software"
     description: "Security vulnerabilities in custom software are identified and managed."
     skills: ["supply-chain-security", "secret-detection"]
+    checks: ["scan_dependencies", "scan_secrets", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
   - id: "7.2"
     title: "Access to System Components and Data"
     description: "Access to system components and data is appropriately defined and assigned."
     skills: ["iam-best-practices", "auth-security"]
+    cwe: ["CWE-284", "CWE-285"]
   - id: "8.3.6"
     title: "Authentication Factors are Strong"
     description: "Initial authentication factors meet minimum strength requirements; passwords are protected at rest and in transit."
     skills: ["auth-security", "crypto-misuse"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-521", "CWE-256"]
   - id: "8.4.2"
     title: "Multi-Factor Authentication for Administrative Access"
     description: "MFA is implemented for all non-console access into the CDE for personnel with administrative access."
     skills: ["auth-security"]
+    cwe: ["CWE-308", "CWE-287"]
   - id: "10.2"
     title: "Audit Logs are Implemented"
     description: "Audit logs are implemented to support the detection of anomalies and suspicious activity, and the forensic analysis of events."
     skills: ["logging-security"]
+    cwe: ["CWE-778"]
   - id: "10.3"
     title: "Audit Logs are Protected"
     description: "Audit logs are protected from destruction and unauthorized modifications."
     skills: ["logging-security"]
+    cwe: ["CWE-778", "CWE-117"]
   - id: "11.3"
     title: "External and Internal Vulnerabilities are Regularly Identified"
     description: "Vulnerability identification and reporting is automated and routine."
     skills: ["supply-chain-security"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
   - id: "12.10"
     title: "Suspected and Confirmed Security Incidents are Responded to Immediately"
     description: "Incident response plan is in place to respond to suspected or confirmed security incidents."
     skills: ["logging-security", "error-handling-security"]
+    cwe: ["CWE-778"]
