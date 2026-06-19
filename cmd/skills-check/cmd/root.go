@@ -51,6 +51,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(sbomCmd())
 	root.AddCommand(scanReachabilityCmd())
 	root.AddCommand(scanCVEPatternsCmd())
+	root.AddCommand(scanDeepCmd())
 	root.AddCommand(policyCheckCmd())
 	return root
 }

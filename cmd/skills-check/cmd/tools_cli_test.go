@@ -577,6 +577,41 @@ func TestScanCVEPatternsRejectsFile(t *testing.T) {
 	}
 }
 
+// TestScanDeepJSON confirms `scan-deep --format json` returns a
+// reachability-prioritized report: an imported malicious package is P1.
+func TestScanDeepJSON(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/event-stream":{"version":"3.3.6"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	src := filepath.Join(dir, "src")
+	if err := os.MkdirAll(src, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(src, "app.js"),
+		[]byte("import es from 'event-stream';\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "scan-deep", "--path", repoRootForTest(t), "--format", "json", dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var rep tools.DeepScanReport
+	if err := json.Unmarshal([]byte(out), &rep); err != nil {
+		t.Fatalf("output is not valid JSON: %v\n%s", err, out)
+	}
+	var es *tools.DeepFinding
+	for i := range rep.Findings {
+		if rep.Findings[i].Package == "event-stream" {
+			es = &rep.Findings[i]
+		}
+	}
+	if es == nil || es.Priority != 1 {
+		t.Errorf("imported malicious dep should be P1, got %+v (full: %s)", es, out)
+	}
+}
+
 // policy_check dispatches scanners by file basename: "Dockerfile" →
 // scan_dockerfile, lockfile names → scan_dependencies, etc. So tests
 // for policy-check must use the canonical basename inside an

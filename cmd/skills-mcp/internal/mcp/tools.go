@@ -265,6 +265,17 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "deep_scan",
+			"description": "Reachability-prioritized dependency triage: run scan_dependencies, DQ-V.1 import reachability, and DQ-V.2 CVE code-pattern reachability over a project and merge them into ONE ranked list answering 'what should I look at first?'. P1 (reachable) = a flagged package you directly import OR a CVE code pattern present in your source; P2 (present only) = a flagged package you don't import (likely transitive) or a non-analyzable ecosystem. Within a tier, sorted by severity. Composes advisory legs; not gate-wired. Subject to --allowed-roots and the sensitive-directory deny-list.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"path": map[string]string{"type": "string", "description": "Absolute path to the project directory to triage (lockfiles + source tree)."},
+				},
+				"required": []string{"path"},
+			},
+		},
+		{
 			"name":        "list_external_tools",
 			"description": "List the industry-standard external CLIs that secure-code skills recommend (declared in each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's PATH. Discovery only — the server never runs these tools. Use it to decide which external scanner to run, then run the chosen one yourself via the shell (e.g. `gitleaks dir` for whole-repo/git-history secret scanning, `hadolint <file>` for Dockerfile linting). The built-in MCP scanners (scan_secrets, scan_dockerfile, …) remain the offline default.",
 			"inputSchema": map[string]interface{}{

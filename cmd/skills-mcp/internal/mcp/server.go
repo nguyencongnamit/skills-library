@@ -410,6 +410,8 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			return tools.ScanCVEPatternsSARIF(rep), nil
 		}
 		return rep, nil
+	case "deep_scan":
+		return s.lib.DeepScan(stringArg(args, "path"))
 	case "list_external_tools":
 		return s.lib.ListExternalTools()
 	case "explain_finding":

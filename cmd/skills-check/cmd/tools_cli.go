@@ -1077,6 +1077,82 @@ func printCVEPatternsText(w io.Writer, target string, rep *tools.CVEReachability
 }
 
 // =============================================================================
+// scan-deep
+// =============================================================================
+
+func scanDeepCmd() *cobra.Command {
+	var repoPath, format string
+	c := &cobra.Command{
+		Use:   "scan-deep <dir>",
+		Short: "Reachability-prioritized triage: merge scan-dependencies + import reachability + CVE code-patterns into one ranked list (what to fix first)",
+		Long: `Run the dependency-side detection legs over <dir> — malicious /
+typosquat / CVE dependency findings, DQ-V.1 import reachability, and DQ-V.2
+CVE code-pattern reachability — and merge them into ONE list ranked by
+reachability:
+
+  P1 (reachable)     a flagged package you directly import, or a CVE code
+                     pattern present in your source — the risk is in code
+                     you wrote or import.
+  P2 (present only)  a flagged package in a lockfile you do not import
+                     (likely transitive — verify) or whose ecosystem has no
+                     import analysis.
+
+Within a tier, findings sort by severity. This is ADVISORY (it composes
+advisory legs) and is not wired into the build-failing gate.`,
+		Args: cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			if err := validateFormat(format, false); err != nil {
+				return err
+			}
+			target := args[0]
+			lib, err := newLibraryForCmd(repoPath, "", target)
+			if err != nil {
+				return err
+			}
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("scan-deep: stat %s: %w", target, err)
+			}
+			if !info.IsDir() {
+				return fmt.Errorf("scan-deep: %s is not a directory (deep scan needs a project source tree)", target)
+			}
+			if err := lib.SetAllowedRoots([]string{targetAbs}); err != nil {
+				return fmt.Errorf("scan-deep: scope library to %s: %w", targetAbs, err)
+			}
+			rep, err := lib.DeepScan(targetAbs)
+			if err != nil {
+				return err
+			}
+			if format == "json" {
+				return emitJSON(c.OutOrStdout(), rep)
+			}
+			printDeepScanText(c.OutOrStdout(), target, rep)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
+	addFormatFlag(c, &format, false)
+	return c
+}
+
+// printDeepScanText renders the reachability-prioritized triage list, each
+// finding with its P-tier, severity, kind, and the one-line rationale.
+func printDeepScanText(w io.Writer, target string, rep *tools.DeepScanReport) {
+	fmt.Fprintf(w, "=== scan-deep %s ===\n", target)
+	fmt.Fprintf(w, "Prioritized findings: %d  (P1 reachable: %d · P2 present: %d)\n",
+		len(rep.Findings), rep.P1Count, rep.P2Count)
+	for _, f := range rep.Findings {
+		loc := ""
+		if f.File != "" {
+			loc = fmt.Sprintf(" — %s:%d", f.File, f.Line)
+		}
+		fmt.Fprintf(w, "  P%d [%s] %-11s %s\n", f.Priority, f.Severity, f.Kind, f.Title)
+		fmt.Fprintf(w, "        %s%s\n", f.Why, loc)
+	}
+}
+
+// =============================================================================
 // gate (formerly policy-check)
 // =============================================================================
 
