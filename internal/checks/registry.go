@@ -73,6 +73,13 @@ var registry = map[string]Check{
 		Description: "Lint a GitHub Actions workflow for pwn-request, script-injection, unpinned actions, missing permissions, and credential exposure.",
 		CWE:         []string{"CWE-94", "CWE-829"},
 	},
+	"scan_iac": {
+		ID:          "scan_iac",
+		Title:       "Infrastructure-as-Code hardening scan",
+		Kind:        KindScanner,
+		Description: "Hardening pass over Terraform, Kubernetes manifests, and CloudFormation templates (public 0.0.0.0/0 ingress, hard-coded credentials, IAM wildcards, privileged/root containers, host namespaces/paths, disabled encryption).",
+		CWE:         []string{"CWE-250", "CWE-269", "CWE-284", "CWE-311", "CWE-668", "CWE-798"},
+	},
 	"check_dependency": {
 		ID:          "check_dependency",
 		Title:       "Single-package check",

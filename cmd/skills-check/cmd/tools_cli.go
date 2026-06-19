@@ -754,6 +754,69 @@ unpinned actions, missing permissions, and credential exposure.
 }
 
 // =============================================================================
+// scan-iac
+// =============================================================================
+
+func scanIaCCmd() *cobra.Command {
+	var repoPath, format, report string
+	c := &cobra.Command{
+		Use:   "scan-iac <file>",
+		Short: "Hardening pass over a Terraform / Kubernetes / CloudFormation file (public ingress, hard-coded creds, IAM wildcards, privileged/root containers, host namespaces, disabled encryption)",
+		Long: `Hardening pass over an Infrastructure-as-Code file. The dialect
+(Terraform .tf, a Kubernetes manifest, or an AWS CloudFormation
+template) is detected from the path and content; a file that is not
+recognised IaC reports no findings.
+
+` + reportHelpParagraph,
+		Args: cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			if err := validateFormat(format, true); err != nil {
+				return err
+			}
+			file := args[0]
+			lib, err := newLibraryForCmd(repoPath, "", file)
+			if err != nil {
+				return err
+			}
+			fileAbs, _ := filepath.Abs(file)
+			res, err := lib.ScanIaC(fileAbs)
+			if err != nil {
+				return err
+			}
+			if report != "" {
+				rep := newReport("scan-iac", []string{file})
+				rep.Sections = append(rep.Sections, iacSection(file, res))
+				return writeReport(c, report, rep)
+			}
+			switch format {
+			case "json":
+				return emitJSON(c.OutOrStdout(), res)
+			case "sarif":
+				return emitJSON(c.OutOrStdout(), tools.ScanIaCSARIF(res))
+			default:
+				kind := string(res.Kind)
+				if kind == "" {
+					kind = "not recognised as IaC"
+				}
+				fmt.Fprintf(c.OutOrStdout(), "=== scan-iac %s (%s) ===\n", file, kind)
+				fmt.Fprintf(c.OutOrStdout(), "Findings: %d\n", len(res.Findings))
+				for _, f := range res.Findings {
+					fmt.Fprintf(c.OutOrStdout(), "  ! [%s] %s:%d  %s\n", f.Severity, f.RuleID, f.Line, f.Title)
+					if f.Fix != "" {
+						fmt.Fprintf(c.OutOrStdout(), "        fix: %s\n", f.Fix)
+					}
+				}
+				return nil
+			}
+		},
+	}
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
+	addFormatFlag(c, &format, true)
+	addReportFlag(c, &report)
+	return c
+}
+
+// =============================================================================
 // gate (formerly policy-check)
 // =============================================================================
 

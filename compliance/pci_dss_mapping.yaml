@@ -13,13 +13,14 @@ controls:
     title: "Network Security Controls between Trusted and Untrusted Networks"
     description: "Network security controls (NSCs) are implemented between trusted and untrusted networks."
     skills: ["iac-security", "container-security"]
+    checks: ["scan_iac"]
     cwe: ["CWE-923", "CWE-1327"]
     references: ["https://www.pcisecuritystandards.org/document_library"]
   - id: "2.2"
     title: "Secure Configuration Standards"
     description: "System components are configured and managed securely."
     skills: ["iac-security", "container-security"]
-    checks: ["scan_dockerfile", "scan_github_actions"]
+    checks: ["scan_dockerfile", "scan_github_actions", "scan_iac"]
     cwe: ["CWE-1188", "CWE-16", "CWE-250"]
   - id: "3.5.1"
     title: "Cryptographic Keys are Protected"

@@ -212,6 +212,7 @@ func TestToolsListReturnsExpectedTools(t *testing.T) {
 		"scan_dependencies":      false,
 		"scan_github_actions":    false,
 		"scan_dockerfile":        false,
+		"scan_iac":               false,
 		"list_external_tools":    false,
 		"explain_finding":        false,
 		"gate":                   false,

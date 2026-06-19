@@ -192,6 +192,70 @@ func ScanDockerfileSARIF(res *ScanDockerfileResult) *SARIFLog {
 	return sarifLogWithCWE(rules, results)
 }
 
+// iacSourceForKind maps a detected IaC dialect to the checklist the rule
+// family is derived from, so a SARIF consumer can trace a finding back to
+// its human-readable hardening guidance.
+func iacSourceForKind(k IaCKind) string {
+	switch k {
+	case IaCTerraform:
+		return "skills/iac-security/checklists/terraform_hardening.yaml"
+	case IaCCloudFormation:
+		return "skills/iac-security/checklists/cloudformation_hardening.yaml"
+	case IaCKubernetes:
+		return "skills/container-security/checklists/k8s_pod_security.yaml"
+	}
+	return ""
+}
+
+// ScanIaCSARIF converts a ScanIaCResult into a SARIF 2.1.0 log. Each rule ID
+// becomes one SARIF rule; findings carry the line number and the source
+// checklist for the detected dialect.
+func ScanIaCSARIF(res *ScanIaCResult) *SARIFLog {
+	if res == nil {
+		return emptyLog("scan_iac")
+	}
+	rules := make([]SARIFRule, 0)
+	ruleIndex := map[string]int{}
+	uri := fileURI(res.FilePath)
+	results := make([]SARIFResult, 0, len(res.Findings))
+	for _, f := range res.Findings {
+		id := "skills-mcp." + f.RuleID
+		if _, ok := ruleIndex[id]; !ok {
+			ruleIndex[id] = len(rules)
+			rule := SARIFRule{
+				ID:               id,
+				Name:             f.RuleID,
+				ShortDescription: &SARIFMultiformat{Text: f.Title},
+				DefaultConfig:    &SARIFRuleConfig{Level: sarifLevel(f.Severity)},
+			}
+			if src := iacSourceForKind(f.Kind); src != "" {
+				rule.Properties = map[string]any{"source": src}
+			}
+			rules = append(rules, rule)
+		}
+		results = append(results, SARIFResult{
+			RuleID:    id,
+			RuleIndex: ruleIndex[id],
+			Level:     sarifLevel(f.Severity),
+			Message:   SARIFMultiformat{Text: f.Title},
+			Locations: []SARIFLocation{{
+				PhysicalLocation: SARIFPhysicalLocation{
+					ArtifactLocation: SARIFArtifactLocation{URI: uri},
+					Region:           &SARIFRegion{StartLine: f.Line},
+				},
+			}},
+			Properties: map[string]any{
+				"severity": f.Severity,
+				"kind":     string(f.Kind),
+				"fix":      f.Fix,
+				"snippet":  f.Snippet,
+			},
+		})
+	}
+	sortRulesAndResults(rules, ruleIndex, results)
+	return sarifLogWithCWE(rules, results)
+}
+
 // sortRulesAndResults sorts the rules slice alphabetically by ID and
 // rewrites every result's RuleIndex so it still points at the same
 // rule after the sort. Without this the rule order would follow

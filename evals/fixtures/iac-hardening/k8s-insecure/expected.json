@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "k8s-insecure/pod.yaml",
+  "description": "Pod exercising every scan_iac kubernetes rule once: hostNetwork:true (k8s-no-host-namespaces), privileged:true (k8s-no-privileged), runAsUser:0 (k8s-run-as-non-root), a capabilities.add of SYS_ADMIN (k8s-drop-all-capabilities), and a hostPath volume (k8s-no-host-paths). The `drop: [ALL]` above the add MUST NOT be flagged — that is the recommended hardening, not a finding.",
+  "expected_findings": [
+    {"rule": "k8s-no-host-namespaces"},
+    {"rule": "k8s-no-privileged"},
+    {"rule": "k8s-run-as-non-root"},
+    {"rule": "k8s-drop-all-capabilities"},
+    {"rule": "k8s-no-host-paths"}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "cloudformation-insecure/template.yaml",
+  "description": "CloudFormation template with a literal MasterUserPassword — flagged by cfn-dynamic-references (secrets must use a {{resolve:...}} dynamic reference, not a literal).",
+  "expected_findings": [
+    {"rule": "cfn-dynamic-references"}
+  ]
+}

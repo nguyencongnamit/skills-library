@@ -422,6 +422,24 @@ func gateSection(res *tools.PolicyCheckResult) reportSection {
 	return s
 }
 
+func iacSection(label string, res *tools.ScanIaCResult) reportSection {
+	title := label
+	if res.Kind != "" {
+		title = fmt.Sprintf("%s (%s)", label, res.Kind)
+	}
+	s := reportSection{Title: title}
+	for _, f := range res.Findings {
+		s.Findings = append(s.Findings, reportFinding{
+			Severity: f.Severity,
+			Title:    f.Title,
+			Location: fmt.Sprintf("%s · line %d", f.RuleID, f.Line),
+			Detail:   f.Snippet,
+			Fix:      f.Fix,
+		})
+	}
+	return s
+}
+
 func githubActionsSection(label string, res *tools.ScanGitHubActionsResult) reportSection {
 	s := reportSection{Title: label}
 	for _, f := range res.Findings {

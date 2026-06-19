@@ -101,6 +101,17 @@ SCANNERS: dict[str, dict[str, Any]] = {
         "key": lambda f: ((f.get("rule") or f.get("rule_id") or "").lower(),),
         "actual_key": lambda f: ((f.get("rule_id") or "").lower(),),
     },
+    "iac": {
+        "tool": "scan_iac",
+        "dir": REPO_ROOT / "evals" / "fixtures" / "iac-hardening",
+        # Per-subdir layout: each fixture is one Terraform/Kubernetes/
+        # CloudFormation input file paired with an expected.json. The
+        # input_globs cover the three dialect file names.
+        "expected_filename": "expected.json",
+        "input_globs": ("main.tf", "pod.yaml", "template.yaml"),
+        "key": lambda f: ((f.get("rule") or f.get("rule_id") or "").lower(),),
+        "actual_key": lambda f: ((f.get("rule_id") or "").lower(),),
+    },
 }
 
 

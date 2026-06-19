@@ -26,11 +26,12 @@ func TestVerdict(t *testing.T) {
 }
 
 func TestByCWE(t *testing.T) {
-	// scan_secrets and check_secret_pattern are both tagged CWE-798 in the
-	// registry; nothing is tagged with a fabricated CWE.
+	// check_secret_pattern, scan_iac, and scan_secrets are all tagged
+	// CWE-798 (hard-coded credentials) in the registry; nothing is tagged
+	// with a fabricated CWE.
 	got := ByCWE("CWE-798")
-	if !reflect.DeepEqual(got, []string{"check_secret_pattern", "scan_secrets"}) {
-		t.Errorf("ByCWE(CWE-798) = %v, want [check_secret_pattern scan_secrets]", got)
+	if !reflect.DeepEqual(got, []string{"check_secret_pattern", "scan_iac", "scan_secrets"}) {
+		t.Errorf("ByCWE(CWE-798) = %v, want [check_secret_pattern scan_iac scan_secrets]", got)
 	}
 	if len(ByCWE("CWE-0000000")) != 0 {
 		t.Error("ByCWE of an unmapped CWE must be empty")

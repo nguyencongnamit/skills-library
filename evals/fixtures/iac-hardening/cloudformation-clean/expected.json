@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "cloudformation-clean/template.yaml",
+  "description": "Control fixture: the database password is sourced via a {{resolve:secretsmanager:...}} dynamic reference, so cfn-dynamic-references must NOT fire — guards the CloudFormation false-positive rate.",
+  "expected_findings": []
+}

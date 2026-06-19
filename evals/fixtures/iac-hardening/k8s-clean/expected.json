@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "k8s-clean/pod.yaml",
+  "description": "Restricted-profile pod: runAsNonRoot, high UID, privileged:false, drop ALL capabilities and add back only NET_BIND_SERVICE. No scan_iac rule should fire — guards the kubernetes false-positive rate (notably that drop:[ALL] and a benign added capability are not flagged).",
+  "expected_findings": []
+}

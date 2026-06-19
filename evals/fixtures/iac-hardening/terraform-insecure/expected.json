@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "terraform-insecure/main.tf",
+  "description": "One Terraform file exercising every scan_iac terraform rule exactly once: a literal access_key (tf-no-hardcoded-creds), insecure=true (tf-no-skip-tls), a 0.0.0.0/0 ingress (tf-security-group-no-world-admin), an IAM Action=\"*\" wildcard (tf-iam-no-wildcard), publicly_accessible=true (tf-rds-not-public), and storage_encrypted=false (tf-storage-encrypted).",
+  "expected_findings": [
+    {"rule": "tf-no-hardcoded-creds"},
+    {"rule": "tf-no-skip-tls"},
+    {"rule": "tf-security-group-no-world-admin"},
+    {"rule": "tf-iam-no-wildcard"},
+    {"rule": "tf-rds-not-public"},
+    {"rule": "tf-storage-encrypted"}
+  ]
+}

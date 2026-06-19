@@ -388,6 +388,15 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			return tools.ScanDockerfileSARIF(res), nil
 		}
 		return res, nil
+	case "scan_iac":
+		res, err := s.lib.ScanIaC(stringArg(args, "file_path"))
+		if err != nil {
+			return nil, err
+		}
+		if strings.EqualFold(stringArg(args, "format"), "sarif") {
+			return tools.ScanIaCSARIF(res), nil
+		}
+		return res, nil
 	case "list_external_tools":
 		return s.lib.ListExternalTools()
 	case "explain_finding":

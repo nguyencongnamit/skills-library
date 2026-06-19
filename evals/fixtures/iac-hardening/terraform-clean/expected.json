@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-06-19",
+  "fixture": "terraform-clean/main.tf",
+  "description": "Control fixture: pinned provider, no inline credentials, publicly_accessible=false, storage_encrypted=true. No scan_iac rule should fire — guards the terraform false-positive rate.",
+  "expected_findings": []
+}

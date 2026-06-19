@@ -116,6 +116,24 @@ func (l *Library) runScannerCheck(id, scanPath string) (int, error) {
 		}
 		return total, nil
 
+	case "scan_iac":
+		// IsIaCCandidate narrows the walk by extension; ScanIaC then
+		// content-sniffs each file and returns no findings for anything
+		// that is not really Terraform / Kubernetes / CloudFormation.
+		files, err := WalkScanFiles(scanPath, IsIaCCandidate)
+		if err != nil {
+			return 0, err
+		}
+		total := 0
+		for _, f := range files {
+			res, err := l.ScanIaC(f)
+			if err != nil {
+				continue
+			}
+			total += len(res.Findings)
+		}
+		return total, nil
+
 	default:
 		return 0, fmt.Errorf("no scanner bound for check %q", id)
 	}

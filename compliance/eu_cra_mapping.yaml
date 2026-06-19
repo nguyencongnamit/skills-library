@@ -12,7 +12,7 @@ controls:
     title: "Secure by Default Configuration"
     description: "Products are made available with a secure-by-default configuration, including the possibility to reset to a secure state."
     skills: ["iac-security", "container-security", "cicd-security"]
-    checks: ["scan_dockerfile", "scan_github_actions"]
+    checks: ["scan_dockerfile", "scan_github_actions", "scan_iac"]
     cwe: ["CWE-1188", "CWE-16"]
     references: ["https://eur-lex.europa.eu/eli/reg/2024/2847/oj"]
   - id: "AnnexI.1.2(b)"
@@ -35,7 +35,7 @@ controls:
     title: "Minimize Attack Surfaces"
     description: "Design, develop, and produce products to limit attack surfaces, including external interfaces and exposed services."
     skills: ["container-security", "iac-security"]
-    checks: ["scan_dockerfile"]
+    checks: ["scan_dockerfile", "scan_iac"]
     cwe: ["CWE-1188", "CWE-250"]
   - id: "AnnexI.1.2(k)"
     title: "Secure the Software Supply Chain"

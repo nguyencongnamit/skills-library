@@ -1,0 +1,7 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  DB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      MasterUserPassword: "SuperSecret123"
+      Engine: postgres

@@ -211,6 +211,22 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "scan_iac",
+			"description": "Run a hardening pass over an Infrastructure-as-Code file — Terraform (.tf), a Kubernetes manifest, or an AWS CloudFormation template (the dialect is auto-detected from path and content). Detects 0.0.0.0/0 ingress, hard-coded provider/resource credentials, IAM `Action=\"*\"` wildcards, publicly-accessible databases, disabled TLS/encryption, privileged or run-as-root containers, host-namespace/hostPath escapes, and dangerous added Linux capabilities. A file that is not recognised IaC returns no findings. Subject to --allowed-roots and the sensitive-directory deny-list. Pass `format`=\"sarif\" for SARIF 2.1.0 output.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"file_path": map[string]string{"type": "string", "description": "Absolute path to a Terraform, Kubernetes, or CloudFormation file."},
+					"format": map[string]interface{}{
+						"type":        "string",
+						"description": "Output format. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log.",
+						"enum":        []string{"", "json", "sarif"},
+					},
+				},
+				"required": []string{"file_path"},
+			},
+		},
+		{
 			"name":        "list_external_tools",
 			"description": "List the industry-standard external CLIs that secure-code skills recommend (declared in each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's PATH. Discovery only — the server never runs these tools. Use it to decide which external scanner to run, then run the chosen one yourself via the shell (e.g. `gitleaks dir` for whole-repo/git-history secret scanning, `hadolint <file>` for Dockerfile linting). The built-in MCP scanners (scan_secrets, scan_dockerfile, …) remain the offline default.",
 			"inputSchema": map[string]interface{}{
@@ -231,7 +247,7 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "gate",
-			"description": "Pick the right scanner for file_path and report a CI-friendly pass/fail with a per-severity count. Dispatches to scan_dependencies for lockfiles, scan_github_actions for `.github/workflows/*.{yml,yaml}` files, and scan_dockerfile for Dockerfiles, falling back to scan_secrets for any other file. Findings at or above `severity_floor` (default: high) fail the check; the response includes `pass` and `exit_code` (0 on pass, 1 on fail) so a CI wrapper can branch on it. (Formerly `policy_check`; that name is still accepted.)",
+			"description": "Pick the right scanner for file_path and report a CI-friendly pass/fail with a per-severity count. Dispatches to scan_dependencies for lockfiles, scan_github_actions for `.github/workflows/*.{yml,yaml}` files, scan_dockerfile for Dockerfiles, and scan_iac for Terraform (`.tf`) files, falling back to scan_secrets for any other file. Findings at or above `severity_floor` (default: high) fail the check; the response includes `pass` and `exit_code` (0 on pass, 1 on fail) so a CI wrapper can branch on it. (Formerly `policy_check`; that name is still accepted.)",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{

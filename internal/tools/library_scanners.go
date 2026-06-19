@@ -1086,6 +1086,22 @@ func (l *Library) PolicyCheck(filePath, severityFloor string) (*PolicyCheckResul
 				Snippet:    f.Snippet,
 			})
 		}
+	case "scan_iac":
+		res, err := l.ScanIaC(filePath)
+		if err != nil {
+			return nil, err
+		}
+		out.FileSize = res.FileSize
+		for _, f := range res.Findings {
+			out.Findings = append(out.Findings, PolicyCheckFinding{
+				RuleID:     f.RuleID,
+				Severity:   f.Severity,
+				Confidence: f.Confidence,
+				Title:      f.Title,
+				Line:       f.Line,
+				Snippet:    f.Snippet,
+			})
+		}
 	case "scan_secrets":
 		res, err := l.ScanSecrets("", filePath)
 		if err != nil {
@@ -1250,6 +1266,14 @@ func pickScan(filePath string) (string, error) {
 	lower := strings.ToLower(base)
 	if strings.HasSuffix(lower, ".dockerfile") {
 		return "scan_dockerfile", nil
+	}
+	// Terraform files route to scan_iac by extension. Kubernetes /
+	// CloudFormation share .yaml/.json with other content, so they are
+	// NOT force-routed here — the dedicated scan-iac command and
+	// `evidence --scan` (which content-sniffs) cover them, while a gate
+	// over arbitrary YAML/JSON keeps the safer scan_secrets fallback.
+	if strings.HasSuffix(lower, ".tf") || strings.HasSuffix(lower, ".tf.json") {
+		return "scan_iac", nil
 	}
 	if strings.HasPrefix(lower, "requirements") && strings.HasSuffix(lower, ".txt") {
 		return "scan_dependencies", nil

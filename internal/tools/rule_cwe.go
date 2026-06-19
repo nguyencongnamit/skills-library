@@ -32,14 +32,27 @@ var ruleCWE = map[string][]string{
 	"dkr-explicit-latest-tag":      {"CWE-1357"},
 	"dkr-eol-base-image":           {"CWE-1104"},
 
-	// Kubernetes pod-security (scan_dockerfile k8s manifests) — from k8s_pod_security.yaml.
+	// Kubernetes pod-security (scan_iac k8s manifests) — from k8s_pod_security.yaml.
 	"k8s-run-as-non-root":         {"CWE-250"},
 	"k8s-drop-all-capabilities":   {"CWE-269"},
 	"k8s-no-privileged":           {"CWE-269"},
+	"k8s-no-host-namespaces":      {"CWE-668"},
+	"k8s-no-host-paths":           {"CWE-668"},
 	"k8s-no-default-sa":           {"CWE-250"},
 	"k8s-network-policy-deny-all": {"CWE-284"},
 	"k8s-rbac-least-privilege":    {"CWE-269"},
 	"k8s-image-digest-pin":        {"CWE-1357"},
+
+	// Terraform hardening (scan_iac) — from terraform_hardening.yaml.
+	"tf-no-hardcoded-creds":            {"CWE-798"},
+	"tf-iam-no-wildcard":               {"CWE-269"},
+	"tf-security-group-no-world-admin": {"CWE-284"},
+	"tf-rds-not-public":                {"CWE-284"},
+	"tf-storage-encrypted":             {"CWE-311"},
+	"tf-no-skip-tls":                   {"CWE-295"},
+
+	// CloudFormation hardening (scan_iac) — from cloudformation_hardening.yaml.
+	"cfn-dynamic-references": {"CWE-798"},
 
 	// GitHub Actions hardening (scan_github_actions) — mapped from semantics.
 	"gha-pin-actions-by-sha":              {"CWE-829"},
