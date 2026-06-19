@@ -215,6 +215,7 @@ func TestToolsListReturnsExpectedTools(t *testing.T) {
 		"scan_iac":               false,
 		"generate_sbom":          false,
 		"check_reachability":     false,
+		"scan_cve_patterns":      false,
 		"list_external_tools":    false,
 		"explain_finding":        false,
 		"gate":                   false,

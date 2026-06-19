@@ -238,6 +238,22 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "scan_cve_patterns",
+			"description": "Scan first-party source for the curated code patterns of known CVEs (e.g. Log4Shell ${jndi:...}, Shellshock, Spring4Shell), language-scoped: each CVE's code_patterns run only against files in the languages it declares. DB-guided source-level reachability, NOT generic SAST — only the hand-tuned regexes shipped in the verified CVE DB run. ADVISORY: a match means a pattern associated with that CVE is present (verify exploitability); it is not wired into the build-failing gate. Patterns that can't compile under RE2 are skipped and counted. Pass format=\"sarif\" for SARIF 2.1.0. Subject to --allowed-roots and the sensitive-directory deny-list.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"path": map[string]string{"type": "string", "description": "Absolute path to the project directory whose source tree is scanned."},
+					"format": map[string]interface{}{
+						"type":        "string",
+						"description": "Output format. Empty (or \"json\") returns the native MCP shape; \"sarif\" returns a SARIF 2.1.0 log.",
+						"enum":        []string{"", "json", "sarif"},
+					},
+				},
+				"required": []string{"path"},
+			},
+		},
+		{
 			"name":        "check_reachability",
 			"description": "DB-guided import reachability: of the dependencies scan_dependencies already flagged (malicious / typosquat / CVE) in a project's lockfiles, report which are DIRECTLY IMPORTED in first-party source (JavaScript/TypeScript, Python, Go) and at which file:line. This is targeted triage scoped to the verified DB, NOT generic SAST — reachability is resolved only for flagged packages. Honest limits: \"imported: false\" means no direct import of that name was found, NOT unreachable/safe (transitive reachability and Python distribution-vs-module name divergence like PyYAML->yaml are out of scope); it is additive triage and never suppresses a finding. Ecosystems without import analysis (Cargo, Maven, NuGet, RubyGems) are reported as not-analyzed. Subject to --allowed-roots and the sensitive-directory deny-list.",
 			"inputSchema": map[string]interface{}{

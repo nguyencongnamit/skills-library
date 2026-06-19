@@ -534,6 +534,49 @@ func TestScanReachabilityRejectsFile(t *testing.T) {
 	}
 }
 
+// TestScanCVEPatternsLog4ShellJSON confirms `scan-cve-patterns --format
+// json` flags a planted Log4Shell trigger in a Java file.
+func TestScanCVEPatternsLog4ShellJSON(t *testing.T) {
+	dir := t.TempDir()
+	src := filepath.Join(dir, "src")
+	if err := os.MkdirAll(src, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(src, "A.java"),
+		[]byte("class A { void f(String u){ logger.info(\"${jndi:ldap://x/\"+u); } }\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "scan-cve-patterns", "--path", repoRootForTest(t), "--format", "json", dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var rep tools.CVEReachabilityReport
+	if err := json.Unmarshal([]byte(out), &rep); err != nil {
+		t.Fatalf("output is not valid JSON: %v\n%s", err, out)
+	}
+	found := false
+	for _, f := range rep.Findings {
+		if f.CVE == "CVE-2021-44228" {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected a Log4Shell finding in %s", out)
+	}
+}
+
+// TestScanCVEPatternsRejectsFile confirms the scanner needs a directory.
+func TestScanCVEPatternsRejectsFile(t *testing.T) {
+	f := writeFixedNameFixture(t, "A.java", "class A {}\n")
+	_, _, err := run(t, "scan-cve-patterns", "--path", repoRootForTest(t), f)
+	if err == nil {
+		t.Fatal("expected an error when given a file, got nil")
+	}
+	if !strings.Contains(err.Error(), "not a directory") {
+		t.Errorf("error should explain a directory is required: %v", err)
+	}
+}
+
 // policy_check dispatches scanners by file basename: "Dockerfile" →
 // scan_dockerfile, lockfile names → scan_dependencies, etc. So tests
 // for policy-check must use the canonical basename inside an

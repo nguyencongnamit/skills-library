@@ -726,13 +726,14 @@ type cvePatternsFile struct {
 	LastUpdated   string `json:"last_updated"`
 	Description   string `json:"description"`
 	Entries       []struct {
-		CVE         string   `json:"cve"`
-		Name        string   `json:"name"`
-		Severity    string   `json:"severity"`
-		Description string   `json:"description"`
-		References  []string `json:"references"`
-		Languages   []string `json:"languages"`
-		AttackType  string   `json:"attack_type"`
+		CVE          string   `json:"cve"`
+		Name         string   `json:"name"`
+		Severity     string   `json:"severity"`
+		Description  string   `json:"description"`
+		References   []string `json:"references"`
+		Languages    []string `json:"languages"`
+		CodePatterns []string `json:"code_patterns"`
+		AttackType   string   `json:"attack_type"`
 	} `json:"entries"`
 }
 

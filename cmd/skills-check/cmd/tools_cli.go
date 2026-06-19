@@ -1004,6 +1004,79 @@ func printReachabilityText(w io.Writer, target string, rep *tools.ReachabilityRe
 }
 
 // =============================================================================
+// scan-cve-patterns
+// =============================================================================
+
+func scanCVEPatternsCmd() *cobra.Command {
+	var repoPath, format string
+	c := &cobra.Command{
+		Use:   "scan-cve-patterns <dir>",
+		Short: "Scan first-party source for the curated code patterns of known CVEs (Log4Shell, Shellshock, Spring4Shell, …), language-scoped — advisory CVE reachability at the source level",
+		Long: `Walk the source tree under <dir> and, for each file, apply the
+curated code_patterns of every CVE in the verified DB that declares the
+file's language, reporting each match with file:line.
+
+This is DB-guided depth, not generic SAST: only the hand-tuned CVE
+regexes shipped in the library run, and only against matching languages.
+It is ADVISORY — a match means a pattern associated with the CVE is
+present (verify it); it is not proof of exploitability, and it is NOT
+wired into the build-failing gate. Patterns that cannot compile under
+Go's RE2 engine are skipped and counted.`,
+		Args: cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			if err := validateFormat(format, true); err != nil {
+				return err
+			}
+			target := args[0]
+			lib, err := newLibraryForCmd(repoPath, "", target)
+			if err != nil {
+				return err
+			}
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("scan-cve-patterns: stat %s: %w", target, err)
+			}
+			if !info.IsDir() {
+				return fmt.Errorf("scan-cve-patterns: %s is not a directory (CVE-pattern scanning needs a source tree)", target)
+			}
+			if err := lib.SetAllowedRoots([]string{targetAbs}); err != nil {
+				return fmt.Errorf("scan-cve-patterns: scope library to %s: %w", targetAbs, err)
+			}
+			rep, err := lib.ScanCVEPatterns(targetAbs)
+			if err != nil {
+				return err
+			}
+			switch format {
+			case "json":
+				return emitJSON(c.OutOrStdout(), rep)
+			case "sarif":
+				return emitJSON(c.OutOrStdout(), tools.ScanCVEPatternsSARIF(rep))
+			default:
+				printCVEPatternsText(c.OutOrStdout(), target, rep)
+				return nil
+			}
+		},
+	}
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
+	addFormatFlag(c, &format, true)
+	return c
+}
+
+// printCVEPatternsText renders the per-finding CVE code-pattern matches plus
+// a scan summary (files scanned, active/skipped patterns). The SARIF log is
+// emitted only under --format sarif.
+func printCVEPatternsText(w io.Writer, target string, rep *tools.CVEReachabilityReport) {
+	fmt.Fprintf(w, "=== scan-cve-patterns %s ===\n", target)
+	fmt.Fprintf(w, "Files scanned: %d · patterns active: %d (skipped: %d) · findings: %d\n",
+		rep.FilesScanned, rep.PatternsActive, rep.PatternsSkipped, len(rep.Findings))
+	for _, f := range rep.Findings {
+		fmt.Fprintf(w, "  ! [%s] %s (%s) %s:%d\n", f.Severity, f.CVE, f.Name, f.File, f.Line)
+		fmt.Fprintf(w, "        match: %s\n", f.Match)
+	}
+}
+
+// =============================================================================
 // gate (formerly policy-check)
 // =============================================================================
 

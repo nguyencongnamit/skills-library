@@ -401,6 +401,15 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 		return s.lib.GenerateSBOM(stringArg(args, "path"))
 	case "check_reachability":
 		return s.lib.AnalyzeReachability(stringArg(args, "path"))
+	case "scan_cve_patterns":
+		rep, err := s.lib.ScanCVEPatterns(stringArg(args, "path"))
+		if err != nil {
+			return nil, err
+		}
+		if strings.EqualFold(stringArg(args, "format"), "sarif") {
+			return tools.ScanCVEPatternsSARIF(rep), nil
+		}
+		return rep, nil
 	case "list_external_tools":
 		return s.lib.ListExternalTools()
 	case "explain_finding":
