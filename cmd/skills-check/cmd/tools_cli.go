@@ -32,6 +32,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -814,6 +815,102 @@ recognised IaC reports no findings.
 	addFormatFlag(c, &format, true)
 	addReportFlag(c, &report)
 	return c
+}
+
+// =============================================================================
+// sbom
+// =============================================================================
+
+func sbomCmd() *cobra.Command {
+	var repoPath, format string
+	c := &cobra.Command{
+		Use:   "sbom [dir]",
+		Short: "Generate a CycloneDX 1.5 software bill of materials from a project's dependency lockfiles",
+		Long: `Discover every recognised lockfile under the target directory
+(default: the current directory), parse each into its resolved
+(name, version, ecosystem) tuples, de-duplicate, and emit a
+CycloneDX 1.5 SBOM. The component inventory is exactly the set of
+packages scan-dependencies evaluates — one resolution path, so the
+BOM never drifts from what the scanner sees.
+
+Generation is pure and deterministic (no network, no timestamp): the
+same tree always yields byte-identical output, so the BOM stays
+diffable in CI. Use --format json for the CycloneDX document itself
+(the artifact to commit); the default text format prints a
+per-ecosystem component summary. This is the real artifact the EU CRA
+Annex I (2)(1) "draw up a software bill of materials" obligation asks
+for.`,
+		Args: cobra.MaximumNArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			if err := validateFormat(format, false); err != nil {
+				return err
+			}
+			target := "."
+			if len(args) == 1 {
+				target = args[0]
+			}
+			lib, err := newLibraryForCmd(repoPath, "", target)
+			if err != nil {
+				return err
+			}
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("sbom: stat %s: %w", target, err)
+			}
+			// GenerateSBOM walks a directory; scope the allow-list to the
+			// directory (or, for a single lockfile target, its parent) so
+			// readScanFile permits the inventory reads.
+			root := targetAbs
+			if !info.IsDir() {
+				root = filepath.Dir(targetAbs)
+			}
+			if err := lib.SetAllowedRoots([]string{root}); err != nil {
+				return fmt.Errorf("sbom: scope library to %s: %w", root, err)
+			}
+			bom, err := lib.GenerateSBOM(root)
+			if err != nil {
+				return err
+			}
+			if format == "json" {
+				return emitJSON(c.OutOrStdout(), bom)
+			}
+			printSBOMText(c.OutOrStdout(), bom)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
+	addFormatFlag(c, &format, false)
+	return c
+}
+
+// printSBOMText renders a human summary of a generated BOM: the subject,
+// the total component count, and a per-ecosystem breakdown in stable
+// (alphabetical) order. The CycloneDX document itself is emitted only
+// under --format json.
+func printSBOMText(w io.Writer, bom *tools.SBOM) {
+	subject := "project"
+	if bom.Metadata.Component != nil && bom.Metadata.Component.Name != "" {
+		subject = bom.Metadata.Component.Name
+	}
+	fmt.Fprintf(w, "=== sbom %s (CycloneDX %s) ===\n", subject, bom.SpecVersion)
+	fmt.Fprintf(w, "Components: %d\n", len(bom.Components))
+	counts := map[string]int{}
+	for _, comp := range bom.Components {
+		eco := comp.Ecosystem
+		if eco == "" {
+			eco = "(unknown)"
+		}
+		counts[eco]++
+	}
+	ecos := make([]string, 0, len(counts))
+	for eco := range counts {
+		ecos = append(ecos, eco)
+	}
+	sort.Strings(ecos)
+	for _, eco := range ecos {
+		fmt.Fprintf(w, "  %-10s %d\n", eco, counts[eco])
+	}
 }
 
 // =============================================================================

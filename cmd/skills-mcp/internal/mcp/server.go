@@ -397,6 +397,8 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			return tools.ScanIaCSARIF(res), nil
 		}
 		return res, nil
+	case "generate_sbom":
+		return s.lib.GenerateSBOM(stringArg(args, "path"))
 	case "list_external_tools":
 		return s.lib.ListExternalTools()
 	case "explain_finding":

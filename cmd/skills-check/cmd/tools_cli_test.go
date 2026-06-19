@@ -403,6 +403,53 @@ func TestScanDependenciesDirectoryNoLockfile(t *testing.T) {
 	}
 }
 
+// TestSBOMDirectoryJSON confirms `sbom --format json` over a directory
+// emits a valid CycloneDX 1.5 document inventorying every lockfile found.
+func TestSBOMDirectoryJSON(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "go.sum"),
+		[]byte("github.com/stretchr/testify v1.8.4 h1:abc=\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.0"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "sbom", "--path", repoRootForTest(t), "--format", "json", dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var bom tools.SBOM
+	if err := json.Unmarshal([]byte(out), &bom); err != nil {
+		t.Fatalf("output is not valid CycloneDX JSON: %v\n%s", err, out)
+	}
+	if bom.BOMFormat != "CycloneDX" || bom.SpecVersion != "1.5" {
+		t.Errorf("envelope = %q/%q, want CycloneDX/1.5", bom.BOMFormat, bom.SpecVersion)
+	}
+	if len(bom.Components) != 2 {
+		t.Errorf("expected 2 components (testify + left-pad), got %d", len(bom.Components))
+	}
+}
+
+// TestSBOMTextSummary confirms the default (text) format prints a human
+// summary with the format, the component count, and an ecosystem line.
+func TestSBOMTextSummary(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.0"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "sbom", "--path", repoRootForTest(t), dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	for _, want := range []string{"CycloneDX 1.5", "Components: 1", "npm"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("text summary missing %q:\n%s", want, out)
+		}
+	}
+}
+
 // policy_check dispatches scanners by file basename: "Dockerfile" →
 // scan_dockerfile, lockfile names → scan_dependencies, etc. So tests
 // for policy-check must use the canonical basename inside an

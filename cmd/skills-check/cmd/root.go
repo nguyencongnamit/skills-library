@@ -48,6 +48,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(scanDockerfileCmd())
 	root.AddCommand(scanGitHubActionsCmd())
 	root.AddCommand(scanIaCCmd())
+	root.AddCommand(sbomCmd())
 	root.AddCommand(policyCheckCmd())
 	return root
 }

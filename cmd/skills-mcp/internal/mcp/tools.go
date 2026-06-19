@@ -227,6 +227,17 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "generate_sbom",
+			"description": "Generate a CycloneDX 1.5 software bill of materials (SBOM) for a project directory by discovering and parsing its dependency lockfiles (npm, PyPI, Go, Cargo, Maven, NuGet, RubyGems). Returns the standard CycloneDX JSON document: a deterministic, network-free inventory of every resolved (name, version) component, each with a Package URL (purl). The component set is exactly what scan_dependencies evaluates, so the BOM never drifts from the scanner. This is the real artifact the EU CRA Annex I (2)(1) \"draw up a software bill of materials\" obligation asks for. Subject to --allowed-roots and the sensitive-directory deny-list.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"path": map[string]string{"type": "string", "description": "Absolute path to the project directory to inventory. Every recognised lockfile beneath it is discovered and parsed."},
+				},
+				"required": []string{"path"},
+			},
+		},
+		{
 			"name":        "list_external_tools",
 			"description": "List the industry-standard external CLIs that secure-code skills recommend (declared in each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's PATH. Discovery only — the server never runs these tools. Use it to decide which external scanner to run, then run the chosen one yourself via the shell (e.g. `gitleaks dir` for whole-repo/git-history secret scanning, `hadolint <file>` for Dockerfile linting). The built-in MCP scanners (scan_secrets, scan_dockerfile, …) remain the offline default.",
 			"inputSchema": map[string]interface{}{
