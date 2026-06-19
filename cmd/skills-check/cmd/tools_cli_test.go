@@ -450,6 +450,59 @@ func TestSBOMTextSummary(t *testing.T) {
 	}
 }
 
+// TestScanReachabilityImportedJSON confirms `scan-reachability --format
+// json` flags a malicious lockfile package as imported when first-party
+// source actually imports it, with the import site.
+func TestScanReachabilityImportedJSON(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "package-lock.json"),
+		[]byte(`{"lockfileVersion":3,"packages":{"node_modules/event-stream":{"version":"3.3.6"}}}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	srcDir := filepath.Join(dir, "src")
+	if err := os.MkdirAll(srcDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "index.js"),
+		[]byte("import es from 'event-stream';\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := run(t, "scan-reachability", "--path", repoRootForTest(t), "--format", "json", dir)
+	if err != nil {
+		t.Fatalf("run: %v", err)
+	}
+	var rep tools.ReachabilityReport
+	if err := json.Unmarshal([]byte(out), &rep); err != nil {
+		t.Fatalf("output is not valid JSON: %v\n%s", err, out)
+	}
+	var found *tools.ReachabilityFinding
+	for i := range rep.Findings {
+		if rep.Findings[i].Package == "event-stream" {
+			found = &rep.Findings[i]
+		}
+	}
+	if found == nil {
+		t.Fatalf("no event-stream finding in %s", out)
+	}
+	if !found.Imported || len(found.Sites) == 0 {
+		t.Errorf("event-stream should be imported with a site, got %+v", found)
+	}
+}
+
+// TestScanReachabilityRejectsFile confirms reachability needs a directory
+// (it walks a source tree), not a single file.
+func TestScanReachabilityRejectsFile(t *testing.T) {
+	f := writeFixedNameFixture(t, "package-lock.json",
+		`{"lockfileVersion":3,"packages":{}}`)
+	_, _, err := run(t, "scan-reachability", "--path", repoRootForTest(t), f)
+	if err == nil {
+		t.Fatal("expected an error when given a file, got nil")
+	}
+	if !strings.Contains(err.Error(), "not a directory") {
+		t.Errorf("error should explain a directory is required: %v", err)
+	}
+}
+
 // policy_check dispatches scanners by file basename: "Dockerfile" →
 // scan_dockerfile, lockfile names → scan_dependencies, etc. So tests
 // for policy-check must use the canonical basename inside an

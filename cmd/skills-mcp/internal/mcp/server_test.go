@@ -214,6 +214,7 @@ func TestToolsListReturnsExpectedTools(t *testing.T) {
 		"scan_dockerfile":        false,
 		"scan_iac":               false,
 		"generate_sbom":          false,
+		"check_reachability":     false,
 		"list_external_tools":    false,
 		"explain_finding":        false,
 		"gate":                   false,

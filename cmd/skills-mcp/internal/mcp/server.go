@@ -399,6 +399,8 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 		return res, nil
 	case "generate_sbom":
 		return s.lib.GenerateSBOM(stringArg(args, "path"))
+	case "check_reachability":
+		return s.lib.AnalyzeReachability(stringArg(args, "path"))
 	case "list_external_tools":
 		return s.lib.ListExternalTools()
 	case "explain_finding":

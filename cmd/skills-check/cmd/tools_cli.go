@@ -914,6 +914,94 @@ func printSBOMText(w io.Writer, bom *tools.SBOM) {
 }
 
 // =============================================================================
+// scan-reachability
+// =============================================================================
+
+func scanReachabilityCmd() *cobra.Command {
+	var repoPath, format string
+	c := &cobra.Command{
+		Use:   "scan-reachability <dir>",
+		Short: "Triage dependency findings by direct-import reachability: of the flagged (malicious/typosquat/CVE) packages in a project's lockfiles, which are actually imported in first-party source (npm/PyPI/Go), and where",
+		Long: `Run scan-dependencies across every lockfile under <dir>, then
+determine which of the DB-flagged packages are *directly imported* in
+first-party source (JavaScript/TypeScript, Python, Go) and report the
+import sites.
+
+This is DB-guided import reachability, not generic SAST: reachability
+is resolved only for the packages the vulnerability DB already flagged.
+Two limits are reported honestly — "imported: false" means no direct
+import of that name was found, NOT that the package is unreachable or
+safe. Transitive reachability (a flagged package pulled in by another
+dependency) is out of scope, and a Python distribution imported under a
+different module name (e.g. PyYAML -> yaml) can read as not-imported.
+Reachability is additive triage; it never suppresses a finding.
+
+Ecosystems without import analysis (Cargo, Maven, NuGet, RubyGems) are
+reported as "not analyzed", never as "not imported".`,
+		Args: cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			if err := validateFormat(format, false); err != nil {
+				return err
+			}
+			target := args[0]
+			lib, err := newLibraryForCmd(repoPath, "", target)
+			if err != nil {
+				return err
+			}
+			targetAbs, _ := filepath.Abs(target)
+			info, err := os.Stat(targetAbs)
+			if err != nil {
+				return fmt.Errorf("scan-reachability: stat %s: %w", target, err)
+			}
+			if !info.IsDir() {
+				return fmt.Errorf("scan-reachability: %s is not a directory (reachability needs a project source tree)", target)
+			}
+			if err := lib.SetAllowedRoots([]string{targetAbs}); err != nil {
+				return fmt.Errorf("scan-reachability: scope library to %s: %w", targetAbs, err)
+			}
+			rep, err := lib.AnalyzeReachability(targetAbs)
+			if err != nil {
+				return err
+			}
+			if format == "json" {
+				return emitJSON(c.OutOrStdout(), rep)
+			}
+			printReachabilityText(c.OutOrStdout(), target, rep)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&repoPath, "path", ".", "skills-library checkout (default: $SKILLS_LIBRARY_PATH, else cwd)")
+	addFormatFlag(c, &format, false)
+	return c
+}
+
+// printReachabilityText renders the per-finding reachability verdict plus
+// the import sites for any package found imported. The CycloneDX-style
+// JSON document is emitted only under --format json.
+func printReachabilityText(w io.Writer, target string, rep *tools.ReachabilityReport) {
+	fmt.Fprintf(w, "=== scan-reachability %s ===\n", target)
+	fmt.Fprintf(w, "Flagged dependencies: %d  (imported: %d · not imported: %d · not analyzed: %d)\n",
+		len(rep.Findings), rep.ImportedCount, rep.NotImportedCount, rep.NotAnalyzedCount)
+	for _, f := range rep.Findings {
+		verdict := "not imported"
+		switch {
+		case !f.Analyzed:
+			verdict = "not analyzed"
+		case f.Imported:
+			verdict = "IMPORTED"
+		}
+		pv := f.Package
+		if f.Version != "" {
+			pv += "@" + f.Version
+		}
+		fmt.Fprintf(w, "  [%-12s] %-8s %-7s %s (%s)\n", verdict, f.Severity, f.Ecosystem, pv, f.Category)
+		for _, s := range f.Sites {
+			fmt.Fprintf(w, "        %s:%d\n", s.File, s.Line)
+		}
+	}
+}
+
+// =============================================================================
 // gate (formerly policy-check)
 // =============================================================================
 

@@ -238,6 +238,17 @@ func toolDefinitions() []map[string]interface{} {
 			},
 		},
 		{
+			"name":        "check_reachability",
+			"description": "DB-guided import reachability: of the dependencies scan_dependencies already flagged (malicious / typosquat / CVE) in a project's lockfiles, report which are DIRECTLY IMPORTED in first-party source (JavaScript/TypeScript, Python, Go) and at which file:line. This is targeted triage scoped to the verified DB, NOT generic SAST — reachability is resolved only for flagged packages. Honest limits: \"imported: false\" means no direct import of that name was found, NOT unreachable/safe (transitive reachability and Python distribution-vs-module name divergence like PyYAML->yaml are out of scope); it is additive triage and never suppresses a finding. Ecosystems without import analysis (Cargo, Maven, NuGet, RubyGems) are reported as not-analyzed. Subject to --allowed-roots and the sensitive-directory deny-list.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"path": map[string]string{"type": "string", "description": "Absolute path to the project directory. Lockfiles beneath it are scanned and its source tree is searched for imports of the flagged packages."},
+				},
+				"required": []string{"path"},
+			},
+		},
+		{
 			"name":        "list_external_tools",
 			"description": "List the industry-standard external CLIs that secure-code skills recommend (declared in each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's PATH. Discovery only — the server never runs these tools. Use it to decide which external scanner to run, then run the chosen one yourself via the shell (e.g. `gitleaks dir` for whole-repo/git-history secret scanning, `hadolint <file>` for Dockerfile linting). The built-in MCP scanners (scan_secrets, scan_dockerfile, …) remain the offline default.",
 			"inputSchema": map[string]interface{}{
