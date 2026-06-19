@@ -19,6 +19,17 @@ Thumbs.db
 .idea/
 *.swp
 
+# Internal strategy / planning (NEVER publish to the public OSS repo — competitive moat)
+/STRATEGY.md
+/BACKLOG.md
+/BUILD_PLAN.md
+/CLAUDE.md
+/.claude/
+*-strategy-report.html
+*-OSS-Strategy-Report.pdf
+/test-report.pdf
+/secure-code-team-guide.pdf
+
 # Python build/test
 __pycache__/
 *.pyc
