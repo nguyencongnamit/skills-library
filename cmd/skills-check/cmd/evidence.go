@@ -44,6 +44,11 @@ type EvidenceReport struct {
 	UnmappedSkills   []string          `json:"unmapped_skills"`
 	UnmappedControls []string          `json:"unmapped_controls"`
 	Metadata         map[string]string `json:"metadata,omitempty"`
+	// Signature is the detached Ed25519 signature over the canonical bytes
+	// of this report (with Signature itself blanked), formatted
+	// "ed25519:<base64>". Set only when --sign was passed; makes the bundle
+	// tamper-evident and attestable. Verified with verifyEvidence.
+	Signature string `json:"signature,omitempty"`
 }
 
 type ControlEvidence struct {
@@ -81,6 +86,7 @@ func evidenceCmd() *cobra.Command {
 		format      string
 		outFile     string
 		scanPath    string
+		signKeyPath string
 	)
 
 	c := &cobra.Command{
@@ -232,6 +238,14 @@ records, access reviews, and so on.
 			}
 			sort.Strings(report.UnmappedControls)
 
+			// Sign last, over the fully-built report, so the signature
+			// attests to the exact content rendered (including verification).
+			if signKeyPath != "" {
+				if err := signEvidence(&report, signKeyPath); err != nil {
+					return fmt.Errorf("sign evidence: %w", err)
+				}
+			}
+
 			out, err := renderEvidence(report, format)
 			if err != nil {
 				return err
@@ -253,6 +267,7 @@ records, access reviews, and so on.
 
 	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root")
 	c.Flags().StringVar(&scanPath, "scan", "", "Path to a codebase to VERIFY each control's mapped checks against (schema 2.0); omit for a skill-coverage-only report")
+	c.Flags().StringVar(&signKeyPath, "sign", "", "Path to an Ed25519 private key; signs the report into a tamper-evident bundle (signature field)")
 	c.Flags().StringVar(&framework, "framework", "", "Compliance framework: SOC2|HIPAA|PCI-DSS")
 	c.Flags().StringVar(&format, "format", "json", "Output format: json|markdown")
 	c.Flags().StringVar(&outFile, "out", "", "Write report to this file; '-' or empty for stdout")
@@ -287,7 +302,11 @@ func renderEvidenceMarkdown(r EvidenceReport) string {
 		fmt.Fprintf(&sb, "**Scan target:** `%s`  \n", r.ScanTarget)
 	}
 	fmt.Fprintf(&sb, "**Skills installed:** %d  \n", r.SkillsCount)
-	fmt.Fprintf(&sb, "**Controls evaluated:** %d\n\n", len(r.Controls))
+	fmt.Fprintf(&sb, "**Controls evaluated:** %d  \n", len(r.Controls))
+	if r.Signature != "" {
+		fmt.Fprintf(&sb, "**Signed:** yes (`%s…`, verify with `skills-check`)  \n", truncateSig(r.Signature))
+	}
+	sb.WriteString("\n")
 
 	var covered, partial, missing, unmapped int
 	verif := map[string]int{}
