@@ -1,0 +1,65 @@
+schema_version: "2.0"
+framework: "NIST SSDF"
+version: "SP 800-218 v1.1 (Secure Software Development Framework)"
+last_updated: "2026-06-19"
+# Maps NIST SSDF practices to prevention skills (advisory) and, where an
+# automated detection exists, to runnable checks (verification). Practice
+# IDs follow SP 800-218 (PO / PS / PW / RV groups).
+controls:
+  - id: "PO.5.1"
+    title: "Implement and Maintain Secure Development Environments"
+    description: "Separate and protect each environment involved in software development; enforce secure configurations for the toolchain and CI/CD."
+    skills: ["cicd-security", "iac-security", "iam-best-practices"]
+    checks: ["scan_github_actions"]
+    cwe: ["CWE-1188", "CWE-16"]
+    references: ["https://csrc.nist.gov/Projects/ssdf"]
+  - id: "PS.1.1"
+    title: "Protect All Forms of Code from Unauthorized Access and Tampering"
+    description: "Store all source code, configuration, and secrets securely; keep credentials out of the codebase."
+    skills: ["secret-detection", "cicd-security"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-312"]
+  - id: "PS.2.1"
+    title: "Provide a Mechanism for Verifying Software Release Integrity"
+    description: "Make integrity-verification information (signatures, hashes) available to consumers of each release."
+    skills: ["supply-chain-security"]
+    cwe: ["CWE-345", "CWE-353"]
+  - id: "PW.4.1"
+    title: "Reuse Existing, Well-Secured Software"
+    description: "Acquire and maintain well-secured third-party components; track them and screen for known-vulnerable, malicious, or typosquatted dependencies."
+    skills: ["supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "check_dependency", "check_typosquat", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-1357", "CWE-937"]
+  - id: "PW.5.1"
+    title: "Create Source Code Adhering to Secure Coding Practices"
+    description: "Follow secure coding standards for input handling, cryptography, deserialization, and request-forgery prevention."
+    skills: ["secure-code-review", "crypto-misuse", "deserialization-security", "ssrf-prevention", "api-security"]
+    cwe: ["CWE-20", "CWE-502", "CWE-918"]
+  - id: "PW.6.1"
+    title: "Configure Build Processes to Improve Executable Security"
+    description: "Harden the compilation, interpreter, and container build processes; pin and verify build inputs."
+    skills: ["cicd-security", "container-security"]
+    checks: ["scan_dockerfile", "scan_github_actions"]
+    cwe: ["CWE-15", "CWE-94"]
+  - id: "PW.7.2"
+    title: "Review and/or Analyze Human-Readable Code"
+    description: "Use code review and static analysis to identify vulnerabilities and verify compliance with secure coding standards."
+    skills: ["secure-code-review", "logging-security", "error-handling-security"]
+    cwe: ["CWE-209", "CWE-1295"]
+  - id: "PW.9.1"
+    title: "Configure Software to Have Secure Settings by Default"
+    description: "Ship secure-by-default configuration for the software and its runtime/container images."
+    skills: ["iac-security", "container-security", "cors-security"]
+    checks: ["scan_dockerfile"]
+    cwe: ["CWE-1188", "CWE-250"]
+  - id: "RV.1.1"
+    title: "Identify and Confirm Vulnerabilities on an Ongoing Basis"
+    description: "Continuously gather and analyze vulnerability information about the software and its dependencies."
+    skills: ["supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "RV.2.1"
+    title: "Assess, Prioritize, and Remediate Vulnerabilities"
+    description: "Triage discovered vulnerabilities by severity/exploitability and remediate or mitigate them."
+    skills: ["dependency-audit", "supply-chain-security", "secure-code-review"]
+    cwe: ["CWE-1035"]

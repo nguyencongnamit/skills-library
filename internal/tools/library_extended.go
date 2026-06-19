@@ -465,14 +465,16 @@ type FrameworkMatch struct {
 // the on-disk YAML names under compliance/. Keys are stable IDs the
 // LLM can pin in `framework` arguments.
 var frameworkFiles = map[string]string{
-	"soc2":    "soc2_mapping.yaml",
-	"hipaa":   "hipaa_mapping.yaml",
-	"pci-dss": "pci_dss_mapping.yaml",
+	"soc2":       "soc2_mapping.yaml",
+	"hipaa":      "hipaa_mapping.yaml",
+	"pci-dss":    "pci_dss_mapping.yaml",
+	"nist-ssdf":  "nist_ssdf_mapping.yaml",
+	"owasp-asvs": "owasp_asvs_mapping.yaml",
 }
 
 // frameworkOrder is the deterministic iteration order so tool output is
 // stable across calls.
-var frameworkOrder = []string{"soc2", "hipaa", "pci-dss"}
+var frameworkOrder = []string{"soc2", "hipaa", "pci-dss", "nist-ssdf", "owasp-asvs"}
 
 // MapComplianceControl finds controls in SOC 2 / HIPAA / PCI DSS that
 // reference the supplied skill ID or whose title/description matches

@@ -232,7 +232,7 @@ func TestEvidenceCmdRejectsPathTraversalFramework(t *testing.T) {
 // allows the canonical framework names (alphanumerics plus `-` and `_`).
 func TestEvidenceCmdAcceptsValidFrameworkSlug(t *testing.T) {
 	root := repoRoot(t)
-	for _, fw := range []string{"SOC2", "HIPAA", "PCI-DSS"} {
+	for _, fw := range []string{"SOC2", "HIPAA", "PCI-DSS", "NIST-SSDF", "OWASP-ASVS"} {
 		t.Run(fw, func(t *testing.T) {
 			_, _, err := executeRoot(t,
 				"evidence",
@@ -242,6 +242,41 @@ func TestEvidenceCmdAcceptsValidFrameworkSlug(t *testing.T) {
 			)
 			if err != nil {
 				t.Fatalf("expected %q to be accepted by the slug validator, got: %v", fw, err)
+			}
+		})
+	}
+}
+
+// TestEvidenceCmdNewFrameworksAreCheckBacked confirms the CF.6 frameworks
+// (NIST SSDF + OWASP ASVS) load, are schema 2.0, and have at least one
+// control wired to a runnable check — i.e. they exercise the full
+// control→check rail, not just skill-presence coverage.
+func TestEvidenceCmdNewFrameworksAreCheckBacked(t *testing.T) {
+	root := repoRoot(t)
+	for _, fw := range []string{"NIST-SSDF", "OWASP-ASVS"} {
+		t.Run(fw, func(t *testing.T) {
+			stdout, _, err := executeRoot(t, "evidence", "--library", root, "--framework", fw, "--format", "json")
+			if err != nil {
+				t.Fatalf("evidence %s: %v", fw, err)
+			}
+			var report EvidenceReport
+			if err := json.Unmarshal([]byte(stdout), &report); err != nil {
+				t.Fatalf("parse %s: %v", fw, err)
+			}
+			if report.Metadata["mapping_schema_version"] != "2.0" {
+				t.Errorf("%s: want schema 2.0, got %q", fw, report.Metadata["mapping_schema_version"])
+			}
+			if len(report.Controls) == 0 {
+				t.Fatalf("%s: expected controls", fw)
+			}
+			checkBacked := 0
+			for _, c := range report.Controls {
+				if len(c.MappedChecks) > 0 {
+					checkBacked++
+				}
+			}
+			if checkBacked == 0 {
+				t.Errorf("%s: expected at least one check-backed control", fw)
 			}
 		})
 	}

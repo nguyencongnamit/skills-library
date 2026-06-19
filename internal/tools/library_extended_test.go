@@ -245,7 +245,7 @@ func TestMapComplianceControlResponseKeyShape(t *testing.T) {
 	if len(res.Frameworks) == 0 {
 		t.Fatal("expected at least one framework match for secret-detection")
 	}
-	validKeys := map[string]bool{"soc2": true, "hipaa": true, "pci-dss": true}
+	validKeys := map[string]bool{"soc2": true, "hipaa": true, "pci-dss": true, "nist-ssdf": true, "owasp-asvs": true}
 	for k, v := range res.Frameworks {
 		if !validKeys[k] {
 			t.Errorf("framework key %q is not a machine identifier; expected one of %v", k, validKeys)
@@ -1373,5 +1373,20 @@ func TestOSVUserCacheMissingFallsBackToRepoSample(t *testing.T) {
 	if idx == nil || len(idx.ByPackage) == 0 {
 		t.Fatalf("repo-bundled rubygems index must remain visible when " +
 			"user cache is missing; got nil/empty")
+	}
+}
+
+// TestMapComplianceControlNewFrameworks confirms the CF.6 frameworks are
+// registered and queryable by their stable keys (nist-ssdf, owasp-asvs).
+func TestMapComplianceControlNewFrameworks(t *testing.T) {
+	lib := newLibrary(t)
+	for _, fw := range []string{"nist-ssdf", "owasp-asvs"} {
+		res, err := lib.MapComplianceControl("supply-chain-security", "", fw)
+		if err != nil {
+			t.Fatalf("MapComplianceControl(%q): %v", fw, err)
+		}
+		if len(res.Frameworks) == 0 {
+			t.Errorf("%s: expected a framework match for supply-chain-security", fw)
+		}
 	}
 }

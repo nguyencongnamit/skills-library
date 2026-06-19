@@ -1,0 +1,80 @@
+schema_version: "2.0"
+framework: "OWASP ASVS"
+version: "Application Security Verification Standard v4.0.3"
+last_updated: "2026-06-19"
+# Maps ASVS verification chapters (V1–V14) to prevention skills (advisory)
+# and, where an automated detection exists, to runnable checks
+# (verification). ASVS is itself a verification standard, so its sections
+# line up naturally with checks. Control IDs follow ASVS section numbering.
+controls:
+  - id: "V1.1"
+    title: "Secure Software Development Lifecycle"
+    description: "Security is addressed in architecture, design, and threat modeling throughout the SDLC."
+    skills: ["secure-code-review", "compliance-awareness"]
+    cwe: ["CWE-1059"]
+    references: ["https://owasp.org/www-project-application-security-verification-standard/"]
+  - id: "V2.1"
+    title: "Authentication"
+    description: "Authentication controls (password policy, MFA, anti-automation) are present and enforced."
+    skills: ["auth-security", "iam-best-practices"]
+    cwe: ["CWE-287", "CWE-307"]
+  - id: "V3.1"
+    title: "Session Management"
+    description: "Sessions are created, maintained, and invalidated securely."
+    skills: ["auth-security", "api-security"]
+    cwe: ["CWE-384", "CWE-613"]
+  - id: "V4.1"
+    title: "Access Control"
+    description: "Access-control decisions are enforced server-side and protect against IDOR / privilege escalation."
+    skills: ["auth-security", "iam-best-practices", "api-security"]
+    cwe: ["CWE-285", "CWE-639"]
+  - id: "V5.1"
+    title: "Validation, Sanitization and Encoding"
+    description: "Untrusted input is validated, and output is encoded to prevent injection (SQLi, XSS, command, SSRF)."
+    skills: ["api-security", "frontend-security", "deserialization-security", "ssrf-prevention", "database-security"]
+    cwe: ["CWE-20", "CWE-79", "CWE-89", "CWE-918"]
+  - id: "V6.1"
+    title: "Stored Cryptography"
+    description: "Sensitive data is protected with approved cryptographic algorithms, modes, and key management."
+    skills: ["crypto-misuse", "secret-detection"]
+    checks: ["scan_secrets"]
+    cwe: ["CWE-311", "CWE-327", "CWE-798"]
+  - id: "V7.1"
+    title: "Error Handling and Logging"
+    description: "Errors are handled without leaking sensitive data, and logs do not contain credentials or secrets."
+    skills: ["error-handling-security", "logging-security", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-209", "CWE-532"]
+  - id: "V8.1"
+    title: "Data Protection"
+    description: "Sensitive data is identified and protected at rest and in transit; secrets are not embedded in code."
+    skills: ["database-security", "secret-detection", "crypto-misuse"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-312", "CWE-200"]
+  - id: "V9.1"
+    title: "Communication Security"
+    description: "All communication uses TLS with secure configuration; cross-origin access is restricted."
+    skills: ["protocol-security", "cors-security"]
+    cwe: ["CWE-319", "CWE-295"]
+  - id: "V10.3"
+    title: "Deployed Application Integrity / Malicious Code"
+    description: "Dependencies are screened for malicious, typosquatted, and known-vulnerable components."
+    skills: ["supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "check_dependency", "check_typosquat", "lookup_vulnerability"]
+    cwe: ["CWE-506", "CWE-1104", "CWE-1357"]
+  - id: "V12.1"
+    title: "Files and Resources"
+    description: "File upload and access are validated to prevent path traversal and unsafe file handling."
+    skills: ["file-upload-security", "ssrf-prevention"]
+    cwe: ["CWE-434", "CWE-22"]
+  - id: "V13.1"
+    title: "API and Web Service"
+    description: "REST/GraphQL endpoints enforce authentication, authorization, and input validation."
+    skills: ["api-security", "graphql-security"]
+    cwe: ["CWE-650", "CWE-285"]
+  - id: "V14.1"
+    title: "Configuration"
+    description: "Build and deployment configuration is hardened; CI/CD and container images follow secure defaults."
+    skills: ["iac-security", "container-security", "cicd-security"]
+    checks: ["scan_dockerfile", "scan_github_actions"]
+    cwe: ["CWE-16", "CWE-1188"]
