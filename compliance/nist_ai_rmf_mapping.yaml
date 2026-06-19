@@ -1,0 +1,58 @@
+schema_version: "2.0"
+framework: "NIST AI RMF"
+version: "AI RMF 1.0 (NIST AI 100-1) + Generative AI Profile (NIST AI 600-1)"
+last_updated: "2026-06-19"
+# Maps the NIST AI Risk Management Framework functions (GOVERN / MAP / MEASURE
+# / MANAGE) to prevention skills (advisory) and, where an automated detection
+# exists, to runnable checks (verification). This mapping deliberately covers
+# the AI-generated-code and AI-supply-chain angle (ML/LLM library screening,
+# secrets in prompts/code, review of generated code) that general compliance
+# tooling does not. Governance/process subcategories carry CWE identifiers but
+# no `checks:`. Control IDs follow the AI RMF subcategory numbering.
+controls:
+  - id: "GOVERN-1.1"
+    title: "Policies for AI Risk Management"
+    description: "Legal, regulatory, and organizational policies for AI risk — including review of AI-generated code — are established and documented."
+    skills: ["compliance-awareness", "secure-code-review"]
+    cwe: ["CWE-1059"]
+    references: ["https://www.nist.gov/itl/ai-risk-management-framework"]
+  - id: "GOVERN-4.1"
+    title: "Review of AI-Generated Code and Artifacts"
+    description: "AI-generated code is treated as untrusted: it is reviewed and scanned for secrets and vulnerable or malicious dependencies before being merged."
+    skills: ["secure-code-review", "supply-chain-security", "secret-detection"]
+    checks: ["scan_secrets", "scan_dependencies", "check_typosquat"]
+    cwe: ["CWE-1059", "CWE-798", "CWE-1104"]
+  - id: "MAP-1.1"
+    title: "Context and Secure Configuration of AI Systems"
+    description: "The context of AI use is established and the AI system's runtime and container configuration are hardened."
+    skills: ["iac-security", "container-security", "llm-app-security"]
+    checks: ["scan_dockerfile"]
+    cwe: ["CWE-1188"]
+  - id: "MAP-2.3"
+    title: "AI Components and Dependencies Are Inventoried"
+    description: "AI system components — including ML/LLM libraries and model dependencies — are inventoried and screened for known-vulnerable, malicious, or typosquatted packages."
+    skills: ["ml-security", "supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "check_typosquat", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "MEASURE-2.7"
+    title: "Security and Resilience of the AI System"
+    description: "AI system security is evaluated against threats such as prompt injection, insecure output handling, and model supply-chain compromise."
+    skills: ["llm-app-security", "ml-security", "api-security"]
+    cwe: ["CWE-20", "CWE-94"]
+  - id: "MEASURE-2.10"
+    title: "Privacy of the AI System"
+    description: "Secrets and sensitive data are kept out of code, prompts, and logs; the AI system does not leak credentials or personal data."
+    skills: ["secret-detection", "llm-app-security", "logging-security"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-200"]
+  - id: "MANAGE-2.2"
+    title: "Mechanisms to Sustain AI System Security"
+    description: "Mechanisms are in place to sustain the security of the AI system over time, including dependency and vulnerability management for AI libraries."
+    skills: ["ml-security", "supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "MANAGE-4.1"
+    title: "Post-Deployment Monitoring and Logging"
+    description: "Post-deployment monitoring of the AI system is in place, including secure logging of AI decisions without leaking sensitive data."
+    skills: ["logging-security", "llm-app-security", "error-handling-security"]
+    cwe: ["CWE-778", "CWE-532"]

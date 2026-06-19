@@ -99,6 +99,33 @@ func Parse(path string, body []byte) ([]Dependency, error) {
 	return nil, fmt.Errorf("%w: %s", ErrUnknownLockfile, base)
 }
 
+// IsKnownLockfile reports whether base (a file's base name) is a
+// dependency manifest / lockfile that Parse recognises. It is the single
+// source of truth for lockfile discovery: directory scanners (the
+// scan-dependencies CLI and the compliance evidence runner) use it to
+// decide which files to feed Parse, so a parser added above is picked up
+// by discovery without updating a second hand-maintained list. Keep this
+// in lock-step with the Parse dispatch.
+func IsKnownLockfile(base string) bool {
+	switch base {
+	case "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
+		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
+		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
+		"packages.lock.json", "Gemfile.lock":
+		return true
+	}
+	lower := strings.ToLower(base)
+	if strings.HasSuffix(lower, ".csproj") ||
+		strings.HasSuffix(lower, ".fsproj") ||
+		strings.HasSuffix(lower, ".vbproj") {
+		return true
+	}
+	if strings.HasSuffix(base, ".txt") && strings.HasPrefix(base, "requirements") {
+		return true
+	}
+	return false
+}
+
 // dedupe returns deps with exact duplicates collapsed. Order is
 // preserved on first occurrence so the lockfile reading order is
 // stable across runs. We only fold genuinely identical rows so a

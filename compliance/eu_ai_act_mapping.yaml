@@ -1,0 +1,52 @@
+schema_version: "2.0"
+framework: "EU AI Act"
+version: "Regulation (EU) 2024/1689 — high-risk AI systems (Title III, Chapter 2)"
+last_updated: "2026-06-19"
+# Maps the EU AI Act high-risk-system requirements (Articles 9–15) to
+# prevention skills (advisory) and, where an automated detection exists, to
+# runnable checks (verification). Like the AI RMF mapping, this covers the
+# AI-supply-chain and AI-generated-code angle (model/library screening,
+# secrets in training data and code, review of generated outputs).
+# Process/documentation articles carry CWE identifiers but no `checks:`.
+# Control IDs follow the Article numbering.
+controls:
+  - id: "Art9"
+    title: "Risk Management System"
+    description: "A continuous risk-management system is established and maintained across the AI system lifecycle."
+    skills: ["compliance-awareness", "ml-security"]
+    cwe: ["CWE-1059"]
+    references: ["https://eur-lex.europa.eu/eli/reg/2024/1689/oj"]
+  - id: "Art10"
+    title: "Data and Data Governance"
+    description: "Training, validation, and testing data are governed; sensitive data and secrets are not embedded in datasets, code, or pipelines."
+    skills: ["ml-security", "secret-detection", "database-security"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-200"]
+  - id: "Art11"
+    title: "Technical Documentation (Components and SBOM)"
+    description: "Technical documentation is drawn up, including an inventory of components and dependencies of the AI system."
+    skills: ["supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "Art12"
+    title: "Record-Keeping and Logging"
+    description: "High-risk AI systems automatically record events (logs) over their lifetime, securely and without leaking sensitive data."
+    skills: ["logging-security", "error-handling-security"]
+    cwe: ["CWE-778", "CWE-532"]
+  - id: "Art14"
+    title: "Human Oversight"
+    description: "High-risk AI systems are designed for effective human oversight, including human review of AI-generated code and outputs before use."
+    skills: ["secure-code-review", "llm-app-security"]
+    cwe: ["CWE-1059"]
+  - id: "Art15"
+    title: "Accuracy, Robustness and Cybersecurity"
+    description: "High-risk AI systems achieve appropriate robustness and cybersecurity, including resilient and screened third-party AI components."
+    skills: ["llm-app-security", "ml-security", "supply-chain-security"]
+    checks: ["scan_dependencies", "check_typosquat", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937", "CWE-20"]
+  - id: "Art15.5"
+    title: "Resilience Against AI-Specific Attacks"
+    description: "Measures address AI-specific threats — data poisoning, adversarial inputs, and model/dependency supply-chain compromise."
+    skills: ["ml-security", "llm-app-security", "supply-chain-security"]
+    checks: ["scan_dependencies"]
+    cwe: ["CWE-1104", "CWE-94"]

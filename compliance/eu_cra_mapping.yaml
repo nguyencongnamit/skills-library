@@ -1,0 +1,62 @@
+schema_version: "2.0"
+framework: "EU CRA"
+version: "Regulation (EU) 2024/2847 — Cyber Resilience Act, Annex I"
+last_updated: "2026-06-19"
+# Maps the EU Cyber Resilience Act Annex I essential requirements (Part I —
+# security properties; Part II — vulnerability handling) to prevention skills
+# (advisory) and, where an automated detection exists, to runnable checks
+# (verification). Requirements that are organizational or design-level carry
+# CWE identifiers but no `checks:`. Control IDs follow Annex I numbering.
+controls:
+  - id: "AnnexI.1.2(a)"
+    title: "Secure by Default Configuration"
+    description: "Products are made available with a secure-by-default configuration, including the possibility to reset to a secure state."
+    skills: ["iac-security", "container-security", "cicd-security"]
+    checks: ["scan_dockerfile", "scan_github_actions"]
+    cwe: ["CWE-1188", "CWE-16"]
+    references: ["https://eur-lex.europa.eu/eli/reg/2024/2847/oj"]
+  - id: "AnnexI.1.2(b)"
+    title: "Protection from Unauthorized Access"
+    description: "Protect against unauthorized access by appropriate control mechanisms, including authentication and identity management."
+    skills: ["auth-security", "iam-best-practices", "api-security"]
+    cwe: ["CWE-287", "CWE-284"]
+  - id: "AnnexI.1.2(c)"
+    title: "Confidentiality of Data"
+    description: "Protect the confidentiality of stored, transmitted, or processed data through encryption and by keeping secrets out of the codebase."
+    skills: ["crypto-misuse", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-311"]
+  - id: "AnnexI.1.2(d)"
+    title: "Integrity of Data and Commands"
+    description: "Protect the integrity of stored/transmitted data, commands, programs, and configuration against unauthorized manipulation."
+    skills: ["supply-chain-security", "api-security"]
+    cwe: ["CWE-345", "CWE-353"]
+  - id: "AnnexI.1.2(h)"
+    title: "Minimize Attack Surfaces"
+    description: "Design, develop, and produce products to limit attack surfaces, including external interfaces and exposed services."
+    skills: ["container-security", "iac-security"]
+    checks: ["scan_dockerfile"]
+    cwe: ["CWE-1188", "CWE-250"]
+  - id: "AnnexI.1.2(k)"
+    title: "Secure the Software Supply Chain"
+    description: "Limit attack surfaces introduced through third-party components by screening dependencies for malicious, typosquatted, and vulnerable packages."
+    skills: ["supply-chain-security", "dependency-audit"]
+    checks: ["scan_dependencies", "check_dependency", "check_typosquat", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-1357", "CWE-937"]
+  - id: "AnnexI.2.1"
+    title: "Identify and Document Components (SBOM)"
+    description: "Identify and document vulnerabilities and components, including by drawing up a software bill of materials."
+    skills: ["supply-chain-security"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "AnnexI.2.3"
+    title: "Address Vulnerabilities Without Delay"
+    description: "Address and remediate vulnerabilities without delay, including by providing security updates for affected components."
+    skills: ["dependency-audit", "supply-chain-security"]
+    checks: ["scan_dependencies", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
+  - id: "AnnexI.2.5"
+    title: "Apply Effective Vulnerability-Handling Hygiene"
+    description: "Apply secure development practices and regular testing before placing the product on the market and throughout its lifecycle."
+    skills: ["secure-code-review", "logging-security", "error-handling-security"]
+    cwe: ["CWE-209", "CWE-778"]

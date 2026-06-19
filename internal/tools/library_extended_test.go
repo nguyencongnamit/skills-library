@@ -245,7 +245,10 @@ func TestMapComplianceControlResponseKeyShape(t *testing.T) {
 	if len(res.Frameworks) == 0 {
 		t.Fatal("expected at least one framework match for secret-detection")
 	}
-	validKeys := map[string]bool{"soc2": true, "hipaa": true, "pci-dss": true, "nist-ssdf": true, "owasp-asvs": true}
+	validKeys := map[string]bool{
+		"soc2": true, "hipaa": true, "pci-dss": true, "nist-ssdf": true, "owasp-asvs": true,
+		"slsa": true, "eu-cra": true, "nist-ai-rmf": true, "eu-ai-act": true,
+	}
 	for k, v := range res.Frameworks {
 		if !validKeys[k] {
 			t.Errorf("framework key %q is not a machine identifier; expected one of %v", k, validKeys)
@@ -1377,10 +1380,11 @@ func TestOSVUserCacheMissingFallsBackToRepoSample(t *testing.T) {
 }
 
 // TestMapComplianceControlNewFrameworks confirms the CF.6 frameworks are
-// registered and queryable by their stable keys (nist-ssdf, owasp-asvs).
+// registered and queryable by their stable keys. supply-chain-security maps
+// into every one of them, so each must return a non-empty match.
 func TestMapComplianceControlNewFrameworks(t *testing.T) {
 	lib := newLibrary(t)
-	for _, fw := range []string{"nist-ssdf", "owasp-asvs"} {
+	for _, fw := range []string{"nist-ssdf", "owasp-asvs", "slsa", "eu-cra", "nist-ai-rmf", "eu-ai-act"} {
 		res, err := lib.MapComplianceControl("supply-chain-security", "", fw)
 		if err != nil {
 			t.Fatalf("MapComplianceControl(%q): %v", fw, err)
@@ -1388,5 +1392,85 @@ func TestMapComplianceControlNewFrameworks(t *testing.T) {
 		if len(res.Frameworks) == 0 {
 			t.Errorf("%s: expected a framework match for supply-chain-security", fw)
 		}
+	}
+}
+
+// TestMapComplianceControlReturnsChecksAndCWE confirms CF.5: even without a
+// scan, each matched control carries its schema-2.0 mapped checks and CWE
+// identifiers (not just the advisory skills), and no verification is run.
+func TestMapComplianceControlReturnsChecksAndCWE(t *testing.T) {
+	lib := newLibrary(t)
+	res, err := lib.MapComplianceControl("secret-detection", "", "soc2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fm, ok := res.Frameworks["soc2"]
+	if !ok || len(fm.Controls) == 0 {
+		t.Fatalf("expected soc2 matches for secret-detection, got %+v", res.Frameworks)
+	}
+	if res.ScanTarget != "" {
+		t.Errorf("ScanTarget must be empty without a run, got %q", res.ScanTarget)
+	}
+	var sawChecks, sawCWE bool
+	for _, cm := range fm.Controls {
+		if len(cm.Checks) > 0 {
+			sawChecks = true
+		}
+		if len(cm.CWE) > 0 {
+			sawCWE = true
+		}
+		if cm.Verification != "" || len(cm.CheckResults) != 0 {
+			t.Errorf("control %s: no verification expected without a scan path", cm.ID)
+		}
+	}
+	if !sawChecks || !sawCWE {
+		t.Errorf("expected matched controls to carry checks (%v) and cwe (%v)", sawChecks, sawCWE)
+	}
+}
+
+// TestMapComplianceControlRunVerifies is the CF.5 keystone test: with a scan
+// path, each matched control's mapped checks are executed and the per-control
+// verdict reflects what was found. A planted credential must flip the
+// secret-backed control to "findings".
+func TestMapComplianceControlRunVerifies(t *testing.T) {
+	lib := newLibrary(t)
+	target := t.TempDir()
+	secret := "aws_secret_access_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"\n"
+	if err := os.WriteFile(filepath.Join(target, "config.js"), []byte(secret), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	res, err := lib.MapComplianceControlRun("secret-detection", "", "soc2", target)
+	if err != nil {
+		t.Fatalf("MapComplianceControlRun: %v", err)
+	}
+	if res.ScanTarget == "" {
+		t.Error("ScanTarget must be set on a run")
+	}
+	fm := res.Frameworks["soc2"]
+	var sawFindings, sawScanSecretFail bool
+	for _, cm := range fm.Controls {
+		if cm.Verification == "findings" {
+			sawFindings = true
+		}
+		for _, cr := range cm.CheckResults {
+			if cr.ID == "scan_secrets" && cr.Status == "fail" && cr.Findings >= 1 {
+				sawScanSecretFail = true
+			}
+		}
+	}
+	if !sawFindings {
+		t.Error("expected at least one soc2 control to verify as 'findings' against the planted secret")
+	}
+	if !sawScanSecretFail {
+		t.Error("expected a scan_secrets check to fail with >=1 finding")
+	}
+}
+
+// TestMapComplianceControlRunRejectsBadPath ensures a non-directory scan path
+// is rejected rather than silently producing an unverified report.
+func TestMapComplianceControlRunRejectsBadPath(t *testing.T) {
+	lib := newLibrary(t)
+	if _, err := lib.MapComplianceControlRun("secret-detection", "", "soc2", "/no/such/path/here"); err == nil {
+		t.Error("expected an error for a non-existent scan path")
 	}
 }

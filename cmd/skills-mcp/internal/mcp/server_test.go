@@ -206,6 +206,7 @@ func TestToolsListReturnsExpectedTools(t *testing.T) {
 		"check_dependency":       false,
 		"check_typosquat":        false,
 		"map_compliance_control": false,
+		"map_cwe":                false,
 		"get_sigma_rule":         false,
 		"version_status":         false,
 		"scan_dependencies":      false,
@@ -257,6 +258,34 @@ func TestToolsCallLookupVulnerability(t *testing.T) {
 	body, _ := json.Marshal(res)
 	if !strings.Contains(string(body), "event-stream") {
 		t.Errorf("response did not contain event-stream; got %s", body)
+	}
+}
+
+func TestToolsCallMapCWE(t *testing.T) {
+	srv := newServer(t)
+	req := mustMarshal(t, map[string]interface{}{
+		"jsonrpc": "2.0",
+		"id":      31,
+		"method":  "tools/call",
+		"params": map[string]interface{}{
+			"name": "map_cwe",
+			"arguments": map[string]string{
+				"cwe": "798",
+			},
+		},
+	})
+	resp := srv.HandleLine(req)
+	if resp == nil || resp.Error != nil {
+		t.Fatalf("expected ok response, got %+v", resp)
+	}
+	res := resp.Result.(map[string]interface{})
+	body, _ := json.Marshal(res)
+	// The CWE-798 spine must surface the normalized id, the secret-detection
+	// skill, and the scan_secrets check across multiple frameworks.
+	for _, want := range []string{"CWE-798", "secret-detection", "scan_secrets"} {
+		if !strings.Contains(string(body), want) {
+			t.Errorf("map_cwe response missing %q; got %s", want, body)
+		}
 	}
 }
 

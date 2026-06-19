@@ -21,6 +21,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"github.com/namncqualgo/skills-library/internal/checks"
 	"github.com/namncqualgo/skills-library/internal/compliance"
 )
 
@@ -448,38 +449,80 @@ type FrameworkMapping = compliance.Mapping
 // name ("SOC 2", "HIPAA", "PCI-DSS") is preserved per-entry on the
 // FrameworkMatch value.
 type MapComplianceResult struct {
-	SkillID    string                    `json:"skill_id,omitempty"`
-	Query      string                    `json:"query,omitempty"`
-	Framework  string                    `json:"framework,omitempty"`
+	SkillID   string `json:"skill_id,omitempty"`
+	Query     string `json:"query,omitempty"`
+	Framework string `json:"framework,omitempty"`
+	// ScanTarget is the directory the mapped checks were executed against,
+	// set only when a verifying run was requested (a non-empty scan path).
+	// Empty means an advisory mapping with no live verification.
+	ScanTarget string                    `json:"scan_target,omitempty"`
 	Frameworks map[string]FrameworkMatch `json:"frameworks"`
 }
 
 // FrameworkMatch wraps the controls matched in a single framework with
 // the human-readable display name from the YAML.
 type FrameworkMatch struct {
-	Name     string              `json:"name"`
-	Controls []ComplianceControl `json:"controls"`
+	Name     string         `json:"name"`
+	Controls []ControlMatch `json:"controls"`
+}
+
+// ControlMatch is one matched control. It embeds the on-disk Control so the
+// response carries the schema-2.0 mapped checks and CWE identifiers (not just
+// the advisory skills), and — when a verifying run was requested — the live
+// per-check Results and the collapsed Verification verdict for this control.
+// The embedded Control's fields are promoted in JSON, so a mapping that was
+// not run marshals exactly as it did before this field existed (the two new
+// fields are omitempty).
+type ControlMatch struct {
+	compliance.Control
+	// Verification is the collapsed verdict for this control
+	// (verified | findings | not_verifiable | error), set only on a run.
+	Verification string `json:"verification,omitempty"`
+	// CheckResults is the per-check detail behind Verification, set only on a run.
+	CheckResults []checks.Result `json:"check_results,omitempty"`
 }
 
 // frameworkFiles maps the framework keys exposed via the MCP tool to
 // the on-disk YAML names under compliance/. Keys are stable IDs the
 // LLM can pin in `framework` arguments.
 var frameworkFiles = map[string]string{
-	"soc2":       "soc2_mapping.yaml",
-	"hipaa":      "hipaa_mapping.yaml",
-	"pci-dss":    "pci_dss_mapping.yaml",
-	"nist-ssdf":  "nist_ssdf_mapping.yaml",
-	"owasp-asvs": "owasp_asvs_mapping.yaml",
+	"soc2":        "soc2_mapping.yaml",
+	"hipaa":       "hipaa_mapping.yaml",
+	"pci-dss":     "pci_dss_mapping.yaml",
+	"nist-ssdf":   "nist_ssdf_mapping.yaml",
+	"owasp-asvs":  "owasp_asvs_mapping.yaml",
+	"slsa":        "slsa_mapping.yaml",
+	"eu-cra":      "eu_cra_mapping.yaml",
+	"nist-ai-rmf": "nist_ai_rmf_mapping.yaml",
+	"eu-ai-act":   "eu_ai_act_mapping.yaml",
 }
 
 // frameworkOrder is the deterministic iteration order so tool output is
 // stable across calls.
-var frameworkOrder = []string{"soc2", "hipaa", "pci-dss", "nist-ssdf", "owasp-asvs"}
+var frameworkOrder = []string{"soc2", "hipaa", "pci-dss", "nist-ssdf", "owasp-asvs", "slsa", "eu-cra", "nist-ai-rmf", "eu-ai-act"}
 
-// MapComplianceControl finds controls in SOC 2 / HIPAA / PCI DSS that
-// reference the supplied skill ID or whose title/description matches
-// the free-text query. At least one of skillID or query must be set.
+// MapComplianceControl finds controls that reference the supplied skill ID or
+// whose title/description matches the free-text query, grouped by framework.
+// Each matched control carries its schema-2.0 mapped checks and CWE
+// identifiers. This is an advisory mapping only — it runs nothing; use
+// MapComplianceControlRun to additionally verify each control against real
+// code. At least one of skillID or query must be set.
 func (l *Library) MapComplianceControl(skillID, query, framework string) (*MapComplianceResult, error) {
+	return l.mapCompliance(skillID, query, framework, "")
+}
+
+// MapComplianceControlRun is MapComplianceControl plus live verification: for
+// each matched control, its mapped checks (schema 2.0) are executed over
+// scanPath and the collapsed per-control verdict + per-check results are
+// attached. scanPath must be an existing directory; passing "" is exactly
+// equivalent to MapComplianceControl. This is the CF.5 "control → checks →
+// pass/fail" round-trip: an LLM can map a skill/finding to controls and, in
+// the same call, see which of those controls actually hold for a codebase.
+func (l *Library) MapComplianceControlRun(skillID, query, framework, scanPath string) (*MapComplianceResult, error) {
+	return l.mapCompliance(skillID, query, framework, scanPath)
+}
+
+func (l *Library) mapCompliance(skillID, query, framework, scanPath string) (*MapComplianceResult, error) {
 	skillID = strings.TrimSpace(skillID)
 	query = strings.TrimSpace(query)
 	if skillID == "" && query == "" {
@@ -491,12 +534,29 @@ func (l *Library) MapComplianceControl(skillID, query, framework string) (*MapCo
 			return nil, fmt.Errorf("map_compliance_control: unknown framework %q", framework)
 		}
 	}
+	scanPath = strings.TrimSpace(scanPath)
+	if scanPath != "" {
+		abs, err := filepath.Abs(scanPath)
+		if err != nil {
+			return nil, fmt.Errorf("map_compliance_control: resolve scan path: %w", err)
+		}
+		info, err := os.Stat(abs)
+		if err != nil {
+			return nil, fmt.Errorf("map_compliance_control: scan path: %w", err)
+		}
+		if !info.IsDir() {
+			return nil, fmt.Errorf("map_compliance_control: scan path %s must be a directory", abs)
+		}
+		scanPath = abs
+	}
 	out := &MapComplianceResult{
 		SkillID:    skillID,
 		Query:      query,
 		Framework:  framework,
+		ScanTarget: scanPath,
 		Frameworks: map[string]FrameworkMatch{},
 	}
+	needle := strings.ToLower(query)
 	for _, fwKey := range frameworkOrder {
 		if framework != "" && fwKey != framework {
 			continue
@@ -505,8 +565,7 @@ func (l *Library) MapComplianceControl(skillID, query, framework string) (*MapCo
 		if err != nil {
 			continue
 		}
-		var matches []ComplianceControl
-		needle := strings.ToLower(query)
+		var matches []ControlMatch
 		for _, ctrl := range mapping.Controls {
 			matched := false
 			if skillID != "" {
@@ -523,9 +582,15 @@ func (l *Library) MapComplianceControl(skillID, query, framework string) (*MapCo
 					matched = true
 				}
 			}
-			if matched {
-				matches = append(matches, ctrl)
+			if !matched {
+				continue
 			}
+			cm := ControlMatch{Control: ctrl}
+			if scanPath != "" && len(ctrl.Checks) > 0 {
+				cm.CheckResults = l.RunControlChecks(scanPath, ctrl.Checks)
+				cm.Verification = checks.Verdict(cm.CheckResults)
+			}
+			matches = append(matches, cm)
 		}
 		if matches != nil {
 			out.Frameworks[fwKey] = FrameworkMatch{

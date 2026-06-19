@@ -93,17 +93,20 @@ func evidenceCmd() *cobra.Command {
 		Use:   "evidence",
 		Short: "Emit a compliance coverage report showing which installed skills map to framework controls",
 		Long: `Compile a compliance coverage report that maps installed skills onto
-the controls of a compliance framework (SOC2, HIPAA, PCI-DSS).
+the controls of a compliance framework (SOC2, HIPAA, PCI-DSS, NIST SSDF,
+OWASP ASVS, SLSA, EU CRA, NIST AI RMF, EU AI Act).
 
 The report is timestamped and lists which controls are covered by which skill
 versions, flagging missing skills — showing which installed skills map to
-framework controls. It is a developer-facing coverage map, not an audit
-artifact: a real audit also needs runtime evidence, change-management
-records, access reviews, and so on.
+framework controls. With --scan it also RUNS each control's mapped checks
+(schema 2.0) over a target codebase and records a per-control verification
+verdict, turning the report from an intent map into verified evidence. It is a
+developer-facing artifact: a full audit also needs runtime evidence,
+change-management records, access reviews, and so on.
 `,
 		RunE: func(c *cobra.Command, args []string) error {
 			if framework == "" {
-				return fmt.Errorf("--framework is required (SOC2|HIPAA|PCI-DSS)")
+				return fmt.Errorf("--framework is required (e.g. soc2|hipaa|pci-dss|nist-ssdf|owasp-asvs|slsa|eu-cra|nist-ai-rmf|eu-ai-act)")
 			}
 			if !frameworkSlugRegex.MatchString(framework) {
 				return fmt.Errorf(
@@ -218,7 +221,7 @@ records, access reviews, and so on.
 					ev.Status = "partial"
 				}
 				if scanLib != nil && len(ev.MappedChecks) > 0 {
-					ev.CheckResults = runControlChecks(scanLib, report.ScanTarget, ev.MappedChecks)
+					ev.CheckResults = scanLib.RunControlChecks(report.ScanTarget, ev.MappedChecks)
 					ev.Verification = deriveVerification(ev.CheckResults)
 				}
 				report.Controls = append(report.Controls, ev)
@@ -268,7 +271,7 @@ records, access reviews, and so on.
 	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root")
 	c.Flags().StringVar(&scanPath, "scan", "", "Path to a codebase to VERIFY each control's mapped checks against (schema 2.0); omit for a skill-coverage-only report")
 	c.Flags().StringVar(&signKeyPath, "sign", "", "Path to an Ed25519 private key; signs the report into a tamper-evident bundle (signature field)")
-	c.Flags().StringVar(&framework, "framework", "", "Compliance framework: SOC2|HIPAA|PCI-DSS")
+	c.Flags().StringVar(&framework, "framework", "", "Compliance framework: soc2|hipaa|pci-dss|nist-ssdf|owasp-asvs|slsa|eu-cra|nist-ai-rmf|eu-ai-act")
 	c.Flags().StringVar(&format, "format", "json", "Output format: json|markdown")
 	c.Flags().StringVar(&outFile, "out", "", "Write report to this file; '-' or empty for stdout")
 	return c

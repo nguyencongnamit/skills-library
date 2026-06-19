@@ -636,37 +636,7 @@ func printScanDependenciesText(w io.Writer, label string, res *tools.ScanDepende
 // manifests are scanned without descending into installed-dependency
 // trees.
 func discoverLockfiles(dir string) ([]string, error) {
-	found, err := tools.WalkScanFiles(dir, func(path string) bool {
-		return knownLockfileName(filepath.Base(path))
-	})
-	if err != nil {
-		return nil, fmt.Errorf("scan-dependencies: walk %s: %w", dir, err)
-	}
-	return found, nil
-}
-
-// knownLockfileName reports whether base is a lockfile name that
-// parsers.Parse recognises. Kept in sync with the dispatch table in
-// internal/tools/parsers/parsers.go; if a parser is added there, add
-// its base name here so directory discovery picks it up.
-func knownLockfileName(base string) bool {
-	switch base {
-	case "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
-		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
-		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
-		"packages.lock.json", "Gemfile.lock":
-		return true
-	}
-	lower := strings.ToLower(base)
-	if strings.HasSuffix(lower, ".csproj") ||
-		strings.HasSuffix(lower, ".fsproj") ||
-		strings.HasSuffix(lower, ".vbproj") {
-		return true
-	}
-	if strings.HasSuffix(base, ".txt") && strings.HasPrefix(base, "requirements") {
-		return true
-	}
-	return false
+	return tools.DiscoverLockfiles(dir)
 }
 
 // =============================================================================

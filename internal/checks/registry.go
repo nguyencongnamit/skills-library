@@ -134,3 +134,21 @@ func IDs() []string {
 	sort.Strings(out)
 	return out
 }
+
+// ByCWE returns the IDs of every registered check whose CWE list includes
+// cwe (e.g. "CWE-798"), sorted. It is one leg of the CWE cross-framework
+// spine: given a weakness, which runnable detections surface it. Returns an
+// empty slice when no check is tagged with the CWE.
+func ByCWE(cwe string) []string {
+	var out []string
+	for id, c := range registry {
+		for _, w := range c.CWE {
+			if w == cwe {
+				out = append(out, id)
+				break
+			}
+		}
+	}
+	sort.Strings(out)
+	return out
+}

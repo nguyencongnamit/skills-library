@@ -112,7 +112,7 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "map_compliance_control",
-			"description": "Map a Skills Library skill ID, category, or free-text term to the controls in SOC 2 / HIPAA / PCI DSS that cover it. Returns the matching controls grouped by framework so an LLM can cite the right control alongside a fix.",
+			"description": "Map a Skills Library skill ID, category, or free-text term to the compliance controls that cover it across SOC 2, HIPAA, PCI DSS, NIST SSDF, OWASP ASVS, SLSA, EU CRA, NIST AI RMF, and the EU AI Act. Returns the matching controls grouped by framework, each carrying its mapped automated checks and CWE identifiers (schema 2.0) so an LLM can cite the right control alongside a fix. Pass `path` to additionally RUN each matched control's checks over that codebase and get a live pass/fail (verification) per control.",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{
@@ -121,9 +121,21 @@ func toolDefinitions() []map[string]interface{} {
 					"framework": map[string]interface{}{
 						"type":        "string",
 						"description": "Optional framework filter.",
-						"enum":        []string{"soc2", "hipaa", "pci-dss"},
+						"enum":        []string{"soc2", "hipaa", "pci-dss", "nist-ssdf", "owasp-asvs", "slsa", "eu-cra", "nist-ai-rmf", "eu-ai-act"},
 					},
+					"path": map[string]string{"type": "string", "description": "Optional path to a codebase directory. When set, each matched control's mapped checks are executed against it and the response includes a per-control verification verdict (verified | findings | not_verifiable | error) plus per-check results."},
 				},
+			},
+		},
+		{
+			"name":        "map_cwe",
+			"description": "Resolve a CWE identifier to its cross-framework spine: every compliance control that cites it (grouped by framework), the prevention skills that advise on those controls, and the runnable checks that detect or verify it. Use this to turn one finding's CWE into the full control → skill → check chain — e.g. given CWE-798 from a secret scan, surface which SOC 2 / PCI / SLSA controls it implicates and which checks prove remediation.",
+			"inputSchema": map[string]interface{}{
+				"type": "object",
+				"properties": map[string]interface{}{
+					"cwe": map[string]string{"type": "string", "description": "A CWE identifier, canonical or bare-number (e.g. 'CWE-798' or '798'). Required."},
+				},
+				"required": []string{"cwe"},
 			},
 		},
 		{

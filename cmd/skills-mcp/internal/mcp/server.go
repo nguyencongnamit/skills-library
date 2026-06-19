@@ -241,7 +241,7 @@ func (s *Server) dispatch(req *request) *response {
 		// won't recognise it and we shouldn't claim to speak their
 		// version while emitting it.
 		if negotiated >= protocolVersionWithInstructions {
-			result["instructions"] = "Use the secure-code skills before generating or reviewing security-sensitive code. For dependencies call check_dependency / check_typosquat / lookup_vulnerability; for secrets call scan_secrets or check_secret_pattern; for detection logic call get_sigma_rule; to map findings to compliance call map_compliance_control; to fetch a curated skill call get_skill / search_skills. Use version_status to confirm the data version and signature state before relying on results."
+			result["instructions"] = "Use the secure-code skills before generating or reviewing security-sensitive code. For dependencies call check_dependency / check_typosquat / lookup_vulnerability; for secrets call scan_secrets or check_secret_pattern; for detection logic call get_sigma_rule; to map findings to compliance call map_compliance_control (pass a path to verify controls live); to turn a finding's CWE into the controls/skills/checks that cover it call map_cwe; to fetch a curated skill call get_skill / search_skills. Use version_status to confirm the data version and signature state before relying on results."
 		}
 		return successResponse(req.ID, result)
 	case "tools/list":
@@ -335,11 +335,24 @@ func (s *Server) invokeTool(name string, args map[string]interface{}) (interface
 			stringArg(args, "ecosystem"),
 		)
 	case "map_compliance_control":
+		// When a path is supplied, additionally VERIFY each matched control's
+		// mapped checks against that codebase (CF.5 live pass/fail); otherwise
+		// it is an advisory mapping that runs nothing.
+		if path := stringArg(args, "path"); path != "" {
+			return s.lib.MapComplianceControlRun(
+				stringArg(args, "skill_id"),
+				stringArg(args, "query"),
+				stringArg(args, "framework"),
+				path,
+			)
+		}
 		return s.lib.MapComplianceControl(
 			stringArg(args, "skill_id"),
 			stringArg(args, "query"),
 			stringArg(args, "framework"),
 		)
+	case "map_cwe":
+		return s.lib.MapCWE(stringArg(args, "cwe"))
 	case "get_sigma_rule":
 		return s.lib.GetSigmaRule(
 			stringArg(args, "rule_id"),

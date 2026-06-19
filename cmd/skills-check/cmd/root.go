@@ -35,6 +35,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(newCmd())
 	root.AddCommand(testCmd())
 	root.AddCommand(evidenceCmd())
+	root.AddCommand(cweCmd())
 	root.AddCommand(configureCmd())
 	root.AddCommand(fetchVulnsCmd())
 	root.AddCommand(deriveChecklistsCmd())
