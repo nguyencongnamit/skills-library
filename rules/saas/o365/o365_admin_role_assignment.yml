@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1098.003
   - attack.persistence
+  - cwe.269
 logsource:
   product: m365
   service: azuread

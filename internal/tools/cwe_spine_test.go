@@ -1,7 +1,9 @@
 package tools
 
 import (
+	"regexp"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -77,8 +79,65 @@ func TestMapCWEUnknownIsEmptyNotError(t *testing.T) {
 		t.Errorf("unmapped CWE should yield no controls, got %+v", res)
 	}
 	// Slices must marshal as [] not null.
-	if res.Skills == nil || res.Checks == nil {
-		t.Error("Skills/Checks must be non-nil (empty) slices")
+	if res.Skills == nil || res.Checks == nil || res.Rules == nil {
+		t.Error("Skills/Checks/Rules must be non-nil (empty) slices")
+	}
+}
+
+// TestMapCWESpineDetectionRules covers the leg added by DQ.2 (sigma CWE
+// tags): a weakness surfaces the Sigma detection rules that catch its
+// exploitation at runtime.
+func TestMapCWESpineDetectionRules(t *testing.T) {
+	lib := newLibrary(t)
+	// CWE-284 (improper access control) is carried by the network/access
+	// Sigma rules (firewall / NSG opened to the internet, exec into a pod).
+	res, err := lib.MapCWE("284")
+	if err != nil {
+		t.Fatalf("MapCWE: %v", err)
+	}
+	if len(res.Rules) == 0 {
+		t.Fatalf("expected CWE-284 to surface detection rules, got none")
+	}
+	paths := make([]string, len(res.Rules))
+	for i, r := range res.Rules {
+		if r.ID == "" || r.Title == "" || r.Path == "" {
+			t.Errorf("rule ref missing fields: %+v", r)
+		}
+		paths[i] = r.Path
+	}
+	if !sort.StringsAreSorted(paths) {
+		t.Errorf("rules must be sorted by path, got %v", paths)
+	}
+}
+
+// TestSigmaCWETags locks the DQ.2 tagging policy: every cwe.* tag is
+// well-formed, enough rules are tagged, and the behavioral endpoint
+// detections stay ATT&CK-only (no forced CWE).
+func TestSigmaCWETags(t *testing.T) {
+	lib := newLibrary(t)
+	rules, err := lib.loadSigmaRules()
+	if err != nil {
+		t.Fatalf("loadSigmaRules: %v", err)
+	}
+	cweTag := regexp.MustCompile(`^cwe\.[0-9]+$`)
+	tagged := 0
+	for _, r := range rules {
+		for _, tg := range r.Tags {
+			low := strings.ToLower(strings.TrimSpace(tg))
+			if !strings.HasPrefix(low, "cwe.") {
+				continue
+			}
+			if !cweTag.MatchString(low) {
+				t.Errorf("%s: malformed CWE tag %q", r.Path, tg)
+			}
+			tagged++
+			if r.Category == "endpoint" {
+				t.Errorf("endpoint rule %s should stay ATT&CK-only, has CWE tag %q", r.Path, tg)
+			}
+		}
+	}
+	if tagged < 21 {
+		t.Errorf("expected >= 21 CWE-tagged sigma rules, got %d", tagged)
 	}
 }
 

@@ -60,8 +60,16 @@ func renderCWEText(c *cobra.Command, res *tools.CWESpineResult) {
 	if len(res.Checks) > 0 {
 		fmt.Fprintf(w, "Checks:   %s\n", strings.Join(res.Checks, ", "))
 	}
+	if len(res.Rules) > 0 {
+		fmt.Fprintf(w, "Rules:    %d detection rule(s)\n", len(res.Rules))
+		for _, r := range res.Rules {
+			fmt.Fprintf(w, "  - [%s] %s  (%s)\n", r.Category, r.Title, r.Path)
+		}
+	}
 	if res.ControlCount == 0 {
-		fmt.Fprintf(w, "\nNo mapped controls cite %s yet.\n", res.CWE)
+		if len(res.Rules) == 0 {
+			fmt.Fprintf(w, "\nNo mapped controls cite %s yet.\n", res.CWE)
+		}
 		return
 	}
 	// Deterministic framework order for stable output.

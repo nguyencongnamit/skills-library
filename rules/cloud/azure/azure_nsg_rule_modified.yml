@@ -12,6 +12,7 @@ references:
 tags:
   - attack.t1133
   - attack.initial_access
+  - cwe.284
 logsource:
   product: azure
   service: activitylogs

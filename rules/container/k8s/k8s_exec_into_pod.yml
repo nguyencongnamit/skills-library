@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1609
   - attack.execution
+  - cwe.284
 logsource:
   product: k8s
   service: audit

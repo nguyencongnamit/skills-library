@@ -35,6 +35,20 @@ type CWESpineResult struct {
 	// this CWE: registry checks tagged with the CWE plus checks cited by the
 	// matching controls.
 	Checks []string `json:"checks"`
+	// Rules is the detection (Sigma) rules tagged with this CWE — the
+	// runtime/behavioral leg of the spine. A weakness's exploitation can be
+	// *detected* at runtime (a Sigma rule), not only prevented (a skill) or
+	// statically verified (a check). Sorted by rule path; never null.
+	Rules []CWERuleRef `json:"rules"`
+}
+
+// CWERuleRef identifies one detection (Sigma) rule tagged with the CWE.
+type CWERuleRef struct {
+	ID       string `json:"id"`
+	Title    string `json:"title"`
+	Category string `json:"category"`
+	Level    string `json:"level,omitempty"`
+	Path     string `json:"path"`
 }
 
 // CWEFrameworkMatch is the set of one framework's controls that cite a CWE.
@@ -63,9 +77,10 @@ func NormalizeCWE(raw string) (string, error) {
 
 // MapCWE resolves a CWE identifier to its cross-framework spine: every control
 // that cites it (grouped by framework), the union of prevention skills those
-// controls advise, and the union of runnable checks that detect or verify it.
-// An unknown-but-well-formed CWE returns an empty (non-nil) result rather than
-// an error, so callers can use it to ask "is this weakness covered?".
+// controls advise, the union of runnable checks that detect or verify it, and
+// the detection (Sigma) rules that catch its exploitation at runtime. An
+// unknown-but-well-formed CWE returns an empty (non-nil) result rather than an
+// error, so callers can use it to ask "is this weakness covered?".
 func (l *Library) MapCWE(rawCWE string) (*CWESpineResult, error) {
 	cwe, err := NormalizeCWE(rawCWE)
 	if err != nil {
@@ -74,6 +89,7 @@ func (l *Library) MapCWE(rawCWE string) (*CWESpineResult, error) {
 	out := &CWESpineResult{
 		CWE:        cwe,
 		Frameworks: map[string]CWEFrameworkMatch{},
+		Rules:      []CWERuleRef{},
 	}
 	skillSet := map[string]bool{}
 	checkSet := map[string]bool{}
@@ -112,9 +128,39 @@ func (l *Library) MapCWE(rawCWE string) (*CWESpineResult, error) {
 		}
 	}
 
+	// Leg 5: detection (Sigma) rules tagged with this CWE via a "cwe.<n>"
+	// tag. Loaded lazily; a rules read error degrades to no detection leg
+	// rather than failing the whole spine query.
+	cweNum := strings.TrimPrefix(cwe, "CWE-")
+	if rules, err := l.loadSigmaRules(); err == nil {
+		for _, r := range rules {
+			if ruleTagsHaveCWE(r.Tags, cweNum) {
+				out.Rules = append(out.Rules, CWERuleRef{
+					ID:       r.ID,
+					Title:    r.Title,
+					Category: r.Category,
+					Level:    r.Level,
+					Path:     r.Path,
+				})
+			}
+		}
+	}
+
 	out.Skills = sortedKeys(skillSet)
 	out.Checks = sortedKeys(checkSet)
 	return out, nil
+}
+
+// ruleTagsHaveCWE reports whether a Sigma rule's tags include the given CWE
+// number written in the Sigma convention "cwe.<number>" (case-insensitive).
+func ruleTagsHaveCWE(tags []string, cweNum string) bool {
+	want := "cwe." + cweNum
+	for _, t := range tags {
+		if strings.EqualFold(strings.TrimSpace(t), want) {
+			return true
+		}
+	}
+	return false
 }
 
 // containsFold reports whether s contains target, comparing case-insensitively

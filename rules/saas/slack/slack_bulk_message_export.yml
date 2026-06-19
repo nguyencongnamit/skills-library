@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1530
   - attack.collection
+  - cwe.200
 logsource:
   product: slack
   service: audit_log

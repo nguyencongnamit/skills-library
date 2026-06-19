@@ -16,6 +16,7 @@ references:
 tags:
   - attack.t1195.002
   - attack.initial_access
+  - cwe.269
 logsource:
   product: slack
   service: audit_log

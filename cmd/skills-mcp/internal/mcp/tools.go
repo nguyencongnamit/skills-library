@@ -129,7 +129,7 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "map_cwe",
-			"description": "Resolve a CWE identifier to its cross-framework spine: every compliance control that cites it (grouped by framework), the prevention skills that advise on those controls, and the runnable checks that detect or verify it. Use this to turn one finding's CWE into the full control → skill → check chain — e.g. given CWE-798 from a secret scan, surface which SOC 2 / PCI / SLSA controls it implicates and which checks prove remediation.",
+			"description": "Resolve a CWE identifier to its cross-framework spine: every compliance control that cites it (grouped by framework), the prevention skills that advise on those controls, the runnable checks that detect or verify it, and the Sigma detection rules that catch its exploitation at runtime. Use this to turn one finding's CWE into the full control → skill → check → detection chain — e.g. given CWE-798 from a secret scan, surface which SOC 2 / PCI / SLSA controls it implicates, which checks prove remediation, and which runtime detections would fire.",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{

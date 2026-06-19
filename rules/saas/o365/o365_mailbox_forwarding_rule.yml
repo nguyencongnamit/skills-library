@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1114.003
   - attack.collection
+  - cwe.200
 logsource:
   product: m365
   service: exchange

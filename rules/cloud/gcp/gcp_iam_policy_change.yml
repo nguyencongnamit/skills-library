@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1098
   - attack.persistence
+  - cwe.269
 logsource:
   product: gcp
   service: cloudaudit

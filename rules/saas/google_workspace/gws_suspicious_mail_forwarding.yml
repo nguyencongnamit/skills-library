@@ -14,6 +14,7 @@ references:
 tags:
   - attack.t1114.003
   - attack.collection
+  - cwe.200
 logsource:
   product: google_workspace
   service: gmail

@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1530
   - attack.collection
+  - cwe.732
 logsource:
   product: aws
   service: cloudtrail

@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1562.008
   - attack.defense_evasion
+  - cwe.778
 logsource:
   product: aws
   service: cloudtrail

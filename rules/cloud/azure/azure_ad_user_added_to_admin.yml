@@ -15,6 +15,7 @@ tags:
   - attack.t1098.003
   - attack.persistence
   - attack.privilege_escalation
+  - cwe.269
 logsource:
   product: azure
   service: signinlogs

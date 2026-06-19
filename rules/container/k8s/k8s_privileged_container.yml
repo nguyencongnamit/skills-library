@@ -13,6 +13,7 @@ references:
 tags:
   - attack.t1611
   - attack.privilege_escalation
+  - cwe.250
 logsource:
   product: k8s
   service: audit
