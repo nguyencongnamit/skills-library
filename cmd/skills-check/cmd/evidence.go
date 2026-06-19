@@ -13,7 +13,9 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
+	"github.com/namncqualgo/skills-library/internal/compliance"
 	"github.com/namncqualgo/skills-library/internal/skill"
+	"github.com/namncqualgo/skills-library/internal/tools"
 )
 
 // frameworkSlugRegex restricts the --framework value to a simple slug so the
@@ -22,27 +24,21 @@ import (
 var frameworkSlugRegex = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
 
 // ComplianceMapping is the shape of the per-framework mapping files under
-// compliance/<framework>_mapping.yaml.
-type ComplianceMapping struct {
-	SchemaVersion string `yaml:"schema_version" json:"schema_version"`
-	Framework     string `yaml:"framework" json:"framework"`
-	Version       string `yaml:"version" json:"version"`
-	LastUpdated   string `yaml:"last_updated" json:"last_updated"`
-	Controls      []struct {
-		ID          string   `yaml:"id" json:"id"`
-		Title       string   `yaml:"title" json:"title"`
-		Description string   `yaml:"description" json:"description"`
-		Skills      []string `yaml:"skills" json:"skills"`
-		References  []string `yaml:"references" json:"references"`
-	} `yaml:"controls" json:"controls"`
-}
+// compliance/<framework>_mapping.yaml. The canonical definition lives in
+// internal/compliance (shared with the library's map_compliance_control
+// tool) so the on-disk shape cannot drift between the two consumers.
+type ComplianceMapping = compliance.Mapping
 
 // EvidenceReport is the rendered audit artifact for `skills-check evidence`.
 type EvidenceReport struct {
-	GeneratedAt      time.Time         `json:"generated_at"`
-	Framework        string            `json:"framework"`
-	FrameworkVersion string            `json:"framework_version,omitempty"`
-	LibraryRoot      string            `json:"library_root"`
+	GeneratedAt      time.Time `json:"generated_at"`
+	Framework        string    `json:"framework"`
+	FrameworkVersion string    `json:"framework_version,omitempty"`
+	LibraryRoot      string    `json:"library_root"`
+	// ScanTarget is the path whose code the mapped checks were run against
+	// (set only when --scan was passed). Empty means a skill-coverage-only
+	// report with no verification.
+	ScanTarget       string            `json:"scan_target,omitempty"`
 	SkillsCount      int               `json:"skills_count"`
 	Controls         []ControlEvidence `json:"controls"`
 	UnmappedSkills   []string          `json:"unmapped_skills"`
@@ -54,11 +50,21 @@ type ControlEvidence struct {
 	ID            string         `json:"id"`
 	Title         string         `json:"title"`
 	Description   string         `json:"description,omitempty"`
-	Status        string         `json:"status"` // covered | partial | missing
+	Status        string         `json:"status"` // covered | partial | missing | unmapped
 	MappedSkills  []string       `json:"mapped_skills"`
 	PresentSkills []SkillSummary `json:"present_skills"`
 	MissingSkills []string       `json:"missing_skills"`
-	References    []string       `json:"references,omitempty"`
+	// MappedChecks / CWE are the schema-2.0 automated checks and weakness
+	// IDs the mapping ties to this control.
+	MappedChecks []string `json:"mapped_checks,omitempty"`
+	CWE          []string `json:"cwe,omitempty"`
+	// Verification and CheckResults are populated only when --scan ran the
+	// mapped checks over a target: Verification is the collapsed verdict
+	// (verified | findings | not_verifiable | error), CheckResults the
+	// per-check detail. Empty when no scan was requested (skill-only report).
+	Verification string        `json:"verification,omitempty"`
+	CheckResults []CheckResult `json:"check_results,omitempty"`
+	References   []string      `json:"references,omitempty"`
 }
 
 type SkillSummary struct {
@@ -74,6 +80,7 @@ func evidenceCmd() *cobra.Command {
 		framework   string
 		format      string
 		outFile     string
+		scanPath    string
 	)
 
 	c := &cobra.Command{
@@ -144,6 +151,29 @@ records, access reviews, and so on.
 				},
 			}
 
+			// When --scan is set, build a library rooted at the skills/vuln
+			// data and run each control's mapped checks over the target so
+			// coverage can be VERIFIED, not just asserted from skill presence.
+			var scanLib *tools.Library
+			if scanPath != "" {
+				scanAbs, err := filepath.Abs(scanPath)
+				if err != nil {
+					return err
+				}
+				info, err := os.Stat(scanAbs)
+				if err != nil {
+					return fmt.Errorf("scan target: %w", err)
+				}
+				if !info.IsDir() {
+					return fmt.Errorf("scan target %s must be a directory", scanAbs)
+				}
+				scanLib, err = tools.NewLibrary(lib)
+				if err != nil {
+					return fmt.Errorf("open library for scan: %w", err)
+				}
+				report.ScanTarget = scanAbs
+			}
+
 			referencedSkills := map[string]bool{}
 			for _, ctrl := range mapping.Controls {
 				ev := ControlEvidence{
@@ -151,6 +181,8 @@ records, access reviews, and so on.
 					Title:        ctrl.Title,
 					Description:  ctrl.Description,
 					MappedSkills: append([]string{}, ctrl.Skills...),
+					MappedChecks: append([]string{}, ctrl.Checks...),
+					CWE:          append([]string{}, ctrl.CWE...),
 					References:   append([]string{}, ctrl.References...),
 					// Pre-initialize so per-control JSON marshals as `[]` not `null` when empty.
 					PresentSkills: []SkillSummary{},
@@ -178,6 +210,10 @@ records, access reviews, and so on.
 					ev.Status = "missing"
 				default:
 					ev.Status = "partial"
+				}
+				if scanLib != nil && len(ev.MappedChecks) > 0 {
+					ev.CheckResults = runControlChecks(scanLib, report.ScanTarget, ev.MappedChecks)
+					ev.Verification = deriveVerification(ev.CheckResults)
 				}
 				report.Controls = append(report.Controls, ev)
 			}
@@ -216,6 +252,7 @@ records, access reviews, and so on.
 	}
 
 	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root")
+	c.Flags().StringVar(&scanPath, "scan", "", "Path to a codebase to VERIFY each control's mapped checks against (schema 2.0); omit for a skill-coverage-only report")
 	c.Flags().StringVar(&framework, "framework", "", "Compliance framework: SOC2|HIPAA|PCI-DSS")
 	c.Flags().StringVar(&format, "format", "json", "Output format: json|markdown")
 	c.Flags().StringVar(&outFile, "out", "", "Write report to this file; '-' or empty for stdout")
@@ -245,10 +282,15 @@ func renderEvidenceMarkdown(r EvidenceReport) string {
 	}
 	fmt.Fprintf(&sb, "**Generated:** %s  \n", r.GeneratedAt.Format(time.RFC3339))
 	fmt.Fprintf(&sb, "**Library root:** `%s`  \n", r.LibraryRoot)
+	scanning := r.ScanTarget != ""
+	if scanning {
+		fmt.Fprintf(&sb, "**Scan target:** `%s`  \n", r.ScanTarget)
+	}
 	fmt.Fprintf(&sb, "**Skills installed:** %d  \n", r.SkillsCount)
 	fmt.Fprintf(&sb, "**Controls evaluated:** %d\n\n", len(r.Controls))
 
 	var covered, partial, missing, unmapped int
+	verif := map[string]int{}
 	for _, c := range r.Controls {
 		switch c.Status {
 		case "covered":
@@ -260,11 +302,24 @@ func renderEvidenceMarkdown(r EvidenceReport) string {
 		case "unmapped":
 			unmapped++
 		}
+		if c.Verification != "" {
+			verif[c.Verification]++
+		}
 	}
-	fmt.Fprintf(&sb, "## Summary\n\n- Covered: %d\n- Partial: %d\n- Missing: %d\n- Unmapped: %d\n\n", covered, partial, missing, unmapped)
+	fmt.Fprintf(&sb, "## Summary\n\n- Covered: %d\n- Partial: %d\n- Missing: %d\n- Unmapped: %d\n", covered, partial, missing, unmapped)
+	if scanning {
+		fmt.Fprintf(&sb, "\n**Verification (checks run against the scan target):**\n\n- Verified: %d\n- Findings: %d\n- Not verifiable: %d\n- Errors: %d\n",
+			verif[verifiedClean], verif[verifiedFindgs], verif[notVerifiable], verif[verifyError])
+	}
+	sb.WriteString("\n")
 	fmt.Fprintf(&sb, "## Controls\n\n")
-	fmt.Fprintf(&sb, "| Control | Status | Skills present | Skills missing |\n")
-	fmt.Fprintf(&sb, "|---|---|---|---|\n")
+	if scanning {
+		fmt.Fprintf(&sb, "| Control | Status | Verification | Checks | Skills present | Skills missing |\n")
+		fmt.Fprintf(&sb, "|---|---|---|---|---|---|\n")
+	} else {
+		fmt.Fprintf(&sb, "| Control | Status | Skills present | Skills missing |\n")
+		fmt.Fprintf(&sb, "|---|---|---|---|\n")
+	}
 	for _, c := range r.Controls {
 		present := make([]string, 0, len(c.PresentSkills))
 		for _, s := range c.PresentSkills {
@@ -274,11 +329,29 @@ func renderEvidenceMarkdown(r EvidenceReport) string {
 		for _, m := range c.MissingSkills {
 			missing = append(missing, escapeMarkdownTableCell(m))
 		}
-		fmt.Fprintf(&sb, "| %s | %s | %s | %s |\n",
-			escapeMarkdownTableCell(c.ID),
-			escapeMarkdownTableCell(c.Status),
-			strings.Join(present, ", "),
-			strings.Join(missing, ", "))
+		if scanning {
+			checkCells := make([]string, 0, len(c.CheckResults))
+			for _, cr := range c.CheckResults {
+				label := fmt.Sprintf("%s:%s", cr.ID, cr.Status)
+				if cr.Findings > 0 {
+					label = fmt.Sprintf("%s(%d)", label, cr.Findings)
+				}
+				checkCells = append(checkCells, escapeMarkdownTableCell(label))
+			}
+			fmt.Fprintf(&sb, "| %s | %s | %s | %s | %s | %s |\n",
+				escapeMarkdownTableCell(c.ID),
+				escapeMarkdownTableCell(c.Status),
+				escapeMarkdownTableCell(c.Verification),
+				strings.Join(checkCells, ", "),
+				strings.Join(present, ", "),
+				strings.Join(missing, ", "))
+		} else {
+			fmt.Fprintf(&sb, "| %s | %s | %s | %s |\n",
+				escapeMarkdownTableCell(c.ID),
+				escapeMarkdownTableCell(c.Status),
+				strings.Join(present, ", "),
+				strings.Join(missing, ", "))
+		}
 	}
 	if len(r.UnmappedSkills) > 0 {
 		fmt.Fprintf(&sb, "\n## Skills not referenced by any control\n\n")

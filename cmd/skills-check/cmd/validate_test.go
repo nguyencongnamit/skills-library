@@ -328,3 +328,98 @@ func copyDir(src, dst string) error {
 		return os.WriteFile(target, data, info.Mode())
 	})
 }
+
+// TestValidateRejectsUnknownCheckInComplianceMapping verifies that a
+// schema-2.0 control referencing a check ID that is not in the internal
+// check registry fails validation — a control may only be backed by a
+// detection the engine can actually run, or an evidence report could claim
+// verification it cannot perform.
+func TestValidateRejectsUnknownCheckInComplianceMapping(t *testing.T) {
+	tmp := buildMinimalLibrary(t)
+
+	mapping := []byte(`schema_version: "2.0"
+framework: "TEST"
+version: "test-2.0"
+last_updated: "2026-06-19"
+controls:
+  - id: "CTRL-1"
+    title: "Test Control"
+    description: "x"
+    skills: ["api-security"]
+    checks: ["scan_secrets", "no_such_check_xyz"]
+    cwe: ["CWE-798"]
+`)
+	if err := os.WriteFile(filepath.Join(tmp, "compliance", "test_mapping.yaml"), mapping, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	stdout, stderr, err := executeRoot(t, "validate", "--path", tmp)
+	if err == nil {
+		t.Fatalf("expected validate to fail on unknown check ID\nstdout:%s\nstderr:%s", stdout, stderr)
+	}
+	if !strings.Contains(stderr, "no_such_check_xyz") {
+		t.Errorf("expected stderr to name the unknown check, got:\n%s", stderr)
+	}
+	if !strings.Contains(stderr, "unknown check") {
+		t.Errorf("expected 'unknown check' in stderr, got:\n%s", stderr)
+	}
+	if !strings.Contains(stderr, "control CTRL-1") {
+		t.Errorf("expected stderr to name the control, got:\n%s", stderr)
+	}
+}
+
+// TestValidateRejectsMalformedCWE verifies the CWE field is shape-checked.
+func TestValidateRejectsMalformedCWE(t *testing.T) {
+	tmp := buildMinimalLibrary(t)
+
+	mapping := []byte(`schema_version: "2.0"
+framework: "TEST"
+version: "test-2.0"
+last_updated: "2026-06-19"
+controls:
+  - id: "CTRL-2"
+    title: "Test Control"
+    description: "x"
+    skills: ["api-security"]
+    checks: ["scan_secrets"]
+    cwe: ["CWE-79", "not-a-cwe"]
+`)
+	if err := os.WriteFile(filepath.Join(tmp, "compliance", "test_mapping.yaml"), mapping, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, stderr, err := executeRoot(t, "validate", "--path", tmp)
+	if err == nil {
+		t.Fatalf("expected validate to fail on malformed CWE; stderr:%s", stderr)
+	}
+	if !strings.Contains(stderr, "not-a-cwe") || !strings.Contains(stderr, "malformed CWE") {
+		t.Errorf("expected stderr to flag the malformed CWE, got:\n%s", stderr)
+	}
+}
+
+// TestValidateAcceptsKnownChecksAndCWE is the positive case: a schema-2.0
+// control whose checks all resolve and whose CWEs are well-formed passes.
+func TestValidateAcceptsKnownChecksAndCWE(t *testing.T) {
+	tmp := buildMinimalLibrary(t)
+
+	mapping := []byte(`schema_version: "2.0"
+framework: "TEST"
+version: "test-2.0"
+last_updated: "2026-06-19"
+controls:
+  - id: "CTRL-3"
+    title: "Test Control"
+    description: "x"
+    skills: ["api-security"]
+    checks: ["scan_dependencies", "scan_dockerfile", "check_typosquat"]
+    cwe: ["CWE-1104", "CWE-506"]
+`)
+	if err := os.WriteFile(filepath.Join(tmp, "compliance", "test_mapping.yaml"), mapping, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	stdout, stderr, err := executeRoot(t, "validate", "--path", tmp)
+	if err != nil {
+		t.Fatalf("expected validate to pass for valid v2 mapping\nstdout:%s\nstderr:%s", stdout, stderr)
+	}
+}

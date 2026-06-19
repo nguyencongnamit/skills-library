@@ -1,7 +1,7 @@
-schema_version: "1.0"
+schema_version: "2.0"
 framework: "SOC 2"
 version: "Trust Services Criteria (2017, updated 2022)"
-last_updated: "2026-05-13"
+last_updated: "2026-06-19"
 controls:
   - id: "CC6.1"
     title: "Logical and Physical Access Controls"
@@ -16,14 +16,20 @@ controls:
     title: "Restriction of Information Transmission, Movement, and Removal"
     description: "The entity restricts the transmission, movement, and removal of information to authorized internal and external users."
     skills: ["protocol-security", "crypto-misuse", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-312"]
   - id: "CC6.8"
     title: "Protection Against Malicious Code"
     description: "The entity implements controls to prevent or detect and act upon the introduction of unauthorized or malicious software."
     skills: ["supply-chain-security", "container-security"]
+    checks: ["scan_dependencies", "scan_dockerfile", "check_dependency", "check_typosquat"]
+    cwe: ["CWE-1104", "CWE-506"]
   - id: "CC7.1"
     title: "Vulnerability Detection and Monitoring"
     description: "The entity uses detection and monitoring procedures to identify changes to configurations that result in vulnerabilities."
     skills: ["supply-chain-security", "container-security", "iac-security"]
+    checks: ["scan_dependencies", "scan_dockerfile", "scan_github_actions", "lookup_vulnerability"]
+    cwe: ["CWE-1104", "CWE-937"]
   - id: "CC7.2"
     title: "System Monitoring"
     description: "The entity monitors system components and the operation of those components for anomalies indicative of malicious acts, natural disasters, and errors."
@@ -44,3 +50,5 @@ controls:
     title: "Confidentiality of Information"
     description: "The entity identifies and maintains confidential information to meet the entity's objectives related to confidentiality."
     skills: ["crypto-misuse", "database-security", "secret-detection"]
+    checks: ["scan_secrets", "check_secret_pattern"]
+    cwe: ["CWE-798", "CWE-311"]

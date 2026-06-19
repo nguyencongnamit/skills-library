@@ -409,3 +409,104 @@ controls:
 		t.Error("MissingSkills should be non-nil empty after round-trip")
 	}
 }
+
+// TestEvidenceScanVerifiesControls is the CF.3 keystone test: with --scan,
+// a control's status is derived from RUNNING its mapped checks over a real
+// target, not from skill presence. A planted secret must make the
+// secret-backed controls report verification=findings, while the
+// dependency/Dockerfile-backed controls (nothing to find in the target)
+// report verification=verified.
+func TestEvidenceScanVerifiesControls(t *testing.T) {
+	root := repoRoot(t)
+
+	target := t.TempDir()
+	secret := "aws_secret_access_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"\n"
+	if err := os.WriteFile(filepath.Join(target, "config.js"), []byte(secret), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	stdout, stderr, err := executeRoot(t,
+		"evidence",
+		"--library", root,
+		"--framework", "SOC2",
+		"--scan", target,
+		"--format", "json",
+	)
+	if err != nil {
+		t.Fatalf("evidence --scan failed: %v\nstderr:%s", err, stderr)
+	}
+	var report EvidenceReport
+	if err := json.Unmarshal([]byte(stdout), &report); err != nil {
+		t.Fatalf("parse JSON: %v\n%s", err, stdout)
+	}
+	if report.ScanTarget == "" {
+		t.Error("expected scan_target to be set when --scan is passed")
+	}
+
+	byID := map[string]ControlEvidence{}
+	for _, c := range report.Controls {
+		byID[c.ID] = c
+	}
+
+	// CC6.7 is backed by scan_secrets — the planted key must surface.
+	cc67 := byID["CC6.7"]
+	if cc67.Verification != "findings" {
+		t.Errorf("CC6.7: want verification=findings, got %q", cc67.Verification)
+	}
+	var sawSecretFail bool
+	for _, cr := range cc67.CheckResults {
+		if cr.ID == "scan_secrets" {
+			if cr.Status != "fail" || cr.Findings < 1 {
+				t.Errorf("CC6.7 scan_secrets: want fail with >=1 finding, got %s/%d", cr.Status, cr.Findings)
+			}
+			sawSecretFail = true
+		}
+	}
+	if !sawSecretFail {
+		t.Error("CC6.7: expected a scan_secrets CheckResult")
+	}
+
+	// CC6.8 is backed by dependency/Dockerfile scanners — nothing to find
+	// in the target, so it must verify clean.
+	if v := byID["CC6.8"].Verification; v != "verified" {
+		t.Errorf("CC6.8: want verification=verified, got %q", v)
+	}
+
+	// Without --scan, no verification is performed (back-compat).
+	plain, _, err := executeRoot(t, "evidence", "--library", root, "--framework", "SOC2", "--format", "json")
+	if err != nil {
+		t.Fatalf("plain evidence failed: %v", err)
+	}
+	var plainReport EvidenceReport
+	if err := json.Unmarshal([]byte(plain), &plainReport); err != nil {
+		t.Fatalf("parse plain JSON: %v", err)
+	}
+	if plainReport.ScanTarget != "" {
+		t.Error("scan_target must be empty without --scan")
+	}
+	for _, c := range plainReport.Controls {
+		if c.Verification != "" || len(c.CheckResults) != 0 {
+			t.Errorf("control %s: expected no verification without --scan, got %q / %d results", c.ID, c.Verification, len(c.CheckResults))
+		}
+	}
+}
+
+func TestDeriveVerification(t *testing.T) {
+	cases := []struct {
+		name string
+		in   []CheckResult
+		want string
+	}{
+		{"none", nil, ""},
+		{"all pass", []CheckResult{{Status: checkPass}, {Status: checkPass}}, verifiedClean},
+		{"a finding outranks pass", []CheckResult{{Status: checkPass}, {Status: checkFail}}, verifiedFindgs},
+		{"error when no finding", []CheckResult{{Status: checkPass}, {Status: checkError}}, verifyError},
+		{"finding outranks error", []CheckResult{{Status: checkError}, {Status: checkFail}}, verifiedFindgs},
+		{"only lookups", []CheckResult{{Status: checkNotRun}, {Status: checkNotRun}}, notVerifiable},
+	}
+	for _, tc := range cases {
+		if got := deriveVerification(tc.in); got != tc.want {
+			t.Errorf("%s: deriveVerification = %q, want %q", tc.name, got, tc.want)
+		}
+	}
+}

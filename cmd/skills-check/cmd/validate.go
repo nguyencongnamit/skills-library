@@ -5,14 +5,21 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
 	"github.com/namncqualgo/skills-library/cmd/skills-check/internal/token"
+	"github.com/namncqualgo/skills-library/internal/checks"
+	"github.com/namncqualgo/skills-library/internal/compliance"
 	"github.com/namncqualgo/skills-library/internal/skill"
 )
+
+// cweRefRegex is the canonical form of a CWE identifier in a compliance
+// mapping's `cwe:` list, e.g. "CWE-79".
+var cweRefRegex = regexp.MustCompile(`^CWE-[0-9]+$`)
 
 func validateCmd() *cobra.Command {
 	var path string
@@ -84,6 +91,10 @@ func validateCmd() *cobra.Command {
 				knownIDs[s.Frontmatter.ID] = true
 			}
 			if err := validateSkillReferences(abs, knownIDs, &problems); err != nil {
+				return err
+			}
+
+			if err := validateComplianceChecks(abs, &problems); err != nil {
 				return err
 			}
 
@@ -221,6 +232,70 @@ func validateSkillReferences(root string, knownIDs map[string]bool, problems *[]
 		}
 	}
 
+	return nil
+}
+
+// validateComplianceChecks cross-checks every check ID referenced under a
+// compliance control's `checks:` list (schema 2.0) against the canonical
+// check registry (internal/checks), and validates that every `cwe:` entry
+// is well-formed. A control may only be backed by a detection the engine
+// can actually run, so an unknown check ID — which would let an evidence
+// report claim verification it cannot perform — fails CI here.
+func validateComplianceChecks(root string, problems *[]string) error {
+	dir := filepath.Join(root, "compliance")
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return err
+	}
+	for _, e := range entries {
+		if e.IsDir() {
+			continue
+		}
+		name := e.Name()
+		if !strings.HasSuffix(name, ".yaml") && !strings.HasSuffix(name, ".yml") {
+			continue
+		}
+		path := filepath.Join(dir, name)
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		var mapping compliance.Mapping
+		if err := yaml.Unmarshal(data, &mapping); err != nil {
+			// A syntax error here is also reported by collectComplianceSkillRefs;
+			// skip to avoid a duplicate problem line.
+			continue
+		}
+		for _, ctrl := range mapping.Controls {
+			for _, raw := range ctrl.Checks {
+				id := strings.TrimSpace(raw)
+				if id == "" {
+					continue
+				}
+				if !checks.IsKnown(id) {
+					*problems = append(*problems, fmt.Sprintf(
+						"%s: control %s references unknown check %q (not in internal/checks registry; known: %s)",
+						path, ctrl.ID, id, strings.Join(checks.IDs(), ", "),
+					))
+				}
+			}
+			for _, raw := range ctrl.CWE {
+				cwe := strings.TrimSpace(raw)
+				if cwe == "" {
+					continue
+				}
+				if !cweRefRegex.MatchString(cwe) {
+					*problems = append(*problems, fmt.Sprintf(
+						"%s: control %s has malformed CWE %q (want form \"CWE-<number>\")",
+						path, ctrl.ID, cwe,
+					))
+				}
+			}
+		}
+	}
 	return nil
 }
 

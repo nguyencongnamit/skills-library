@@ -20,6 +20,8 @@ import (
 	"sync"
 
 	"gopkg.in/yaml.v3"
+
+	"github.com/namncqualgo/skills-library/internal/compliance"
 )
 
 // placeholderSignature mirrors manifest.PlaceholderSignature in the
@@ -430,26 +432,13 @@ func typosquatCompareKey(ecosystem, name string) string {
 	return name
 }
 
-// ComplianceControl is the shape of one row in the compliance/ YAMLs.
-// Carries explicit yaml tags to mirror FrameworkMapping; relying on
-// yaml.v3's implicit case-insensitive field matching would tie the
-// on-disk format to that fallback behaviour.
-type ComplianceControl struct {
-	ID          string   `json:"id"                    yaml:"id"`
-	Title       string   `json:"title"                 yaml:"title"`
-	Description string   `json:"description,omitempty" yaml:"description,omitempty"`
-	Skills      []string `json:"skills,omitempty"      yaml:"skills,omitempty"`
-	References  []string `json:"references,omitempty"  yaml:"references,omitempty"`
-}
-
-// FrameworkMapping is one framework's compliance YAML on disk.
-type FrameworkMapping struct {
-	SchemaVersion string              `json:"schema_version" yaml:"schema_version"`
-	Framework     string              `json:"framework"      yaml:"framework"`
-	Version       string              `json:"version"        yaml:"version"`
-	LastUpdated   string              `json:"last_updated"   yaml:"last_updated"`
-	Controls      []ComplianceControl `json:"controls"       yaml:"controls"`
-}
+// ComplianceControl and FrameworkMapping are the on-disk shape of one row
+// and one file under compliance/. The canonical definitions live in
+// internal/compliance (shared with `skills-check evidence`) so the shape
+// cannot drift between consumers; these aliases preserve the historical
+// names used throughout this package. Schema 2.0 adds Checks + CWE.
+type ComplianceControl = compliance.Control
+type FrameworkMapping = compliance.Mapping
 
 // MapComplianceResult is what the map_compliance_control tool returns.
 //
