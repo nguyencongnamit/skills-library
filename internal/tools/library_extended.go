@@ -259,6 +259,14 @@ func (l *Library) CheckDependency(pkg, version, ecosystem string) (*CheckDepende
 			if !cveAppliesToEcosystem(entry.Languages, eco) {
 				continue
 			}
+			// When the entry pins concrete affected versions and we know
+			// the resolved version, drop the finding for a version outside
+			// every affected range (e.g. a package already upgraded past
+			// the fix). Entries without `affected` stay version-agnostic.
+			if version != "" && len(entry.Affected) > 0 &&
+				!cveVersionAffected(entry.Affected, eco, pkg, version) {
+				continue
+			}
 			out.CVEs = append(out.CVEs, CVEPatternMatch{
 				CVE:         entry.CVE,
 				Name:        entry.Name,
@@ -670,14 +678,49 @@ type cvePatternsFile struct {
 	LastUpdated   string `json:"last_updated"`
 	Description   string `json:"description"`
 	Entries       []struct {
-		CVE         string   `json:"cve"`
-		Name        string   `json:"name"`
-		Severity    string   `json:"severity"`
-		Description string   `json:"description"`
-		References  []string `json:"references"`
-		Languages   []string `json:"languages"`
-		AttackType  string   `json:"attack_type"`
+		CVE         string        `json:"cve"`
+		Name        string        `json:"name"`
+		Severity    string        `json:"severity"`
+		Description string        `json:"description"`
+		References  []string      `json:"references"`
+		Languages   []string      `json:"languages"`
+		AttackType  string        `json:"attack_type"`
+		Affected    []cveAffected `json:"affected,omitempty"`
 	} `json:"entries"`
+}
+
+// cveAffected optionally pins a CVE pattern entry to concrete affected
+// package versions. When present (and a version is known), the dependency
+// scan only reports the CVE for an in-range version, so a package already
+// upgraded past the fix is not flagged. Entries without `affected` keep
+// the prior name-only, version-agnostic (suggestive) behaviour.
+type cveAffected struct {
+	Package          string   `json:"package,omitempty"`
+	Ecosystem        string   `json:"ecosystem,omitempty"`
+	VersionsAffected []string `json:"versions_affected,omitempty"`
+}
+
+// cveVersionAffected reports whether (pkg@version, eco) is covered by any
+// of the entry's affected rows. Rows are filtered to those matching the
+// ecosystem and (when set) the package. If applicable rows exist but none
+// cover the version, the version is NOT affected (e.g. patched). If no row
+// applies to this ecosystem/package, it falls open (true) so the
+// name-only match is preserved for entries that only pin OTHER packages.
+func cveVersionAffected(affected []cveAffected, eco, pkg, version string) bool {
+	sawApplicable := false
+	for _, a := range affected {
+		if a.Ecosystem != "" && !strings.EqualFold(a.Ecosystem, eco) {
+			continue
+		}
+		if a.Package != "" && !strings.EqualFold(a.Package, pkg) {
+			continue
+		}
+		sawApplicable = true
+		if len(a.VersionsAffected) == 0 || versionInAnyRangeEco(eco, version, a.VersionsAffected) {
+			return true
+		}
+	}
+	return !sawApplicable
 }
 
 // extendedCache backs the per-Library caches for the new tools. The

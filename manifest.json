@@ -2564,8 +2564,8 @@
     },
     {
       "path": "vulnerabilities/cve/code-relevant/cve_patterns.json",
-      "sha256": "52c62040798b4f5681af2cfe2ed01d6034683d294c376f04c2356e6db65220d0",
-      "size": 65762,
+      "sha256": "1763456fabe0762349bb269f143dc4e8cc417068eb6b25395e134c52bf631140",
+      "size": 66040,
       "action": "unchanged"
     },
     {
