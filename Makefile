@@ -14,17 +14,28 @@ BIN_DIR    ?= .
 SKILLS_CHECK := $(BIN_DIR)/skills-check
 SKILLS_MCP   := $(BIN_DIR)/skills-mcp
 
+# Every .go file (excluding the VCS dir) is a prerequisite of both binaries so
+# Make rebuilds them whenever a source changes. WITHOUT this, the binary file
+# targets look "up to date" the moment they exist, and `make validate` /
+# `regenerate` silently run a STALE binary against fresh source — which once
+# produced phantom token-budget failures (the stale-./skills-check footgun
+# noted in CLAUDE.md). Source-dependency tracking keeps `make validate` fresh.
+GO_SOURCES := $(shell find . -name '*.go' -not -path './.git/*' 2>/dev/null)
+
 .DEFAULT_GOAL := build
 
 .PHONY: build
-build: skills-check skills-mcp ## Build both binaries (default)
+build: $(SKILLS_CHECK) $(SKILLS_MCP) ## Build both binaries (default)
 
-.PHONY: skills-check
-skills-check: ## Build only the skills-check CLI
+# These are FILE targets (not phony) with the .go sources as prerequisites, so
+# they rebuild on a source change but no-op when up to date. GNU Make
+# canonicalises `./skills-check` to `skills-check`, so `make skills-check` /
+# `make skills-mcp` still work as before — no separate phony aliases needed
+# (and a phony alias would create a circular self-dependency).
+$(SKILLS_CHECK): $(GO_SOURCES)
 	$(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" -o $(SKILLS_CHECK) ./cmd/skills-check
 
-.PHONY: skills-mcp
-skills-mcp: ## Build only the skills-mcp server
+$(SKILLS_MCP): $(GO_SOURCES)
 	$(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" -o $(SKILLS_MCP) ./cmd/skills-mcp
 
 .PHONY: test
