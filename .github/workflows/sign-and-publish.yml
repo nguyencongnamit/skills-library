@@ -208,6 +208,45 @@ jobs:
           gh release edit "$TAG" --draft=false
           echo "::notice::Published ${TAG}"
 
+      - name: Update Homebrew tap
+        # Push the stamped formula (skills-check.rb, downloaded with the other
+        # release assets into ./verify above) to namncqualgo/homebrew-tap so
+        # `brew install namncqualgo/tap/skills-check` resolves. Runs AFTER the
+        # promote step so the release assets the formula's url lines point at
+        # are downloadable. Graceful no-op when HOMEBREW_TAP_TOKEN is not set —
+        # the stamped formula is still published as a release asset for a manual
+        # tap update, matching the repo's "off until a key is provided" pattern.
+        env:
+          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${TAP_TOKEN:-}" ]; then
+            echo "::notice::HOMEBREW_TAP_TOKEN not configured; skipping tap update. The stamped formula is published as the skills-check.rb release asset for a manual tap update."
+            exit 0
+          fi
+          if [ ! -f verify/skills-check.rb ]; then
+            echo "::error::verify/skills-check.rb was not among the release assets; cannot update the tap."
+            exit 1
+          fi
+          tapdir=$(mktemp -d)
+          git clone --depth 1 \
+            "https://x-access-token:${TAP_TOKEN}@github.com/namncqualgo/homebrew-tap.git" "$tapdir"
+          mkdir -p "$tapdir/Formula"
+          cp verify/skills-check.rb "$tapdir/Formula/skills-check.rb"
+          git -C "$tapdir" add Formula/skills-check.rb
+          if git -C "$tapdir" diff --cached --quiet; then
+            echo "::notice::Tap formula already up to date for ${TAG}."
+          else
+            git -C "$tapdir" \
+              -c user.name="vibe-guard release bot" \
+              -c user.email="release-bot@users.noreply.github.com" \
+              commit -m "skills-check ${TAG}"
+            git -C "$tapdir" push origin HEAD
+            echo "::notice::Updated namncqualgo/homebrew-tap to ${TAG}."
+          fi
+
       - name: Summary
         env:
           TAG: ${{ inputs.tag }}
