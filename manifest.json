@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "c4f40cf67b14042e144723b21d7e5ff4b08732b9cf606c91fd5f9c300f4b08cb",
-      "size": 111193,
+      "sha256": "9d9810a230971778928a8cc2adba0b3e1cdc767329c6dc891fbfac2a06d34197",
+      "size": 111217,
       "action": "unchanged"
     },
     {
@@ -7850,14 +7850,14 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/docker.json",
-      "sha256": "6f051273d236d7f1cb6ed93a240a7358582a082239d42fd876d057658cd6da06",
-      "size": 9600,
+      "sha256": "48753afdc3c7e20b6d6c602c41d73d4c7f2a963e39e5fa9beaa913d78b456f7f",
+      "size": 10821,
       "action": "unchanged"
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/github-actions.json",
-      "sha256": "7d4b1bcede7ab55500500c54fff66ade3da243b3ac43facd6fb840189f62640f",
-      "size": 9621,
+      "sha256": "439959c4e2ae16afbc80adfb4076ee84ee07f969be6b56f6574cfde88ae2be4f",
+      "size": 12206,
       "action": "unchanged"
     },
     {
