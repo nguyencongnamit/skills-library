@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
@@ -17,7 +18,49 @@ func manifestCmd() *cobra.Command {
 	c.AddCommand(manifestComputeCmd())
 	c.AddCommand(manifestVerifyCmd())
 	c.AddCommand(manifestSignCmd())
+	c.AddCommand(manifestSignDetachedCmd())
 	c.AddCommand(manifestDeltaCmd())
+	return c
+}
+
+// manifestSignDetachedCmd signs an arbitrary file (e.g. a release checksum
+// file) with the Ed25519 private key, writing "<file>.sig" containing an
+// "ed25519:<base64>" detached signature. `self-update` verifies this against
+// the embedded public key before trusting the checksum, anchoring update
+// integrity to the project key rather than the download source.
+func manifestSignDetachedCmd() *cobra.Command {
+	var keyPath, outPath string
+	c := &cobra.Command{
+		Use:   "sign-detached <file>",
+		Short: "Write an Ed25519 detached signature (<file>.sig) for a file",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			priv, err := manifest.LoadPrivateKey(keyPath)
+			if err != nil {
+				return err
+			}
+			data, err := os.ReadFile(args[0])
+			if err != nil {
+				return fmt.Errorf("read %s: %w", args[0], err)
+			}
+			sig, err := manifest.SignDetached(priv, data)
+			if err != nil {
+				return err
+			}
+			dst := outPath
+			if dst == "" {
+				dst = args[0] + ".sig"
+			}
+			if err := os.WriteFile(dst, []byte(sig+"\n"), 0o644); err != nil {
+				return fmt.Errorf("write %s: %w", dst, err)
+			}
+			fmt.Fprintf(c.OutOrStdout(), "wrote detached signature %s\n", dst)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&keyPath, "key", "", "path to Ed25519 private key (required)")
+	c.Flags().StringVar(&outPath, "out", "", "signature output path (default: <file>.sig)")
+	_ = c.MarkFlagRequired("key")
 	return c
 }
 

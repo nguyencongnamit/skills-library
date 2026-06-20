@@ -31,8 +31,10 @@ func selfUpdateCmd() *cobra.Command {
 		Use:   "self-update",
 		Short: "Download the latest skills-check binary and atomically replace this one",
 		Long: "Downloads the binary that matches the running GOOS/GOARCH from " +
-			"GitHub Releases, verifies its SHA-256 against the published " +
-			"checksums-<goos>-<goarch>.txt file, and atomically replaces the " +
+			"GitHub Releases, verifies a detached Ed25519 signature over the " +
+			"checksums-<goos>-<goarch>.txt file against the public key embedded " +
+			"in this binary (fail-closed for released builds), checks the binary's " +
+			"SHA-256 against that signed checksum, and atomically replaces the " +
 			"running binary on disk. --dry-run reports what would happen " +
 			"without writing anything.",
 		RunE: func(c *cobra.Command, args []string) error {
@@ -102,9 +104,25 @@ func runSelfUpdate(out io.Writer, baseURL, goos, goarch, targetPath string, dryR
 	if err != nil {
 		return nil, fmt.Errorf("download %s: %w", sumURL, err)
 	}
-	defer sumBody.Close()
+	sumBytes, err := io.ReadAll(sumBody)
+	sumBody.Close()
+	if err != nil {
+		return nil, fmt.Errorf("read %s: %w", sumURL, err)
+	}
 
-	expected, err := lookupChecksum(sumBody, binaryName)
+	// Anchor trust to the project's Ed25519 release key, not the download
+	// source. Without this, a compromised release (or a malicious --base-url)
+	// can serve a binary plus a matching checksum file and the SHA-256 check
+	// passes vacuously. We verify a detached signature over the checksum file
+	// bytes using the public key embedded in this binary at build time. When a
+	// key is embedded (every released build), this is fail-closed: a missing or
+	// invalid signature aborts the update. Dev builds with no embedded key
+	// cannot verify and fall back to checksum-only with a clear warning.
+	if err := verifyChecksumSignature(out, baseURL, checksumName, sumBytes); err != nil {
+		return nil, err
+	}
+
+	expected, err := lookupChecksum(strings.NewReader(string(sumBytes)), binaryName)
 	if err != nil {
 		return nil, err
 	}
@@ -120,6 +138,43 @@ func runSelfUpdate(out io.Writer, baseURL, goos, goarch, targetPath string, dryR
 		return nil, fmt.Errorf("replace %s: %w", targetPath, err)
 	}
 	return &selfUpdateResult{BinaryName: binaryName, SHA256: gotHex}, nil
+}
+
+// verifyChecksumSignature downloads "<checksumName>.sig" and verifies it is a
+// valid Ed25519 signature over sumBytes using the public key embedded in this
+// binary. Fail-closed when a key is embedded; warn-and-continue only for dev
+// builds that have no key to verify against.
+func verifyChecksumSignature(out io.Writer, baseURL, checksumName string, sumBytes []byte) error {
+	pub, err := manifest.EmbeddedPublicKeyParsed()
+	if err != nil {
+		// No key embedded — a development build. There is nothing to verify
+		// against; preserve the legacy checksum-only behaviour but say so
+		// loudly so it is never mistaken for a verified update.
+		fmt.Fprintln(out, "warning: no release signing key embedded in this build; "+
+			"skipping signature verification (checksum-only). Released binaries verify the signature.")
+		return nil
+	}
+	sigURL, err := joinURL(baseURL, checksumName+".sig")
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(out, "downloading %s\n", sigURL)
+	sigBody, err := httpGet(sigURL)
+	if err != nil {
+		return fmt.Errorf("download release signature %s: %w "+
+			"(refusing to update without a verifiable signature)", sigURL, err)
+	}
+	sigRaw, err := io.ReadAll(sigBody)
+	sigBody.Close()
+	if err != nil {
+		return fmt.Errorf("read release signature %s: %w", sigURL, err)
+	}
+	if err := manifest.VerifyDetached(pub, sumBytes, string(sigRaw)); err != nil {
+		return fmt.Errorf("release signature verification failed for %s: %w "+
+			"(the checksum file is not signed by the trusted release key)", checksumName, err)
+	}
+	fmt.Fprintf(out, "verified release signature (key %s)\n", manifest.EmbeddedKeyDisplay())
+	return nil
 }
 
 func joinURL(base, name string) (string, error) {

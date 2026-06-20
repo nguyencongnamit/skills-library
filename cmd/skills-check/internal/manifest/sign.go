@@ -179,6 +179,51 @@ func (m *Manifest) VerifyWith(pub ed25519.PublicKey) error {
 	return nil
 }
 
+// SignDetached signs an arbitrary message (e.g. the bytes of a release
+// checksum file) with an Ed25519 private key and returns an "ed25519:<base64>"
+// detached signature string — the same wire format used for manifest
+// signatures. Used to sign release checksum files so `self-update` can anchor
+// trust to the project key rather than the download source.
+func SignDetached(priv ed25519.PrivateKey, message []byte) (string, error) {
+	if len(priv) != ed25519.PrivateKeySize {
+		return "", fmt.Errorf("ed25519 private key must be %d bytes, got %d", ed25519.PrivateKeySize, len(priv))
+	}
+	sig := ed25519.Sign(priv, message)
+	return SignaturePrefix + base64.StdEncoding.EncodeToString(sig), nil
+}
+
+// VerifyDetached verifies an "ed25519:<base64>" detached signature over the
+// given message against a public key. The "ed25519:" prefix is optional so a
+// raw base64 signature also verifies.
+func VerifyDetached(pub ed25519.PublicKey, message []byte, signature string) error {
+	if len(pub) != ed25519.PublicKeySize {
+		return fmt.Errorf("ed25519 public key must be %d bytes, got %d", ed25519.PublicKeySize, len(pub))
+	}
+	sigB64 := strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(signature), SignaturePrefix))
+	if sigB64 == "" {
+		return errors.New("empty signature")
+	}
+	raw, err := base64.StdEncoding.DecodeString(sigB64)
+	if err != nil {
+		return fmt.Errorf("decode signature: %w", err)
+	}
+	if len(raw) != ed25519.SignatureSize {
+		return fmt.Errorf("signature length %d != %d", len(raw), ed25519.SignatureSize)
+	}
+	if !ed25519.Verify(pub, message, raw) {
+		return errors.New("ed25519 signature verification failed")
+	}
+	return nil
+}
+
+// EmbeddedPublicKeyParsed returns the build-time embedded public key parsed
+// into an ed25519.PublicKey, or an error if no key was embedded. Exposed so
+// the self-update path can verify release signatures with the same key the CLI
+// trusts for manifests.
+func EmbeddedPublicKeyParsed() (ed25519.PublicKey, error) {
+	return embeddedPublicKey()
+}
+
 // GenerateKeyPair produces a fresh Ed25519 keypair for development and tests.
 func GenerateKeyPair() (ed25519.PublicKey, ed25519.PrivateKey, error) {
 	return ed25519.GenerateKey(rand.Reader)

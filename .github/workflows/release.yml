@@ -363,6 +363,46 @@ jobs:
           if [ -d deltas ]; then
             tar -C deltas -czf release/deltas.tar.gz . || true
           fi
+
+      - name: Sign release checksum files (Ed25519)
+        # `self-update` is fail-closed: a released binary refuses to update
+        # unless it can verify a detached Ed25519 signature over the checksum
+        # file with the public key baked into it at build time. This anchors
+        # update integrity to the project key rather than the download source.
+        # The signing key is intentionally NOT graceful-off — shipping
+        # unsigned checksums would brick `self-update` for every released
+        # binary, so a missing key fails the release loudly.
+        shell: bash
+        env:
+          SKILLS_LIBRARY_PRIVKEY_B64: ${{ secrets.SKILLS_LIBRARY_PRIVKEY_B64 }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SKILLS_LIBRARY_PRIVKEY_B64:-}" ]; then
+            echo "::error::SKILLS_LIBRARY_PRIVKEY_B64 is not set. Released binaries verify a"
+            echo "::error::detached Ed25519 signature over the checksum file before self-updating;"
+            echo "::error::publishing without one would brick self-update. Add the release signing"
+            echo "::error::private key as the SKILLS_LIBRARY_PRIVKEY_B64 secret (base64 of the PEM)."
+            exit 1
+          fi
+          keyfile="$(mktemp)"
+          trap 'rm -f "$keyfile"' EXIT
+          echo "$SKILLS_LIBRARY_PRIVKEY_B64" | base64 -d > "$keyfile"
+          shopt -s nullglob
+          signed=0
+          for f in release/checksums-*.txt; do
+            /tmp/skills-check manifest sign-detached "$f" --key "$keyfile"
+            signed=$((signed+1))
+          done
+          if [ "$signed" -eq 0 ]; then
+            echo "::error::no checksums-*.txt files found to sign"
+            exit 1
+          fi
+          echo "signed $signed checksum file(s) with the release key"
+
+      - name: Catalog release assets
+        shell: bash
+        run: |
+          set -e
           (cd release && sha256sum * > SHA256SUMS.txt)
 
       - name: Tag-resolved release name
