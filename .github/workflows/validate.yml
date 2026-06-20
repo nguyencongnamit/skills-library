@@ -346,6 +346,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install PyYAML
+        # The secret-detection benchmark gate reads the YAML checklist (same
+        # as the static-checks job, which installs this too).
+        run: python -m pip install --quiet pyyaml
+
       - name: Verify go.mod is tidy
         run: |
           go mod tidy
