@@ -123,7 +123,18 @@ npx @namncqualgo/secure-code-skill connect-mcp
 files `init` writes). Prefer a persistent command? `npm install -g
 @namncqualgo/secure-code-skill`, then `secure-code-skill init`.
 
-### B. Go — `go install`
+### B. curl \| sh — prebuilt binary (no Go, no clone)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/namncqualgo/skills-library/main/install.sh | sh
+```
+
+Downloads the `skills-check` binary for your OS/arch from the latest GitHub
+release, **verifies its SHA-256** against the release `SHA256SUMS.txt`, and
+installs it to `~/.local/bin`. Override with `SKILLS_CHECK_BIN_DIR` (install
+dir) or `SKILLS_CHECK_VERSION` (pin a tag). macOS + Linux, amd64 + arm64.
+
+### C. Go — `go install`
 
 ```bash
 # the MCP server
@@ -135,7 +146,7 @@ go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 
 `skills-mcp` reads its library data from disk (it does not embed it), so point
 it at a **library directory** via `--path` (or `$SKILLS_LIBRARY_PATH`). Get one
-by cloning (section C below); `skills-check update` keeps that directory's
+by cloning (section D below); `skills-check update` keeps that directory's
 signed skills + vulnerability data current:
 
 ```bash
@@ -144,7 +155,7 @@ skills-mcp --path ./lib            # run the server against ./lib
 skills-check update --path ./lib   # later: pull signed updates into ./lib
 ```
 
-### C. From source (clone)
+### D. From source (clone)
 
 ```bash
 git clone https://github.com/namncqualgo/skills-library.git
