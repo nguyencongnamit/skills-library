@@ -7856,8 +7856,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/github-actions.json",
-      "sha256": "f0776f88a99fc7c7328e1b1c21a92d16d250c10a44f6cc0c01b8d1df8a0fae97",
-      "size": 8165,
+      "sha256": "7d4b1bcede7ab55500500c54fff66ade3da243b3ac43facd6fb840189f62640f",
+      "size": 9621,
       "action": "unchanged"
     },
     {

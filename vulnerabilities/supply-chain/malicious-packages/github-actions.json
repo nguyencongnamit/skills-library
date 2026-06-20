@@ -180,6 +180,27 @@
         "creation of a public repository named 'Shai-Hulud'"
       ],
       "attack_type": "build_pipeline_compromise"
+    },
+    {
+      "name": "ghostaction-workflow-injection",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "build_pipeline_compromise",
+      "severity": "critical",
+      "discovered": "2025-09-05",
+      "description": "GitGuardian disclosed (2025-09-05) the 'GhostAction' campaign: an attacker with write access injected a malicious workflow named 'Github Actions Security' at .github/workflows/github_actions_security.yml into 817 repositories across 327 GitHub users, exfiltrating 3,325 secrets. The workflow harvested CI secrets (DockerHub credentials, GitHub PATs and npm tokens were most common, plus PyPI/AWS/Cloudflare keys and DB credentials) and POSTed them with curl to attacker endpoints; 24 downstream packages (9 npm, 15 PyPI) were left at immediate compromise risk from the stolen publish tokens.",
+      "references": [
+        "https://blog.gitguardian.com/ghostaction-campaign-3-325-secrets-stolen/",
+        "https://thehackernews.com/2025/03/github-action-compromise-puts-cicd.html"
+      ],
+      "indicators": [
+        "unexpected workflow .github/workflows/github_actions_security.yml named 'Github Actions Security'",
+        "curl -s -X POST -d '<secret vars>' exfiltration step",
+        "exfil endpoints *.plesk.page / IP 45.139.104.115 / carte-avantage.com",
+        "workflow enumerates and POSTs CI secrets (PyPI/npm/DockerHub/AWS/GitHub tokens)"
+      ],
+      "attack_type": "build_pipeline_compromise"
     }
   ]
 }
