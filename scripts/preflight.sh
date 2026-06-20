@@ -78,12 +78,13 @@ else
   bad "manifest — run: skills-check manifest compute --path . --write"
 fi
 
-# 6. Prevention-lift bench (informational). Skills that ship an
-# evals/cases.json get scored here. Not a hard gate yet — the lift floor
-# is still being calibrated per skill — but a regression is worth seeing.
-# Run `skills-check eval --all --enforce` to make it a hard gate.
-step "eval --all (prevention lift, informational)"
-"${CHECK[@]}" eval --all || true
+# 6. Prevention-lift gate. Every skill that ships an evals/cases.json must keep
+# its prevention lift at or above its floor (per-skill min_lift in the corpus,
+# else the --min-lift default). A regression that lets the AI write insecure
+# code the skill used to prevent fails here — the same hard gate CI enforces, so
+# local and CI agree. This is the objective, eval-gated bar (VISION §5).
+step "eval --all --enforce (prevention-lift gate)"
+if "${CHECK[@]}" eval --all --enforce; then ok "eval (prevention lift)"; else bad "eval — a skill dropped below its prevention-lift floor"; fi
 
 # Summary.
 printf '\n%s────────────────────────────────────────%s\n' "$dim" "$reset"

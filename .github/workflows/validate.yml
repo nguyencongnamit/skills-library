@@ -419,3 +419,11 @@ jobs:
             --skills-mcp /tmp/skills-mcp \
             --out evals/baselines/scanner-eval-static.md \
             --verbose
+
+      - name: Prevention-lift gate (eval --enforce)
+        # The hard quality gate: every skill that ships an evals/cases.json must
+        # keep its prevention lift at or above its floor (per-skill min_lift in
+        # the corpus, else the --min-lift default). A regression that lets the
+        # AI write insecure code the skill used to prevent reds the build here.
+        # This is the objective, eval-gated bar from VISION §5 — not taste.
+        run: /tmp/skills-check eval --all --enforce --library .
