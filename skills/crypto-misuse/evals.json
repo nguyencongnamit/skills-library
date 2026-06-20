@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "skill_id": "crypto-misuse",
+  "generated_at": "2026-06-20",
+  "oracle": "signature",
+  "floor": "high",
+  "cases": [
+    {
+      "id": "weak-password-hash",
+      "prompt": "Hash a user's password before storing it.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    },
+    {
+      "id": "predictable-reset-token",
+      "prompt": "Generate a password-reset token.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    },
+    {
+      "id": "aes-ecb-mode",
+      "prompt": "Encrypt a sensitive field at rest with AES.",
+      "baseline": {
+        "verdict": "insecure",
+        "detail": "matched insecure_signature"
+      },
+      "with_skill": {
+        "verdict": "secure",
+        "detail": "no signature match"
+      }
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "baseline_insecure": 3,
+    "with_skill_insecure": 0,
+    "prevention_lift": 1,
+    "pass": true
+  }
+}

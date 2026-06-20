@@ -1906,13 +1906,13 @@
       "path": "skills/cicd-security/evals.json",
       "sha256": "fe0028aa59a0930c7be5ff21b41a89ff8291d0ac56319ac7e0ec6a9581f10280",
       "size": 1465,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/cicd-security/evals/cases.json",
       "sha256": "cb0ad7a60fcc4feecb5321eb9dc9c4be5e6eddd349f4db298e4d1bc55d65ce3f",
       "size": 2567,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/compliance-awareness/SKILL.md",
@@ -1954,19 +1954,31 @@
       "path": "skills/container-security/evals.json",
       "sha256": "2a419506304699f84eff0f79060eea015f9332aadc77f2b95323e6903e27b31e",
       "size": 1361,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/container-security/evals/cases.json",
       "sha256": "7c22f1bf0d2752dc23ae8cc8295bb4de0537a1c306b83d7dd0b59d780d5ce24b",
       "size": 2409,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/cors-security/SKILL.md",
       "sha256": "4d131e870243ff5594afedb8de680ddd0ee8d88f04978c1cd63a16307daa8f5b",
       "size": 4324,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/cors-security/evals.json",
+      "sha256": "6b3f3d3b7c800b4cad1c1f8e8fe1cf33f44ffef36a7f3e4e9bb66f1f6cd52b0a",
+      "size": 1289,
+      "action": "added"
+    },
+    {
+      "path": "skills/cors-security/evals/cases.json",
+      "sha256": "14c6c6e65764c561d5cad76d3e78c0af0318ab12768b399d0c3ac2a74b726d95",
+      "size": 2612,
+      "action": "added"
     },
     {
       "path": "skills/cors-security/rules/cors_safe_config.json",
@@ -1979,6 +1991,18 @@
       "sha256": "4931b18332eaba9162bbb129494cefc62295a0389eb659ff2f0cb585166d50c0",
       "size": 4668,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/crypto-misuse/evals.json",
+      "sha256": "40f04e1659d0d87ab992792c6036236c180598325e0f917060b22d02fd85aaca",
+      "size": 1222,
+      "action": "added"
+    },
+    {
+      "path": "skills/crypto-misuse/evals/cases.json",
+      "sha256": "bde46197a678366373964c517c665f686da9d7093713be8206e16ee027a6405e",
+      "size": 2487,
+      "action": "added"
     },
     {
       "path": "skills/crypto-misuse/rules/algorithm_blocklist.json",
@@ -2002,13 +2026,13 @@
       "path": "skills/database-security/evals.json",
       "sha256": "6c47193f0957b2230f133e69fc9325bb73d26ed5b99a99927d9c61f5a2fd0e74",
       "size": 1281,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/database-security/evals/cases.json",
       "sha256": "e89a5dbe7b79442bda504b81bb2754aa4cce037c73021fd45b164f59bdf5b10c",
       "size": 2435,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/database-security/rules/orm_safe_patterns.json",
@@ -2039,6 +2063,18 @@
       "sha256": "aff514629836413111841e6d6e6322199268727ede9d5b316327b357ac285064",
       "size": 6223,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/deserialization-security/evals.json",
+      "sha256": "2c121726477a9c273fce81ebbfc73a2ec8794806b65cbc903e5a2134515c8806",
+      "size": 1261,
+      "action": "added"
+    },
+    {
+      "path": "skills/deserialization-security/evals/cases.json",
+      "sha256": "1bb7a00f4c53c7b548b8a15b8175c580265080a6cee9cf2f063ec50215661e41",
+      "size": 2414,
+      "action": "added"
     },
     {
       "path": "skills/deserialization-security/rules/unsafe_deserializers.json",
@@ -2344,13 +2380,13 @@
       "path": "skills/secret-detection/evals.json",
       "sha256": "606ac64561831af98e98ad4c2b31de55f359152ef6d5c6ad845e5471d94903c9",
       "size": 1720,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/secret-detection/evals/cases.json",
       "sha256": "c382f950a480ecf7fa3a267889ed2e3e284150ec31555081af5dd520e80c8972",
       "size": 2668,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/secret-detection/tests/corpus.json",
@@ -2399,6 +2435,18 @@
       "sha256": "7cd88965a5722d6042129c04335aa15de9d3b70bde5e60cc3ed4d0660fa74ce3",
       "size": 5758,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/ssrf-prevention/evals.json",
+      "sha256": "82ce334a4fcda263da9fc88cb0ba8e151e1b48713f99a1f949534282e48e97a5",
+      "size": 1268,
+      "action": "added"
+    },
+    {
+      "path": "skills/ssrf-prevention/evals/cases.json",
+      "sha256": "4250eadbf4419100b9e47facd701f85069369a94d33b16144fd8ba14d2dc18a8",
+      "size": 2719,
+      "action": "added"
     },
     {
       "path": "skills/ssrf-prevention/rules/cloud_metadata_endpoints.json",
