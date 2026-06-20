@@ -88,6 +88,14 @@ Vulnerability data and detection patterns change weekly. Two refresh paths, deco
 ./skills-check fetch-vulns --from-release
 ```
 
+Check how stale the local data is at any time — an AI assistant is only as
+current as the knowledge it is fed:
+
+```bash
+./skills-check status                 # version, advisory count, data age, verdict
+./skills-check status --fail-if-stale # exit non-zero in CI when data is >30 days old
+```
+
 For unattended refresh, install the scheduler:
 
 ```bash
@@ -95,6 +103,21 @@ For unattended refresh, install the scheduler:
 ```
 
 That registers a `launchd` LaunchAgent (macOS), a `systemd` user timer (Linux), or a Task Scheduler task (Windows). No daemons, no privileged helpers.
+
+## 5b. Block a bad package you discovered (LEARN loop)
+
+Found a malicious or typosquatting package the curated database doesn't know
+yet? Block it immediately — locally, no central round trip:
+
+```bash
+./skills-check contribute add -p evil-pkg -e npm --reason "exfiltrates env in postinstall"
+./skills-check gate package.json --severity-floor high   # now fails on evil-pkg
+```
+
+The rule is written to `.skills-check/overlay.json` and never leaves your
+machine. Commit that file to protect your whole team; run `contribute submit`
+(optionally `--key` to sign) to share a candidate upstream. See
+[Contribute a Finding](contribute.md).
 
 ## 6. Generate a compliance coverage report
 
