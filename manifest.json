@@ -1904,8 +1904,8 @@
     },
     {
       "path": "skills/cicd-security/checklists/github_actions_hardening.yaml",
-      "sha256": "f946e5613fb9834d7b916702e8d693a4da9d973f8faca14256455d8ead573ef4",
-      "size": 5076,
+      "sha256": "2b2c46b39c484cdf833ab7e0430227e663e757c5d42d0d5812ff5ffed3fb4528",
+      "size": 5079,
       "action": "unchanged"
     },
     {
@@ -1942,7 +1942,7 @@
       "path": "skills/compliance-awareness/tests/corpus.json",
       "sha256": "9f0de7fa2b8fca9d9b043774d9e8f04228ab35bd83517034060a0992d15d1c73",
       "size": 4197,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/container-security/SKILL.md",
@@ -2032,7 +2032,7 @@
       "path": "skills/database-security/tests/corpus.json",
       "sha256": "10396443edf0ee3905ad6bd68436135bf2ff7e95ab54da8363c4677ad4d5660d",
       "size": 3793,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/dependency-audit/SKILL.md",
@@ -2086,7 +2086,7 @@
       "path": "skills/electron-security/tests/corpus.json",
       "sha256": "cc913a9a5cf1f501ea44d9c2f0d047199a8bacd7488712de0bc1ab6f088ae47a",
       "size": 4393,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/error-handling-security/SKILL.md",
@@ -2110,7 +2110,7 @@
       "path": "skills/error-handling-security/tests/corpus.json",
       "sha256": "9231dbb98a209c6178fa06c77f12144bfe0fe52cfd1330b7117e0b71743ca7fd",
       "size": 4094,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/file-upload-security/SKILL.md",
@@ -2128,7 +2128,7 @@
       "path": "skills/file-upload-security/tests/corpus.json",
       "sha256": "eb70c31e762a6ae55f717aa4e82249ccee5030633cb7f07fc213b8e8072cba0f",
       "size": 5130,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/frontend-security/SKILL.md",
@@ -2152,7 +2152,7 @@
       "path": "skills/frontend-security/tests/corpus.json",
       "sha256": "e7fc32b4e9930e8dcf6ef201f39ec4a15c50ee7df4aa9aaab5fca524f164ae0e",
       "size": 3734,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/graphql-security/SKILL.md",
@@ -2170,7 +2170,7 @@
       "path": "skills/graphql-security/tests/corpus.json",
       "sha256": "fe4ffc6dc4f1bcbeae947ba8eb5bab3ddf200f06c7afb3ed17f2700d1fff4e36",
       "size": 3998,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/iac-security/SKILL.md",
@@ -2194,7 +2194,7 @@
       "path": "skills/iac-security/tests/corpus.json",
       "sha256": "f613383f77bd5d8c6331ccd02d57a54103af4c561b4e50a9697ad3cb0f0e480d",
       "size": 5089,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/iam-best-practices/SKILL.md",
@@ -2218,7 +2218,7 @@
       "path": "skills/iam-best-practices/tests/corpus.json",
       "sha256": "ae753b645cf98c8731d6a96ab10956190e88de5c90e8b1c0e9debc1a9c342e48",
       "size": 4765,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/llm-app-security/SKILL.md",
@@ -2260,7 +2260,7 @@
       "path": "skills/logging-security/tests/corpus.json",
       "sha256": "a36a88d2d653c60c9761b311603e435946e002e2e145de229161e5072376e238",
       "size": 3991,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/ml-security/SKILL.md",
@@ -2278,7 +2278,7 @@
       "path": "skills/ml-security/tests/corpus.json",
       "sha256": "f7f46b9e750f7861f259adc4c6546241ed5e0429878a9f2f58b8a8941ca457e4",
       "size": 3636,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/mobile-security/SKILL.md",
@@ -2302,7 +2302,7 @@
       "path": "skills/mobile-security/tests/corpus.json",
       "sha256": "3402d7b242077e5914771a1ad8c3e20348f2771050cef8b8d8e09a886e3371ab",
       "size": 4141,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/protocol-security/SKILL.md",
@@ -2326,7 +2326,7 @@
       "path": "skills/protocol-security/tests/corpus.json",
       "sha256": "dbcdbeef9e6c3901a65782a63e64740d49b5d285bbc2b733e50444f99ad5cd80",
       "size": 3821,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/saas-security/SKILL.md",
@@ -2428,7 +2428,7 @@
       "path": "skills/saas-security/tests/corpus.json",
       "sha256": "214fc9460f0ea10304252c3a308785838c84608fc46372b1b87bedde4e0c56e5",
       "size": 4271,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/secret-detection/SKILL.md",
@@ -2470,7 +2470,7 @@
       "path": "skills/secure-code-review/tests/corpus.json",
       "sha256": "8439d172f4a54b1d3dad541a5ccc31448488e95cb418981369d455dcae69c2e7",
       "size": 3781,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/serverless-security/SKILL.md",
@@ -2494,7 +2494,7 @@
       "path": "skills/serverless-security/tests/corpus.json",
       "sha256": "b7e63bc374c00c36a05464ca01258b4c9b3bdc64aa802d11f0d7de007834e8ac",
       "size": 4608,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "skills/ssrf-prevention/SKILL.md",
@@ -2560,7 +2560,7 @@
       "path": "skills/websocket-security/tests/corpus.json",
       "sha256": "c1f28c451d09b639d5ca19d4362f48aa27cde2413683fbe079faa5a75bf6bf39",
       "size": 5626,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "vulnerabilities/cve/code-relevant/cve_patterns.json",

@@ -545,3 +545,33 @@ func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
 		}
 	}
 }
+
+// TestBlankYAMLComments locks in the comment-blanking lexer that stops a
+// workflow's prose from acting as a regex anchor for the hardening
+// checks: comment text becomes spaces, byte offsets are preserved, and a
+// `#` inside a quoted scalar is left alone.
+func TestBlankYAMLComments(t *testing.T) {
+	cases := []struct {
+		name string
+		in   string
+		want string
+	}{
+		{"full-line comment", "# curl x | sh\nrun: ok", "             \nrun: ok"},
+		{"inline comment", "run: echo hi # curl | sh", "run: echo hi            "},
+		{"hash in double quote kept", `run: echo "a # b"`, `run: echo "a # b"`},
+		{"hash in single quote kept", `key: 'v#1'`, `key: 'v#1'`},
+		{"no whitespace before hash kept", "key: value#notcomment", "key: value#notcomment"},
+		{"offsets preserved", "abc # x\ndef", "abc    \ndef"},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			got := blankYAMLComments(c.in)
+			if got != c.want {
+				t.Errorf("blankYAMLComments(%q)\n  got  %q\n  want %q", c.in, got, c.want)
+			}
+			if len(got) != len(c.in) {
+				t.Errorf("length changed: %d -> %d (offsets must be preserved)", len(c.in), len(got))
+			}
+		})
+	}
+}

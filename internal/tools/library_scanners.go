@@ -379,7 +379,16 @@ func (l *Library) ScanGitHubActions(filePath string) (*ScanGitHubActionsResult, 
 		FileSize: size,
 		Findings: []WorkflowFinding{},
 	}
-	text := string(body)
+	// Blank YAML comment text before the regex pass (offsets and line
+	// numbers are preserved). Several checklist patterns use `[\s\S]+?`
+	// to reach from an anchor (`run:`, `curl`) to a sink (`${{ … }}`,
+	// `| sh`); without this, a workflow's own explanatory comment that
+	// merely *mentions* the anchor becomes a false start point — the
+	// match then either fires on the comment or spans newlines from it
+	// down to the real sink and mis-locates the finding. Stripping the
+	// comment text (to spaces) removes those false anchors while leaving
+	// every executable line, and therefore every real finding, intact.
+	text := blankYAMLComments(string(body))
 	for _, c := range checks {
 		if c.Pattern == "" {
 			continue
@@ -1327,6 +1336,51 @@ func excerpt(s string, n int) string {
 // the source YAML's folded block scalars) with a single space.
 func collapseWS(s string) string {
 	return strings.Join(strings.Fields(s), " ")
+}
+
+// blankYAMLComments returns text with every YAML comment replaced by
+// spaces of the same length, preserving newlines and every byte offset
+// so downstream lineInfo / snippet logic stays accurate. A comment
+// begins at an unquoted `#` that is at the start of the line (after
+// indentation) or preceded by whitespace; quote tracking (single and
+// double) keeps a `#` inside a quoted scalar from being mistaken for a
+// comment. This is a lexical pass, not a full YAML parse — sufficient
+// to stop comment text from acting as a regex anchor for the hardening
+// checks while never touching an executable token.
+func blankYAMLComments(text string) string {
+	b := []byte(text)
+	inSingle, inDouble := false, false
+	lineStart := true // still in the leading-whitespace run of the line
+	for i := 0; i < len(b); i++ {
+		switch b[i] {
+		case '\n':
+			inSingle, inDouble = false, false
+			lineStart = true
+		case '\'':
+			if !inDouble {
+				inSingle = !inSingle
+			}
+			lineStart = false
+		case '"':
+			if !inSingle {
+				inDouble = !inDouble
+			}
+			lineStart = false
+		case ' ', '\t':
+			// whitespace does not end the leading-whitespace run
+		case '#':
+			prevWS := i == 0 || b[i-1] == ' ' || b[i-1] == '\t'
+			if !inSingle && !inDouble && (lineStart || prevWS) {
+				for j := i; j < len(b) && b[j] != '\n'; j++ {
+					b[j] = ' '
+				}
+			}
+			lineStart = false
+		default:
+			lineStart = false
+		}
+	}
+	return string(b)
 }
 
 // lineInfo returns (1-based line number, trimmed line content) for
