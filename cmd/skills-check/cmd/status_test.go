@@ -126,3 +126,34 @@ func TestStatusMissingDataDegrades(t *testing.T) {
 		t.Errorf("marshal: %v", err)
 	}
 }
+
+// runStatus executes `status <args...>` and returns stdout + error.
+func runStatus(t *testing.T, args ...string) (string, error) {
+	t.Helper()
+	root := Root()
+	var buf bytes.Buffer
+	root.SetOut(&buf)
+	root.SetErr(&buf)
+	root.SetArgs(append([]string{"status"}, args...))
+	return func() (string, error) { e := root.Execute(); return buf.String(), e }()
+}
+
+func TestStatusFailIfStaleGate(t *testing.T) {
+	root := writeStatusFixture(t) // newest index 2026-05-16
+
+	// Fresh relative to a near now: gate passes.
+	if _, err := runStatus(t, "--path", root, "--fail-if-stale", "--now", "2026-05-18T00:00:00Z"); err != nil {
+		t.Errorf("fresh data should pass the gate: %v", err)
+	}
+	// Old relative to a far now: gate fails.
+	if _, err := runStatus(t, "--path", root, "--fail-if-stale", "--now", "2026-09-01T00:00:00Z"); err == nil {
+		t.Error("stale data should fail --fail-if-stale")
+	}
+	// --max-age-days overrides the default threshold.
+	if _, err := runStatus(t, "--path", root, "--max-age-days", "3", "--now", "2026-05-20T00:00:00Z"); err == nil {
+		t.Error("4-day-old data should fail --max-age-days 3")
+	}
+	if _, err := runStatus(t, "--path", root, "--max-age-days", "30", "--now", "2026-05-20T00:00:00Z"); err != nil {
+		t.Errorf("4-day-old data should pass --max-age-days 30: %v", err)
+	}
+}

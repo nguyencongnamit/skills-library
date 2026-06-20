@@ -290,8 +290,10 @@ skills-check update --check-only
 skills-check update --rollback
 
 # How stale is my data? (your AI is only as current as what it's fed)
-skills-check status            # version, advisory count, data age, freshness verdict
-skills-check status --json     # machine-readable for CI
+skills-check status                      # version, advisory count, data age, verdict
+skills-check status --json               # machine-readable for CI
+skills-check status --fail-if-stale      # exit 1 when the data is >30 days old (CI gate)
+skills-check status --max-age-days 14    # custom freshness budget
 
 # Use a custom source (HTTP URL, local directory, or tarball)
 skills-check update --source https://cdn.example.com/secure-code/

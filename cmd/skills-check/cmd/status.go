@@ -41,6 +41,8 @@ func statusCmd() *cobra.Command {
 	var path string
 	var asJSON bool
 	var nowOverride string // RFC3339; testing seam
+	var failIfStale bool
+	var maxAgeDays int
 	c := &cobra.Command{
 		Use:   "status",
 		Short: "Report how fresh the local skills + vulnerability data is",
@@ -63,15 +65,34 @@ run "skills-check update".`,
 			if asJSON {
 				enc := json.NewEncoder(cmd.OutOrStdout())
 				enc.SetIndent("", "  ")
-				return enc.Encode(rep)
+				if err := enc.Encode(rep); err != nil {
+					return err
+				}
+			} else {
+				renderStatus(cmd.OutOrStdout(), rep)
 			}
-			renderStatus(cmd.OutOrStdout(), rep)
+			// CI gate: fail when the vulnerability data is older than the
+			// allowed budget. --max-age-days takes precedence; otherwise
+			// --fail-if-stale uses the "stale" threshold. A run with no
+			// dated index (age -1) cannot be judged, so it never fails the
+			// gate on its own.
+			limit := -1
+			if cmd.Flags().Changed("max-age-days") {
+				limit = maxAgeDays
+			} else if failIfStale {
+				limit = agingDays
+			}
+			if limit >= 0 && rep.VulnAgeDays > limit {
+				return fmt.Errorf("vulnerability data is %d days old (limit %d); run `skills-check update`", rep.VulnAgeDays, limit)
+			}
 			return nil
 		},
 	}
 	c.Flags().StringVar(&path, "path", ".", "library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().BoolVar(&asJSON, "json", false, "emit the report as JSON")
 	c.Flags().StringVar(&nowOverride, "now", "", "override the current time (RFC3339) for reproducible output")
+	c.Flags().BoolVar(&failIfStale, "fail-if-stale", false, fmt.Sprintf("exit non-zero when the vulnerability data is older than %d days (CI gate)", agingDays))
+	c.Flags().IntVar(&maxAgeDays, "max-age-days", 0, "exit non-zero when the vulnerability data is older than this many days (overrides --fail-if-stale)")
 	_ = c.Flags().MarkHidden("now")
 	return c
 }
