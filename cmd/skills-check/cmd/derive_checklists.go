@@ -54,6 +54,14 @@ type patternMarker struct {
 	Severity  string `yaml:"severity,omitempty"`
 	CWE       int    `yaml:"cwe,omitempty"`
 	Framework string `yaml:"framework,omitempty"`
+	// Check marks a pattern as SCANNER-BOUND rather than a governance
+	// checklist row: "deterministic" means a Go scanner check enforces
+	// it, "llm" means the agent reasons from SKILL.md. Markers with a
+	// non-empty Check are the contract the gate's trace test reads
+	// directly and are deliberately EXCLUDED from checklists/*.yaml
+	// generation — so a scanner-bound skill (container/cicd) emits no
+	// checklist YAML at all.
+	Check string `yaml:"check,omitempty"`
 }
 
 // derivedPattern is one entry in the generated YAML file. Mirrors the
@@ -148,6 +156,24 @@ func runDeriveChecklists(stdout interface{ Write([]byte) (int, error) }, repoRoo
 		fmt.Fprintf(stdout, "derive-checklists: %s has 0 tagged bullets; no checklists touched\n", skillID)
 		return nil
 	}
+	// Scanner-bound markers (check: deterministic|llm) are the contract
+	// the gate's trace test reads straight from SKILL.md; they never
+	// become governance checklist rows. Drop them before generating so a
+	// fully scanner-bound skill (container/cicd) produces no YAML.
+	governance := make([]bulletWithMarker, 0, len(markers))
+	scannerBound := 0
+	for _, m := range markers {
+		if strings.TrimSpace(m.marker.Check) != "" {
+			scannerBound++
+			continue
+		}
+		governance = append(governance, m)
+	}
+	if len(governance) == 0 {
+		fmt.Fprintf(stdout, "derive-checklists: %s has %d scanner-bound (check:) marker(s) and no governance bullets; no checklists touched\n", skillID, scannerBound)
+		return nil
+	}
+	markers = governance
 	byFramework, err := groupByFramework(markers, skillDir, framework)
 	if err != nil {
 		return err

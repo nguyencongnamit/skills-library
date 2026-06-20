@@ -100,6 +100,7 @@ func dedupeSorted(in []string) []string {
 // WriteRuleBundles emits the Cursor, Copilot, and Devin per-skill rule
 // trees under outDir, purging stale per-skill files first.
 func WriteRuleBundles(skills []*skill.Skill, outDir string) error {
+	skills = stripSkillMarkers(skills)
 	cursorDir := filepath.Join(outDir, "cursor-rules", ".cursor", "rules")
 	copilotDir := filepath.Join(outDir, "copilot-rules", ".github", "instructions")
 	devinDir := filepath.Join(outDir, "devin-rules", ".devin", "rules")

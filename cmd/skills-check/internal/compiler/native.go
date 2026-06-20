@@ -62,6 +62,7 @@ var DefaultNativeBundles = []NativeBundle{
 // so consumers that want richer metadata can read it without
 // reparsing the human-facing SKILL.md.
 func WriteNativeBundles(skills []*skill.Skill, outDir string) error {
+	skills = stripSkillMarkers(skills)
 	for _, bundle := range DefaultNativeBundles {
 		if err := writeBundle(bundle, skills, outDir); err != nil {
 			return fmt.Errorf("native bundle %s: %w", bundle.Subdir, err)

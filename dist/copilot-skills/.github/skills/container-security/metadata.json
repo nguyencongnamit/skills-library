@@ -17,7 +17,7 @@
     "python"
   ],
   "token_budget": {
-    "minimal": 1750,
+    "minimal": 1800,
     "compact": 2200,
     "full": 3500
   },
@@ -28,7 +28,7 @@
     "iam-best-practices",
     "electron-security"
   ],
-  "last_updated": "2026-06-17",
+  "last_updated": "2026-06-20",
   "sources": [
     "CIS Docker Benchmark v1.6",
     "CIS Kubernetes Benchmark v1.9",

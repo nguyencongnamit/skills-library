@@ -129,7 +129,7 @@ func ScanGitHubActionsSARIF(res *ScanGitHubActionsResult) *SARIFLog {
 				FullDescription:  &SARIFMultiformat{Text: f.Rationale},
 				DefaultConfig:    &SARIFRuleConfig{Level: sarifLevel(f.Severity)},
 				Properties: map[string]any{
-					"source": "skills/cicd-security/checklists/github_actions_hardening.yaml",
+					"source": "skills/cicd-security/SKILL.md",
 				},
 			})
 		}
@@ -187,7 +187,7 @@ func ScanDockerfileSARIF(res *ScanDockerfileResult) *SARIFLog {
 				ShortDescription: &SARIFMultiformat{Text: f.Title},
 				DefaultConfig:    &SARIFRuleConfig{Level: sarifLevel(f.Severity)},
 				Properties: map[string]any{
-					"source": "skills/container-security/checklists/dockerfile_hardening.yaml",
+					"source": "skills/container-security/SKILL.md",
 				},
 			})
 		}

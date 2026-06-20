@@ -110,6 +110,11 @@ func Compile(skills []*skill.Skill, tool string, tier skill.Tier, ctx Context) (
 	}
 
 	sortSkills(skills)
+	// Render against marker-free copies so the build-time pattern
+	// markers never reach dist output or the token counts; the raw
+	// SKILL.md (read by derive-checklists and the gate's trace test)
+	// keeps them.
+	skills = stripSkillMarkers(skills)
 	out := f.Format(skills, tier, ctx)
 
 	report := &Report{
@@ -162,6 +167,32 @@ func Compile(skills []*skill.Skill, tool string, tier skill.Tier, ctx Context) (
 		}
 	}
 	return out, report, warnings, nil
+}
+
+// stripSkillMarkers returns shallow copies of each skill whose body
+// bullets have the build-time `<!-- pattern: { ... } -->` markers
+// removed. The originals are left untouched so other consumers (and the
+// raw on-disk SKILL.md) keep the markers the trace test relies on.
+func stripSkillMarkers(skills []*skill.Skill) []*skill.Skill {
+	stripLines := func(in []string) []string {
+		if len(in) == 0 {
+			return in
+		}
+		out := make([]string, len(in))
+		for i, line := range in {
+			out[i] = skill.StripBodyMarkers(line)
+		}
+		return out
+	}
+	out := make([]*skill.Skill, len(skills))
+	for i, s := range skills {
+		cp := *s
+		cp.Body.Always = stripLines(s.Body.Always)
+		cp.Body.Never = stripLines(s.Body.Never)
+		cp.Body.KnownFalsePositives = stripLines(s.Body.KnownFalsePositives)
+		out[i] = &cp
+	}
+	return out
 }
 
 // WriteFile compiles and writes a single distribution file to outDir.
