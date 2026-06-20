@@ -21,6 +21,9 @@ func FuzzParse(f *testing.F) {
 		{"packages.lock.json", `{"dependencies":{"net6.0":{"a":{"resolved":"1.0.0"}}}}`},
 		{"Gemfile.lock", "GEM\n  specs:\n    a (1.0.0)\n"},
 		{"app.csproj", `<Project><ItemGroup><PackageReference Include="a" Version="1.0.0"/></ItemGroup></Project>`},
+		{"composer.lock", `{"packages":[{"name":"v/a","version":"1.0.0"}],"packages-dev":[]}`},
+		{"Package.resolved", `{"pins":[{"identity":"a","state":{"version":"1.0.0"}}],"version":2}`},
+		{"pubspec.lock", "packages:\n  a:\n    version: \"1.0.0\"\nsdks:\n  dart: \">=2.0.0\"\n"},
 		{"unknown.bin", "\x00\x01\x02 not a lockfile"},
 		{"requirements-dev.txt", ""},
 	}

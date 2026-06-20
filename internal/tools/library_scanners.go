@@ -1025,6 +1025,8 @@ type PolicyCheckFinding struct {
 //	packages.lock.json / *.csproj / *.fsproj /
 //	  *.vbproj                                     -> scan_dependencies
 //	Gemfile.lock                                   -> scan_dependencies
+//	composer.lock / Package.resolved /
+//	  pubspec.lock                                 -> scan_dependencies
 //	*.yml / *.yaml under .github/workflows/        -> scan_github_actions
 //	Dockerfile / *.dockerfile                      -> scan_dockerfile
 //	anything else                                  -> scan_secrets
@@ -1265,7 +1267,8 @@ func pickScan(filePath string) (string, error) {
 	case "package-lock.json", "npm-shrinkwrap.json", "package.json", "yarn.lock", "pnpm-lock.yaml",
 		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
 		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
-		"packages.lock.json", "Gemfile.lock":
+		"packages.lock.json", "Gemfile.lock",
+		"composer.lock", "Package.resolved", "pubspec.lock":
 		return "scan_dependencies", nil
 	case "Dockerfile":
 		return "scan_dockerfile", nil
