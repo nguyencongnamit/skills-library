@@ -4,9 +4,9 @@
 Reads skills/secret-detection/tests/corpus.json (the source-of-truth
 fixture set) and evaluates two engines against it:
 
-  1. skills-library DLP patterns (skills/secret-detection/rules/
-     dlp_patterns.json), via the same regex+hotword logic the
-     `skills-check test` runner uses.
+  1. skills-library DLP patterns (the `type: secret_pattern` entries of
+     skills/secret-detection/checklists/secret_detection.yaml), via the
+     same regex+hotword logic the `skills-check test` runner uses.
   2. (optional) gitleaks v8 with its default ruleset — the most
      widely-deployed open-source secret scanner. The script will
      auto-detect the `gitleaks` binary on $PATH and run it in
@@ -25,11 +25,21 @@ regex+hotword matcher in Python here keeps the harness dependency-
 free and lets us compute precision/recall across every fixture in
 one pass.
 
-AI authorship disclosure: this harness was drafted with AI
-assistance per AGENTS.md. The matching logic is a faithful
-re-implementation of cmd/skills-check/cmd/test.go (see the
-`matchAny`, `hotwordNear`, `denylisted` functions there) — any
-divergence is a bug the human reviewer should flag.
+The matching logic is a faithful re-implementation of
+cmd/skills-check/cmd/test.go (see the `matchAny`, `hotwordNear`,
+`denylisted` functions and the `rulePatternEntry`/`loadRulePatterns`
+loader there). Like that runner, it reads the `type: secret_pattern`
+entries from skills/secret-detection/checklists/secret_detection.yaml
+and applies only regex + hotword + denylist gating — NOT the score /
+entropy fields, which the `skills-check test` corpus runner also
+ignores (see test.go's note on rulePatternEntry). Because the corpus
+runner is the source of truth, a faithful mirror MUST reproduce its
+verdicts: `skills-check test secret-detection` passing with 0 failures
+implies this harness reports 0 false positives AND 0 false negatives in
+the skills-library column. A divergence there is a bug to flag.
+
+AI authorship disclosure: this harness was drafted with AI assistance
+per AGENTS.md.
 """
 
 from __future__ import annotations
@@ -48,7 +58,11 @@ from typing import Iterable
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 CORPUS = ROOT / "skills/secret-detection/tests/corpus.json"
-PATTERNS = ROOT / "skills/secret-detection/rules/dlp_patterns.json"
+# DLP rules migrated from rules/dlp_patterns.json to a YAML checklist in
+# fccc44f (PR #7); mirror cmd/skills-check/cmd/test.go and read the
+# `type: secret_pattern` entries straight from the checklist so the two
+# stay in lockstep.
+PATTERNS = ROOT / "skills/secret-detection/checklists/secret_detection.yaml"
 
 
 @dataclass
@@ -62,24 +76,47 @@ class CompiledPattern:
 
 
 def load_patterns() -> list[CompiledPattern]:
-    raw = json.loads(PATTERNS.read_text())
+    """Compile the `type: secret_pattern` entries from the secret-detection
+    YAML checklist, mirroring cmd/skills-check/cmd/test.go:loadRulePatterns.
+    Only regex + hotword + denylist fields are read; score_weight, entropy_min
+    and hotword_boost are intentionally ignored — the Go corpus runner ignores
+    them too, so this keeps the binary detect/ignore verdict identical."""
+    try:
+        import yaml  # type: ignore
+    except ImportError as exc:  # pragma: no cover - explicit user message
+        raise SystemExit(
+            "PyYAML is required to read the secret-detection checklist; "
+            "run `pip install pyyaml`"
+        ) from exc
+    raw = yaml.safe_load(PATTERNS.read_text())
     out: list[CompiledPattern] = []
-    for p in raw["patterns"]:
+    for c in raw.get("checks") or []:
+        if c.get("type") != "secret_pattern":
+            continue
         try:
-            rx = re.compile(p["regex"])
+            rx = re.compile(c["pattern"])
         except re.error:
             # Mirror the Go runner's behaviour: skip patterns that
             # don't compile cleanly under this engine.
             continue
         out.append(
             CompiledPattern(
-                name=p["name"],
+                name=c.get("title") or c.get("id") or "",
                 regex=rx,
-                hotwords=p.get("hotwords") or [],
-                hotword_window=p.get("hotword_window") or 80,
-                require_hotword=bool(p.get("require_hotword")),
-                denylist=p.get("denylist_substrings") or [],
+                hotwords=c.get("hotwords") or [],
+                hotword_window=c.get("hotword_window") or 80,
+                require_hotword=bool(c.get("require_hotword")),
+                denylist=c.get("denylist_substrings") or [],
             )
+        )
+    if not out:
+        # Fail loudly: a renamed checklist or a schema change that drops
+        # every `type: secret_pattern` entry would otherwise score every
+        # fixture as a false negative and silently report 0% recall — the
+        # exact silent breakage this loader was rewritten to end.
+        raise SystemExit(
+            f"no secret_pattern entries loaded from {PATTERNS} — "
+            "the checklist path or schema changed; this harness is stale"
         )
     return out
 
