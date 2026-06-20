@@ -16,7 +16,7 @@ token_budget:
   full: 3500
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices", "electron-security"]
-last_updated: "2026-06-17"
+last_updated: "2026-06-20"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"

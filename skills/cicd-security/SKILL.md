@@ -17,7 +17,7 @@ token_budget:
   full: 2200
 rules_path: "checklists/"
 related_skills: ["supply-chain-security", "secret-detection", "container-security"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "OpenSSF Scorecard — Pinned-Dependencies / Token-Permissions"
   - "SLSA v1.0 Build Track"
