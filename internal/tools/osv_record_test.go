@@ -252,3 +252,48 @@ func TestOSVLastAffectedRange(t *testing.T) {
 		}
 	}
 }
+
+// TestLookupOSVDedupesByID guards against an index that lists the same
+// advisory ID multiple times for one package (observed upstream in the
+// composer index): the scanner must report it once, not once per entry.
+func TestLookupOSVDedupesByID(t *testing.T) {
+	tmp := t.TempDir()
+	must := func(p, body string) {
+		full := filepath.Join(tmp, p)
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(full, []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := os.MkdirAll(filepath.Join(tmp, "skills"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	must("vulnerabilities/supply-chain/malicious-packages/pypi.json", `{"ecosystem":"pypi","entries":[]}`)
+	// GHSA-dup listed three times for the same package.
+	must("vulnerabilities/osv/pypi/index.json", `{
+		"schema_version": "1.0",
+		"by_package": {"dupe": [
+			{"id":"GHSA-dup","file":"","summary":"x","aliases":[],"severity":"high"},
+			{"id":"GHSA-dup","file":"","summary":"x","aliases":[],"severity":"high"},
+			{"id":"GHSA-dup","file":"","summary":"x","aliases":[],"severity":"high"},
+			{"id":"GHSA-other","file":"","summary":"y","aliases":[],"severity":"low"}
+		]}
+	}`)
+	lib, err := NewLibrary(tmp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := lib.lookupOSV("pypi", "dupe", "")
+	if len(got) != 2 {
+		t.Fatalf("got %d advisories, want 2 (GHSA-dup deduped to 1 + GHSA-other)", len(got))
+	}
+	counts := map[string]int{}
+	for _, a := range got {
+		counts[a.ID]++
+	}
+	if counts["GHSA-dup"] != 1 {
+		t.Errorf("GHSA-dup reported %d times, want 1", counts["GHSA-dup"])
+	}
+}
