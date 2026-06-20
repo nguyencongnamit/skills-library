@@ -9,10 +9,16 @@ prompts a real LLM under one of three tiers of security context:
 * ``minimal-skill`` — the compiled ``dist/SECURITY-SKILLS.md`` (compact
   tier) is injected as the system prompt. Measures what the static
   knowledge alone buys.
-* ``full-mcp`` — same as ``minimal-skill`` plus a brief note that the
-  ``skills-mcp`` server's scanning tools are available. (This driver
-  does NOT wire up MCP tool-use end-to-end; the tool is described in the
-  system prompt and the model is asked to reply as if it had used it.)
+* ``full-mcp`` — same as ``minimal-skill`` plus the scanner exposed as a
+  real ``scan_input`` tool. With a native-tool-use provider (Anthropic)
+  the MODEL decides to call it; the driver runs the deterministic
+  ``skills-check`` scanner for the fixture, returns the findings as a
+  tool result, and lets the model continue — a genuine agentic loop, not
+  a pre-baked answer. Providers without a tool-use loop (OpenAI/Ollama)
+  fall back to pre-injection (the scan runs once, its findings are
+  spliced into the prompt). Categories with no scanner (secret-generation,
+  auth-patterns, ssrf) have nothing to call, so full-mcp == minimal-skill
+  there — the honest result.
 
 Per fixture, the run records a ``result`` label per the schema in
 ``evals/baselines/README.md`` and writes everything to the matching
@@ -179,6 +185,26 @@ class LLMProvider:
     def call(self, system: str | None, user: str) -> LLMResponse:
         raise NotImplementedError
 
+    def call_with_tools(
+        self,
+        system: str | None,
+        user: str,
+        tools: list[dict],
+        executor,
+    ) -> LLMResponse:
+        """Answer `user` with `tools` available, executing tool calls via
+        `executor(name, input) -> str`. The base implementation is the
+        PRE-INJECTION fallback for providers without a native tool-use loop
+        (OpenAI/Ollama): run the (single) tool once and splice its output into
+        the prompt, then answer normally. It is the same authoritative findings
+        the model would receive — minus the agentic *decision* to call the tool.
+        Providers that support native tool-use (Anthropic) override this with a
+        real loop where the MODEL chooses to call the scanner."""
+        if tools and executor is not None:
+            block = executor(tools[0]["name"], {})
+            user = f"{user}\n\n{block}"
+        return self.call(system, user)
+
 
 class AnthropicProvider(LLMProvider):
     name = "anthropic"
@@ -214,6 +240,56 @@ class AnthropicProvider(LLMProvider):
             latency_ms=int((time.time() - t0) * 1000),
             input_tokens=getattr(msg.usage, "input_tokens", None),
             output_tokens=getattr(msg.usage, "output_tokens", None),
+        )
+
+    def call_with_tools(self, system, user, tools, executor) -> LLMResponse:
+        """Genuine agentic loop: offer `tools` to the model and let IT decide to
+        call them. Each tool_use block is dispatched through `executor`, its
+        result fed back as a tool_result, and the conversation continued until
+        the model stops requesting tools (or a small iteration cap). If the
+        model never calls a tool, no findings are injected — full-mcp then
+        equals minimal-skill for that fixture, which is the honest result."""
+        if not tools or executor is None:
+            return self.call(system, user)
+        messages: list[dict] = [{"role": "user", "content": user}]
+        t0 = time.time()
+        in_tok = out_tok = 0
+        last_text = ""
+        for _ in range(6):  # cap tool-use turns so a loop can't run away
+            kwargs: dict = {
+                "model": self._model,
+                "max_tokens": 1024,
+                "messages": messages,
+                "tools": tools,
+            }
+            if system:
+                kwargs["system"] = system
+            msg = self._client.messages.create(**kwargs)
+            in_tok += getattr(msg.usage, "input_tokens", 0) or 0
+            out_tok += getattr(msg.usage, "output_tokens", 0) or 0
+            text = "".join(
+                b.text for b in msg.content if getattr(b, "type", None) == "text"
+            )
+            if text:
+                last_text = text
+            tool_uses = [b for b in msg.content if getattr(b, "type", None) == "tool_use"]
+            if msg.stop_reason != "tool_use" or not tool_uses:
+                break
+            messages.append({"role": "assistant", "content": msg.content})
+            results = []
+            for tu in tool_uses:
+                output = executor(tu.name, getattr(tu, "input", {}) or {})
+                results.append(
+                    {"type": "tool_result", "tool_use_id": tu.id, "content": output}
+                )
+            messages.append({"role": "user", "content": results})
+        return LLMResponse(
+            text=last_text,
+            model=self._model,
+            provider=self.name,
+            latency_ms=int((time.time() - t0) * 1000),
+            input_tokens=in_tok or None,
+            output_tokens=out_tok or None,
         )
 
 
@@ -348,6 +424,15 @@ class MockProvider(LLMProvider):
         return LLMResponse(
             text=text, model="mock-deterministic", provider="mock", latency_ms=0
         )
+
+    def call_with_tools(self, system, user, tools, executor) -> LLMResponse:
+        # Deterministically EXERCISE the tool loop (so the self-check covers the
+        # agentic path) but do NOT splice the output into the prompt — the mock
+        # verdict is seeded off the prompt, and keeping it stable preserves the
+        # synthetic prevention-lift the self-check asserts.
+        if tools and executor is not None:
+            executor(tools[0]["name"], {})
+        return self.call(system, user)
 
 
 def _pick_provider(
@@ -751,6 +836,42 @@ def mcp_scan_block(binary: pathlib.Path, fixture: "Fixture") -> tuple[str | None
     return block, meta
 
 
+# The single tool the full-mcp tier exposes to the model: scanning the input
+# under review. One parameterless tool keeps the agentic loop simple — the
+# executor already knows which fixture (and therefore which scanner) it backs.
+_SCAN_TOOL_DEF = {
+    "name": "scan_input",
+    "description": (
+        "Run the authoritative offline skills-mcp scanner on the input under "
+        "review and return its findings. Call this before deciding whether the "
+        "input is secure; treat the result as ground truth."
+    ),
+    "input_schema": {"type": "object", "properties": {}},
+}
+
+
+def build_scan_tool(binary: pathlib.Path | None, fixture: "Fixture"):
+    """Build the (tools, executor, state) triple for the full-mcp agentic tier.
+
+    Returns ([], None, state) when there is nothing to scan — no scanner for the
+    fixture's category, no input file, or no binary — so full-mcp honestly
+    collapses to minimal-skill there. Otherwise returns a one-tool list and an
+    executor that runs the real scanner via ``mcp_scan_block``. ``state`` records
+    how many times the tool was actually invoked (``calls``) and the last scan
+    meta, so the caller can report agentic tool use per fixture."""
+    state = {"calls": 0, "scanner": CATEGORY_SCANNER.get(fixture.category), "meta": None}
+    if state["scanner"] is None or fixture.raw_path is None or binary is None:
+        return [], None, state
+
+    def executor(_name: str, _input: dict) -> str:
+        state["calls"] += 1
+        block, meta = mcp_scan_block(binary, fixture)
+        state["meta"] = meta
+        return block or "SKILLS-MCP SCAN RESULT: scanner produced no output."
+
+    return [dict(_SCAN_TOOL_DEF)], executor, state
+
+
 def _system_for_tier(tier: str) -> str | None:
     if tier == "no-instructions":
         return None
@@ -773,12 +894,14 @@ def _system_for_tier(tier: str) -> str | None:
         body = _read_text(SKILL_BUNDLE_PATH)
         return (
             body + "\n\n"
-            + "You also have access to the skills-mcp scanners (scan_dependencies, "
-            "scan_secrets, scan_dockerfile, scan_github_actions). When the input "
-            "for this task has been scanned, the REAL, authoritative scanner output "
-            "is appended to the task under 'SKILLS-MCP SCAN RESULT'. Treat those "
-            "findings as ground truth: report exactly what the scanner found, and "
-            "if it reports the input is clean, do not invent issues it did not find."
+            + "You also have access to the skills-mcp scanner via a `scan_input` "
+            "tool, backed by the real, deterministic skills-check scanners. When a "
+            "task involves a dependency lockfile, Dockerfile, or CI workflow, CALL "
+            "scan_input to get authoritative findings before you answer. (Providers "
+            "without native tool-use instead receive the scanner output inline under "
+            "'SKILLS-MCP SCAN RESULT'.) Treat the scanner result as ground truth: "
+            "report exactly what it found, and if it reports the input is clean, do "
+            "not invent issues it did not find."
         )
     raise SystemExit(f"unknown tier: {tier}")
 
@@ -835,14 +958,25 @@ def run_tier(
     for f in fixtures:
         user = f.prompt
         scan_meta = None
-        # full-mcp is the only tier that runs a real scanner and injects its
-        # authoritative findings; other tiers leave the prompt untouched.
-        if tier == "full-mcp" and scan_binary is not None:
-            block, scan_meta = mcp_scan_block(scan_binary, f)
-            if block:
-                user = f"{f.prompt}\n\n{block}"
         try:
-            resp = provider.call(system, user)
+            # full-mcp offers the scanner as a TOOL: a native-tool-use provider
+            # (Anthropic) decides to call it; others fall back to pre-injection
+            # inside call_with_tools. Either way the model only sees findings via
+            # the tool path — no out-of-band splicing here. Other tiers answer
+            # the prompt untouched.
+            if tier == "full-mcp":
+                tools, executor, state = build_scan_tool(scan_binary, f)
+                if tools:
+                    resp = provider.call_with_tools(system, f.prompt, tools, executor)
+                    scan_meta = {
+                        "scanner": state["scanner"],
+                        "finding_count": (state["meta"] or {}).get("finding_count"),
+                        "agentic_tool_calls": state["calls"],
+                    }
+                else:
+                    resp = provider.call(system, user)
+            else:
+                resp = provider.call(system, user)
         except Exception as exc:  # pragma: no cover - network / API surface
             fixture_results.append(
                 {
@@ -1062,6 +1196,47 @@ class _CannedProvider(LLMProvider):
         return LLMResponse(text=self._text, model="canned", provider="canned", latency_ms=0)
 
 
+class _EchoProvider(LLMProvider):
+    """A provider that echoes the user prompt back as its response — used to
+    assert that the base pre-injection tool fallback actually splices the tool
+    output into the prompt. No network/model."""
+
+    name = "echo"
+
+    def call(self, system: str | None, user: str) -> LLMResponse:
+        return LLMResponse(text=user, model="echo", provider="echo", latency_ms=0)
+
+
+def _check_agentic_loop() -> bool:
+    """Keyless check of the full-mcp tool-call wiring — no binary, no network.
+    (1) MockProvider.call_with_tools must INVOKE the executor (the agentic path
+    the self-check tiers don't otherwise hit, since they run binary-less).
+    (2) The base pre-injection fallback must SPLICE the tool output into the
+    prompt a tool-less provider sees. Both are the bug-prone seams of #4."""
+    ok = True
+    tools = [dict(_SCAN_TOOL_DEF)]
+    calls = {"n": 0}
+
+    def fake_exec(_name: str, _input: dict) -> str:
+        calls["n"] += 1
+        return "SKILLS-MCP SCAN RESULT: 1 finding (test)"
+
+    resp = MockProvider().call_with_tools("sys", "task", tools, fake_exec)
+    if calls["n"] != 1 or not resp.text:
+        print("agentic-loop FAIL: mock did not invoke the scan tool", file=sys.stderr)
+        ok = False
+
+    calls["n"] = 0
+    resp2 = _EchoProvider().call_with_tools(None, "task", tools, fake_exec)
+    if calls["n"] != 1 or "1 finding (test)" not in resp2.text:
+        print(
+            "agentic-loop FAIL: pre-injection fallback did not splice tool output",
+            file=sys.stderr,
+        )
+        ok = False
+    return ok
+
+
 def _check_judge_parsing() -> bool:
     """Verify judge_label maps a judge's verdict onto the result vocabulary.
     Keyless and deterministic — the parsing is the bug-prone part of the judge
@@ -1178,6 +1353,9 @@ def run_mock_self_check() -> int:
     """
     if not _check_judge_parsing():
         print("self-check FAILED: judge label-parser regressed", file=sys.stderr)
+        return 1
+    if not _check_agentic_loop():
+        print("self-check FAILED: full-mcp tool-call wiring regressed", file=sys.stderr)
         return 1
     fixtures = load_fixtures(list(LLM_CATEGORIES))
     if not fixtures:
