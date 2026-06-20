@@ -420,6 +420,15 @@ jobs:
             --out evals/baselines/scanner-eval-static.md \
             --verbose
 
+      - name: Live-model eval pipeline (keyless self-check)
+        # The LLM-tier prevention-lift baselines are bring-your-own-key and
+        # not run in CI, but the harness that produces them must stay green.
+        # --self-check drives all three tiers through the deterministic
+        # MockProvider (no API key, tempdir output) and fails if the
+        # synthetic prevention-lift regresses to <= 0. Guards fixture
+        # loading, tier execution, response classification, and lift math.
+        run: python3 evals/benchmarks/llm-eval.py --self-check
+
       - name: Per-skill corpus tests (hard gate)
         # Runs every skills/<id>/tests/corpus.json through `skills-check test`.
         # Gate-driven corpora scan their fixtures with the same PolicyCheck the

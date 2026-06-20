@@ -104,4 +104,15 @@ python3 evals/benchmarks/scanner-eval.py \
 cat evals/baselines/scanner-eval-static.md
 
 echo
+echo "==> 5. live-model eval pipeline (keyless self-check)"
+# The LLM-tier baselines (no-instructions/minimal-skill/full-mcp) are
+# bring-your-own-key and NOT run here. But the prevention-lift pipeline
+# itself — fixture loading, tier execution, response classification, and
+# lift computation — is exercised end to end through the deterministic
+# MockProvider, which needs no API key and writes only to a tempdir.
+# Asserts a positive SYNTHETIC lift so a regression in the harness fails
+# CI even though no real model is called.
+python3 evals/benchmarks/llm-eval.py --self-check
+
+echo
 echo "==> all eval checks passed"
