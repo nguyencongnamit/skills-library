@@ -64,11 +64,16 @@ Before opening a pull request, please run these in order:
    rejects drift.
 6. `last_updated` bumped on any modified `SKILL.md`. CI enforces this.
 7. New / updated entries include at least one external reference URL.
-8. Commit messages follow the convention used in `git log` (no force-pushing to
+8. `go run honnef.co/go/tools/cmd/staticcheck@latest ./...` — clean. The tree is
+   kept staticcheck-clean; run it under a recent Go toolchain (the latest
+   release needs Go newer than the CI build floor, so this is a local check
+   rather than a CI gate).
+9. Commit messages follow the convention used in `git log` (no force-pushing to
    `main`; do not amend other contributors' commits).
 
-CI runs the same checks plus `go vet`, `gofmt`, `staticcheck`, the markdown
-link checker, and the token-budget enforcer.
+CI runs the same checks plus `go vet`, `gofmt`, the markdown link checker, and
+the token-budget enforcer. (`staticcheck` is a recommended local check — see
+step 8 — not a CI gate, to avoid pinning it across the CI/dev Go-version gap.)
 
 ## Pattern markers (linking SKILL.md to `checklists/*.yaml`)
 
