@@ -518,20 +518,6 @@ func TestWalkScanFiles(t *testing.T) {
 // bullet carrying more than one marker is fully captured.
 var dockerfileMarkerRe = regexp.MustCompile(`<!--\s*pattern\s*:\s*(\{[^}]*\})\s*-->`)
 
-// dockerfileGoRuleIDs is the full set of rule ids the dockerfile
-// scanner can emit: the inline regex checks (dockerfileChecks) plus the
-// AST-only checks that are not in that slice.
-func dockerfileGoRuleIDs() map[string]bool {
-	ids := map[string]bool{
-		// Emitted by the AST pass in ScanDockerfile, not dockerfileChecks.
-		"dkr-missing-user-directive": true,
-	}
-	for _, c := range dockerfileChecks {
-		ids[c.id] = true
-	}
-	return ids
-}
-
 // TestDockerfileRuleIDsTraceToSkill is the drift guard binding the
 // dockerfile scanner to its single source of truth, SKILL.md. The
 // checklist YAML is gone; the contract now lives in the skill's
@@ -574,7 +560,7 @@ func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
 		}
 	}
 
-	goIDs := dockerfileGoRuleIDs()
+	goIDs := DockerfileRuleIDs()
 	for id := range goIDs {
 		if !deterministic[id] {
 			t.Errorf("dockerfile scanner emits %q but SKILL.md has no `check: deterministic` "+

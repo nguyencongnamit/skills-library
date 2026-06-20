@@ -656,6 +656,22 @@ var dockerfileChecks = []dockerfileCheck{
 	},
 }
 
+// DockerfileRuleIDs returns the full set of rule ids the dockerfile
+// scanner can emit: the inline regex checks (dockerfileChecks) plus the
+// AST-only checks that live in ScanDockerfile but not in that slice.
+// It is the single source of truth for "what the gate deterministically
+// enforces" — consumed by the trace test and the `coverage` command.
+func DockerfileRuleIDs() map[string]bool {
+	ids := map[string]bool{
+		// Emitted by the AST pass in ScanDockerfile, not dockerfileChecks.
+		"dkr-missing-user-directive": true,
+	}
+	for _, c := range dockerfileChecks {
+		ids[c.id] = true
+	}
+	return ids
+}
+
 // ScanDockerfile runs the inline dockerfileChecks against filePath
 // and returns the findings. The rules are deliberately Go-side: they
 // reference Dockerfile-specific tokens (FROM, USER, ADD, ENV, ARG,
