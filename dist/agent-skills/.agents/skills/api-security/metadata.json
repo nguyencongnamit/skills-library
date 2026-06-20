@@ -25,7 +25,7 @@
     "secret-detection",
     "ssrf-prevention"
   ],
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP API Security Top 10 2023",
     "OWASP Authentication Cheat Sheet",

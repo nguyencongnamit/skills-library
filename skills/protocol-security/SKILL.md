@@ -16,7 +16,7 @@ token_budget:
   full: 2400
 rules_path: "rules/"
 related_skills: ["crypto-misuse", "frontend-security", "api-security"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "NIST SP 800-52 Rev. 2 (TLS Guidelines)"
   - "RFC 8446 — TLS 1.3"
@@ -96,6 +96,34 @@ introduced "to make tests work" and never reverted.
 
 This skill pairs naturally with `crypto-misuse` (algorithm choice) and
 `auth-security` (token issuance).
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect endpoint/handshake).** Drive the live
+   client or server with a scanning client. For TLS downgrade / weak ciphers,
+   run `testssl.sh host:port` or force a sub-1.2 handshake:
+   `openssl s_client -connect host:port -tls1_1` (or `-cipher 'DES-CBC3-SHA'`).
+   For cert validation, present an invalid/self-signed/wrong-host cert and see
+   if the client completes the connection. For plaintext fallback / missing
+   HSTS, hit the HTTP scheme and watch for a 200 with no redirect or no
+   `Strict-Transport-Security`. For gRPC, check whether an `insecure_channel`
+   peer connects. **Real** if the weak handshake succeeds, the bad cert is
+   accepted, or plaintext is served — a **false positive** is a localhost/CI
+   ephemeral cert, a documented legacy-peer exception, or a public read-only
+   HTTP status page (per KNOWN FALSE POSITIVES).
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call). Assert the connection is **rejected** for: TLS < 1.2, a disabled
+   weak cipher, an invalid/self-signed/hostname-mismatched cert (i.e. no
+   `InsecureSkipVerify` / `verify=False` / `rejectUnauthorized:false`), and a
+   plaintext/`insecure_channel` peer. Assert HSTS is present on HTTPS responses
+   and the WebSocket handshake rejects a disallowed `Origin`. Include the
+   **benign case**: a valid TLS 1.2/1.3 handshake with a CA-signed,
+   hostname-matched cert still succeeds. Commit it to CI so the guard can't be
+   silently dropped in a later refactor.
 
 ## References
 

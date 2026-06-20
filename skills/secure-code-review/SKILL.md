@@ -17,7 +17,7 @@ token_budget:
   full: 2400
 rules_path: "checklists/"
 related_skills: ["api-security", "secret-detection", "container-security"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Top 10 2021"
   - "CWE Top 25 2023"
@@ -79,6 +79,29 @@ Most modern web vulnerabilities boil down to the same handful of root causes: fa
 to validate input, failure to use the right cryptographic primitive, failure to apply
 least privilege, failure to use the framework's built-in defenses. This skill is the
 AI's checklist for not falling into those traps.
+
+
+### Verify & lock (triaging a finding)
+
+A review produces a *list of candidates*, not confirmed bugs — OWASP/CWE pattern
+matches and SAST hits flag *where to look*, not *what is true*. For each finding, run
+the same loop before you act, so you fix real issues and lock them against regression.
+
+1. **Confirm it's real (probe per class).** Reproduce the finding with a concrete probe
+   matched to its class, and hand off to the domain skill that owns the exact probe:
+   DAST/runtime for injection, XSS, auth, SSRF, deserialization; config/behavioral
+   checks for container, IaC, IAM, secrets. Check it against the skill's KNOWN FALSE
+   POSITIVES first (e.g. documented admin shell-outs, legacy MD5 test vectors) — those
+   are pre-cleared. Real only if reproduced; otherwise mark it a false positive with a
+   one-line rationale so the same pattern isn't re-raised next review.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call). For
+   every confirmed finding add a test that feeds the attack input and asserts the secure
+   outcome (rejected/escaped/denied), plus a benign case that still passes; wire it into
+   CI. A finding without a regression test will come back. Commit it so the class can't recur.
+
+Rules: this is the cross-cutting triage discipline that *orchestrates* the domain skills —
+it routes each finding to the right class-specific probe rather than re-deriving it here.
+Stay framework-agnostic; the proof is the probe and the test, not the pattern match.
 
 ## References
 

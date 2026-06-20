@@ -17,7 +17,7 @@ token_budget:
   full: 2700
 rules_path: "rules/"
 related_skills: ["api-security", "crypto-misuse", "secret-detection"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Authentication Cheat Sheet"
   - "OWASP Session Management Cheat Sheet"
@@ -98,6 +98,15 @@ the authoritative references for the recipe.
 AI assistants tend to ship "works in dev" auth: HS256 JWTs with hard-coded
 secrets, `bcrypt.hash` with default cost 10, no PKCE, tokens in localStorage.
 This skill catches each of those.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Replay the protected request with the credential weakened, not just absent. For broken authz, hit another user's object / an admin route as a low-privilege (or unauthenticated) caller and re-derive the subject server-side — a `200` with real data where you expected `401`/`403` confirms it. For JWT, resend the token with `alg` flipped to `none`/`HS256` (signed with the public key), `exp` in the past, or a swapped `iss`/`aud`; acceptance = real hit. For sessions, capture the pre-login session ID, authenticate, and check it didn't rotate (fixation); for reset/MFA, request many tokens and test for predictability (non-CSPRNG), reuse, or no expiry. A false positive looks like the same probe returning `401`/`403`, a rejected token, or a rotated identifier.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call): assert the attack input yields the secure outcome — cross-user/role-escalation request → `403`; `alg=none`/expired/wrong-aud token → rejected; pre-auth session ID → changed after login; reset/MFA tokens → CSPRNG, single-use, time-boxed; wrong password → generic error with no user/pass distinction. Pair each with a benign case that must still pass (legitimate owner → `200`, valid token verified, correct login succeeds) so the guard isn't just blanket-denying. Commit it to CI so the guard can't be silently dropped in a later refactor.
 
 ## References
 

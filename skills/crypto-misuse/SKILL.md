@@ -16,7 +16,7 @@ token_budget:
   full: 2500
 rules_path: "rules/"
 related_skills: ["secret-detection", "auth-security", "protocol-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "NIST SP 800-131A Rev. 2"
   - "NIST SP 800-57 Part 1 Rev. 5"
@@ -88,6 +88,30 @@ non-constant-time comparison of secrets (CWE-208).
 AI assistants tend to mirror whatever crypto example was popular on Stack
 Overflow circa 2014, which means lots of `sha256(password)` and `AES-CBC` with
 manual padding. This skill is the counterweight.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (inspect the behavior/values, not a browser).** Read the
+   primitive at the call site and prove the weakness: encrypt repeated plaintext
+   and show ECB yields identical ciphertext blocks; show the IV/nonce/salt is
+   static, hardcoded, or reused across calls; confirm the digest is MD5/SHA-1 or
+   that passwords go through a fast hash (`sha256(pw)`) instead of a salted KDF;
+   trace the key/RNG source — a literal key, `Math.random`/`random`/`rand()`, or
+   an undersized RSA/EC key is the bug; for compares, confirm `==`/`strcmp`/
+   `bytes.Equal` over a secret instead of a constant-time helper. Rule out the
+   known FPs first (MD5/SHA-1 ETag/dedup, test KAT vectors, flagged legacy interop).
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   assert encrypting the same plaintext twice gives different ciphertext (fresh
+   random IV/nonce); the algorithm/mode resolves from an allowlist (AEAD, no
+   ECB/DES/RC4); password verify uses the slow KDF with a per-user salt; keys load
+   from a secret store (not a literal) and meet the size floor; secret comparison
+   routes through the constant-time helper — plus a benign positive case (correct
+   key/password/MAC still verifies). Commit it to CI so the guard can't be silently
+   dropped in a later refactor.
 
 ## References
 

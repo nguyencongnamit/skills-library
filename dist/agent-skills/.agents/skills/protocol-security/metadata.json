@@ -24,7 +24,7 @@
     "frontend-security",
     "api-security"
   ],
-  "last_updated": "2026-06-06",
+  "last_updated": "2026-06-20",
   "sources": [
     "NIST SP 800-52 Rev. 2 (TLS Guidelines)",
     "RFC 8446 — TLS 1.3",

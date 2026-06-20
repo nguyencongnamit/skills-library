@@ -30,7 +30,7 @@
     "api-security",
     "frontend-security"
   ],
-  "last_updated": "2026-06-04",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Top 10 for LLM Applications 2025",
     "OWASP Top 10 for Agentic Applications",

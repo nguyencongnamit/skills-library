@@ -16,7 +16,7 @@ token_budget:
   full: 2500
 rules_path: "checklists/"
 related_skills: ["container-security", "secret-detection", "iam-best-practices"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "CIS Benchmarks (AWS, Azure, GCP)"
   - "HashiCorp Terraform Best Practices"
@@ -87,6 +87,28 @@ network exposure, wildcard IAM, drift — are exactly what CIS and the cloud
 providers' own well-architected reviews flag the most. AI assistants are
 particularly prone to generating "works on my machine" Terraform that pins nothing
 and uses local state; this skill is the counterbalance.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (inspect the resolved plan, not the source).** Run
+   `terraform plan` / `pulumi preview` / `cfn` change-set and inspect the
+   *resolved* resource, since a variable, module default, or default-tags block
+   can flip the verdict: a literal `0.0.0.0/0` ingress on 22/3306/5432, a public
+   S3 ACL or bucket policy, an unencrypted volume/bucket/RDS (no `kms_key_id`), a
+   `*:*` IAM action/resource, an unpinned provider, or local/unencrypted state.
+   For secrets, grep the plan and the state file — referencing a variable still
+   leaves plaintext in state. Real if the planned resource has the bad property;
+   FP if a constraint already narrows it (e.g. an intentional bastion on 22).
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call): add a policy-as-code check in CI (conftest/OPA, checkov, trivy config,
+   or `terraform test`) asserting the resource stays constrained — no
+   `0.0.0.0/0` on admin ports, encryption with a CMK, private ACL, no wildcard
+   IAM, providers pinned, remote encrypted state — plus a benign config that
+   passes so the rule is exercised. Commit it so the guard can't be silently dropped.
 
 ## References
 

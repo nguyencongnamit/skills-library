@@ -26,7 +26,7 @@
     "secret-detection",
     "container-security"
   ],
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-06-20",
   "sources": [
     "Alex Birsan, Dependency Confusion (2021)",
     "OpenSSF Best Practices for OSS Developers",

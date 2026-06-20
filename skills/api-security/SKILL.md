@@ -17,7 +17,7 @@ token_budget:
   full: 2700
 rules_path: "checklists/"
 related_skills: ["secure-code-review", "secret-detection", "ssrf-prevention"]
-last_updated: "2026-06-10"
+last_updated: "2026-06-20"
 sources:
   - "OWASP API Security Top 10 2023"
   - "OWASP Authentication Cheat Sheet"
@@ -99,6 +99,30 @@ core service is also directly reachable and authenticates nothing because it's
 the allowlisted network, or simply a public DNS name that resolves to the same
 backend — bypasses every perimeter control. Network position is a mitigation, not
 an authentication boundary; the owning service must enforce auth/authz itself.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Replay the endpoint as an
+   attacker would. *BOLA/IDOR:* authenticate as user A, request user B's resource ID
+   (`GET /orders/{B_id}`) — a real hit returns B's data or `200`; a false positive
+   returns `403/404`. *Broken auth:* call the endpoint with no token, an expired
+   token, and a `none`/wrong-alg JWT — acceptance is a real hit. *Mass assignment:*
+   POST/PATCH with an extra privileged field (`{"role":"admin","is_verified":true}`)
+   and re-read the object — if the field stuck, it's real. *Rate-limit:* fire N rapid
+   auth/reset requests; absence of `429` after the threshold confirms it. *Perimeter
+   trust:* hit the backend service directly (bypassing the gateway) — a `200` without
+   auth confirms the control lives only at the proxy.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   assert the attack input now yields the secure outcome (cross-tenant ID → `403/404`;
+   forged/expired/`none`-alg token → `401`; unknown privileged field → ignored or
+   rejected, never persisted; over-threshold burst → `429`; direct-to-service call →
+   auth enforced), AND that a legitimate request (owner reading own resource, valid
+   token, allowed fields) still succeeds. Commit it to CI so the guard can't be
+   silently dropped in a later refactor.
 
 ## References
 

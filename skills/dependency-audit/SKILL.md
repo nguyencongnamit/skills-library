@@ -17,7 +17,7 @@ token_budget:
   full: 1900
 rules_path: "rules/"
 related_skills: ["secret-detection", "supply-chain-security"]
-last_updated: "2026-05-12"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Top 10 2021 — A06: Vulnerable and Outdated Components"
   - "CWE-1104: Use of Unmaintained Third Party Components"
@@ -72,6 +72,29 @@ recommends a backdoored version.
 
 This skill compensates by injecting the live malicious-package database into the AI's
 working context and requiring the AI to consult it before adding any dependency.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (inspect).** Resolve the *installed* version from the lockfile
+   (`package-lock.json`, `poetry.lock`, `go.sum`, `Cargo.lock`) — not the manifest range —
+   and check it actually falls inside the advisory's vulnerable range; an SCA hit is a false
+   positive if the resolved version is already patched. Then check reachability: is the
+   vulnerable package/function on a runtime path, or is it a transitive *dev-only* dep
+   (test/build tooling) that never ships? For a malicious-package/typosquat hit, confirm the
+   name, registry, and repo URL against the bundled malicious-package list and the real
+   project — re-registered legacy names and owned `@yourco/*` namespaces are known FPs.
+   Real if a runtime (or shipped) path resolves to a version in the vulnerable range, or the
+   name matches a live malicious entry.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call): upgrade to
+   the patched version and pin it exactly in the lockfile; then add a CI `audit`/gate step
+   (`npm audit`, `pip-audit`, `govulncheck`, `cargo audit`) that fails on that advisory id at
+   the chosen severity floor, or a lockfile assertion that the resolved version is `>=` the
+   patched one. Keep a clean baseline that passes so a future downgrade or transitive pull-in
+   re-trips it. Commit it so the guard can't be silently dropped.
 
 ## References
 

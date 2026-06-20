@@ -30,7 +30,7 @@
     "crypto-misuse",
     "supply-chain-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Deserialization Cheat Sheet",
     "CWE-502: Deserialization of Untrusted Data",

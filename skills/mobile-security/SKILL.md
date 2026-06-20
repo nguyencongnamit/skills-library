@@ -16,7 +16,7 @@ token_budget:
   full: 2500
 rules_path: "checklists/"
 related_skills: ["crypto-misuse", "secret-detection", "auth-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP MASVS v2.0"
   - "OWASP Mobile Application Security Testing Guide (MASTG)"
@@ -102,6 +102,32 @@ AI assistants frequently generate Android code with `allowBackup=true`, no
 ProGuard, hardcoded API keys in `strings.xml`, and iOS code that calls
 `SecCertificateCreateWithData` with no verification. This skill is the
 counterweight.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** For a *hardcoded secret*,
+   `strings`/`grep -r` the built `.apk`/`.ipa` (and `strings.xml` / `BuildConfig` /
+   `Info.plist`) — real if a live API/signing/backend key is present (not a public
+   DSN or analytics ID, which are FPs). For *plaintext storage*, pull
+   `SharedPreferences`/files (Android) or read `UserDefaults`/plist/Keychain dump
+   (iOS) on-device — real if the token/PII is readable in clear. For *missing
+   pinning / cleartext*, MITM the app through a proxy — real if traffic decrypts
+   despite an untrusted CA, or `NSAllowsArbitraryLoads`/cleartext-to-arbitrary-host
+   is set. For an *exported component / deep link*, fire the intent (`am start`) or
+   open `myapp://...` from another app — real if it executes an action without the
+   caller's permission or `state`/scheme check.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   assert the secret is absent from the built bundle and that storage contains no
+   plaintext token (read it back, expect ciphertext/Keystore/Keychain); add a
+   config test asserting `NSAllowsArbitraryLoads`/cleartext is disabled, pinning is
+   configured, and the component is `exported="false"` (or its scheme/`state` is
+   validated). Include a benign case (a public ID is allowed; a legitimately
+   exported activity with a guarded intent filter still passes). Commit it to CI so
+   the guard can't be silently dropped in a later refactor.
 
 ## References
 

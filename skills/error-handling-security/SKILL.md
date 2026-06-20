@@ -16,7 +16,7 @@ token_budget:
   full: 1900
 rules_path: "rules/"
 related_skills: ["api-security", "logging-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Error Handling Cheat Sheet"
   - "CWE-209 — Generation of Error Message Containing Sensitive Information"
@@ -87,6 +87,31 @@ attack.
 
 This skill is intentionally narrow and pairs with `logging-security` (the
 *log* side of the same operation) and `api-security` (the response shape).
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (force an error and read the response).** Hit the
+   suspect endpoint with input that throws — malformed JSON/types, a `'` to
+   trip the DB layer, an oversized/missing field, or a route that 500s — and
+   inspect the raw HTTP body *and* status. Real if the response leaks a stack
+   trace, SQL fragment (`...unique constraint "users_email_key"`), filesystem
+   path, internal hostname, framework debug page, or a version banner
+   (`X-Powered-By`); also real if errors *differ* (`User not found` vs
+   `Invalid password`, or differing status/timing) and let you enumerate. False
+   positive if you get a generic sanitized message + stable code + correlation
+   ID, identical across cases.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call): assert the forced error returns a generic body with the correct
+   status (e.g. uniform 400/500) and a correlation ID, and that the body
+   contains NO stack trace, SQL text, path, or version string; assert
+   account-enumeration probes return the *same* message/status. Add a positive
+   check that the full detail still lands in the server-side log/error tracker
+   (redacted). Commit it to CI so the sanitizer can't be silently dropped in a
+   later refactor.
 
 ## References
 
