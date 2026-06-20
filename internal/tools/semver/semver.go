@@ -43,6 +43,11 @@ func Match(ecosystem, constraint, version string) (matched, ok bool) {
 	case Go:
 		return matchGo(c, v)
 	default:
-		return false, false
+		// crates, maven, nuget, rubygems, composer, pub, swift, and any
+		// other ecosystem fall back to the generic dotted-numeric
+		// comparator. It handles the comparator bounds OSV ranges use and
+		// returns ok=false on anything it cannot parse, so the caller
+		// still falls open on exotic version strings.
+		return matchGeneric(c, v)
 	}
 }

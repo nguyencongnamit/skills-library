@@ -141,8 +141,15 @@ func TestMatchGo(t *testing.T) {
 }
 
 func TestUnknownEcosystem(t *testing.T) {
-	if _, ok := Match("haskell", "==1.2.3", "1.2.3"); ok {
-		t.Fatal("unknown ecosystem should return ok=false")
+	// An unknown ecosystem with a clean dotted-numeric version now falls
+	// through to the generic comparator (so OSV ranges for crates, maven,
+	// nuget, rubygems, composer, … are version-filtered too).
+	if matched, ok := Match("haskell", "==1.2.3", "1.2.3"); !ok || !matched {
+		t.Fatalf("generic fallback: Match(haskell, ==1.2.3, 1.2.3) = (%v, %v); want (true, true)", matched, ok)
+	}
+	// A version the generic parser cannot make sense of still falls open.
+	if _, ok := Match("haskell", "==1.2.3", "not-a-version"); ok {
+		t.Fatal("unparseable version should return ok=false (caller falls open)")
 	}
 }
 
