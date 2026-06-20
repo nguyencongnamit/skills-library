@@ -56,6 +56,14 @@ func (l *Library) loadOSVAffected(eco, file string) []osvAffected {
 	if file == "" {
 		return nil
 	}
+	// Defence in depth: an OSV record lives as a flat file in the
+	// ecosystem directory, so its index-declared name must be a bare
+	// base name. Reject anything carrying a path separator or "..", so a
+	// tampered index.json cannot redirect the read outside the OSV tree.
+	if file != filepath.Base(file) || strings.Contains(file, "..") ||
+		strings.ContainsAny(file, `/\`) {
+		return nil
+	}
 	cacheKey := eco + "/" + file
 	l.osvRecordMu.Lock()
 	if cached, ok := l.osvRecord[cacheKey]; ok {
