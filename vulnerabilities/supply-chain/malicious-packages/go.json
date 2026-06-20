@@ -489,6 +489,28 @@
         "exfiltration to dpaste.com with an embedded API token"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "github.com/xinfeisoft/crypto",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "backdoor",
+      "severity": "critical",
+      "discovered": "2025-02-20",
+      "description": "Typosquat impersonating golang.org/x/crypto (published 2025-02-20; Rekoobe campaign disclosed by Socket). Backdoors the ssh/terminal ReadPassword helper: when an app reads a password interactively (SSH passphrases, DB logins, API keys) it captures the plaintext credential, writes it to /usr/share/nano/.lock, and exfiltrates it; then fetches and runs shell scripts that install persistent SSH access and deploy the Rekoobe Linux backdoor. Dormant during automated tests, active only on interactive use, to evade detection.",
+      "references": [
+        "https://cybersecuritynews.com/malicious-go-crypto-module-steals-passwords-and-deploy-rekoobe/",
+        "https://thehackernews.com/2026/02/malicious-go-crypto-module-steals.html"
+      ],
+      "indicators": [
+        "module path github.com/xinfeisoft/crypto (typosquat of golang.org/x/crypto)",
+        "backdoor in ssh/terminal ReadPassword captures plaintext credentials",
+        "writes captured creds to /usr/share/nano/.lock",
+        "deploys the Rekoobe Linux backdoor + persistent SSH",
+        "dormant under automated testing, active on interactive use"
+      ],
+      "attack_type": "backdoor"
     }
   ],
   "sources": {
