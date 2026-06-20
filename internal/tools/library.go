@@ -746,7 +746,15 @@ func (l *Library) lookupOSV(eco, pkg, version string) []OSVAdvisory {
 		return nil
 	}
 	out := make([]OSVAdvisory, 0, len(entries))
+	// An index can list the same advisory ID more than once for a package
+	// (observed in the composer index: GHSA-3qpq-r242-jqj7 appears 3x for
+	// phpseclib). Dedupe by ID so one advisory is reported once per
+	// package, regardless of upstream-data quality.
+	emitted := make(map[string]bool, len(entries))
 	for _, e := range entries {
+		if e.ID != "" && emitted[e.ID] {
+			continue
+		}
 		status := osvUnknown
 		if strings.TrimSpace(version) != "" {
 			status = osvVersionAffected(eco, pkg, version, l.loadOSVAffected(eco, e.File))
@@ -757,6 +765,7 @@ func (l *Library) lookupOSV(eco, pkg, version string) []OSVAdvisory {
 				continue
 			}
 		}
+		emitted[e.ID] = true
 		out = append(out, OSVAdvisory{
 			ID:               e.ID,
 			Package:          pkg,
