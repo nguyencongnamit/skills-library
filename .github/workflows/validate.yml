@@ -429,6 +429,16 @@ jobs:
         # loading, tier execution, response classification, and lift math.
         run: python3 evals/benchmarks/llm-eval.py --self-check
 
+      - name: Secret-detection benchmark harness (keyless gate)
+        # The Python precision/recall harness re-implements the secret-detection
+        # matcher to emit a confusion matrix gitleaks can be compared against.
+        # It reads the same YAML checklist as the engine, so it can silently
+        # drift (it crashed unnoticed for ~3 weeks after the DLP->YAML migration
+        # because run-evals.sh is not run in CI). --check gates the skills-library
+        # column at 0 FP / 0 FN — keyless, no gitleaks — so any drift from the
+        # engine's verdict fails loudly here.
+        run: python3 evals/benchmarks/secret-detection-vs-gitleaks.py --check
+
       - name: Per-skill corpus tests (hard gate)
         # Runs every skills/<id>/tests/corpus.json through `skills-check test`.
         # Gate-driven corpora scan their fixtures with the same PolicyCheck the
