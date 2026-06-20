@@ -142,7 +142,7 @@
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2023-11-03",
-      "description": "Malicious code in littest (crates.io)",
+      "description": "Malicious crate (v0.3.1) flagged by the OpenSSF Package Analysis project (OSV MAL-2023-8429, 2023-11-03): the package communicates with a domain associated with malicious activity.",
       "references": [
         "https://osv.dev/vulnerability/MAL-2023-8429"
       ],
@@ -160,7 +160,7 @@
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-04-28",
-      "description": "Malicious code in lsh (crates.io)",
+      "description": "Malicious crate (v99.0.1, v99.1.0) flagged by the OpenSSF Package Analysis project (OSV MAL-2026-3126): it communicates with a domain associated with malicious activity and executes one or more commands associated with malicious behavior. The 99.x version numbers are a typical marker of automated typosquat / dependency-confusion uploads.",
       "references": [
         "https://osv.dev/vulnerability/MAL-2026-3126"
       ],
@@ -305,7 +305,7 @@
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-04-28",
-      "description": "Malicious code in supertag (crates.io)",
+      "description": "Malicious crate (v99.1.1) flagged by the OpenSSF Package Analysis project (OSV MAL-2026-3129): it executes one or more commands associated with malicious behavior and communicates with a domain associated with malicious activity.",
       "references": [
         "https://osv.dev/vulnerability/MAL-2026-3129"
       ],
