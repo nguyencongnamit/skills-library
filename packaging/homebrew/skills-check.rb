@@ -1,9 +1,13 @@
 # Homebrew formula template for skills-check.
 #
 # This file is the canonical source for the namncqualgo/tap/skills-check formula.
-# On release, the release workflow stamps the @version, @url, and @sha256
-# placeholders below with the values for the new tag and pushes the resulting
-# .rb to the namncqualgo/homebrew-tap repository.
+# On release, the "Stamp Homebrew formula" step in .github/workflows/release.yml
+# fills the version + per-arch sha256 placeholders below from the binaries built
+# for the new tag (the url lines interpolate v#{version}), and publishes the
+# stamped result as the `skills-check.rb` asset on the GitHub Release. To update
+# the tap, the release manager copies that published asset into the
+# namncqualgo/homebrew-tap repository (a tap-token-gated push step can automate
+# this once the tap repo + secret exist).
 class SkillsCheck < Formula
   desc "Skills Library CLI for AI-assisted coding tools"
   homepage "https://github.com/namncqualgo/skills-library"
