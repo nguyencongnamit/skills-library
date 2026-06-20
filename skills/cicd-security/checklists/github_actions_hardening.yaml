@@ -62,7 +62,7 @@ checks:
     rationale: >
       Codecov bash-uploader 2021 (CVE-2021-32699) exfiltrated env vars for
       ~10 weeks via a remote-script substitution attack on CDN.
-    pattern: "(curl|wget)[^|]*\\|\\s*(ba)?sh"
+    pattern: "(curl|wget)[^|\\n]*\\|\\s*(ba)?sh"
     fix: "Download, verify a known SHA-256, then execute. Prefer a vendor-supplied binary or container image."
   - id: gha-harden-runner
     severity: medium
