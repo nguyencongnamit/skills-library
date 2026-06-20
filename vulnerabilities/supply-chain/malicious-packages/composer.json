@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "composer",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "entries": [
     {
       "name": "hautelook/phpass",
@@ -11,7 +11,7 @@
       "type": "malicious_code",
       "severity": "critical",
       "discovered": "2022-05-24",
-      "description": "In May 2022 an attacker claimed the abandoned upstream GitHub repository behind the Packagist package hautelook/phpass (2.5M+ lifetime downloads) and published malicious versions. The altered PasswordHash.php read the AWS_ACCESS_KEY and AWS_SECRET_KEY environment variables and POSTed them to an attacker Heroku endpoint (https://anti-theft-web.herokuapp.com/hacked/) — the same campaign that backdoored the PyPI package 'ctx'.",
+      "description": "In May 2022 an attacker claimed the abandoned upstream GitHub repository behind the Packagist package hautelook/phpass (2.5M+ lifetime downloads) and published malicious versions. The altered PasswordHash.php read the AWS_ACCESS_KEY and AWS_SECRET_KEY environment variables and POSTed them to an attacker Heroku endpoint (https://anti-theft-web.herokuapp.com/hacked/) \u2014 the same campaign that backdoored the PyPI package 'ctx'.",
       "references": [
         "https://www.bleepingcomputer.com/news/security/popular-python-and-php-libraries-hijacked-to-steal-aws-keys/"
       ],
@@ -123,6 +123,64 @@
         "impersonates symfony/process"
       ],
       "attack_type": "typosquat"
+    },
+    {
+      "name": "nhattuanbl/lara-helper",
+      "versions_affected": [
+        "5.4.7"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2024-12-01",
+      "description": "PHP package by threat actor 'nhattuanbl' disguised as a Laravel helper utility; Socket flagged it as a fully-featured RAT/backdoor. After clean packages built install history under the same author (June-Dec 2024), the malicious version shipped a remote-access payload: a 60s heartbeat plus operators cmd (shell), powershell, download (read file as base64), upload (write file from base64) and screenshot (imagegrabscreen). C2 helper.leuleu.net:2096 over AES-128-CTR with a hardcoded key; retries every 15s indefinitely.",
+      "references": [
+        "https://socket.dev/blog/malicious-packagist-packages-disguised-as-laravel-utilities"
+      ],
+      "indicators": [
+        "author nhattuanbl (nhattuanbl@gmail.com)",
+        "RAT commands: cmd, powershell, download, upload, screenshot",
+        "60-second heartbeat beacon",
+        "AES-128-CTR C2 to helper.leuleu.net:2096 with a hardcoded key"
+      ],
+      "attack_type": "backdoor"
+    },
+    {
+      "name": "nhattuanbl/simple-queue",
+      "versions_affected": [
+        "1.5"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2024-12-01",
+      "description": "Second malicious package in the 'nhattuanbl' Laravel-utility campaign (Socket, June-Dec 2024). Carries the same RAT payload as nhattuanbl/lara-helper \u2014 heartbeat plus cmd/powershell/download/upload/screenshot operators. C2 helper.leuleu.net:2096 over AES-128-CTR with a hardcoded key; retries every 15s indefinitely.",
+      "references": [
+        "https://socket.dev/blog/malicious-packagist-packages-disguised-as-laravel-utilities"
+      ],
+      "indicators": [
+        "author nhattuanbl",
+        "embedded PHP RAT identical to lara-helper",
+        "AES-128-CTR C2 to helper.leuleu.net:2096"
+      ],
+      "attack_type": "backdoor"
+    },
+    {
+      "name": "nhattuanbl/lara-swagger",
+      "versions_affected": [
+        "2.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-12-01",
+      "description": "Third package in the 'nhattuanbl' Laravel-utility campaign (Socket, June-Dec 2024). The package code is clean on its own but it DECLARES A DEPENDENCY on the backdoored nhattuanbl/lara-helper, so a normal `composer require` pulls the RAT in transitively \u2014 a delivery vector that hides the payload one hop away.",
+      "references": [
+        "https://socket.dev/blog/malicious-packagist-packages-disguised-as-laravel-utilities"
+      ],
+      "indicators": [
+        "author nhattuanbl",
+        "declares a composer dependency on nhattuanbl/lara-helper (backdoored)",
+        "package body itself benign \u2014 malice delivered transitively"
+      ],
+      "attack_type": "backdoor"
     }
   ],
   "sources": {
