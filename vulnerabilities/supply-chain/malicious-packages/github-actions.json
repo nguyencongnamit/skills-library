@@ -201,6 +201,48 @@
         "workflow enumerates and POSTs CI secrets (PyPI/npm/DockerHub/AWS/GitHub tokens)"
       ],
       "attack_type": "build_pipeline_compromise"
+    },
+    {
+      "name": "aquasecurity/trivy-action",
+      "versions_affected": [
+        "76 of 77 tags (0.0.1 through 0.34.2)"
+      ],
+      "type": "action_compromise",
+      "severity": "critical",
+      "discovered": "2026-03-19",
+      "description": "On 2026-03-19 attackers (TeamPCP) force-pushed/repointed 76 of 77 version tags of aquasecurity/trivy-action (the popular Trivy scanner Action) to imposter commits carrying a multi-stage credential stealer that reads GitHub Actions runner-worker memory and exfiltrates secrets to scan[.]aquasecurtiy[.]org (typosquatted domain). Compromised ~12h; StepSecurity Harden-Runner flagged C2 from 12,000+ repos. Second Trivy compromise in 3 weeks (first 2026-03-01; incomplete credential rotation left residual access). GHSA-69fq-xp46-6x23.",
+      "references": [
+        "https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23",
+        "https://www.stepsecurity.io/blog/trivy-compromised-a-second-time---malicious-v0-69-4-release"
+      ],
+      "indicators": [
+        "version tags force-pushed/repointed to malicious commits",
+        "credential stealer reads GitHub Actions runner-worker memory",
+        "exfiltrates to scan[.]aquasecurtiy[.]org (typosquatted aquasecurity)",
+        "pin actions by full commit SHA, never by tag"
+      ],
+      "attack_type": "action_compromise"
+    },
+    {
+      "name": "aquasecurity/setup-trivy",
+      "versions_affected": [
+        "all 7 tags"
+      ],
+      "type": "action_compromise",
+      "severity": "critical",
+      "discovered": "2026-03-19",
+      "description": "Companion compromise to aquasecurity/trivy-action on 2026-03-19 (TeamPCP): all 7 version tags of aquasecurity/setup-trivy were repointed to malicious commits (~4h) with the same runner-memory credential stealer exfiltrating to scan[.]aquasecurtiy[.]org. Part of the broader Trivy supply-chain compromise that also pushed malicious trivy binary v0.69.4 and DockerHub images v0.69.5/v0.69.6. GHSA-69fq-xp46-6x23.",
+      "references": [
+        "https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23",
+        "https://www.stepsecurity.io/blog/trivy-compromised-a-second-time---malicious-v0-69-4-release"
+      ],
+      "indicators": [
+        "version tags force-pushed/repointed to malicious commits",
+        "credential stealer reads GitHub Actions runner-worker memory",
+        "exfiltrates to scan[.]aquasecurtiy[.]org (typosquatted aquasecurity)",
+        "pin actions by full commit SHA, never by tag"
+      ],
+      "attack_type": "action_compromise"
     }
   ]
 }

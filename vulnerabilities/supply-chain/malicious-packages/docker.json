@@ -214,6 +214,29 @@
         "multi-layer obfuscation to evade detection"
       ],
       "attack_type": "cryptominer"
+    },
+    {
+      "name": "graboid-cryptojacking-worm",
+      "versions_affected": [
+        "pocosow/centos:7.6.1810",
+        "gakeaws/nginx:8.9",
+        "gakeaws/mysql"
+      ],
+      "type": "malicious_image",
+      "severity": "high",
+      "discovered": "2019-10-16",
+      "description": "Unit42 (2019-10-16) documented Graboid, the first-ever cryptojacking WORM spread via Docker Hub images. Malicious images pocosow/centos:7.6.1810 (10,000+ pulls) and gakeaws/nginx:8.9 (6,500+; gakeaws/mysql identical) deploy a Monero (XMRig) miner and self-propagate: a compromised host pulls 4 shell scripts from C2, then randomly picks targets from a list of 2,000+ unsecured Docker daemons and deploys the malicious container remotely.",
+      "references": [
+        "https://unit42.paloaltonetworks.com/graboid-first-ever-cryptojacking-worm-found-in-images-on-docker-hub/"
+      ],
+      "indicators": [
+        "images pocosow/centos:7.6.1810, gakeaws/nginx:8.9, gakeaws/mysql",
+        "spreads via unsecured Docker daemons (exposed API)",
+        "pulls 4 shell scripts from C2",
+        "Monero miner; ~250s mining periods",
+        "randomly targets a 2,000+ host list"
+      ],
+      "attack_type": "cryptominer"
     }
   ]
 }
