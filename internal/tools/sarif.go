@@ -425,7 +425,7 @@ func CheckDependencySARIF(res *CheckDependencyResult) *SARIFLog {
 // non-zero exit (to fail the PR).
 func PolicyCheckSARIF(results []*PolicyCheckResult) *SARIFLog {
 	rules := make([]SARIFRule, 0)
-	ruleIndex := map[string]int{}      // RuleID -> index in rules
+	ruleIndex := map[string]int{}       // RuleID -> index in rules
 	ruleSeverity := map[string]string{} // RuleID -> most severe level seen
 
 	ensureRule := func(id, severity string) {
