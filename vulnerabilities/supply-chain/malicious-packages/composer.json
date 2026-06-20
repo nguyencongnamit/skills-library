@@ -181,6 +181,27 @@
         "package body itself benign \u2014 malice delivered transitively"
       ],
       "attack_type": "backdoor"
+    },
+    {
+      "name": "intercom/intercom-php",
+      "versions_affected": [
+        "5.0.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-30",
+      "description": "Socket Research Team disclosed (2026-04-30) a 'mini Shai-Hulud' compromise of the legitimate intercom/intercom-php SDK on Packagist (v5.0.2). The release abused Composer's plugin system \u2014 registering as a composer-plugin so setup-intercom.sh runs during install/update, which downloads and executes obfuscated JavaScript (router_runtime.js) via Bun. The payload harvests GitHub/npm tokens, SSH keys, AWS/Azure/GCP credentials, Kubernetes/Vault tokens, Docker creds and .env files, encrypts them with AES-256-GCM under an RSA-OAEP/SHA-256-wrapped key, and exfiltrates to zero.masscan.cloud, with GitHub-based exfiltration as a fallback.",
+      "references": [
+        "https://socket.dev/blog/mini-shai-hulud-packagist-malicious-intercom-php-package-compromise"
+      ],
+      "indicators": [
+        "intercom/intercom-php@5.0.2 registers as a composer-plugin (runs on install/update)",
+        "setup-intercom.sh downloads + runs router_runtime.js via Bun",
+        "harvests GitHub/npm/SSH/cloud/K8s/Vault/Docker creds + .env",
+        "AES-256-GCM + RSA-OAEP exfiltration to zero.masscan.cloud:443/v1/telemetry",
+        "GitHub-token-based exfiltration fallback"
+      ],
+      "attack_type": "maintainer_compromise"
     }
   ],
   "sources": {

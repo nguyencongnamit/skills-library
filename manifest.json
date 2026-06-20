@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "615954b81c92a5b180c5796bd1a6f5093c42fc8a1884bfea8217a1ddd2f5a016",
-      "size": 110967,
+      "sha256": "507a2fa2c705a832180e1f157acc8df8bc22b3d568edf34e466099ed7f1cd6cb",
+      "size": 111242,
       "action": "unchanged"
     },
     {
@@ -7838,8 +7838,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/composer.json",
-      "sha256": "61de9213911acc02d7642771533473c32f7af2ae4fbd95f3e90bb0b577110ada",
-      "size": 9909,
+      "sha256": "c7962be36194f574726e5b3476b1383194e09980adaeb8723d16e15aaf1cd124",
+      "size": 11369,
       "action": "unchanged"
     },
     {
