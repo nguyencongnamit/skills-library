@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"crypto/ed25519"
 	"fmt"
+	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -17,6 +20,8 @@ func manifestCmd() *cobra.Command {
 	c.AddCommand(manifestComputeCmd())
 	c.AddCommand(manifestVerifyCmd())
 	c.AddCommand(manifestSignCmd())
+	c.AddCommand(manifestSignFileCmd())
+	c.AddCommand(manifestVerifyFileCmd())
 	c.AddCommand(manifestDeltaCmd())
 	return c
 }
@@ -189,6 +194,95 @@ func manifestSignCmd() *cobra.Command {
 	c.Flags().StringVar(&path, "path", ".", "library root")
 	c.Flags().StringVar(&keyPath, "key", "", "path to Ed25519 private key (required)")
 	_ = c.MarkFlagRequired("key")
+	return c
+}
+
+// manifestSignFileCmd writes a detached "<file>.sig" Ed25519 signature for an
+// arbitrary release artifact (e.g. a checksums-<goos>-<goarch>.txt file). The
+// release manager runs this offline with the release key — the same key that
+// signs manifest.json — so the SHA-256 a self-update consumes is anchored to
+// the release identity, not to the source that served the binary.
+func manifestSignFileCmd() *cobra.Command {
+	var keyPath, outPath string
+	c := &cobra.Command{
+		Use:   "sign-file <file>",
+		Short: "Write a detached Ed25519 signature (<file>.sig) for a release artifact",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			priv, err := manifest.LoadPrivateKey(keyPath)
+			if err != nil {
+				return err
+			}
+			data, err := os.ReadFile(args[0])
+			if err != nil {
+				return err
+			}
+			sig, err := manifest.SignDetached(priv, data)
+			if err != nil {
+				return err
+			}
+			if outPath == "" {
+				outPath = args[0] + ".sig"
+			}
+			if err := os.WriteFile(outPath, []byte(sig+"\n"), 0o644); err != nil {
+				return err
+			}
+			fmt.Fprintf(c.OutOrStdout(), "wrote %s\n", outPath)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&keyPath, "key", "", "path to Ed25519 private key (required)")
+	c.Flags().StringVar(&outPath, "out", "", "output signature path (default: <file>.sig)")
+	_ = c.MarkFlagRequired("key")
+	return c
+}
+
+// manifestVerifyFileCmd verifies a detached "<file>.sig" signature against the
+// embedded public key (or an explicit --public-key). The mirror of sign-file,
+// and what `self-update` runs against the downloaded checksums file.
+func manifestVerifyFileCmd() *cobra.Command {
+	var pubKeyPath, sigPath string
+	c := &cobra.Command{
+		Use:   "verify-file <file>",
+		Short: "Verify a detached Ed25519 signature for a release artifact",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(c *cobra.Command, args []string) error {
+			data, err := os.ReadFile(args[0])
+			if err != nil {
+				return err
+			}
+			if sigPath == "" {
+				sigPath = args[0] + ".sig"
+			}
+			sigBytes, err := os.ReadFile(sigPath)
+			if err != nil {
+				return err
+			}
+			var keys []ed25519.PublicKey
+			if pubKeyPath != "" {
+				pub, err := manifest.LoadPublicKey(pubKeyPath)
+				if err != nil {
+					return err
+				}
+				keys = []ed25519.PublicKey{pub}
+			} else {
+				keys, err = manifest.TrustedKeys(nil)
+				if err != nil {
+					return err
+				}
+				if len(keys) == 0 {
+					return fmt.Errorf("no public key embedded in this build; pass --public-key")
+				}
+			}
+			if err := manifest.VerifyDetachedAny(keys, data, strings.TrimSpace(string(sigBytes))); err != nil {
+				return err
+			}
+			fmt.Fprintln(c.OutOrStdout(), "signature: ok")
+			return nil
+		},
+	}
+	c.Flags().StringVar(&pubKeyPath, "public-key", "", "path to Ed25519 public key (default: embedded)")
+	c.Flags().StringVar(&sigPath, "sig", "", "path to the .sig file (default: <file>.sig)")
 	return c
 }
 
