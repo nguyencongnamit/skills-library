@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "a4b167015122e5d184859301410aa9b309133d17a3bb79506a06e733f7e6347d",
-      "size": 111305,
+      "sha256": "bd0ab4d9fb6c366a4060ff6aa6ab740fdae5ea292d71db5138654fe1c2c78867",
+      "size": 110542,
       "action": "unchanged"
     },
     {
@@ -7844,8 +7844,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/crates.json",
-      "sha256": "e4b65e050fdb3565e3eb3dfef5b0cb20f0ef4ae6a44f903df4733c4e32bef568",
-      "size": 21923,
+      "sha256": "032879791b33b58f0e71e9ed2441c8738baa93545d455bb58ba7a78e45b5839b",
+      "size": 25672,
       "action": "unchanged"
     },
     {
@@ -7874,8 +7874,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/npm.json",
-      "sha256": "00a9f7fbd71f41efd7934606223b8014d4f835ebf1a8c4166c589ef6e7d12f1f",
-      "size": 354630,
+      "sha256": "66eaadeae877a2770ceaed109e8ae19c7d8b8873a03ea0a99599cd5dcb0603f6",
+      "size": 365294,
       "action": "unchanged"
     },
     {
@@ -7886,8 +7886,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/pypi.json",
-      "sha256": "6477d6993298f173e0aa363f5cfd97ebab0502cb687a63c000e560819035a668",
-      "size": 156310,
+      "sha256": "e0e54338b488515c747cb89ee9d2b0c841f63864297cf414547aa86bfdd736c5",
+      "size": 161314,
       "action": "unchanged"
     },
     {
