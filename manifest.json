@@ -7838,8 +7838,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/composer.json",
-      "sha256": "7dd3d2a64e42f8f33b8c9024210c81b560737fd14613d02f9a946762c1fdda44",
-      "size": 6942,
+      "sha256": "61de9213911acc02d7642771533473c32f7af2ae4fbd95f3e90bb0b577110ada",
+      "size": 9909,
       "action": "unchanged"
     },
     {
