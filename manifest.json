@@ -7837,9 +7837,15 @@
       "action": "unchanged"
     },
     {
+      "path": "vulnerabilities/supply-chain/malicious-packages/composer.json",
+      "sha256": "7dd3d2a64e42f8f33b8c9024210c81b560737fd14613d02f9a946762c1fdda44",
+      "size": 6942,
+      "action": "added"
+    },
+    {
       "path": "vulnerabilities/supply-chain/malicious-packages/crates.json",
-      "sha256": "5c40a747f73df3931cdb5df86b8326967113a12aff255aad8bfe26efcaff1cdc",
-      "size": 9753,
+      "sha256": "324999a234689c6149e88a5679f65ddb0071d06b5a08de803d0dfb518de35526",
+      "size": 11945,
       "action": "unchanged"
     },
     {
