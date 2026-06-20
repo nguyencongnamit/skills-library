@@ -16,21 +16,111 @@ inputs:
     description: npm version or dist-tag of @namncqualgo/secure-code-mcp to run (pin for reproducible CI).
     required: false
     default: latest
+  sarif-file:
+    description: >-
+      When set, write a SARIF 2.1.0 report to this path and (unless
+      upload-sarif is false) publish it to GitHub Code Scanning. Leave empty
+      to keep the default human-readable text mode that fails inline.
+    required: false
+    default: ""
+  upload-sarif:
+    description: >-
+      Upload the SARIF report to GitHub Code Scanning when sarif-file is set.
+      Requires `permissions: security-events: write` in the calling workflow.
+      Set to false to produce the SARIF artifact without uploading it.
+    required: false
+    default: "true"
 
 runs:
   using: composite
   steps:
-    - name: Run secure-code gate
+    # Text mode (default, back-compat): scan and fail inline on findings.
+    # Skipped entirely when the caller asks for SARIF output.
+    #
+    # Inputs are passed through `env:` and referenced as "$VARS" rather than
+    # interpolated as ${{ inputs.* }} inside the script. This forecloses the
+    # GitHub Actions shell-injection class: a caller that wires an input from
+    # untrusted data (e.g. files: ${{ github.event.pull_request.title }})
+    # cannot break out of the command, because the value never becomes part of
+    # the script text. FILES stays unquoted on the command line on purpose so
+    # the space-separated list word-splits into multiple path arguments.
+    - name: Run secure-code gate (text)
+      if: ${{ inputs.sarif-file == '' }}
       shell: bash
+      env:
+        FILES: ${{ inputs.files }}
+        SEVERITY_FLOOR: ${{ inputs.severity-floor }}
+        VERSION: ${{ inputs.version }}
       run: |
         set -euo pipefail
-        if [ -z "${{ inputs.files }}" ]; then
+        if [ -z "$FILES" ]; then
           echo "secure-code-gate: no files supplied via the 'files' input; nothing to gate." >&2
           exit 0
         fi
         # The published package bundles the skills-check CLI binary + the rule
         # data; the secure-code-check launcher points it at that data via
         # $SKILLS_LIBRARY_PATH, so no checkout or --path is needed here.
-        npx -y -p "@namncqualgo/secure-code-mcp@${{ inputs.version }}" \
-          secure-code-check gate ${{ inputs.files }} \
-          --severity-floor "${{ inputs.severity-floor }}"
+        npx -y -p "@namncqualgo/secure-code-mcp@${VERSION}" \
+          secure-code-check gate $FILES \
+          --severity-floor "$SEVERITY_FLOOR"
+
+    # SARIF mode: write the report, then DEFER the fail so the upload step
+    # below can still publish the findings to Code Scanning. gate emits the
+    # SARIF before its non-zero exit, so a failing gate still produces a valid
+    # uploadable artifact. Exit codes: 0 = clean, 1 = findings at/above floor,
+    # 2+ = an operational error (which fails immediately — there is no SARIF).
+    - name: Run secure-code gate (sarif)
+      id: gate
+      if: ${{ inputs.sarif-file != '' }}
+      shell: bash
+      env:
+        FILES: ${{ inputs.files }}
+        SEVERITY_FLOOR: ${{ inputs.severity-floor }}
+        VERSION: ${{ inputs.version }}
+        SARIF_FILE: ${{ inputs.sarif-file }}
+      run: |
+        set -uo pipefail
+        if [ -z "$FILES" ]; then
+          # No files and so no SARIF written: leave gate-exit unset so the
+          # upload step skips (its sarif-file would not exist) and the fail
+          # step treats the absent output as a clean pass.
+          echo "secure-code-gate: no files supplied via the 'files' input; nothing to gate." >&2
+          exit 0
+        fi
+        set +e
+        npx -y -p "@namncqualgo/secure-code-mcp@${VERSION}" \
+          secure-code-check gate $FILES \
+          --severity-floor "$SEVERITY_FLOOR" \
+          --format sarif > "$SARIF_FILE"
+        code=$?
+        set -e
+        echo "gate-exit=$code" >> "$GITHUB_OUTPUT"
+        if [ "$code" -ge 2 ]; then
+          # Operational failure (bad flag, unreadable file): no usable SARIF
+          # was produced, so fail now rather than uploading an empty report.
+          echo "secure-code-gate: gate errored (exit $code); no SARIF to upload." >&2
+          exit "$code"
+        fi
+        echo "secure-code-gate: wrote SARIF to $SARIF_FILE (gate exit $code)."
+
+    # Publish to Code Scanning. always() so it still runs on a failing gate;
+    # gated on a real SARIF artifact (gate-exit 0 or 1 means one was written).
+    - name: Upload SARIF to Code Scanning
+      if: ${{ always() && inputs.sarif-file != '' && inputs.upload-sarif == 'true' && steps.gate.outputs.gate-exit != '' && steps.gate.outputs.gate-exit < '2' }}
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.sarif-file }}
+        category: secure-code-gate
+
+    # Re-surface the gate's verdict as the step's exit code, after the upload.
+    - name: Fail on findings
+      if: ${{ inputs.sarif-file != '' }}
+      shell: bash
+      env:
+        GATE_EXIT: ${{ steps.gate.outputs.gate-exit }}
+      run: |
+        code="${GATE_EXIT:-0}"
+        if [ "$code" -ne 0 ]; then
+          echo "secure-code-gate: findings met the severity floor (gate exit $code)." >&2
+          exit 1
+        fi

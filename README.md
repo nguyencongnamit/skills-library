@@ -673,6 +673,33 @@ when any finding meets the severity floor (default `high`; override with
     severity-floor: high
 ```
 
+**GitHub Code Scanning** — set `sarif-file` to publish findings to the
+**Security → Code scanning** tab as SARIF 2.1.0. The Action writes the report,
+uploads it (even on a failing gate, so the findings are always visible), and
+then fails the PR when anything meets the severity floor. This requires the
+`security-events: write` permission:
+
+```yaml
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: namncqualgo/skills-library@v0.4.0
+        with:
+          files: Dockerfile package-lock.json .github/workflows/ci.yml
+          severity-floor: high
+          sarif-file: secure-code.sarif    # turns on Code Scanning upload
+```
+
+A complete, copy-paste workflow lives at
+[`examples/github-code-scanning.yml`](./examples/github-code-scanning.yml). Set
+`upload-sarif: false` to produce the SARIF artifact without uploading it.
+
 ## Building and running tests
 
 ```bash

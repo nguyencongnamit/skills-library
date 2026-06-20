@@ -119,6 +119,13 @@ async function main() {
   const gate = spawnSync(process.execPath, [checker, 'gate', df, '--severity-floor', 'high'], { stdio: 'inherit' });
   if (gate.status !== 1) die(`expected \`gate\` to exit 1 on a bad Dockerfile, got ${gate.status}`);
 
+  // A genuine operational error (e.g. a missing file) must exit 2, not 1,
+  // so a CI wrapper can tell a real failure apart from a clean policy
+  // rejection — the contract the Code Scanning Action relies on.
+  const missing = path.join(work, 'does-not-exist.Dockerfile');
+  const err = spawnSync(process.execPath, [checker, 'gate', missing, '--severity-floor', 'high'], { stdio: 'inherit' });
+  if (err.status !== 2) die(`expected \`gate\` to exit 2 on a missing file, got ${err.status}`);
+
   await fs.rm(work, { recursive: true, force: true });
   console.log(`smoke-test: PASS — ${SCOPE}/${MAIN} (${key}) MCP handshakes (serverInfo.name=${name}) and \`secure-code-check gate\` gates`);
 }

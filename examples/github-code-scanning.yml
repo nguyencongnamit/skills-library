@@ -1,0 +1,39 @@
+# secure-code gate → GitHub Code Scanning
+#
+# Copy this file into your repository at .github/workflows/secure-code-gate.yml.
+# It runs the vibe-guard `gate` over the named files, uploads the findings to
+# the Security → Code scanning tab as SARIF, and fails the PR when any finding
+# meets the severity floor.
+#
+# The `security-events: write` permission is REQUIRED for the SARIF upload.
+# `contents: read` lets the workflow check out the files being gated.
+
+name: secure-code gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: secure-code gate
+        uses: namncqualgo/skills-library@v0.4.0
+        with:
+          # Space-separated files to gate. gate scans exactly what you name —
+          # point it at the lockfiles, Dockerfiles, and workflows you ship.
+          files: Dockerfile package-lock.json .github/workflows/ci.yml
+          severity-floor: high
+          # Setting sarif-file switches the Action into Code Scanning mode:
+          # it writes SARIF here and uploads it before failing the build.
+          sarif-file: secure-code.sarif
+          # Pin a published release for reproducible CI (defaults to latest).
+          version: latest
