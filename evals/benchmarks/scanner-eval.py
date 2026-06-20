@@ -71,6 +71,9 @@ SCANNERS: dict[str, dict[str, Any]] = {
             "pom.xml",
             "gradle.lockfile",
             "packages.lock.json",
+            "composer.lock",
+            "Package.resolved",
+            "pubspec.lock",
         ),
         "key": lambda f: (
             (f.get("ecosystem") or "").lower(),

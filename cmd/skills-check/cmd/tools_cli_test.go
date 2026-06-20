@@ -779,3 +779,21 @@ func TestGateSARIFOnCleanFileIsWellFormed(t *testing.T) {
 		t.Errorf("rules array serialised as null, not []:\n%s", out)
 	}
 }
+
+// TestKnownLockfileNameNewParsers locks the directory-discovery list to the
+// parser dispatch table in internal/tools/parsers/parsers.go. composer.lock,
+// Package.resolved, and pubspec.lock parsers shipped, but knownLockfileName
+// was not updated to match, so `scan-dependencies <dir>` silently skipped
+// them while single-file scans worked. Guards that regression.
+func TestKnownLockfileNameNewParsers(t *testing.T) {
+	for _, base := range []string{"composer.lock", "Package.resolved", "pubspec.lock"} {
+		if !knownLockfileName(base) {
+			t.Errorf("knownLockfileName(%q) = false; directory discovery would skip it "+
+				"even though parsers.Parse recognises it", base)
+		}
+	}
+	// A non-lockfile name must still be rejected.
+	if knownLockfileName("README.md") {
+		t.Errorf("knownLockfileName(README.md) = true, want false")
+	}
+}

@@ -504,7 +504,8 @@ func scanDependenciesCmd() *cobra.Command {
 yarn.lock, pnpm-lock.yaml, requirements*.txt, Pipfile.lock,
 poetry.lock, go.sum, Cargo.lock, pom.xml, gradle.lockfile,
 build.gradle.lockfile, packages.lock.json, *.csproj / *.fsproj /
-*.vbproj, and Gemfile.lock.
+*.vbproj, Gemfile.lock, composer.lock, Package.resolved, and
+pubspec.lock.
 
 Pass a single lockfile to scan just that file, or a directory to
 auto-discover and scan every recognised lockfile beneath it
@@ -654,7 +655,8 @@ func knownLockfileName(base string) bool {
 	case "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
 		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
 		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
-		"packages.lock.json", "Gemfile.lock":
+		"packages.lock.json", "Gemfile.lock",
+		"composer.lock", "Package.resolved", "pubspec.lock":
 		return true
 	}
 	lower := strings.ToLower(base)
