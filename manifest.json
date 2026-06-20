@@ -1910,8 +1910,8 @@
     },
     {
       "path": "skills/cicd-security/tests/corpus.json",
-      "sha256": "b8f3a7314099a83801951380761ac0abb97e67a4fca15f537e5f238ca8093c17",
-      "size": 2250,
+      "sha256": "8783dd5836bda74a6a098635e7cb57cf32dbae0a4e16eb2a37361a7cb98fcef8",
+      "size": 2265,
       "action": "unchanged"
     },
     {

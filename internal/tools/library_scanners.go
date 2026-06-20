@@ -368,6 +368,19 @@ var gitHubActionsChecks = []gitHubActionsHardeningCheck{
 		Fix:       "Download, verify a known SHA-256, then execute. Prefer a vendor-supplied binary or container image.",
 	},
 	{
+		// Regex, not AST: the regex reliably catches an untrusted
+		// expression anywhere in a `run:` body (PR title, issue body,
+		// head ref…); the structured AST check missed cases the regex
+		// caught, so this is the canonical detector. `run:`-anchored, so
+		// the scanner evaluates it per step chunk.
+		ID:        "gha-no-untrusted-script-injection",
+		Severity:  "critical",
+		Title:     "Untrusted github.event expression interpolated into `run:`",
+		Rationale: "`run: echo \"${{ github.event.pull_request.title }}\"` is a shell-injection sink. Route the value through an `env:` variable and reference it as $VAR.",
+		Pattern:   `run:[\s\S]+?\$\{\{\s*github\.(event\.[a-z_.]+|head_ref\b)`,
+		Fix:       "Bind the expression to env: NAME: ${{ ... }} and use \"$NAME\" inside the run body.",
+	},
+	{
 		ID:        "gha-cache-key-scope",
 		Severity:  "medium",
 		Title:     "Cache keys must include a lockfile hash, not just `os`",
@@ -402,7 +415,6 @@ func GitHubActionsRuleIDs() map[string]bool {
 		// Emitted by the AST pass, not gitHubActionsChecks.
 		"gha-pin-actions-by-sha":              true,
 		"gha-pr-target-no-untrusted-checkout": true,
-		"gha-no-untrusted-script-injection":   true,
 	}
 	for _, c := range gitHubActionsChecks {
 		ids[c.ID] = true
@@ -517,8 +529,9 @@ func (l *Library) ScanGitHubActions(filePath string) (*ScanGitHubActionsResult, 
 	//     a 40-char SHA pin from a version tag.
 	//   * gha-pr-target-no-untrusted-checkout: pull_request_target +
 	//     actions/checkout is the classic PWN-request pattern.
-	//   * gha-no-untrusted-script-injection: untrusted github.event.* /
-	//     github.head_ref interpolated into a `run:` block.
+	//
+	// (Expression-injection stays a regex check — the structured walk
+	// missed cases the regex catches.)
 	if wf, err := parsers.ParseWorkflow(body); err == nil && wf != nil {
 		appendAstWorkflowFindings(wf, out)
 	}
@@ -563,20 +576,10 @@ func appendAstWorkflowFindings(wf *parsers.Workflow, out *ScanGitHubActionsResul
 					Snippet: fmt.Sprintf("uses: %s (job %q)", step.Uses, jobName),
 				})
 			}
-			if step.Run != "" && parsers.HasUntrustedExpressionInjection(step.Run) {
-				out.Findings = append(out.Findings, WorkflowFinding{
-					RuleID:     "gha-no-untrusted-script-injection",
-					Severity:   "critical",
-					Confidence: "confirmed",
-					Title:      "Untrusted github.event expression interpolated into `run:`",
-					Rationale: "Expressions like ${{ github.event.pull_request.title }} are" +
-						" attacker-controlled and Bash-expanded at runtime. Move the value" +
-						" through an env: mapping and reference it as $VAR instead.",
-					Fix:     "Bind the expression to env: NAME: ${{ ... }} and use \"$NAME\" inside `run:`.",
-					Line:    step.Line,
-					Snippet: firstLine(step.Run),
-				})
-			}
+			// Expression-injection is detected by the regex check
+			// gha-no-untrusted-script-injection (in gitHubActionsChecks):
+			// it catches untrusted ${{ github.event… }} in a run: body
+			// more broadly than the structured walk did.
 		}
 	}
 }
@@ -591,17 +594,6 @@ func truncateSnippet(s string, n int) string {
 	}
 	r := []rune(out)
 	return string(r[:n]) + "…"
-}
-
-// firstLine returns the first non-empty line of s, trimmed. Used to
-// keep `run:`-block snippets readable in finding output.
-func firstLine(s string) string {
-	for _, line := range strings.Split(s, "\n") {
-		if t := strings.TrimSpace(line); t != "" {
-			return t
-		}
-	}
-	return ""
 }
 
 // DockerfileFinding is one match against a Dockerfile hardening rule.
