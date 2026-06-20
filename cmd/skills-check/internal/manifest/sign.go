@@ -179,6 +179,60 @@ func (m *Manifest) VerifyWith(pub ed25519.PublicKey) error {
 	return nil
 }
 
+// SignDetached signs arbitrary bytes with an Ed25519 private key and returns
+// an "ed25519:<base64>" detached signature string. Used to sign release
+// artifacts (e.g. the per-platform checksums file) out of band with the same
+// key that signs the manifest, so the SHA-256 a self-update trusts is itself
+// anchored to the release key rather than to whatever source served it.
+func SignDetached(priv ed25519.PrivateKey, data []byte) (string, error) {
+	if len(priv) != ed25519.PrivateKeySize {
+		return "", fmt.Errorf("ed25519 private key must be %d bytes, got %d", ed25519.PrivateKeySize, len(priv))
+	}
+	sig := ed25519.Sign(priv, data)
+	return SignaturePrefix + base64.StdEncoding.EncodeToString(sig), nil
+}
+
+// VerifyDetached verifies an "ed25519:<base64>" detached signature over data
+// against a single public key.
+func VerifyDetached(pub ed25519.PublicKey, data []byte, sig string) error {
+	if len(pub) != ed25519.PublicKeySize {
+		return fmt.Errorf("ed25519 public key must be %d bytes, got %d", ed25519.PublicKeySize, len(pub))
+	}
+	s := strings.TrimSpace(sig)
+	if s == "" {
+		return errors.New("empty signature")
+	}
+	if !strings.HasPrefix(s, SignaturePrefix) {
+		return fmt.Errorf("signature missing %q prefix", SignaturePrefix)
+	}
+	raw, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(s, SignaturePrefix))
+	if err != nil {
+		return fmt.Errorf("decode signature: %w", err)
+	}
+	if len(raw) != ed25519.SignatureSize {
+		return fmt.Errorf("signature length %d != %d", len(raw), ed25519.SignatureSize)
+	}
+	if !ed25519.Verify(pub, data, raw) {
+		return errors.New("ed25519 signature verification failed")
+	}
+	return nil
+}
+
+// VerifyDetachedAny verifies a detached signature over data against any of the
+// trusted Ed25519 public keys (embedded + configured). Mirrors
+// (*Manifest).VerifyAny for non-manifest artifacts.
+func VerifyDetachedAny(keys []ed25519.PublicKey, data []byte, sig string) error {
+	if len(keys) == 0 {
+		return errors.New("no trusted keys configured")
+	}
+	for _, pub := range keys {
+		if err := VerifyDetached(pub, data, sig); err == nil {
+			return nil
+		}
+	}
+	return errors.New("signature did not match any trusted key")
+}
+
 // GenerateKeyPair produces a fresh Ed25519 keypair for development and tests.
 func GenerateKeyPair() (ed25519.PublicKey, ed25519.PrivateKey, error) {
 	return ed25519.GenerateKey(rand.Reader)

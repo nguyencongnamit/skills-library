@@ -176,6 +176,31 @@ jobs:
           cp verify/manifest.json verify/extracted/manifest.json
           /tmp/skills-check manifest verify --path verify/extracted
 
+      - name: Verify binary checksum signatures (best effort)
+        # If the release manager signed the per-platform checksum files
+        # offline (SIGNING.md step 4), every `checksums-*.txt.sig` must
+        # verify against the public key embedded in the freshly-built
+        # binary before we publish — otherwise a self-update would trust a
+        # bad signature. Releases that predate signed checksums (no .sig
+        # assets) are allowed through; self-update falls back to
+        # checksum-only integrity for them unless run with
+        # --require-signature.
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          sigs=(verify/checksums-*.txt.sig)
+          if [ ${#sigs[@]} -eq 0 ]; then
+            echo "::notice::no checksum .sig files on this release; self-update will fall back to checksum-only integrity (see SIGNING.md step 4)"
+            exit 0
+          fi
+          for sig in "${sigs[@]}"; do
+            base="${sig%.sig}"
+            echo "verifying ${base}.sig"
+            /tmp/skills-check manifest verify-file "$base"
+          done
+          echo "::notice::verified ${#sigs[@]} binary checksum signature(s)"
+
       - name: Cross-check tarball SHA-256 against SHA256SUMS.txt
         shell: bash
         run: |

@@ -65,13 +65,45 @@ manifest is intact end-to-end.
      --public-key keys/secure-code-release-2026.pub
    ```
 
-4. **Re-upload the signed manifest to the same draft.**
+4. **Sign the per-platform binary checksum files (binary authenticity).**
+   The `manifest.json` signature authenticates the *library data tree*, but
+   the `skills-check self-update` path trusts the binary's SHA-256 from the
+   `checksums-<goos>-<goarch>.txt` files. Sign each of those with the same
+   offline key so the hash a self-update consumes is itself anchored to the
+   release key rather than to whatever source served the binary:
+
+   ```bash
+   gh release download v2026.05.12 -p 'checksums-*.txt' -D /tmp/release-staging/
+   for f in /tmp/release-staging/checksums-*.txt; do
+     go run ./cmd/skills-check manifest sign-file --key /path/to/ed25519.seed "$f"
+     # writes "$f.sig" = "ed25519:<base64>" over the checksum file bytes
+   done
+   # sanity-check one:
+   go run ./cmd/skills-check manifest verify-file \
+     --public-key keys/secure-code-release-2026.pub \
+     /tmp/release-staging/checksums-linux-amd64.txt
+   ```
+
+   Then upload the `.sig` files alongside the checksum files:
+
+   ```bash
+   gh release upload v2026.05.12 /tmp/release-staging/checksums-*.txt.sig --clobber
+   ```
+
+   `skills-check self-update` fetches `checksums-<goos>-<goarch>.txt.sig`,
+   verifies it against the embedded public key, and *then* trusts the
+   SHA-256. Releases without these `.sig` files still self-update (with a
+   warning) unless the user passes `--require-signature`; once a release
+   ships signed checksum files, `--require-signature` becomes the
+   recommended invocation and a future CLI version can make it the default.
+
+5. **Re-upload the signed manifest to the same draft.**
 
    ```bash
    gh release upload v2026.05.12 /tmp/release-staging/manifest.json --clobber
    ```
 
-5. **Run the publish-verification workflow.** From the GitHub Actions UI,
+6. **Run the publish-verification workflow.** From the GitHub Actions UI,
    trigger **Sign & publish** (`.github/workflows/sign-and-publish.yml`)
    with the release tag (e.g. `v2026.05.12`). The workflow:
 
