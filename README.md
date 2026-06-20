@@ -730,12 +730,19 @@ skills-check gate package.json --severity-floor high   # now fails on evil-pkg
 ```
 
 `contribute add` writes only to `.skills-check/overlay.json` in your project;
-the rule never leaves your machine. Commit that file and your whole team (and
-CI) enforces the same block. When you want to share a finding upstream,
-`contribute keygen` + `contribute submit --key …` produces a **signed**,
-portable candidate that a reviewer can `contribute verify` before it is
-promoted into the central, centrally-signed database. Crowdsource candidates,
-centralize trust — see **[Contribute a Finding](docs/contribute.md)**.
+the rule never leaves your machine. Sharing widens by blast radius:
+
+| Scope | How | Who enforces it |
+|-------|-----|-----------------|
+| **You** | `contribute add` writes `.skills-check/overlay.json` | every local `check`/`scan`/`gate` |
+| **Team** | commit `.skills-check/overlay.json` | every teammate's gate (git is the fan-out) + CI, on next pull |
+| **Org** | point `SKILLS_CHECK_OVERLAY` at a shared overlay file outside any repo (OS path-list separated for several) | every `skills-check` invocation, across all repos and CI jobs |
+
+When you want to share a finding upstream, `contribute keygen` +
+`contribute submit --key …` produces a **signed**, portable candidate that a
+reviewer can `contribute verify` before it is promoted into the central,
+centrally-signed database. Crowdsource candidates, centralize trust — see
+**[Contribute a Finding](docs/contribute.md)**.
 
 ## Building and running tests
 

@@ -303,11 +303,21 @@ func WithOverlayPaths(paths ...string) LibraryOption {
 	return func(l *Library) { l.overlayPaths = paths }
 }
 
+// OverlayEnvVar names the environment variable holding extra contribution
+// overlay paths, OS path-list separated (":" on Unix, ";" on Windows). It lets
+// a team or org point every skills-check invocation — gate, scan, MCP — at a
+// SHARED overlay that lives outside any single repo (e.g. an org-wide
+// bad-package list mounted into CI), without a per-command flag. The
+// repo-local .skills-check/overlay.json remains the zero-config team channel
+// (commit it); this env var is the cross-repo / central channel.
+const OverlayEnvVar = "SKILLS_CHECK_OVERLAY"
+
 // defaultOverlayPaths returns the overlay files probed when no explicit
 // WithOverlayPaths is supplied: the project-local
 // .skills-check/overlay.json relative to the process working directory,
-// then the user-global overlay beside the OSV cache root. Missing files
-// are silently ignored at load time.
+// the user-global overlay beside the OSV cache root, and any paths named in
+// $SKILLS_CHECK_OVERLAY (shared/org overlays). Missing files are silently
+// ignored at load time; duplicate paths are de-duplicated.
 func defaultOverlayPaths() []string {
 	var paths []string
 	if wd, err := os.Getwd(); err == nil && wd != "" {
@@ -316,7 +326,25 @@ func defaultOverlayPaths() []string {
 	if root := defaultUserCacheRoot(); root != "" {
 		paths = append(paths, filepath.Join(root, "overlay.json"))
 	}
-	return paths
+	if env := os.Getenv(OverlayEnvVar); env != "" {
+		for _, p := range filepath.SplitList(env) {
+			if p = strings.TrimSpace(p); p != "" {
+				paths = append(paths, p)
+			}
+		}
+	}
+	// De-duplicate while preserving order so a path named twice (e.g. the
+	// project-local file also listed in the env var) is only loaded once.
+	seen := make(map[string]struct{}, len(paths))
+	out := paths[:0]
+	for _, p := range paths {
+		if _, dup := seen[p]; dup {
+			continue
+		}
+		seen[p] = struct{}{}
+		out = append(out, p)
+	}
+	return out
 }
 
 // defaultUserCacheRoot returns the OSV user-cache root the Library
