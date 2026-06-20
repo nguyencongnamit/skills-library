@@ -193,6 +193,27 @@
         "Dero wallet dero1qyy8xjrdjcn2dvr6pwe40jrl3evv9vam6tpx537vux60xxkx6hs7zqgde993y"
       ],
       "attack_type": "cryptominer"
+    },
+    {
+      "name": "kazutod-tene-ten-resource-hijack",
+      "versions_affected": [
+        "kazutod/tene:ten"
+      ],
+      "type": "malicious_image",
+      "severity": "high",
+      "discovered": "2025-04-01",
+      "description": "Darktrace and Cado Security Labs (April 2025) analysed the Docker Hub image kazutod/tene:ten, which runs a Python script ten.py hidden in the image layers behind multi-layer obfuscation. Rather than mining with XMRig, the de-obfuscated payload connects to teneo.pro (a Web3 data-network startup) to farm reward points by faking heartbeats \u2014 a resource-/account-abuse twist on cryptojacking.",
+      "references": [
+        "https://gbhackers.com/new-malware-hijacks-docker-images/",
+        "https://cybersecuritynews.com/new-malware-hijacking-docker-images/"
+      ],
+      "indicators": [
+        "image kazutod/tene:ten",
+        "embedded obfuscated ten.py in image layers",
+        "connects to teneo.pro to farm reward points (not direct coin mining)",
+        "multi-layer obfuscation to evade detection"
+      ],
+      "attack_type": "cryptominer"
     }
   ]
 }
