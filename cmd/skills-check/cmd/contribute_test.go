@@ -154,6 +154,63 @@ func TestContributeSignSubmitVerify(t *testing.T) {
 	}
 }
 
+// TestContributeRejectsKeyIDMismatch locks the security branch that stops a
+// candidate from lying about which key signed it: public_key_id must hash-match
+// the embedded public_key_b64. That check is DUPLICATED in verifyCandidate (the
+// import pre-check) and contributeVerifyCmd (the standalone verify), so this
+// asserts BOTH reject an otherwise-valid candidate whose declared id has been
+// swapped — pinning the two copies to identical behaviour so they can't drift.
+func TestContributeRejectsKeyIDMismatch(t *testing.T) {
+	dir := t.TempDir()
+	keyPath := filepath.Join(dir, "key.pem")
+	if _, err := runContribute(t, "keygen", "--out", keyPath); err != nil {
+		t.Fatalf("keygen: %v", err)
+	}
+	if _, err := runContribute(t, "add", "--dir", dir, "-p", "evil", "-e", "npm", "--reason", "x", "--key", keyPath); err != nil {
+		t.Fatalf("signed add: %v", err)
+	}
+	candPath := filepath.Join(dir, "cand.json")
+	if _, err := runContribute(t, "submit", "--dir", dir, "--key", keyPath, "--out", candPath); err != nil {
+		t.Fatalf("submit: %v", err)
+	}
+
+	// Swap ONLY the public_key_id value (string replace, every other byte —
+	// the embedded key and every signature — untouched). The signatures still
+	// verify against the embedded key; only the declared id is now a lie.
+	body, _ := os.ReadFile(candPath)
+	var cand struct {
+		PublicKeyID string `json:"public_key_id"`
+	}
+	if err := json.Unmarshal(body, &cand); err != nil {
+		t.Fatalf("unmarshal candidate: %v", err)
+	}
+	if cand.PublicKeyID == "" {
+		t.Fatal("candidate has no public_key_id to tamper")
+	}
+	mangled := strings.Replace(string(body), cand.PublicKeyID, cand.PublicKeyID+"X", 1)
+	if mangled == string(body) {
+		t.Fatal("failed to swap public_key_id")
+	}
+	if err := os.WriteFile(candPath, []byte(mangled), 0o644); err != nil {
+		t.Fatalf("write mangled: %v", err)
+	}
+
+	// Both paths must reject, and reject for the RIGHT reason (the id
+	// mismatch) — not some incidental parse error.
+	vout, verr := runContribute(t, "verify", candPath)
+	if verr == nil {
+		t.Errorf("verify accepted a key-id-mismatched candidate; want failure (%s)", vout)
+	} else if !strings.Contains(verr.Error()+vout, "public_key_id") {
+		t.Errorf("verify rejected for the wrong reason: %v / %s", verr, vout)
+	}
+	iout, ierr := runContribute(t, "import", candPath, "--dir", t.TempDir())
+	if ierr == nil {
+		t.Errorf("import accepted a key-id-mismatched candidate; want failure (%s)", iout)
+	} else if !strings.Contains(ierr.Error()+iout, "public_key_id") {
+		t.Errorf("import rejected for the wrong reason: %v / %s", ierr, iout)
+	}
+}
+
 // TestContributeAddRequiresPackage guards the required-flag validation.
 func TestContributeAddRequiresPackage(t *testing.T) {
 	if _, err := runContribute(t, "add", "--dir", t.TempDir(), "-e", "npm"); err == nil {
