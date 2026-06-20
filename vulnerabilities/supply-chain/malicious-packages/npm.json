@@ -10709,6 +10709,154 @@
         "rootkit-like credential/secret exfiltration"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "@automagik/genie",
+      "versions_affected": [
+        "4.260421.33",
+        "4.260421.34",
+        "4.260421.35",
+        "4.260421.36",
+        "4.260421.37",
+        "4.260421.38",
+        "4.260421.39"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "pgserve",
+      "versions_affected": [
+        "1.1.11",
+        "1.1.12",
+        "1.1.13"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "@fairwords/websocket",
+      "versions_affected": [
+        "1.0.38",
+        "1.0.39"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "@fairwords/loopback-connector-es",
+      "versions_affected": [
+        "1.4.3",
+        "1.4.4"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "@openwebconcept/design-tokens",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "@openwebconcept/theme-owc",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-04-22",
+      "description": "Compromised in the self-propagating 'CanisterWorm' npm worm (TeamPCP, Socket/JFrog 2026-04-22, downstream of the Trivy CI/CD breach). The malicious versions harvest credentials \u2014 env-var secrets/tokens, SSH keys, .npmrc, AWS/Azure/GCP creds, and Chrome/MetaMask/Phantom wallet data \u2014 and exfiltrate to a webhook plus an Internet Computer (ICP) canister endpoint (telemetry.api-monitor.com, canister cjn37-uyaaa-aaaac-qgnva-cai). It self-spreads by stealing the victim's npm token, republishing packages they can publish with a new malicious postinstall hook (with PyPI-propagation logic too). Only the listed versions are malicious.",
+      "references": [
+        "https://socket.dev/blog/namastex-npm-packages-compromised-canisterworm",
+        "https://research.jfrog.com/post/canister-worm/",
+        "https://orca.security/resources/blog/canisterworm-npm-worm-ci-cd-breach/"
+      ],
+      "indicators": [
+        "compromised via the CanisterWorm self-propagating npm worm (TeamPCP)",
+        "harvests env secrets, SSH keys, .npmrc, cloud creds, MetaMask/Phantom wallets",
+        "exfiltrates to telemetry.api-monitor.com + ICP canister cjn37-uyaaa-aaaac-qgnva-cai",
+        "steals npm token and republishes victim packages with a malicious postinstall",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
