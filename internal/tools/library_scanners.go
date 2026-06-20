@@ -417,7 +417,26 @@ func (l *Library) ScanGitHubActions(filePath string) (*ScanGitHubActionsResult, 
 			}
 			continue
 		}
-		for _, idx := range pat.FindAllStringIndex(text, -1) {
+		// A rule anchored on `run:` describes something inside a single
+		// step's script. Evaluated file-wide, its `[\s\S]+?` body can
+		// anchor on one step's `run:` and reach across the whole file to
+		// a token in an unrelated later step — e.g. an innocent
+		// `run: pip install` bridging to a much later step that safely
+		// env-binds a github.event expression. Evaluate such rules per
+		// step chunk so a match cannot span steps, while still catching a
+		// genuine same-step injection even when an earlier innocent
+		// `run:` precedes it.
+		spans := [][]int{}
+		if strings.HasPrefix(strings.TrimSpace(c.Pattern), "run:") {
+			for _, chunk := range workflowStepChunks(text) {
+				if loc := pat.FindStringIndex(text[chunk[0]:chunk[1]]); loc != nil {
+					spans = append(spans, []int{chunk[0] + loc[0], chunk[0] + loc[1]})
+				}
+			}
+		} else {
+			spans = pat.FindAllStringIndex(text, -1)
+		}
+		for _, idx := range spans {
 			line, snippet := lineInfo(text, idx[0])
 			out.Findings = append(out.Findings, WorkflowFinding{
 				RuleID:     c.ID,
@@ -1384,6 +1403,33 @@ func blankYAMLComments(text string) string {
 		}
 	}
 	return string(b)
+}
+
+// workflowStepItem matches a YAML sequence item at step indentation
+// (`      - name:`, `      - uses:`, `      - run:`) — the start of a
+// new workflow step.
+var workflowStepItem = regexp.MustCompile(`(?m)^[ \t]*-[ \t]`)
+
+// workflowStepChunks splits text into byte ranges [start,end) delimited
+// by step-sequence-item boundaries, so a per-step regex pass can't bridge
+// two steps. The region before the first step item is its own chunk
+// (it never holds a `run:` so it is harmless to include). Offsets are
+// preserved for accurate line reporting.
+func workflowStepChunks(text string) [][]int {
+	bounds := workflowStepItem.FindAllStringIndex(text, -1)
+	if len(bounds) == 0 {
+		return [][]int{{0, len(text)}}
+	}
+	var chunks [][]int
+	prev := 0
+	for _, b := range bounds {
+		if b[0] > prev {
+			chunks = append(chunks, []int{prev, b[0]})
+		}
+		prev = b[0]
+	}
+	chunks = append(chunks, []int{prev, len(text)})
+	return chunks
 }
 
 // lineInfo returns (1-based line number, trimmed line content) for

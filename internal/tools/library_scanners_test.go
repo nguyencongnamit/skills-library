@@ -575,3 +575,72 @@ func TestBlankYAMLComments(t *testing.T) {
 		})
 	}
 }
+
+// TestScanGitHubActionsInjectionPerStep is the regression for a real FP
+// found by dogfooding the scanner on the project's own CI: a run:-anchored
+// rule must be evaluated per step, so an innocent `run:` does not bridge
+// across the file to a github.event token in an unrelated later step,
+// while a genuine same-step injection still fires even when an earlier
+// innocent run: precedes it.
+func TestScanGitHubActionsInjectionPerStep(t *testing.T) {
+	lib := newLibrary(t)
+
+	// Case 1: innocent run: step, then a LATER step that safely env-binds
+	// a github.event expression. The file-wide regex used to bridge the
+	// two and flag the innocent step. There must be no injection finding.
+	clean := writeTempFile(t, "clean.yml", `name: ci
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install
+        run: pip install pyyaml
+      - name: use base ref safely
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: echo "$BASE_REF"
+`)
+	res, err := lib.ScanGitHubActions(clean)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range res.Findings {
+		if f.RuleID == "gha-no-untrusted-script-injection" {
+			t.Errorf("false positive: innocent run: step flagged as injection (line %d)", f.Line)
+		}
+	}
+
+	// Case 2: an innocent run: step FOLLOWED by a step that really does
+	// interpolate github.event into its run body. The real injection must
+	// still be detected (and located on its own step).
+	bad := writeTempFile(t, "bad.yml", `name: ci
+on: [issue_comment]
+permissions:
+  contents: read
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install
+        run: curl -fsSL https://example.com/i.sh | sh
+      - name: echo comment
+        run: |
+          echo "${{ github.event.comment.body }}"
+`)
+	res, err = lib.ScanGitHubActions(bad)
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, f := range res.Findings {
+		if f.RuleID == "gha-no-untrusted-script-injection" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("real same-step injection after an innocent run: was not detected")
+	}
+}
