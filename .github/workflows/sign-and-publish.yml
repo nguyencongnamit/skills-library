@@ -34,16 +34,20 @@ on:
         required: true
         type: string
 
+# Least privilege: read-only default; the single publishing job below
+# re-grants the contents: write it needs to promote the release.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify-and-publish:
     name: Verify signed manifest and promote ${{ inputs.tag }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout (for tooling sources at this tag)
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           # Check out the tag the release manager is publishing,
           # not the workflow's default branch. The embedded public
@@ -60,7 +64,7 @@ jobs:
           ref: ${{ inputs.tag }}
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
         with:
           go-version: "1.22"
           cache: true
