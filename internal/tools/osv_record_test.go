@@ -195,3 +195,60 @@ func TestLoadOSVAffectedRejectsPathEscape(t *testing.T) {
 		t.Error("loadOSVAffected on a valid bare filename returned nil")
 	}
 }
+
+// TestOSVLastAffectedRange exercises the `last_affected` range event
+// (an alternative to `fixed` used by real OSV records): versions at or
+// below last_affected are affected; strictly greater ones are not. This
+// is the path that drives versionGreater.
+func TestOSVLastAffectedRange(t *testing.T) {
+	tmp := t.TempDir()
+	must := func(p, body string) {
+		full := filepath.Join(tmp, p)
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(full, []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := os.MkdirAll(filepath.Join(tmp, "skills"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	must("vulnerabilities/supply-chain/malicious-packages/pypi.json", `{"ecosystem":"pypi","entries":[]}`)
+	must("vulnerabilities/osv/pypi/GHSA-la.json", `{
+		"id": "GHSA-la",
+		"summary": "affected up to and including 2.5.0",
+		"affected": [
+			{"package": {"name": "lapkg", "ecosystem": "PyPI"},
+			 "ranges": [{"type": "ECOSYSTEM", "events": [
+				{"introduced": "1.0.0"},
+				{"last_affected": "2.5.0"}
+			]}]}
+		]
+	}`)
+	must("vulnerabilities/osv/pypi/index.json", `{
+		"schema_version": "1.0",
+		"by_package": {"lapkg": [{"id":"GHSA-la","file":"GHSA-la.json","summary":"x","aliases":[],"severity":"high"}]}
+	}`)
+	lib, err := NewLibrary(tmp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cases := []struct {
+		version string
+		wantLen int
+	}{
+		{"2.5.0", 1}, // last affected, inclusive
+		{"2.4.9", 1}, // within range
+		{"1.0.0", 1}, // introduced boundary
+		{"2.5.1", 0}, // strictly greater than last_affected -> not affected
+		{"3.0.0", 0},
+		{"0.9.0", 0}, // below introduced
+	}
+	for _, c := range cases {
+		got := lib.lookupOSV("pypi", "lapkg", c.version)
+		if len(got) != c.wantLen {
+			t.Errorf("lapkg@%s: got %d advisories, want %d", c.version, len(got), c.wantLen)
+		}
+	}
+}
