@@ -709,6 +709,26 @@ steps:
       sarif-file: gate.sarif
 ```
 
+### Extend the block list when you learn something (LEARN loop)
+
+Found a bad package the curated database doesn't know yet? Block it immediately
+— locally, with no round trip:
+
+```bash
+skills-check contribute add -p evil-pkg -e npm \
+  --reason "exfiltrates AWS creds in a postinstall script"
+
+skills-check gate package.json --severity-floor high   # now fails on evil-pkg
+```
+
+`contribute add` writes only to `.skills-check/overlay.json` in your project;
+the rule never leaves your machine. Commit that file and your whole team (and
+CI) enforces the same block. When you want to share a finding upstream,
+`contribute keygen` + `contribute submit --key …` produces a **signed**,
+portable candidate that a reviewer can `contribute verify` before it is
+promoted into the central, centrally-signed database. Crowdsource candidates,
+centralize trust — see **[Contribute a Finding](docs/contribute.md)**.
+
 ## Building and running tests
 
 ```bash
