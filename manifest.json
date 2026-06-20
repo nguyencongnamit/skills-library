@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "507a2fa2c705a832180e1f157acc8df8bc22b3d568edf34e466099ed7f1cd6cb",
-      "size": 111242,
+      "sha256": "c4f40cf67b14042e144723b21d7e5ff4b08732b9cf606c91fd5f9c300f4b08cb",
+      "size": 111193,
       "action": "unchanged"
     },
     {
@@ -7844,8 +7844,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/crates.json",
-      "sha256": "835da74ded450f22ac7520ad3a6e9f0e1d67324da479037f1d95c04d972b612d",
-      "size": 19635,
+      "sha256": "11db50799deb123b0408998652f614a825e4002cbbea224859ad3132d4305bee",
+      "size": 21283,
       "action": "unchanged"
     },
     {
@@ -7862,8 +7862,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/go.json",
-      "sha256": "f0f0dbb82151453ef7555d15871891147c6c123fdf865356c3f0e1f5985242f0",
-      "size": 19681,
+      "sha256": "320d6497c9c5139317b0bcedd3d689a1189a1e8ff9a2ddf03b5b6f0dbbb703ca",
+      "size": 21067,
       "action": "unchanged"
     },
     {

@@ -476,6 +476,46 @@
         "POST to lookalike domain timeapis.io"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "polymarket-clients-sdk",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-02-06",
+      "description": "Typosquat of the polymarket-client-sdk crate (RUSTSEC-2026-0010, Socket). Impersonates the Polymarket Web3 client SDK to exfiltrate developer credentials; flagged 2026-02-06 and removed from crates.io.",
+      "references": [
+        "https://rustsec.org/advisories/RUSTSEC-2026-0010.html",
+        "https://devops.com/crates-io-removes-malicious-rust-package-targeting-web3-developers/"
+      ],
+      "indicators": [
+        "typosquat of polymarket-client-sdk",
+        "targets Web3 developer credentials",
+        "advisory RUSTSEC-2026-0010"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "polymarket-client-sdks",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-02-13",
+      "description": "Typosquat of the polymarket-client-sdk crate (RUSTSEC-2026-0011, Socket). Impersonates the Polymarket Web3 client SDK to exfiltrate developer credentials; flagged 2026-02-13 and removed from crates.io.",
+      "references": [
+        "https://rustsec.org/advisories/RUSTSEC-2026-0011.html",
+        "https://devops.com/crates-io-removes-malicious-rust-package-targeting-web3-developers/"
+      ],
+      "indicators": [
+        "typosquat of polymarket-client-sdk",
+        "targets Web3 developer credentials",
+        "advisory RUSTSEC-2026-0011"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
