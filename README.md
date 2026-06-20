@@ -289,6 +289,10 @@ skills-check update --check-only
 # Revert to the previous version
 skills-check update --rollback
 
+# How stale is my data? (your AI is only as current as what it's fed)
+skills-check status            # version, advisory count, data age, freshness verdict
+skills-check status --json     # machine-readable for CI
+
 # Use a custom source (HTTP URL, local directory, or tarball)
 skills-check update --source https://cdn.example.com/secure-code/
 skills-check update --source /mnt/airgap/secure-code-v2.tar.gz
