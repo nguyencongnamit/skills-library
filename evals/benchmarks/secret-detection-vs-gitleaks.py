@@ -277,11 +277,41 @@ def main() -> int:
         default="-",
         help="Output path for the markdown report (default: stdout).",
     )
+    ap.add_argument(
+        "--check",
+        action="store_true",
+        help="Gate mode: exit non-zero if the skills-library column regresses "
+        "(any false positive or false negative on the corpus). Keyless and "
+        "fast — skips gitleaks. Use in CI so a future break in this harness "
+        "(a renamed checklist, a drifted matcher) fails loudly instead of "
+        "silently reporting bogus numbers.",
+    )
     args = ap.parse_args()
 
     corpus = json.loads(CORPUS.read_text())
     fixtures = corpus["fixtures"]
     patterns = load_patterns()
+
+    if args.check:
+        # The corpus is the skill's quality floor; a faithful harness must
+        # reproduce skills-check's 0-failure verdict. Gate on that and exit
+        # before the (slow, key/binary-dependent) gitleaks pass and report
+        # rendering — none of which the gate needs.
+        c = score(fixtures, lambda t: skills_match(t, patterns))
+        if c.fp or c.fn:
+            sys.stderr.write(
+                f"CHECK FAILED: skills-library column regressed — "
+                f"{c.fp} false positive(s), {c.fn} false negative(s) on "
+                f"{len(fixtures)} fixtures. The harness has drifted from the "
+                f"secret-detection engine (`skills-check test secret-detection` "
+                f"is the source of truth).\n"
+            )
+            return 1
+        sys.stderr.write(
+            f"CHECK OK: skills-library {c.tp} TP / {c.fp} FP / {c.fn} FN / "
+            f"{c.tn} TN — 100% precision & recall on the corpus.\n"
+        )
+        return 0
 
     gitleaks_bin: str | None = None
     if args.gitleaks == "auto":
