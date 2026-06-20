@@ -10523,6 +10523,192 @@
         "gzip+base64+XOR(SHA-256 keystream) of stolen credential files"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "async-pipeline-builder",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "crypto-credential-scanner",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "defi-env-auditor",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "eth-wallet-sentinel",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "wallet-security-checker",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "web3-secrets-detector",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. npm execution path: a postinstall hook on install.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious postinstall lifecycle hook",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "atomic-lockfile",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Malicious npm package installed by the 'Atomic Arch' campaign (Sonatype, 2026-06-11), which hijacked ~1,500 orphaned Arch User Repository (AUR) projects and modified their PKGBUILDs to install this package at build time. Rootkit-like credential harvester targeting SSH artifacts, HashiCorp Vault tokens, browser cookies and collaboration-app data stores.",
+      "references": [
+        "https://www.sonatype.com/blog/atomic-arch-npm-campaign-adds-malicious-dependency",
+        "https://www.stepsecurity.io/blog/400-aur-packages-hijacked-atomic-arch-campaign"
+      ],
+      "indicators": [
+        "installed via hijacked AUR PKGBUILD (Atomic Arch campaign)",
+        "harvests SSH artifacts, HashiCorp Vault tokens, browser cookies",
+        "rootkit-like credential/secret exfiltration"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "js-digest",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Malicious npm package installed by the 'Atomic Arch' campaign (Sonatype, 2026-06-11), which hijacked ~1,500 orphaned Arch User Repository (AUR) projects and modified their PKGBUILDs to install this package at build time. Rootkit-like credential harvester targeting SSH artifacts, HashiCorp Vault tokens, browser cookies and collaboration-app data stores.",
+      "references": [
+        "https://www.sonatype.com/blog/atomic-arch-npm-campaign-adds-malicious-dependency",
+        "https://www.stepsecurity.io/blog/400-aur-packages-hijacked-atomic-arch-campaign"
+      ],
+      "indicators": [
+        "installed via hijacked AUR PKGBUILD (Atomic Arch campaign)",
+        "harvests SSH artifacts, HashiCorp Vault tokens, browser cookies",
+        "rootkit-like credential/secret exfiltration"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "lockfile-js",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Malicious npm package installed by the 'Atomic Arch' campaign (Sonatype, 2026-06-11), which hijacked ~1,500 orphaned Arch User Repository (AUR) projects and modified their PKGBUILDs to install this package at build time. Rootkit-like credential harvester targeting SSH artifacts, HashiCorp Vault tokens, browser cookies and collaboration-app data stores.",
+      "references": [
+        "https://www.sonatype.com/blog/atomic-arch-npm-campaign-adds-malicious-dependency",
+        "https://www.stepsecurity.io/blog/400-aur-packages-hijacked-atomic-arch-campaign"
+      ],
+      "indicators": [
+        "installed via hijacked AUR PKGBUILD (Atomic Arch campaign)",
+        "harvests SSH artifacts, HashiCorp Vault tokens, browser cookies",
+        "rootkit-like credential/secret exfiltration"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {

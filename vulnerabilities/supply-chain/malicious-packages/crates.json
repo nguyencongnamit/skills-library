@@ -516,6 +516,69 @@
         "advisory RUSTSEC-2026-0011"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "move-analyzer-build",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. crates execution path: a malicious build.rs script at build time.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious build.rs script",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "sui-framework-helpers",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. crates execution path: a malicious build.rs script at build time.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious build.rs script",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "sui-sdk-build-utils",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-22",
+      "description": "Part of the 'TrapDoor' supply-chain campaign (Socket, from 2026-05-22) \u2014 the first to weaponize npm, PyPI and crates.io simultaneously, disguising a crypto-focused credential stealer as developer/security tools aimed at crypto/DeFi/Solana/AI developers. Steals SSH keys, Sui/Solana/Aptos wallet keystores, AWS credentials, GitHub tokens, browser profile + wallet-extension data, env vars and API keys. crates execution path: a malicious build.rs script at build time.",
+      "references": [
+        "https://socket.dev/blog/trapdoor-crypto-stealer-npm-pypi-crates",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "part of the multi-ecosystem 'TrapDoor' campaign (npm+PyPI+crates, from 2026-05-22)",
+        "disguised as a crypto/DeFi/web3 security or dev tool",
+        "malicious build.rs script",
+        "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
