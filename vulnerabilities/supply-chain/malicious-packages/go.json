@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "go",
-  "last_updated": "2026-05-14T16:01:45Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "entries": [
     {
       "name": "github.com/jfrog/go-tools",
@@ -429,6 +429,66 @@
       "attack_type": "embedded_malicious_code",
       "source": "ossf-malicious-packages",
       "osv_id": "MAL-2025-2551"
+    },
+    {
+      "name": "github.com/shopsprint/decimal",
+      "versions_affected": [
+        ">=1.3.3"
+      ],
+      "type": "backdoor",
+      "severity": "critical",
+      "discovered": "2023-08-19",
+      "description": "Long-running typosquat of the popular github.com/shopspring/decimal library (38,000+ importers), changing only the final letter of the namespace. It mirrored legitimate upstream releases for almost 6 years to build trust, then on 2023-08-19 the v1.3.3 release silently introduced a DNS-based backdoor: a goroutine polls a subdomain on a free dynamic-DNS provider every ~5 minutes and passes any returned DNS TXT string straight to the system command handler (arbitrary RCE), using DNS to evade HTTP egress firewalls. Disclosed by Socket/Corgea (May 2026); the upstream repo/account are deleted but the Go Module Proxy still serves the poisoned cache.",
+      "references": [
+        "https://socket.dev/blog/popular-go-decimal-library-typosquat-dns-backdoor",
+        "https://corgea.com/research/shopsprint-decimal-go-typosquat-dns-backdoor"
+      ],
+      "indicators": [
+        "module path github.com/shopsprint/decimal (single-letter swap of shopspring)",
+        "goroutine polling DNS TXT records every ~5 minutes",
+        "DNS TXT response passed to system command execution",
+        "C2 over a free dynamic-DNS subdomain to bypass HTTP egress filtering"
+      ],
+      "attack_type": "backdoor"
+    },
+    {
+      "name": "github.com/bpoorman/uuid",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "data_exfiltration",
+      "severity": "high",
+      "discovered": "2021-05-01",
+      "description": "Typosquat impersonating the trusted UUID libraries github.com/google/uuid and github.com/pborman/uuid, first published May 2021 and live in the Go ecosystem for 4+ years before Socket disclosed it (2025). A hidden Valid() function AES-CFB-encrypts whatever data the caller passes (user IDs, emails, session tokens, CI/build credentials and signing keys) with a hardcoded key prefix 57a475a22da17139 and POSTs it to https://dpaste.com/api/v2/ using an embedded bearer token.",
+      "references": [
+        "https://socket.dev/blog/malicious-go-packages-impersonate-googles-uuid-library-and-exfiltrate-data"
+      ],
+      "indicators": [
+        "module path github.com/bpoorman/uuid (typosquat of google/uuid, pborman/uuid)",
+        "hidden Valid() function that exfiltrates its arguments",
+        "AES-CFB encryption with hardcoded key prefix 57a475a22da17139",
+        "exfiltration to dpaste.com/api/v2/ with an embedded bearer token"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "github.com/bpoorman/uid",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "data_exfiltration",
+      "severity": "high",
+      "discovered": "2021-05-01",
+      "description": "Sibling typosquat to github.com/bpoorman/uuid in the same Socket-disclosed campaign, impersonating the trusted UUID libraries with an even shorter name. Carries the same hidden Valid() exfiltration routine: AES-CFB-encrypts caller-supplied data and POSTs it to dpaste.com using an embedded API token.",
+      "references": [
+        "https://socket.dev/blog/malicious-go-packages-impersonate-googles-uuid-library-and-exfiltrate-data"
+      ],
+      "indicators": [
+        "module path github.com/bpoorman/uid (typosquat of google/uuid, pborman/uuid)",
+        "hidden Valid() function that exfiltrates its arguments",
+        "exfiltration to dpaste.com with an embedded API token"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {

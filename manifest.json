@@ -7862,8 +7862,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/go.json",
-      "sha256": "d68d9f77e48c6e829c39118ef9d71b416b138f333d0be1b5655661148ebc6316",
-      "size": 16079,
+      "sha256": "f0f0dbb82151453ef7555d15871891147c6c123fdf865356c3f0e1f5985242f0",
+      "size": 19681,
       "action": "unchanged"
     },
     {
