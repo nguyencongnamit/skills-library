@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "728b9fe472888467b675cd75076d471eae50df93c69bb706d1035a29ebca829b",
-      "size": 111152,
+      "sha256": "615954b81c92a5b180c5796bd1a6f5093c42fc8a1884bfea8217a1ddd2f5a016",
+      "size": 110967,
       "action": "unchanged"
     },
     {
@@ -7844,8 +7844,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/crates.json",
-      "sha256": "ca1aea30e5de7b351566d01e4166c1e39d47e9b3218ae53658344b474e3601eb",
-      "size": 14554,
+      "sha256": "835da74ded450f22ac7520ad3a6e9f0e1d67324da479037f1d95c04d972b612d",
+      "size": 19635,
       "action": "unchanged"
     },
     {

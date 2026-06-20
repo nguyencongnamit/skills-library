@@ -380,6 +380,102 @@
         "delivered via an unpinned dependency from finch-rust"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "chrono_anchor",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-03-01",
+      "description": "Rust crate in a single-actor campaign (Socket, Feb-Mar 2026) of five time-utility impersonators of timeapi.io. Although it poses as a local time utility, its core behavior is secret theft: it collects developer secrets \u2014 notably .env files \u2014 and POSTs them to the threat-actor lookalike domain timeapis.io. crates.io yanked four of the five shortly after publication.; chrono_anchor went further with obfuscation and operational changes to evade detection, and stayed live until reported.",
+      "references": [
+        "https://socket.dev/blog/5-malicious-rust-crates-posed-as-time-utilities-to-exfiltrate-env-files"
+      ],
+      "indicators": [
+        "impersonates timeapi.io (poses as a local time utility)",
+        "collects and exfiltrates .env / developer secrets",
+        "POST to lookalike domain timeapis.io",
+        "heavier obfuscation to evade detection"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "dnp3times",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-01",
+      "description": "Rust crate in a single-actor campaign (Socket, Feb-Mar 2026) of five time-utility impersonators of timeapi.io. Although it poses as a local time utility, its core behavior is secret theft: it collects developer secrets \u2014 notably .env files \u2014 and POSTs them to the threat-actor lookalike domain timeapis.io. crates.io yanked four of the five shortly after publication..",
+      "references": [
+        "https://socket.dev/blog/5-malicious-rust-crates-posed-as-time-utilities-to-exfiltrate-env-files"
+      ],
+      "indicators": [
+        "impersonates timeapi.io (poses as a local time utility)",
+        "collects and exfiltrates .env / developer secrets",
+        "POST to lookalike domain timeapis.io"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "time_calibrator",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-01",
+      "description": "Rust crate in a single-actor campaign (Socket, Feb-Mar 2026) of five time-utility impersonators of timeapi.io. Although it poses as a local time utility, its core behavior is secret theft: it collects developer secrets \u2014 notably .env files \u2014 and POSTs them to the threat-actor lookalike domain timeapis.io. crates.io yanked four of the five shortly after publication..",
+      "references": [
+        "https://socket.dev/blog/5-malicious-rust-crates-posed-as-time-utilities-to-exfiltrate-env-files"
+      ],
+      "indicators": [
+        "impersonates timeapi.io (poses as a local time utility)",
+        "collects and exfiltrates .env / developer secrets",
+        "POST to lookalike domain timeapis.io"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "time_calibrators",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-01",
+      "description": "Rust crate in a single-actor campaign (Socket, Feb-Mar 2026) of five time-utility impersonators of timeapi.io. Although it poses as a local time utility, its core behavior is secret theft: it collects developer secrets \u2014 notably .env files \u2014 and POSTs them to the threat-actor lookalike domain timeapis.io. crates.io yanked four of the five shortly after publication..",
+      "references": [
+        "https://socket.dev/blog/5-malicious-rust-crates-posed-as-time-utilities-to-exfiltrate-env-files"
+      ],
+      "indicators": [
+        "impersonates timeapi.io (poses as a local time utility)",
+        "collects and exfiltrates .env / developer secrets",
+        "POST to lookalike domain timeapis.io"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "time-sync",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-01",
+      "description": "Rust crate in a single-actor campaign (Socket, Feb-Mar 2026) of five time-utility impersonators of timeapi.io. Although it poses as a local time utility, its core behavior is secret theft: it collects developer secrets \u2014 notably .env files \u2014 and POSTs them to the threat-actor lookalike domain timeapis.io. crates.io yanked four of the five shortly after publication..",
+      "references": [
+        "https://socket.dev/blog/5-malicious-rust-crates-posed-as-time-utilities-to-exfiltrate-env-files"
+      ],
+      "indicators": [
+        "impersonates timeapi.io (poses as a local time utility)",
+        "collects and exfiltrates .env / developer secrets",
+        "POST to lookalike domain timeapis.io"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
