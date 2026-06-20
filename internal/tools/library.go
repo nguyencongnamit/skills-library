@@ -613,9 +613,7 @@ func (l *Library) LookupVulnerability(pkg, ecosystem, version string) (*LookupVu
 	// overlay is consulted once (not per-ecosystem) because its entries
 	// already carry their own ecosystem; overlayMatches applies the same
 	// version-range filtering as the curated DB.
-	for _, ent := range l.overlayMatches(ecosystem, pkg, version) {
-		out.Matches = append(out.Matches, ent)
-	}
+	out.Matches = append(out.Matches, l.overlayMatches(ecosystem, pkg, version)...)
 
 	tf, err := l.loadTyposquats()
 	if err == nil {
@@ -1305,18 +1303,6 @@ func (l *Library) SearchSkills(query string) (*SearchSkillsResult, error) {
 func versionInAnyRangeEco(ecosystem, version string, affected []string) bool {
 	for _, a := range affected {
 		if versionMatchesEco(ecosystem, a, version) {
-			return true
-		}
-	}
-	return false
-}
-
-// versionInAnyRange is the legacy ecosystem-agnostic form. It is
-// kept for callers that don't have an ecosystem in scope and for
-// versionMatchesEco's fallback path.
-func versionInAnyRange(version string, affected []string) bool {
-	for _, a := range affected {
-		if versionMatches(a, version) {
 			return true
 		}
 	}
