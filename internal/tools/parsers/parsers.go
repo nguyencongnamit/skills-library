@@ -60,6 +60,9 @@ var ErrUnknownLockfile = errors.New("parsers: unrecognised lockfile format")
 //   - packages.lock.json                         -> nuget
 //   - *.csproj, *.fsproj, *.vbproj               -> nuget
 //   - Gemfile.lock                               -> rubygems
+//   - composer.lock                              -> composer
+//   - Package.resolved                           -> swift
+//   - pubspec.lock                               -> pub
 //
 // Any other base name returns ErrUnknownLockfile.
 func Parse(path string, body []byte) ([]Dependency, error) {
@@ -89,6 +92,12 @@ func Parse(path string, body []byte) ([]Dependency, error) {
 		return parseNuGetPackagesLock(body)
 	case base == "Gemfile.lock":
 		return parseGemfileLock(body)
+	case base == "composer.lock":
+		return parseComposerLock(body)
+	case base == "Package.resolved":
+		return parseSwiftPackageResolved(body)
+	case base == "pubspec.lock":
+		return parsePubspecLock(body)
 	}
 	lower := strings.ToLower(base)
 	if strings.HasSuffix(lower, ".csproj") ||

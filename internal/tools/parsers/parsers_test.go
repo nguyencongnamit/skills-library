@@ -36,11 +36,10 @@ func assertContains(t *testing.T, deps []Dependency, want ...string) {
 }
 
 func TestParseRejectsUnknownLockfile(t *testing.T) {
-	// Pick a base name that no parser claims; "composer.lock" is
-	// a real PHP lockfile but the library does not (yet) ship a
-	// parser for it, so it is a good sentinel for the "no
-	// dispatcher" branch.
-	_, err := Parse("composer.lock", []byte("anything"))
+	// Pick a base name that no parser claims. "mix.lock" is a real
+	// Elixir lockfile the library does not (yet) ship a parser for, so
+	// it is a good sentinel for the "no dispatcher" branch.
+	_, err := Parse("mix.lock", []byte("anything"))
 	if !errors.Is(err, ErrUnknownLockfile) {
 		t.Fatalf("expected ErrUnknownLockfile, got %v", err)
 	}
