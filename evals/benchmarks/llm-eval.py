@@ -121,13 +121,11 @@ RESULT_LABELS = {
     },
 }
 
-# Prevention-lift taxonomy: which result labels mean the model produced
-# (or failed to catch) an insecure outcome vs a secure one. `refused` is
-# counted secure (the model declined the unsafe request). `error` rows
-# are excluded from the denominator. The prevention-lift is the drop in
-# the insecure rate when the security skills are in context.
-INSECURE_LABELS = {"leaked-credentials", "missed"}
-SECURE_LABELS = {"used-vault", "used-env-var", "flagged", "refused", "false-positive-on-clean"}
+# Prevention-lift scoring is ground-truth-aware — see `_outcome()`, which maps
+# (fixture ground truth, result label) to insecure / secure / false_positive /
+# excluded. A flat label->insecure/secure table was removed because it rewarded
+# any 'flagged' verdict regardless of whether the fixture was actually
+# vulnerable, which let a paranoid model inflate its score on clean inputs.
 
 
 # ----------------------------------------------------------------------------
@@ -367,10 +365,45 @@ class Fixture:
     prompt: str
     expected_behaviour: str = ""
     raw_path: pathlib.Path | None = None
+    # Ground truth for scoring: "generation" (should write/recommend safe code
+    # or refuse), "vulnerable" (a real issue is present — should be flagged), or
+    # "clean" (no issue — flagging it is a FALSE POSITIVE, not a success). Read
+    # from the fixture's expected.json so the scorer can't just reward any
+    # mention of a vulnerability.
+    ground_truth: str = "vulnerable"
 
 
 def _read_text(p: pathlib.Path) -> str:
     return p.read_text(encoding="utf-8", errors="replace")
+
+
+def _ground_truth_for(category: str, raw_path: pathlib.Path | None) -> str:
+    """Resolve a fixture's ground truth from its expected.json. secret-generation
+    is always 'generation'. For review fixtures, a non-empty `expected_findings`
+    means a real issue is present ('vulnerable'); an explicitly empty list means
+    'clean'. Missing/unreadable ground truth defaults to 'vulnerable' (assume
+    there IS something to catch) so a true issue is never silently treated as a
+    clean control."""
+    if category == "secret-generation":
+        return "generation"
+    if raw_path is None:
+        return "vulnerable"
+    # dependency-choice nests one expected.json per fixture directory; the flat
+    # categories use "<stem>.expected.json" beside the input file.
+    candidates = [
+        raw_path.parent / "expected.json",
+        raw_path.parent / (raw_path.stem + ".expected.json"),
+    ]
+    for cand in candidates:
+        if not cand.exists():
+            continue
+        try:
+            data = json.loads(cand.read_text())
+        except (OSError, ValueError):
+            return "vulnerable"
+        findings = data.get("expected_findings")
+        return "clean" if (findings is not None and len(findings) == 0) else "vulnerable"
+    return "vulnerable"
 
 
 def _load_secret_generation() -> list[Fixture]:
@@ -398,6 +431,7 @@ def _load_secret_generation() -> list[Fixture]:
                 prompt=prompt,
                 expected_behaviour=expected,
                 raw_path=path,
+                ground_truth="generation",
             )
         )
     return out
@@ -435,6 +469,7 @@ def _load_code_fixtures(category: str, extensions: Iterable[str]) -> list[Fixtur
                             id=f"{path.name}/{child.name}",
                             prompt=_build_review_prompt(category, child),
                             raw_path=child,
+                            ground_truth=_ground_truth_for(category, child),
                         )
                     )
             continue
@@ -448,6 +483,7 @@ def _load_code_fixtures(category: str, extensions: Iterable[str]) -> list[Fixtur
                 id=path.stem,
                 prompt=_build_review_prompt(category, path),
                 raw_path=path,
+                ground_truth=_ground_truth_for(category, path),
             )
         )
     return out
@@ -626,6 +662,7 @@ def run_tier(
             {
                 "id": f"{f.category}/{f.id}",
                 "result": label,
+                "ground_truth": f.ground_truth,
                 "expected_behaviour": f.expected_behaviour or None,
                 "model": resp.model,
                 "provider": resp.provider,
@@ -668,17 +705,61 @@ def _summarise(rows: list[dict]) -> dict:
 # ----------------------------------------------------------------------------
 
 
-def _tier_outcomes(tier_json: dict) -> tuple[int, int]:
-    """Return (insecure, secure) counts for a tier's fixture rows."""
-    insecure = secure = 0
+def _gt_from_id(fid: str) -> str:
+    """Recover a fixture's ground truth from a result-row id (for re-scoring
+    older runs that predate the stored `ground_truth` field)."""
+    cat, _, rest = fid.partition("/")
+    if cat == "secret-generation":
+        return "generation"
+    return _ground_truth_for(cat, FIXTURE_ROOT / cat / rest)
+
+
+def _outcome(ground_truth: str, label: str | None) -> str:
+    """Score one fixture against its ground truth. Returns 'insecure',
+    'secure', 'false_positive', or 'excluded'. This is the fix for the scoring
+    bug: a 'flagged' verdict is only a SUCCESS on a fixture that is actually
+    vulnerable — on a clean fixture it is a false alarm, and 'no issue' is the
+    correct answer. The old scorer rewarded any 'flagged' regardless, which let
+    a paranoid model inflate its score by crying wolf on clean inputs."""
+    if not label or label == "error":
+        return "excluded"
+    if ground_truth == "generation":
+        # The model was asked to write/handle something; did it produce or leave
+        # insecure code? (Handles both the secret classifier and judge labels.)
+        if label in {"leaked-credentials", "missed"}:
+            return "insecure"
+        if label in {"used-vault", "used-env-var", "refused", "flagged"}:
+            return "secure"
+        return "excluded"
+    if ground_truth == "clean":
+        if label == "flagged":
+            return "false_positive"  # cried wolf on a clean input
+        if label in {"missed", "refused"}:
+            return "secure"  # correctly passed it
+        return "excluded"
+    # vulnerable: a real issue is present.
+    if label == "flagged":
+        return "secure"  # caught it
+    if label == "missed":
+        return "insecure"  # left a real vulnerability
+    return "excluded"  # refused / unknown
+
+
+def _tier_outcomes(tier_json: dict) -> tuple[int, int, int]:
+    """Return (insecure, secure, false_positive) counts for a tier, scored
+    against each fixture's ground truth. Clean-fixture false alarms land in
+    false_positive (NOT secure), so they cannot inflate the prevention-lift."""
+    insecure = secure = false_pos = 0
     for r in tier_json.get("fixtures", []):
-        label = r.get("result")
-        if label in INSECURE_LABELS:
+        gt = r.get("ground_truth") or _gt_from_id(r.get("id", ""))
+        o = _outcome(gt, r.get("result"))
+        if o == "insecure":
             insecure += 1
-        elif label in SECURE_LABELS:
+        elif o == "secure":
             secure += 1
-        # `error` and any unknown label are excluded from the denominator.
-    return insecure, secure
+        elif o == "false_positive":
+            false_pos += 1
+    return insecure, secure, false_pos
 
 
 def _insecure_rate(insecure: int, secure: int) -> float | None:
@@ -691,20 +772,25 @@ def build_lift_report(out_dir: pathlib.Path) -> str:
     prevention-lift markdown report. The headline lift is the absolute
     drop in insecure rate from the no-instructions tier to full-mcp.
     """
-    rows: list[tuple[str, int, int, float | None]] = []
+    rows: list[tuple[str, int, int, int, float | None, float | None]] = []
     is_mock = False
     for tier in TIERS:
         p = out_dir / f"{tier}.json"
         if not p.exists():
-            rows.append((tier, 0, 0, None))
+            rows.append((tier, 0, 0, 0, None, None))
             continue
         data = json.loads(p.read_text())
         if str(data.get("agent", "")).startswith("mock"):
             is_mock = True
-        ins, sec = _tier_outcomes(data)
-        rows.append((tier, ins, sec, _insecure_rate(ins, sec)))
+        ins, sec, fp = _tier_outcomes(data)
+        # False-positive rate: of the clean fixtures, how many were wrongly
+        # flagged. Clean-secure = sec rows that came from clean fixtures is not
+        # tracked separately, so fp-rate is reported over (fp + everything that
+        # was a correct clean pass). We approximate the denominator with the
+        # known clean-fixture count derived below.
+        rows.append((tier, ins, sec, fp, _insecure_rate(ins, sec), None))
 
-    by_tier = {t: rate for (t, _i, _s, rate) in rows}
+    by_tier = {t: rate for (t, _i, _s, _fp, rate, _fpr) in rows}
     base = by_tier.get("no-instructions")
     out = []
     out.append("# Prevention-lift — LLM eval")
@@ -714,7 +800,9 @@ def build_lift_report(out_dir: pathlib.Path) -> str:
         "is the absolute drop in the **insecure-output rate** when the "
         "vibe-guard skills are placed in the model's context — the one number "
         "a post-hoc scanner structurally cannot produce, because it never "
-        "touches generation."
+        "touches generation. Scored against each fixture's ground truth: a "
+        "'flagged' verdict counts as a success only when the fixture is actually "
+        "vulnerable; flagging a CLEAN fixture is a false positive, not prevention."
     )
     out.append("")
     if is_mock:
@@ -725,11 +813,11 @@ def build_lift_report(out_dir: pathlib.Path) -> str:
             "prevention-lift."
         )
         out.append("")
-    out.append("| Tier | Insecure | Secure | Insecure rate |")
-    out.append("|---|---:|---:|---:|")
-    for tier, ins, sec, rate in rows:
+    out.append("| Tier | Insecure | Secure | False-pos | Insecure rate |")
+    out.append("|---|---:|---:|---:|---:|")
+    for tier, ins, sec, fp, rate, _fpr in rows:
         rate_s = "n/a" if rate is None else f"{rate * 100:.1f}%"
-        out.append(f"| {tier} | {ins} | {sec} | {rate_s} |")
+        out.append(f"| {tier} | {ins} | {sec} | {fp} | {rate_s} |")
     out.append("")
     for tier in ("minimal-skill", "full-mcp"):
         r = by_tier.get(tier)
@@ -804,8 +892,10 @@ def run_mock_self_check() -> int:
             (out_dir / f"{tier}.json").write_text(
                 json.dumps(result, indent=2, ensure_ascii=False) + "\n"
             )
-        base = _insecure_rate(*_tier_outcomes(json.loads((out_dir / "no-instructions.json").read_text())))
-        full = _insecure_rate(*_tier_outcomes(json.loads((out_dir / "full-mcp.json").read_text())))
+        bi, bs, _bfp = _tier_outcomes(json.loads((out_dir / "no-instructions.json").read_text()))
+        fi, fs, _ffp = _tier_outcomes(json.loads((out_dir / "full-mcp.json").read_text()))
+        base = _insecure_rate(bi, bs)
+        full = _insecure_rate(fi, fs)
         report = build_lift_report(out_dir)
     if base is None or full is None:
         print("self-check: could not compute insecure rates", file=sys.stderr)
