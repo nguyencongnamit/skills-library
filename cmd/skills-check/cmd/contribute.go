@@ -39,7 +39,16 @@ func contributeCmd() *cobra.Command {
 (.skills-check/overlay.json) so the gate blocks the offending package on the
 next run — no central round trip, the rule never leaves your machine.
 
-Commit .skills-check/overlay.json to share the block with your whole team.
+Sharing the block (the LEARN flywheel), in order of blast radius:
+  • Your machine — the overlay is read from .skills-check/overlay.json by every
+    check/scan/gate run.
+  • Your team   — commit .skills-check/overlay.json; git is the fan-out, so
+    every teammate's gate (run from the repo root) enforces it on next pull.
+  • Your org    — point $SKILLS_CHECK_OVERLAY at a shared overlay file outside
+    any single repo (OS path-list separated for more than one); every
+    skills-check invocation folds it in, so an org-wide block applies across
+    all repos and CI jobs.
+
 Run "contribute submit" to export a portable, optionally-signed candidate you
 can attach to an upstream issue/PR for review into the central database.`,
 	}

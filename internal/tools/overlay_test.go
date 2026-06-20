@@ -162,3 +162,77 @@ func TestOverlayLaterPathWins(t *testing.T) {
 		t.Errorf("later path should win: got %+v", res.Matches)
 	}
 }
+
+// TestDefaultOverlayPathsIncludesEnvVar verifies that $SKILLS_CHECK_OVERLAY
+// contributes extra (shared/org) overlay paths and that duplicates are
+// de-duplicated.
+func TestDefaultOverlayPathsIncludesEnvVar(t *testing.T) {
+	shared := filepath.Join(t.TempDir(), "org-overlay.json")
+	second := filepath.Join(t.TempDir(), "team-overlay.json")
+	// Include `shared` twice (and via the env) to exercise de-duplication.
+	t.Setenv(OverlayEnvVar, shared+string(os.PathListSeparator)+second+string(os.PathListSeparator)+shared)
+
+	paths := defaultOverlayPaths()
+	count := func(target string) int {
+		n := 0
+		for _, p := range paths {
+			if p == target {
+				n++
+			}
+		}
+		return n
+	}
+	if count(shared) != 1 {
+		t.Errorf("shared overlay should appear exactly once (de-duped); got %d in %v", count(shared), paths)
+	}
+	if count(second) != 1 {
+		t.Errorf("second env overlay missing; paths=%v", paths)
+	}
+}
+
+// TestSharedOverlayViaEnvBlocksPackage is the org-channel counterpart of
+// TestOverlayBlocksPackage: a package listed in an overlay referenced ONLY via
+// $SKILLS_CHECK_OVERLAY (not committed to the scanned repo) is still flagged by
+// LookupVulnerability — i.e. an org-wide overlay applies to every repo.
+func TestSharedOverlayViaEnvBlocksPackage(t *testing.T) {
+	// A library root with an empty curated DB and NO repo-local overlay.
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, "skills"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	npm := filepath.Join(root, "vulnerabilities/supply-chain/malicious-packages/npm.json")
+	if err := os.MkdirAll(filepath.Dir(npm), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(npm, []byte(`{"ecosystem":"npm","entries":[]}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	// The shared overlay lives OUTSIDE the scanned repo.
+	shared := filepath.Join(t.TempDir(), "org-overlay.json")
+	if err := os.WriteFile(shared, []byte(`{
+		"schema_version": "1.0",
+		"malicious_packages": [
+			{"name": "org-banned-pkg", "ecosystem": "npm", "severity": "high", "reason": "org policy"}
+		]
+	}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv(OverlayEnvVar, shared)
+
+	// No WithOverlayPaths → the Library uses defaultOverlayPaths(), which now
+	// folds in $SKILLS_CHECK_OVERLAY.
+	lib, err := NewLibrary(root)
+	if err != nil {
+		t.Fatalf("NewLibrary: %v", err)
+	}
+	res, err := lib.LookupVulnerability("org-banned-pkg", "npm", "2.1.0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(res.Matches) != 1 {
+		t.Fatalf("got %d matches, want 1 from the shared env overlay", len(res.Matches))
+	}
+	if res.Matches[0].Source != OverlaySource {
+		t.Errorf("Source = %q, want %q", res.Matches[0].Source, OverlaySource)
+	}
+}
