@@ -10500,6 +10500,29 @@
         "inert server-side; activates in browser bundles"
       ],
       "attack_type": "maintainer_compromise"
+    },
+    {
+      "name": "node-ipc",
+      "versions_affected": [
+        "9.1.6",
+        "9.2.3",
+        "12.0.1"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-14",
+      "description": "Second, unrelated node-ipc compromise (2026-05-14, distinct from the 2022 'peacenotwar' protestware): three releases shipped an obfuscated credential stealer that runs on require(\"node-ipc\") (CommonJS entrypoint load, not an npm lifecycle script, making it stealthy for consumers). It collects environment variables, host info, /etc/hosts and a broad set of developer/cloud/package-manager/SCM/Kubernetes/database/SSH credential files, then gzip+base64-encodes, XORs with a SHA-256-derived keystream, and exfiltrates over DNS TXT queries to sh.azurestaticprovider.net (suffix bt.node.js).",
+      "references": [
+        "https://securitylabs.datadoghq.com/articles/node-ipc-npm-malware-analysis/",
+        "https://socket.dev/blog/node-ipc-package-compromised"
+      ],
+      "indicators": [
+        "malicious versions 9.1.6, 9.2.3, 12.0.1 (2026 incident)",
+        "payload runs on require(\"node-ipc\"), not via lifecycle scripts",
+        "DNS-TXT C2 to sh.azurestaticprovider.net, suffix bt.node.js",
+        "gzip+base64+XOR(SHA-256 keystream) of stolen credential files"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
