@@ -31,3 +31,9 @@ sdk/python/dist/
 sdk/typescript/node_modules/
 sdk/typescript/dist/
 /.osv-tmp/
+
+# Local tooling / build outputs (never committed)
+/.venv/
+/_site/
+/.branchguard/
+/graphify-out/
