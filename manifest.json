@@ -80,7 +80,7 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "9d9810a230971778928a8cc2adba0b3e1cdc767329c6dc891fbfac2a06d34197",
+      "sha256": "1a45a4112d394c66d401ce0055d3891acb86fd7c3c5bff52c18893350caa3acc",
       "size": 111217,
       "action": "unchanged"
     },
@@ -7874,8 +7874,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/npm.json",
-      "sha256": "c90d1ac79b8aa3c7a288bfddde354567d1710e0137643b56a9062a00d484c23d",
-      "size": 317554,
+      "sha256": "504e7be5031522717b4a34f4206845212c000d6fbd4660e54ba7ed207567ee77",
+      "size": 353244,
       "action": "unchanged"
     },
     {
