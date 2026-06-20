@@ -320,7 +320,10 @@ func ExtractTarball(archive, dest string) error {
 			if err := os.MkdirAll(target, 0o755); err != nil {
 				return err
 			}
-		case tar.TypeReg, tar.TypeRegA:
+		// tar.Reader normalises the legacy GNU regular-file type
+		// (the old '\x00' / TypeRegA) to TypeReg on read, so a single
+		// TypeReg case covers both modern and legacy archives.
+		case tar.TypeReg:
 			if hdr.Size > MaxTarballEntrySize {
 				return fmt.Errorf("tar entry %s exceeds %d byte limit (declared size %d)", hdr.Name, MaxTarballEntrySize, hdr.Size)
 			}
