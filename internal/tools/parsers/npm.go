@@ -254,16 +254,27 @@ func parseYarnLock(body []byte) ([]Dependency, error) {
 	return dedupe(out), nil
 }
 
-// pnpmPackagePath matches the `/<name>@<version>` key shape used by
-// pnpm-lock.yaml under the `packages:` top-level. Scoped names retain
-// their leading `@`.
-var pnpmPackagePath = regexp.MustCompile(`^[\s]+/((@[^@/\s]+/)?[^@/\s]+)@([^\s:]+):`)
+// pnpmPackagePath matches a package key under pnpm-lock.yaml's
+// `packages:` top-level across schema versions, which differ in how the
+// key is written:
+//
+//   - lockfileVersion 5–8:  `  /<name>@<version>:`        (leading slash)
+//   - lockfileVersion 9+:   `  '<name>@<version>':`       (quoted, no slash)
+//   - simple v9 names:      `  <name>@<version>:`         (unquoted)
+//
+// The match is anchored at the two-space key indent (so deeper 4-space
+// metadata lines like `resolution:` / `engines:` are ignored), allows an
+// optional quote and optional leading slash, keeps a scoped name's
+// leading `@`, and stops the version at the first peer-dep paren so a
+// v8 `/a@1.0.0(b@2)` yields version `1.0.0`.
+var pnpmPackagePath = regexp.MustCompile(`^  '?/?((?:@[^@/'\s]+/)?[^@/'\s]+)@([^'\s:()]+)`)
 
 // parsePnpmLock reads pnpm-lock.yaml without a full YAML decoder.
 //
 // pnpm's lockfile schema is verbose and version-stamped; the only
-// fields we need for scan_dependencies are the `/<name>@<version>:`
-// keys under `packages:`. Walking the file line-by-line keeps the
+// fields we need for scan_dependencies are the package keys under
+// `packages:` (see pnpmPackagePath for the per-version key shapes).
+// Walking the file line-by-line keeps the
 // parser hermetic (no third-party YAML library) and is robust to the
 // half-dozen incompatible schema versions pnpm has shipped.
 func parsePnpmLock(body []byte) ([]Dependency, error) {
@@ -291,7 +302,7 @@ func parsePnpmLock(body []byte) ([]Dependency, error) {
 		}
 		out = append(out, Dependency{
 			Name:      m[1],
-			Version:   m[3],
+			Version:   m[2],
 			Ecosystem: "npm",
 			Source:    strings.TrimSpace(line),
 		})
