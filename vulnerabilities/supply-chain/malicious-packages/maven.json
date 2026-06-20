@@ -1,51 +1,9 @@
 {
   "schema_version": "1.0",
   "ecosystem": "maven",
-  "last_updated": "2026-05-14T16:01:45Z",
+  "last_updated": "2026-06-21T00:00:00Z",
   "description": "Documented malicious or vulnerable Maven Central packages and namespace incidents. Maven Central enforces GPG signing and namespace verification, which historically kept it cleaner than npm/PyPI, but 2022-2024 saw a surge in dependency-confusion and squatted-artifactId attacks.",
   "entries": [
-    {
-      "name": "org.apache.commons:commons-text",
-      "versions_affected": [
-        "1.5",
-        "1.6",
-        "1.7",
-        "1.8",
-        "1.9"
-      ],
-      "type": "vulnerable_library",
-      "severity": "critical",
-      "discovered": "2022-10-13",
-      "description": "Text4Shell (CVE-2022-42889). StringSubstitutor.replace() resolved ${script:}, ${url:}, ${dns:} prefixes from untrusted input, leading to RCE. Awareness entry because the library is a transitive of many Spring projects.",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2022-42889",
-        "https://lists.apache.org/thread/n2bd4vdsgkqh2tm14l1grccnntl3x0o5"
-      ],
-      "indicators": [
-        "${script:}, ${url:}, ${dns:}",
-        "StringSubstitutor"
-      ],
-      "cve": "CVE-2022-42889",
-      "attack_type": "remote_code_execution"
-    },
-    {
-      "name": "io.spring.gradle:dependency-management-plugin",
-      "versions_affected": [
-        "1.0.0.SNAPSHOT-internal"
-      ],
-      "type": "dependency_confusion",
-      "severity": "high",
-      "discovered": "2023-04-12",
-      "description": "Sonatype dependency-confusion research example: attackers pushed pre-release artifacts to Maven Central that collided with internal SNAPSHOT artifactIds at large enterprises, hoping internal builds would resolve the public one.",
-      "references": [
-        "https://blog.sonatype.com/maven-central-and-dependency-confusion",
-        "https://snyk.io/blog/dependency-confusion-attacks-pypi-npm-maven-central/"
-      ],
-      "indicators": [
-        "SNAPSHOT collision"
-      ],
-      "attack_type": "dependency_confusion"
-    },
     {
       "name": "com.github.codingandcoding:malicious-packages-wave",
       "versions_affected": [
@@ -83,61 +41,6 @@
       "attack_type": "typosquat"
     },
     {
-      "name": "org.apache.logging.log4j:log4j-core-patched",
-      "versions_affected": [
-        "2.17.x-fake"
-      ],
-      "type": "typosquat",
-      "severity": "critical",
-      "discovered": "2021-12-15",
-      "description": "Multiple fake 'patched' Log4j repackages uploaded to Maven Central / shaded into JAR proxies during the Log4Shell panic, carrying second-stage payloads or simply being old vulnerable versions repackaged.",
-      "references": [
-        "https://blog.sonatype.com/log4shell-related-malicious-maven-packages",
-        "https://logging.apache.org/log4j/2.x/security.html"
-      ],
-      "indicators": [
-        "Log4Shell panic",
-        "fake patch"
-      ],
-      "attack_type": "typosquat"
-    },
-    {
-      "name": "org.springframework.cloud:spring-cloud-function-malicious",
-      "versions_affected": [
-        "3.x"
-      ],
-      "type": "typosquat",
-      "severity": "high",
-      "discovered": "2022-04-04",
-      "description": "Malicious forks targeting Spring Cloud Function users post-CVE-2022-22963. Published under similar groupIds with a SpEL backdoor still present.",
-      "references": [
-        "https://blog.phylum.io/spring-cloud-function-malicious-forks"
-      ],
-      "indicators": [
-        "SpEL backdoor",
-        "Spring4Shell era"
-      ],
-      "attack_type": "typosquat"
-    },
-    {
-      "name": "io.grpc:grpc-typosquat-set",
-      "versions_affected": [
-        "all"
-      ],
-      "type": "typosquat",
-      "severity": "high",
-      "discovered": "2024-02-29",
-      "description": "Phylum 2024 disclosure: a cluster of Maven artifacts squatting on gRPC artifactIds in attacker-controlled groupIds. Payload dropped a Cobalt Strike beacon during Gradle resolution.",
-      "references": [
-        "https://blog.phylum.io/malicious-maven-packages-cobalt-strike"
-      ],
-      "indicators": [
-        "Cobalt Strike beacon",
-        "Gradle hook"
-      ],
-      "attack_type": "typosquat"
-    },
-    {
       "name": "io.confluent:kafka-streams-malicious",
       "versions_affected": [
         "all"
@@ -170,6 +73,106 @@
       "osv_id": "MAL-2025-2552"
     },
     {
+      "name": "io.grpc:grpc-typosquat-set",
+      "versions_affected": [
+        "all"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2024-02-29",
+      "description": "Phylum 2024 disclosure: a cluster of Maven artifacts squatting on gRPC artifactIds in attacker-controlled groupIds. Payload dropped a Cobalt Strike beacon during Gradle resolution.",
+      "references": [
+        "https://blog.phylum.io/malicious-maven-packages-cobalt-strike"
+      ],
+      "indicators": [
+        "Cobalt Strike beacon",
+        "Gradle hook"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "io.spring.gradle:dependency-management-plugin",
+      "versions_affected": [
+        "1.0.0.SNAPSHOT-internal"
+      ],
+      "type": "dependency_confusion",
+      "severity": "high",
+      "discovered": "2023-04-12",
+      "description": "Sonatype dependency-confusion research example: attackers pushed pre-release artifacts to Maven Central that collided with internal SNAPSHOT artifactIds at large enterprises, hoping internal builds would resolve the public one.",
+      "references": [
+        "https://blog.sonatype.com/maven-central-and-dependency-confusion",
+        "https://snyk.io/blog/dependency-confusion-attacks-pypi-npm-maven-central/"
+      ],
+      "indicators": [
+        "SNAPSHOT collision"
+      ],
+      "attack_type": "dependency_confusion"
+    },
+    {
+      "name": "org.apache.commons:commons-text",
+      "versions_affected": [
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9"
+      ],
+      "type": "vulnerable_library",
+      "severity": "critical",
+      "discovered": "2022-10-13",
+      "description": "Text4Shell (CVE-2022-42889). StringSubstitutor.replace() resolved ${script:}, ${url:}, ${dns:} prefixes from untrusted input, leading to RCE. Awareness entry because the library is a transitive of many Spring projects.",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-42889",
+        "https://lists.apache.org/thread/n2bd4vdsgkqh2tm14l1grccnntl3x0o5"
+      ],
+      "indicators": [
+        "${script:}, ${url:}, ${dns:}",
+        "StringSubstitutor"
+      ],
+      "cve": "CVE-2022-42889",
+      "attack_type": "remote_code_execution"
+    },
+    {
+      "name": "org.apache.logging.log4j:log4j-core-patched",
+      "versions_affected": [
+        "2.17.x-fake"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2021-12-15",
+      "description": "Multiple fake 'patched' Log4j repackages uploaded to Maven Central / shaded into JAR proxies during the Log4Shell panic, carrying second-stage payloads or simply being old vulnerable versions repackaged.",
+      "references": [
+        "https://blog.sonatype.com/log4shell-related-malicious-maven-packages",
+        "https://logging.apache.org/log4j/2.x/security.html"
+      ],
+      "indicators": [
+        "Log4Shell panic",
+        "fake patch"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "org.fasterxml.jackson.core:jackson-databind",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "typosquat",
+      "severity": "critical",
+      "discovered": "2025-12-25",
+      "description": "Typosquat of the ubiquitous Jackson JSON library (legitimate groupId com.fasterxml.jackson.core) using a namespace-prefix swap to org.fasterxml.jackson.core — mirroring a lookalike domain fasterxml.org (vs the real fasterxml.com) registered 2025-12-17. The package acted as a trojan downloader: it contacted a C2 server, fetched OS-specific executables, ran them with suppressed output, and established persistence; the delivered payload was a Cobalt Strike beacon. Removed from Maven Central within ~1.5 hours of reporting (Aikido Security, 2025-12-25).",
+      "references": [
+        "https://www.aikido.dev/blog/maven-central-jackson-typosquatting-malware",
+        "https://www.esecurityplanet.com/threats/malicious-jackson-lookalike-library-slips-into-maven-central/"
+      ],
+      "indicators": [
+        "groupId org.fasterxml.jackson.core swaps the legitimate com.fasterxml namespace",
+        "references lookalike domain fasterxml.org",
+        "trojan downloader fetches OS-specific executable from C2",
+        "delivers a Cobalt Strike beacon"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
       "name": "org.mvnpm:posthog-node",
       "versions_affected": [
         "4.18.1"
@@ -187,6 +190,24 @@
       "attack_type": "embedded_malicious_code",
       "source": "ossf-malicious-packages",
       "osv_id": "MAL-2025-191470"
+    },
+    {
+      "name": "org.springframework.cloud:spring-cloud-function-malicious",
+      "versions_affected": [
+        "3.x"
+      ],
+      "type": "typosquat",
+      "severity": "high",
+      "discovered": "2022-04-04",
+      "description": "Malicious forks targeting Spring Cloud Function users post-CVE-2022-22963. Published under similar groupIds with a SpEL backdoor still present.",
+      "references": [
+        "https://blog.phylum.io/spring-cloud-function-malicious-forks"
+      ],
+      "indicators": [
+        "SpEL backdoor",
+        "Spring4Shell era"
+      ],
+      "attack_type": "typosquat"
     }
   ],
   "sources": {
