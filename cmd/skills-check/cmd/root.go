@@ -48,5 +48,6 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(scanGitHubActionsCmd())
 	root.AddCommand(policyCheckCmd())
 	root.AddCommand(contributeCmd())
+	root.AddCommand(statusCmd())
 	return root
 }
