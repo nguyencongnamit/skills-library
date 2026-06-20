@@ -7850,8 +7850,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/docker.json",
-      "sha256": "7bcaa81d15cbbb3a49319b24e77443629d83b5c237f03c9c8f09bf196b09b6e2",
-      "size": 5901,
+      "sha256": "6dab68f84040919d94cbef51af3a2b12bb23d8b0c0c6514a3c23932c5375ed2a",
+      "size": 6987,
       "action": "unchanged"
     },
     {
