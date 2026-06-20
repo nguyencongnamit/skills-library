@@ -210,8 +210,8 @@ jobs:
 
       - name: Update Homebrew tap
         # Push the stamped formula (skills-check.rb, downloaded with the other
-        # release assets into ./verify above) to namncqualgo/homebrew-tap so
-        # `brew install namncqualgo/tap/skills-check` resolves. Runs AFTER the
+        # release assets into ./verify above) to nguyencongnamit/homebrew-tap so
+        # `brew install nguyencongnamit/tap/skills-check` resolves. Runs AFTER the
         # promote step so the release assets the formula's url lines point at
         # are downloadable. Graceful no-op when HOMEBREW_TAP_TOKEN is not set —
         # the stamped formula is still published as a release asset for a manual
@@ -232,7 +232,7 @@ jobs:
           fi
           tapdir=$(mktemp -d)
           git clone --depth 1 \
-            "https://x-access-token:${TAP_TOKEN}@github.com/namncqualgo/homebrew-tap.git" "$tapdir"
+            "https://x-access-token:${TAP_TOKEN}@github.com/nguyencongnamit/homebrew-tap.git" "$tapdir"
           mkdir -p "$tapdir/Formula"
           cp verify/skills-check.rb "$tapdir/Formula/skills-check.rb"
           git -C "$tapdir" add Formula/skills-check.rb
@@ -244,7 +244,7 @@ jobs:
               -c user.email="release-bot@users.noreply.github.com" \
               commit -m "skills-check ${TAG}"
             git -C "$tapdir" push origin HEAD
-            echo "::notice::Updated namncqualgo/homebrew-tap to ${TAG}."
+            echo "::notice::Updated nguyencongnamit/homebrew-tap to ${TAG}."
           fi
 
       - name: Summary

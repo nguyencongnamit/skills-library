@@ -1,7 +1,7 @@
 #!/bin/sh
 # install.sh — one-line installer for the skills-check CLI.
 #
-#   curl -fsSL https://raw.githubusercontent.com/namncqualgo/skills-library/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/nguyencongnamit/skills-library/main/install.sh | sh
 #
 # Downloads the skills-check binary for your OS/arch from the latest GitHub
 # release, verifies its SHA-256 against the release's SHA256SUMS.txt, and
@@ -14,7 +14,7 @@
 # POSIX sh, no bashisms — runs under dash/ash/busybox as well as bash.
 set -eu
 
-REPO="namncqualgo/skills-library"
+REPO="nguyencongnamit/skills-library"
 BIN="skills-check"
 BIN_DIR="${SKILLS_CHECK_BIN_DIR:-$HOME/.local/bin}"
 VERSION="${SKILLS_CHECK_VERSION:-latest}"

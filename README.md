@@ -126,7 +126,7 @@ files `init` writes). Prefer a persistent command? `npm install -g
 ### B. curl \| sh — prebuilt binary (no Go, no clone)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/namncqualgo/skills-library/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/nguyencongnamit/skills-library/main/install.sh | sh
 ```
 
 Downloads the `skills-check` binary for your OS/arch from the latest GitHub
@@ -150,7 +150,7 @@ by cloning (section D below); `skills-check update` keeps that directory's
 signed skills + vulnerability data current:
 
 ```bash
-git clone https://github.com/namncqualgo/skills-library.git lib
+git clone https://github.com/nguyencongnamit/skills-library.git lib
 skills-mcp --path ./lib            # run the server against ./lib
 skills-check update --path ./lib   # later: pull signed updates into ./lib
 ```
@@ -158,7 +158,7 @@ skills-check update --path ./lib   # later: pull signed updates into ./lib
 ### D. From source (clone)
 
 ```bash
-git clone https://github.com/namncqualgo/skills-library.git
+git clone https://github.com/nguyencongnamit/skills-library.git
 cd skills-library
 
 # build both binaries
@@ -266,7 +266,7 @@ local copy current with incremental, signature-verified remote updates.
 go install github.com/namncqualgo/skills-library/cmd/skills-check@latest
 
 # macOS via Homebrew
-brew install namncqualgo/tap/skills-check
+brew install nguyencongnamit/tap/skills-check
 
 # Windows via winget
 winget install namncqualgo.skills-check
@@ -737,7 +737,7 @@ out-of-band YubiKey-backed signing procedure and key management policy.
 
 | OS | Architectures | CLI install | Scheduled updates |
 |----|---------------|-------------|-------------------|
-| macOS | `amd64`, `arm64` | `brew install namncqualgo/tap/skills-check`, `go install` | `launchd` |
+| macOS | `amd64`, `arm64` | `brew install nguyencongnamit/tap/skills-check`, `go install` | `launchd` |
 | Linux | `amd64`, `arm64` | `.deb`, `.rpm`, `go install`, `apt`, `yum` | `systemd` user timer |
 | Windows | `amd64` | MSI, `winget`, `scoop`, `go install` | Task Scheduler |
 

@@ -373,7 +373,7 @@ jobs:
           fi
 
       - name: Stamp Homebrew formula
-        # Make `brew install namncqualgo/tap/skills-check` real: fill the
+        # Make `brew install nguyencongnamit/tap/skills-check` real: fill the
         # formula template's version + per-arch SHA-256 from the binaries we
         # just built, and publish the stamped formula as the `skills-check.rb`
         # release asset. The formula's `url` lines interpolate `v#{version}`,
