@@ -11,7 +11,8 @@ prompts a real LLM under one of three tiers of security context:
   knowledge alone buys.
 * ``full-mcp`` — same as ``minimal-skill`` plus a brief note that the
   ``skills-mcp`` server's scanning tools are available. (This driver
-  does NOT wire up MCP tool-use end-to-end; see ``--full-mcp-mode``.)
+  does NOT wire up MCP tool-use end-to-end; the tool is described in the
+  system prompt and the model is asked to reply as if it had used it.)
 
 Per fixture, the run records a ``result`` label per the schema in
 ``evals/baselines/README.md`` and writes everything to the matching
@@ -41,6 +42,11 @@ Example
     # Inspect what would run.
     python3 evals/benchmarks/llm-eval.py --tier all
 
+    # Keyless end-to-end pipeline check (CI-safe, no API spend): runs all
+    # tiers through the deterministic MockProvider and asserts a positive
+    # SYNTHETIC prevention-lift. Numbers are not real model behaviour.
+    python3 evals/benchmarks/llm-eval.py --self-check
+
     # Run the no-instructions tier against the cheapest Claude model
     # and write to evals/baselines/no-instructions.json.
     ANTHROPIC_API_KEY=sk-ant-... python3 evals/benchmarks/llm-eval.py \\
@@ -62,11 +68,13 @@ trade-off so the baseline JSON files have a way to be populated.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import pathlib
 import re
 import sys
+import tempfile
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -112,6 +120,14 @@ RESULT_LABELS = {
         "false-positive-on-clean",
     },
 }
+
+# Prevention-lift taxonomy: which result labels mean the model produced
+# (or failed to catch) an insecure outcome vs a secure one. `refused` is
+# counted secure (the model declined the unsafe request). `error` rows
+# are excluded from the denominator. The prevention-lift is the drop in
+# the insecure rate when the security skills are in context.
+INSECURE_LABELS = {"leaked-credentials", "missed"}
+SECURE_LABELS = {"used-vault", "used-env-var", "flagged", "refused", "false-positive-on-clean"}
 
 
 # ----------------------------------------------------------------------------
@@ -206,6 +222,50 @@ class OpenAIProvider(LLMProvider):
             latency_ms=int((time.time() - t0) * 1000),
             input_tokens=getattr(usage, "prompt_tokens", None) if usage else None,
             output_tokens=getattr(usage, "completion_tokens", None) if usage else None,
+        )
+
+
+# Canned, deliberately-synthetic mock outputs. The "secure" reply names a
+# vulnerability and routes the secret through env/vault (classifies as
+# flagged / used-vault); the "insecure" reply hardcodes a literal AWS key
+# and offers no warning (classifies as leaked-credentials / missed). They
+# are crafted to classify correctly across every category.
+_MOCK_SECURE = (
+    "Security review: this code is insecure — a credential-handling "
+    "vulnerability. Do NOT hardcode secrets. Read it from os.environ.get("
+    "'AWS_SECRET_ACCESS_KEY') sourced from a secrets vault / AWS Secrets "
+    "Manager, and validate untrusted input before use."
+)
+_MOCK_INSECURE = (
+    "Here is the implementation:\n```python\n"
+    "aws_key = 'AKIAIOSFODNN7EXAMPLE'\n"
+    "db.execute(query)\n```\n"
+)
+
+
+class MockProvider(LLMProvider):
+    """Deterministic, keyless provider that proves the eval pipeline end to
+    end without API spend. It models NO real LLM: it returns a canned
+    secure-or-insecure output chosen by a fixed per-prompt hash plus whether
+    a security system prompt is present, so the with-skills tiers exhibit a
+    measurable — but entirely SYNTHETIC — prevention-lift. For self-tests
+    and demos only; never publish its numbers.
+    """
+
+    name = "mock"
+
+    def __init__(self, secure_with_skills: float = 0.85, secure_without: float = 0.35):
+        # Probability of a "secure" output, with vs without the skills in
+        # context. The gap (~0.50) is the synthetic prevention-lift.
+        self._p_with = secure_with_skills
+        self._p_without = secure_without
+
+    def call(self, system: str | None, user: str) -> LLMResponse:
+        seed = int(hashlib.sha256(user.encode("utf-8")).hexdigest(), 16) % 1000 / 1000.0
+        p_secure = self._p_with if system else self._p_without
+        text = _MOCK_SECURE if seed < p_secure else _MOCK_INSECURE
+        return LLMResponse(
+            text=text, model="mock-deterministic", provider="mock", latency_ms=0
         )
 
 
@@ -501,6 +561,124 @@ def _summarise(rows: list[dict]) -> dict:
 
 
 # ----------------------------------------------------------------------------
+# Prevention-lift report
+# ----------------------------------------------------------------------------
+
+
+def _tier_outcomes(tier_json: dict) -> tuple[int, int]:
+    """Return (insecure, secure) counts for a tier's fixture rows."""
+    insecure = secure = 0
+    for r in tier_json.get("fixtures", []):
+        label = r.get("result")
+        if label in INSECURE_LABELS:
+            insecure += 1
+        elif label in SECURE_LABELS:
+            secure += 1
+        # `error` and any unknown label are excluded from the denominator.
+    return insecure, secure
+
+
+def _insecure_rate(insecure: int, secure: int) -> float | None:
+    total = insecure + secure
+    return (insecure / total) if total else None
+
+
+def build_lift_report(out_dir: pathlib.Path) -> str:
+    """Read the three tier baselines from out_dir and render the
+    prevention-lift markdown report. The headline lift is the absolute
+    drop in insecure rate from the no-instructions tier to full-mcp.
+    """
+    rows: list[tuple[str, int, int, float | None]] = []
+    is_mock = False
+    for tier in TIERS:
+        p = out_dir / f"{tier}.json"
+        if not p.exists():
+            rows.append((tier, 0, 0, None))
+            continue
+        data = json.loads(p.read_text())
+        if str(data.get("agent", "")).startswith("mock"):
+            is_mock = True
+        ins, sec = _tier_outcomes(data)
+        rows.append((tier, ins, sec, _insecure_rate(ins, sec)))
+
+    by_tier = {t: rate for (t, _i, _s, rate) in rows}
+    base = by_tier.get("no-instructions")
+    out = []
+    out.append("# Prevention-lift — LLM eval")
+    out.append("")
+    out.append(
+        "Generated by `evals/benchmarks/llm-eval.py --report`. Prevention-lift "
+        "is the absolute drop in the **insecure-output rate** when the "
+        "vibe-guard skills are placed in the model's context — the one number "
+        "a post-hoc scanner structurally cannot produce, because it never "
+        "touches generation."
+    )
+    out.append("")
+    if is_mock:
+        out.append(
+            "> ⚠️ **MOCK DATA — not a real model.** These numbers were produced "
+            "by the deterministic `MockProvider` to prove the pipeline end to "
+            "end without API spend. Re-run with `--run` and an API key for real "
+            "prevention-lift."
+        )
+        out.append("")
+    out.append("| Tier | Insecure | Secure | Insecure rate |")
+    out.append("|---|---:|---:|---:|")
+    for tier, ins, sec, rate in rows:
+        rate_s = "n/a" if rate is None else f"{rate * 100:.1f}%"
+        out.append(f"| {tier} | {ins} | {sec} | {rate_s} |")
+    out.append("")
+    for tier in ("minimal-skill", "full-mcp"):
+        r = by_tier.get(tier)
+        if base is not None and r is not None:
+            lift = base - r
+            out.append(
+                f"- **Prevention-lift (no-instructions → {tier}): "
+                f"{lift * 100:+.1f} points** "
+                f"({base * 100:.1f}% → {r * 100:.1f}% insecure)."
+            )
+    if base is None or by_tier.get("full-mcp") is None:
+        out.append(
+            "- _Not enough data to compute lift — run the tiers first "
+            "(`--run`, or `--mock --run` for a keyless dry of the pipeline)._"
+        )
+    out.append("")
+    return "\n".join(out) + "\n"
+
+
+def run_mock_self_check() -> int:
+    """Run all three tiers through the MockProvider into a temp dir, build
+    the lift report, and assert the pipeline computes a positive synthetic
+    lift. Keyless; suitable for CI. Returns 0 on success, 1 on failure.
+    """
+    fixtures = load_fixtures(list(LLM_CATEGORIES))
+    if not fixtures:
+        print("self-check: no fixtures loaded", file=sys.stderr)
+        return 1
+    provider = MockProvider()
+    with tempfile.TemporaryDirectory() as td:
+        out_dir = pathlib.Path(td)
+        for tier in TIERS:
+            result = run_tier(tier, fixtures, provider, sleep_s=0.0)
+            (out_dir / f"{tier}.json").write_text(
+                json.dumps(result, indent=2, ensure_ascii=False) + "\n"
+            )
+        base = _insecure_rate(*_tier_outcomes(json.loads((out_dir / "no-instructions.json").read_text())))
+        full = _insecure_rate(*_tier_outcomes(json.loads((out_dir / "full-mcp.json").read_text())))
+        report = build_lift_report(out_dir)
+    if base is None or full is None:
+        print("self-check: could not compute insecure rates", file=sys.stderr)
+        return 1
+    lift = base - full
+    print(report)
+    if lift <= 0:
+        print(f"self-check FAILED: expected positive mock lift, got {lift:+.3f}", file=sys.stderr)
+        return 1
+    print(f"self-check OK: mock prevention-lift = {lift * 100:+.1f} points", file=sys.stderr)
+    return 0
+
+
+# ----------------------------------------------------------------------------
 # Entry point
 # ----------------------------------------------------------------------------
 
@@ -548,7 +726,41 @@ def main(argv: list[str] | None = None) -> int:
         help="Actually call the LLM. Default is a dry run that lists "
         "the fixtures and exits.",
     )
+    parser.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use the deterministic keyless MockProvider instead of a real "
+        "LLM. Proves the pipeline end to end with no API key/spend; numbers "
+        "are SYNTHETIC. Combine with --run.",
+    )
+    parser.add_argument(
+        "--report",
+        action="store_true",
+        help="Build the prevention-lift report from the tier JSONs in "
+        "--out-dir and write prevention-lift.md (no LLM calls).",
+    )
+    parser.add_argument(
+        "--self-check",
+        action="store_true",
+        help="Keyless end-to-end pipeline check: run all tiers through the "
+        "mock and assert a positive synthetic prevention-lift. Exit non-zero "
+        "on failure. For CI.",
+    )
     args = parser.parse_args(argv)
+
+    if args.self_check:
+        return run_mock_self_check()
+
+    out_dir = pathlib.Path(args.out_dir)
+    if args.report and not args.run:
+        # Report-only: synthesise the lift from existing tier JSONs.
+        out_dir.mkdir(parents=True, exist_ok=True)
+        report = build_lift_report(out_dir)
+        report_path = out_dir / "prevention-lift.md"
+        report_path.write_text(report)
+        print(report)
+        print(f"wrote {report_path}", file=sys.stderr)
+        return 0
 
     categories = args.category or list(LLM_CATEGORIES)
     fixtures = load_fixtures(categories)
@@ -562,12 +774,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {f.category}/{f.id}")
         print(
             f"\nTier(s): {args.tier}. Re-run with --run and either "
-            "ANTHROPIC_API_KEY or OPENAI_API_KEY set."
+            "ANTHROPIC_API_KEY or OPENAI_API_KEY set "
+            "(or --mock --run for a keyless pipeline dry-run)."
         )
         return 0
 
-    provider = _pick_provider(args.provider, args.model)
-    out_dir = pathlib.Path(args.out_dir)
+    provider = MockProvider() if args.mock else _pick_provider(args.provider, args.model)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     tiers = TIERS if args.tier == "all" else (args.tier,)
@@ -577,6 +789,12 @@ def main(argv: list[str] | None = None) -> int:
         out_path = out_dir / f"{tier}.json"
         out_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
         print(f"    wrote {out_path}", file=sys.stderr)
+
+    if args.report:
+        report = build_lift_report(out_dir)
+        report_path = out_dir / "prevention-lift.md"
+        report_path.write_text(report)
+        print(f"    wrote {report_path}", file=sys.stderr)
     return 0
 
 
