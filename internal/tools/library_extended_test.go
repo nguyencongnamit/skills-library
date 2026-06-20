@@ -1375,3 +1375,68 @@ func TestOSVUserCacheMissingFallsBackToRepoSample(t *testing.T) {
 			"user cache is missing; got nil/empty")
 	}
 }
+
+// TestCVEVersionAffected unit-tests the affected-range gate for
+// CVE-pattern entries (the fix for a patched package being flagged).
+func TestCVEVersionAffected(t *testing.T) {
+	affected := []cveAffected{
+		{Package: "next", Ecosystem: "npm", VersionsAffected: []string{
+			">=14.0.0 <14.2.25", ">=15.0.0 <15.2.3",
+		}},
+	}
+	cases := []struct {
+		version string
+		want    bool
+	}{
+		{"14.2.20", true},  // in range, vulnerable
+		{"14.2.25", false}, // the fix, patched
+		{"14.2.35", false}, // past the fix
+		{"15.1.6", true},   // in range, vulnerable
+		{"15.2.3", false},  // the fix
+	}
+	for _, c := range cases {
+		if got := cveVersionAffected(affected, "npm", "next", c.version); got != c.want {
+			t.Errorf("cveVersionAffected(next@%s) = %v, want %v", c.version, got, c.want)
+		}
+	}
+	// Falls open for an ecosystem/package the affected rows don't cover.
+	if !cveVersionAffected(affected, "pypi", "next", "1.0.0") {
+		t.Error("non-applicable ecosystem should fall open (name-only match preserved)")
+	}
+	if !cveVersionAffected(affected, "npm", "express", "1.0.0") {
+		t.Error("non-applicable package should fall open")
+	}
+	// No version pin and no applicable row -> fall open.
+	if !cveVersionAffected(nil, "npm", "next", "14.0.0") {
+		t.Error("empty affected should fall open")
+	}
+}
+
+// TestCheckDependencyCVEVersionFilter is the end-to-end regression
+// against the committed CVE-2025-29927 entry: a patched Next.js must not
+// surface the CVE; a vulnerable one must.
+func TestCheckDependencyCVEVersionFilter(t *testing.T) {
+	lib := newLibrary(t)
+	patched, err := lib.CheckDependency("next", "14.2.35", "npm")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range patched.CVEs {
+		if c.CVE == "CVE-2025-29927" {
+			t.Errorf("patched next@14.2.35 should not flag CVE-2025-29927")
+		}
+	}
+	vuln, err := lib.CheckDependency("next", "15.1.6", "npm")
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, c := range vuln.CVEs {
+		if c.CVE == "CVE-2025-29927" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("vulnerable next@15.1.6 should flag CVE-2025-29927")
+	}
+}
