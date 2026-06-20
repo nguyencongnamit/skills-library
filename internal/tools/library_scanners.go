@@ -256,22 +256,25 @@ func (l *Library) ScanDependencies(filePath string) (*ScanDependenciesResult, er
 			if severity == "" {
 				severity = "medium"
 			}
-			// The OSV cache currently surfaces every advisory whose
-			// `affected[].package.name` matches, regardless of
-			// whether the resolved version actually intersects an
-			// `affected[].ranges` entry. That makes a hit a strong
-			// structured signal but not a version-confirmed one, so
-			// we emit "high" rather than "confirmed". A future
-			// enhancement to lookupOSV that consults the per-record
-			// version ranges can promote this to "confirmed" when
-			// the dependency's version is in range.
+			// lookupOSV now consults each record's `affected[].ranges`
+			// against the resolved version: an advisory that does not
+			// cover the version is dropped before it reaches here, and
+			// one that does is marked VersionConfirmed. So a confirmed
+			// hit is "confirmed" (version intersects an affected range);
+			// an unconfirmed hit — the version was absent, or the
+			// ecosystem's range grammar was not evaluable, so the
+			// advisory failed open on a name match — stays "high".
+			conf := "high"
+			if adv.VersionConfirmed {
+				conf = "confirmed"
+			}
 			out.Findings = append(out.Findings, DependencyFinding{
 				Package:    dep.Name,
 				Version:    dep.Version,
 				Ecosystem:  dep.Ecosystem,
 				Source:     dep.Source,
 				Severity:   severity,
-				Confidence: "high",
+				Confidence: conf,
 				Category:   "osv-advisory",
 				Message:    fmt.Sprintf("%s: %s", adv.ID, adv.Summary),
 				References: refs,
@@ -1000,7 +1003,8 @@ type PolicyCheckFinding struct {
 //
 // The dispatch table is:
 //
-//	package-lock.json / yarn.lock / pnpm-lock.yaml -> scan_dependencies
+//	package-lock.json / package.json / yarn.lock /
+//	  pnpm-lock.yaml                               -> scan_dependencies
 //	Pipfile.lock / poetry.lock / requirements*.txt -> scan_dependencies
 //	go.sum / Cargo.lock                            -> scan_dependencies
 //	pom.xml / *.gradle.lockfile                    -> scan_dependencies
@@ -1239,7 +1243,7 @@ func isProbablyBinary(p string) bool {
 func pickScan(filePath string) (string, error) {
 	base := filepath.Base(filePath)
 	switch base {
-	case "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
+	case "package-lock.json", "npm-shrinkwrap.json", "package.json", "yarn.lock", "pnpm-lock.yaml",
 		"Pipfile.lock", "poetry.lock", "go.sum", "Cargo.lock",
 		"pom.xml", "gradle.lockfile", "build.gradle.lockfile",
 		"packages.lock.json", "Gemfile.lock":
