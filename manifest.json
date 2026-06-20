@@ -1975,6 +1975,12 @@
       "action": "unchanged"
     },
     {
+      "path": "skills/cors-security/tests/corpus.json",
+      "sha256": "37d5df3f7f3aa2ace15f571c20f6797b2e7185f36a3eaa828de7474229f7982c",
+      "size": 2601,
+      "action": "added"
+    },
+    {
       "path": "skills/crypto-misuse/SKILL.md",
       "sha256": "4931b18332eaba9162bbb129494cefc62295a0389eb659ff2f0cb585166d50c0",
       "size": 4668,
@@ -1991,6 +1997,12 @@
       "sha256": "66d90e4839728253f38da061e57b4da5e4306b7ef49c8a06aa74a86aadc0c969",
       "size": 1440,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/crypto-misuse/tests/corpus.json",
+      "sha256": "4dfbb58e26e38f0c7d1ee06f113dfd00c02e7fe29fc868051f762b10458282b3",
+      "size": 2396,
+      "action": "added"
     },
     {
       "path": "skills/database-security/SKILL.md",
@@ -2039,6 +2051,12 @@
       "sha256": "0a6b0fc13970d80448f4772cb2a59d23d3e7faf21748d7070d98810ca4da9ad0",
       "size": 5730,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/deserialization-security/tests/corpus.json",
+      "sha256": "a84d0688841b1fbf7acd80bc47dae31a7e211b375113b30f41a4544858ea1093",
+      "size": 2501,
+      "action": "added"
     },
     {
       "path": "skills/electron-security/SKILL.md",
@@ -2399,6 +2417,12 @@
       "sha256": "e151dfee6978e53b3d5fa3fb589676b1a4131947ea0f1eadc19375acb1c0761e",
       "size": 4914,
       "action": "unchanged"
+    },
+    {
+      "path": "skills/ssrf-prevention/tests/corpus.json",
+      "sha256": "a73d8e8cbf8489bdb34e2a50de9f0d1c8c7dae5825eee05be182129dff492293",
+      "size": 2657,
+      "action": "added"
     },
     {
       "path": "skills/supply-chain-security/SKILL.md",
