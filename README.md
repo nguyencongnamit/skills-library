@@ -573,7 +573,7 @@ The server registers fifteen tools on `tools/list`:
   `scan_github_actions` and `scan_dockerfile` respectively). Supports
   the `sarif` output format.
 - `scan_github_actions(file_path, format?)` — run the
-  `skills/cicd-security/checklists/github_actions_hardening.yaml` rules
+  `skills/cicd-security/SKILL.md` rules
   against a workflow file: unpinned actions, missing `permissions:` defaults,
   `pull_request_target` checkout, untrusted-input script injection,
   `curl | sh`, and stored cloud credentials. Supports the `sarif` format.

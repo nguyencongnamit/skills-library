@@ -32,6 +32,8 @@ func scannerRuleIDs(skillID string) map[string]bool {
 	switch skillID {
 	case "container-security":
 		return tools.DockerfileRuleIDs()
+	case "cicd-security":
+		return tools.GitHubActionsRuleIDs()
 	default:
 		return nil
 	}

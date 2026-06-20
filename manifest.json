@@ -1898,14 +1898,8 @@
     },
     {
       "path": "skills/cicd-security/SKILL.md",
-      "sha256": "88c63d5c4fef52deb3a98cb227bd2c148878ee169d22dfda7640ff46bbffc393",
-      "size": 6527,
-      "action": "unchanged"
-    },
-    {
-      "path": "skills/cicd-security/checklists/github_actions_hardening.yaml",
-      "sha256": "2b2c46b39c484cdf833ab7e0430227e663e757c5d42d0d5812ff5ffed3fb4528",
-      "size": 5079,
+      "sha256": "d3ba1c697b46a8a632e78f39283f6781e0e7fb6e445dc66f777fcf89f56e9952",
+      "size": 7320,
       "action": "unchanged"
     },
     {

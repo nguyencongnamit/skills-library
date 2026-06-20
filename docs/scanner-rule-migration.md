@@ -1,8 +1,18 @@
-# Scanner rule migration — single source of truth in the skill YAML
+# Scanner rule migration — single source of truth in SKILL.md
 
-**Status:** plan (dockerfile ID-drift already reconciled + guarded; see
-`TestDockerfileRuleIDsTraceToSkill`). This documents the bigger cleanup the
-reconcile work surfaced.
+**Status: DONE for dockerfile + GitHub Actions** (the two config/IaC
+scanners). The end design differs from the YAML-centric plan sketched
+below: rather than move rules *into* a checklist YAML, the scanner
+contract now lives in **SKILL.md `<!-- pattern: { id, check } -->`
+markers** (check = `deterministic` → a Go check enforces it, or `llm` →
+the agent reasons it), the rule logic stays in Go, and the
+`dockerfile_hardening.yaml` / `github_actions_hardening.yaml` checklists
+were **deleted**. Guarded by `TestDockerfileRuleIDsTraceToSkill` +
+`TestGitHubActionsRuleIDsTraceToSkill`; surfaced by `skills-check
+coverage`. The GHA AST/regex double-fire was removed (the redundant
+regex versions dropped; the AST checks renamed to the canonical ids per
+the table below). Only `secret_detection.yaml` keeps a runtime rule
+YAML. The YAML-centric notes below are retained as historical context.
 
 ## Goal
 

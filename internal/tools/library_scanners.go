@@ -25,7 +25,6 @@ import (
 
 	"github.com/namncqualgo/skills-library/internal/skill"
 	"github.com/namncqualgo/skills-library/internal/tools/parsers"
-	"gopkg.in/yaml.v3"
 )
 
 // readScanFile is the shared on-disk read path for every new scanner.
@@ -335,23 +334,80 @@ type gitHubActionsHardeningCheck struct {
 	Fix       string `yaml:"fix"`
 }
 
-type gitHubActionsHardeningFile struct {
-	Checks []gitHubActionsHardeningCheck `yaml:"checks"`
+// gitHubActionsChecks are the regex hardening rules whose detection is
+// pure pattern-matching (no AST reasoning needed). Defined in Go — like
+// dockerfileChecks — so the scanner contract lives in one place; their
+// ids trace to the `<!-- pattern: { check: deterministic } -->` markers
+// in cicd-security/SKILL.md. Rules that need structure (action pinning,
+// pwn-request, expression injection) are handled by the AST pass with
+// the same canonical ids and are intentionally NOT duplicated here.
+var gitHubActionsChecks = []gitHubActionsHardeningCheck{
+	{
+		ID:        "gha-default-permissions-read",
+		Severity:  "high",
+		Title:     "Default `permissions:` to read-only at the workflow level",
+		Rationale: "The default GitHub token has write access to many APIs. Setting workflow-level `permissions: { contents: read }` and granting job-level write selectively reduces blast radius.",
+		Pattern:   `^on:[\s\S]+?\njobs:`,
+		Require:   `permissions:\s*\n\s*contents:\s*read`,
+		Fix:       "Add a top-level `permissions: { contents: read }` and grant write scopes per-job.",
+	},
+	{
+		ID:        "gha-oidc-cloud-credentials",
+		Severity:  "high",
+		Title:     "Use OIDC for cloud credentials, not stored long-lived keys",
+		Rationale: "Short-lived OIDC tokens cannot be replayed. Stored AWS/GCP/Azure keys in GitHub Secrets have been the source of major CI cloud-key exfiltration incidents.",
+		Pattern:   `secrets\.(AWS_SECRET_ACCESS_KEY|GCP_SA_KEY|AZURE_CLIENT_SECRET)`,
+		Fix:       "Add `permissions.id-token: write` and use the cloud's OIDC action with role-to-assume.",
+	},
+	{
+		ID:        "gha-no-curl-pipe-bash",
+		Severity:  "critical",
+		Title:     "Never `curl | bash` in CI",
+		Rationale: "Codecov bash-uploader 2021 (CVE-2021-32699) exfiltrated env vars for ~10 weeks via a remote-script substitution attack.",
+		Pattern:   `(curl|wget)[^|\n]*\|\s*(ba)?sh`,
+		Fix:       "Download, verify a known SHA-256, then execute. Prefer a vendor-supplied binary or container image.",
+	},
+	{
+		ID:        "gha-cache-key-scope",
+		Severity:  "medium",
+		Title:     "Cache keys must include a lockfile hash, not just `os`",
+		Rationale: "Loose cache keys allow cross-tenant / cross-branch cache reuse — build-cache poisoning works through unscoped reuse.",
+		Pattern:   `cache@[\s\S]+?key:\s*\$\{\{\s*runner\.os\s*\}\}`,
+		Require:   `hashFiles\(`,
+		Fix:       "Include `hashFiles('**/lockfile')` in the cache key.",
+	},
+	{
+		ID:        "gha-artifact-verify-source",
+		Severity:  "medium",
+		Title:     "Verify provenance before downloading artifacts from other workflows",
+		Rationale: "`actions/download-artifact` from arbitrary workflow runs can be tricked into pulling attacker-controlled artifacts.",
+		Pattern:   `download-artifact@[\s\S]+?workflow:\s*[a-zA-Z0-9_-]+`,
+		Fix:       "Pin both the source workflow file and commit SHA, and verify a SLSA provenance attestation before extraction.",
+	},
 }
 
-// loadGitHubActionsChecks reads the checklist YAML once and caches
-// the compiled regexes on the Library.
+// loadGitHubActionsChecks returns the in-Go regex hardening rules. Kept
+// as a method returning (slice, error) to preserve the call site; the
+// error is always nil now that the rules no longer come from disk.
 func (l *Library) loadGitHubActionsChecks() ([]gitHubActionsHardeningCheck, error) {
-	path := filepath.Join(l.root, "skills", "cicd-security", "checklists", "github_actions_hardening.yaml")
-	body, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("scan_github_actions: read checklist: %w", err)
+	return gitHubActionsChecks, nil
+}
+
+// GitHubActionsRuleIDs returns the full set of rule ids the GHA scanner
+// can emit: the in-Go regex checks (gitHubActionsChecks) plus the
+// AST-only checks. Single source of truth for the trace test and the
+// `coverage` command — mirrors DockerfileRuleIDs.
+func GitHubActionsRuleIDs() map[string]bool {
+	ids := map[string]bool{
+		// Emitted by the AST pass, not gitHubActionsChecks.
+		"gha-pin-actions-by-sha":              true,
+		"gha-pr-target-no-untrusted-checkout": true,
+		"gha-no-untrusted-script-injection":   true,
 	}
-	var doc gitHubActionsHardeningFile
-	if err := yaml.Unmarshal(body, &doc); err != nil {
-		return nil, fmt.Errorf("scan_github_actions: parse checklist: %w", err)
+	for _, c := range gitHubActionsChecks {
+		ids[c.ID] = true
 	}
-	return doc.Checks, nil
+	return ids
 }
 
 // ScanGitHubActions runs every applicable hardening check from
@@ -451,17 +507,17 @@ func (l *Library) ScanGitHubActions(filePath string) (*ScanGitHubActionsResult, 
 		}
 	}
 
-	// AST pass — structured YAML decode supplements the regex pass.
-	// We deliberately keep the regex layer untouched so checklist
-	// updates (in YAML) keep working without a code change. The AST
-	// pass only adds findings the regex layer cannot accurately
-	// detect:
+	// AST pass — structured YAML decode is the CANONICAL detector for
+	// the three concepts below; the redundant regex versions were
+	// removed (they double-fired, and the SHA-pin regex relied on a
+	// negative lookahead Go's RE2 can't compile). These emit the clean
+	// concept ids the SKILL.md markers reference:
 	//
-	//   * gha-ast-unpinned-action: the regex pass cannot reliably
-	//     tell a 40-char SHA pin from a version tag.
-	//   * gha-ast-pwn-request: pull_request_target + actions/checkout
-	//     of the PR head is the classic PWN-request pattern.
-	//   * gha-ast-expression-injection: untrusted github.event.* /
+	//   * gha-pin-actions-by-sha: the regex pass cannot reliably tell
+	//     a 40-char SHA pin from a version tag.
+	//   * gha-pr-target-no-untrusted-checkout: pull_request_target +
+	//     actions/checkout is the classic PWN-request pattern.
+	//   * gha-no-untrusted-script-injection: untrusted github.event.* /
 	//     github.head_ref interpolated into a `run:` block.
 	if wf, err := parsers.ParseWorkflow(body); err == nil && wf != nil {
 		appendAstWorkflowFindings(wf, out)
@@ -479,7 +535,7 @@ func appendAstWorkflowFindings(wf *parsers.Workflow, out *ScanGitHubActionsResul
 		for _, step := range job.Steps {
 			if step.Uses != "" && !parsers.IsPinnedAction(step.Uses) {
 				out.Findings = append(out.Findings, WorkflowFinding{
-					RuleID:     "gha-ast-unpinned-action",
+					RuleID:     "gha-pin-actions-by-sha",
 					Severity:   "high",
 					Confidence: "confirmed",
 					Title:      "Third-party action not pinned to a commit SHA",
@@ -495,7 +551,7 @@ func appendAstWorkflowFindings(wf *parsers.Workflow, out *ScanGitHubActionsResul
 			}
 			if prTarget && parsers.IsCheckoutAction(step.Uses) {
 				out.Findings = append(out.Findings, WorkflowFinding{
-					RuleID:     "gha-ast-pwn-request",
+					RuleID:     "gha-pr-target-no-untrusted-checkout",
 					Severity:   "critical",
 					Confidence: "confirmed",
 					Title:      "pull_request_target combined with actions/checkout",
@@ -509,7 +565,7 @@ func appendAstWorkflowFindings(wf *parsers.Workflow, out *ScanGitHubActionsResul
 			}
 			if step.Run != "" && parsers.HasUntrustedExpressionInjection(step.Run) {
 				out.Findings = append(out.Findings, WorkflowFinding{
-					RuleID:     "gha-ast-expression-injection",
+					RuleID:     "gha-no-untrusted-script-injection",
 					Severity:   "critical",
 					Confidence: "confirmed",
 					Title:      "Untrusted github.event expression interpolated into `run:`",

@@ -35,7 +35,7 @@ evals/
 | --- | --- | --- | --- |
 | `secret-detection` (regex / DLP) | `skills/secret-detection/tests/corpus.json` | yes | `baselines/secret-detection-static.md` |
 | `dependency-choice` | `vulnerabilities/supply-chain/malicious-packages/*.json` + `typosquat-db/known_typosquats.json` | partial (the static check is via `scan_dependencies` — wire-up is documented in each fixture's `expected.json`) | n/a |
-| `cicd-hardening` | `skills/cicd-security/checklists/github_actions_hardening.yaml` | partial (driven by the P3 `scan_github_actions` MCP tool) | n/a |
+| `cicd-hardening` | `skills/cicd-security/SKILL.md` | partial (driven by the P3 `scan_github_actions` MCP tool) | n/a |
 | `auth-patterns` | `skills/auth-security/rules/*.json` | manual review per fixture | n/a |
 | `ssrf` | `skills/ssrf-prevention/rules/*.json` | manual review per fixture | n/a |
 | `secret-generation` (agent leaks secrets in code it writes) | each fixture's "Insecure response" block | requires an LLM | `baselines/{no-instructions,minimal-skill,full-mcp}.json` |
