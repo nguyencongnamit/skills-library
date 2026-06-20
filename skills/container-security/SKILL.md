@@ -11,7 +11,7 @@ applies_to:
   - "when reviewing container changes in PR"
 languages: ["dockerfile", "yaml", "go", "python"]
 token_budget:
-  minimal: 1750
+  minimal: 1800
   compact: 2200
   full: 3500
 rules_path: "checklists/"
@@ -40,20 +40,35 @@ external_tools:
   image so build toolchains and source aren't shipped. The last stage should be
   `FROM distroless`, `FROM scratch`, `FROM alpine:<digest>`, or another minimal
   base — pinned by SHA256 digest, not just tag.
+  <!-- pattern: { id: dkr-multi-stage, severity: high, check: llm } -->
+  <!-- pattern: { id: dkr-pinned-base-digest, severity: high, cwe: 1357, check: deterministic } -->
 - Run as a non-root user: `USER <uid>` (numeric UID >= 10000 for K8s `runAsNonRoot`
   policies to be enforceable). Set USER explicitly on the **final stage** —
   omitting USER entirely leaves the container running as root by default,
   which is the same as `USER root`.
-  <!-- pattern: { id: dkr-missing-user-directive, severity: critical, cwe: 250, framework: dockerfile_hardening } -->
+  <!-- pattern: { id: dkr-missing-user-directive, severity: critical, cwe: 250, check: deterministic } -->
+  <!-- pattern: { id: dkr-non-root-user, severity: critical, cwe: 250, check: deterministic } -->
 - Use **`npm ci`** (and equivalents `pnpm install --frozen-lockfile`,
   `yarn install --frozen-lockfile`) in container builds, not `npm install`.
   `npm install` mutates the lockfile and resolves versions per-build,
   producing non-deterministic images that drift from the lockfile.
-  <!-- pattern: { id: dkr-npm-install-not-ci, severity: medium, framework: dockerfile_hardening } -->
+  <!-- pattern: { id: dkr-npm-install-not-ci, severity: medium, check: deterministic } -->
 - Add a `.dockerignore` excluding `.git`, `node_modules`, `.env`, `*.pem`, `*.key`,
   `target/`, `.terraform/`, `dist/`, `coverage/`.
+  <!-- pattern: { id: dkr-dockerignore-exists, severity: high, check: llm } -->
+- Enable **BuildKit** (`DOCKER_BUILDKIT=1` or `# syntax=docker/dockerfile:1`) for
+  `--mount=type=secret` support and better cache isolation.
+  <!-- pattern: { id: dkr-build-with-buildkit, severity: low, check: llm } -->
+- Emit an **SBOM** (`docker buildx --sbom=true` / `syft`) and attach it to the
+  image so downstream scanners can audit the dependency set.
+  <!-- pattern: { id: dkr-sbom-emitted, severity: medium, check: llm } -->
+- Pin **apt** packages and clean lists in the same layer: `apt-get install -y
+  --no-install-recommends pkg=1.2.3 && rm -rf /var/lib/apt/lists/*`. Unpinned
+  installs make image contents non-reproducible.
+  <!-- pattern: { id: dkr-apt-version-pin, severity: medium, cwe: 1357, check: deterministic } -->
 - Set explicit `HEALTHCHECK` for long-running services and matching
   `livenessProbe` / `readinessProbe` / `startupProbe` in K8s.
+  <!-- pattern: { id: dkr-healthcheck-defined, severity: medium, check: llm } -->
 - Set resource `requests` and `limits` on every container (CPU and memory).
 - Drop all Linux capabilities then add back only what's needed:
   `securityContext.capabilities.drop: [ALL]`.
@@ -63,6 +78,7 @@ external_tools:
   volumes for the few paths that must be writable.
 - Scan every image in CI (Trivy, Grype, Snyk, or your registry's scanner) and
   fail builds on CRITICAL or HIGH severity findings.
+  <!-- pattern: { id: dkr-image-scan-required, severity: high, check: llm } -->
 - Pull base images by SHA256 digest in production manifests, not by mutable tag.
 - For **multi-tenant** workloads (per-user/per-customer sessions on shared
   infra), isolate tenants at the **kernel boundary**: a separate VM — or
@@ -84,7 +100,7 @@ external_tools:
   release. EOL images stop receiving security patches; a maintained
   image with no public CVEs is still safer than an EOL one.
   Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar.
-  <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
+  <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, check: llm } -->
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application
   container. It's effectively root on the host.
 - Expose the container **daemon API over the network** (`tcp://…:2375`, or
@@ -103,11 +119,19 @@ external_tools:
   L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them
   to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
+  <!-- pattern: { id: dkr-no-secrets-in-env, severity: critical, cwe: 798, check: deterministic } -->
+  <!-- pattern: { id: dkr-no-secrets-in-build-args, severity: critical, cwe: 798, check: llm } -->
+  <!-- pattern: { id: dkr-no-secret-leak-in-layers, severity: critical, check: llm } -->
+- Run `curl … | sh` or `wget -O- … | sh` in a `RUN` — piping an unverified
+  remote script to a shell is arbitrary remote code at build time. Download,
+  verify a pinned SHA-256, then execute.
+  <!-- pattern: { id: dkr-no-curl-pipe-sh, severity: critical, cwe: 829, check: deterministic } -->
 - Use `latest`, `stable`, `slim`, or unversioned tags as the final image base —
   builds become non-reproducible and quietly pick up CVEs.
-  <!-- pattern: { id: dkr-explicit-latest-tag, severity: high, framework: dockerfile_hardening } -->
+  <!-- pattern: { id: dkr-explicit-latest-tag, severity: high, check: deterministic } -->
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with
   a checksum verify and `RUN` instead, or vendor the artifact).
+  <!-- pattern: { id: dkr-no-add-remote, severity: medium, check: deterministic } -->
 - Disable `automountServiceAccountToken` when the workload needs the K8s API,
   but DO disable it (`automountServiceAccountToken: false`) when it doesn't.
 - Use `hostNetwork: true`, `hostPID: true`, or `hostIPC: true` for application

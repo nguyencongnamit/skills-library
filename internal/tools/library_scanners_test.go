@@ -3,6 +3,7 @@ package tools
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -512,36 +513,84 @@ func TestWalkScanFiles(t *testing.T) {
 	}
 }
 
-// TestDockerfileRuleIDsTraceToSkill is the drift guard: every rule the
-// dockerfile scanner can emit MUST have a matching entry in the
-// container-security skill's checklist YAML (dkr-* id). This keeps the
-// gate's findings traceable to documented skill knowledge — if someone
-// adds a Go check without a skill entry (or renames one), this fails.
-// (GitHub Actions has an analogous but trickier AST/regex overlap that
-// is tracked separately for the YAML-rule migration.)
+// dockerfileMarkerRe extracts the inline `<!-- pattern: { ... } -->`
+// HTML markers from a SKILL.md body. FindAll (not FindString) so a
+// bullet carrying more than one marker is fully captured.
+var dockerfileMarkerRe = regexp.MustCompile(`<!--\s*pattern\s*:\s*(\{[^}]*\})\s*-->`)
+
+// dockerfileGoRuleIDs is the full set of rule ids the dockerfile
+// scanner can emit: the inline regex checks (dockerfileChecks) plus the
+// AST-only checks that are not in that slice.
+func dockerfileGoRuleIDs() map[string]bool {
+	ids := map[string]bool{
+		// Emitted by the AST pass in ScanDockerfile, not dockerfileChecks.
+		"dkr-missing-user-directive": true,
+	}
+	for _, c := range dockerfileChecks {
+		ids[c.id] = true
+	}
+	return ids
+}
+
+// TestDockerfileRuleIDsTraceToSkill is the drift guard binding the
+// dockerfile scanner to its single source of truth, SKILL.md. The
+// checklist YAML is gone; the contract now lives in the skill's
+// `<!-- pattern: { id, check } -->` markers:
+//
+//   - check: deterministic  → a Go scanner check MUST emit this id
+//   - check: llm            → the agent reasons it from SKILL.md; no Go check
+//
+// The test enforces the bijection both ways (every Go check has a
+// deterministic marker, every deterministic marker has a Go check) and
+// that no llm-marked pattern is silently enforced by Go.
 func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
 	root := repoRoot(t)
-	data, err := os.ReadFile(filepath.Join(root,
-		"skills", "container-security", "checklists", "dockerfile_hardening.yaml"))
+	data, err := os.ReadFile(filepath.Join(root, "skills", "container-security", "SKILL.md"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	var doc struct {
-		Patterns []struct {
-			ID string `yaml:"id"`
-		} `yaml:"patterns"`
+	deterministic := map[string]bool{}
+	llm := map[string]bool{}
+	for _, m := range dockerfileMarkerRe.FindAllStringSubmatch(string(data), -1) {
+		var p struct {
+			ID    string `yaml:"id"`
+			Check string `yaml:"check"`
+		}
+		if err := yaml.Unmarshal([]byte(m[1]), &p); err != nil {
+			t.Fatalf("invalid pattern marker %q: %v", m[1], err)
+		}
+		if !strings.HasPrefix(p.ID, "dkr-") {
+			continue // only the dockerfile family is scanner-backed here
+		}
+		switch p.Check {
+		case "deterministic":
+			deterministic[p.ID] = true
+		case "llm":
+			llm[p.ID] = true
+		case "":
+			t.Errorf("dockerfile marker %q has no check: field (want deterministic|llm)", p.ID)
+		default:
+			t.Errorf("dockerfile marker %q has unknown check %q (want deterministic|llm)", p.ID, p.Check)
+		}
 	}
-	if err := yaml.Unmarshal(data, &doc); err != nil {
-		t.Fatal(err)
+
+	goIDs := dockerfileGoRuleIDs()
+	for id := range goIDs {
+		if !deterministic[id] {
+			t.Errorf("dockerfile scanner emits %q but SKILL.md has no `check: deterministic` "+
+				"marker for it — add the marker or rename the Go id", id)
+		}
 	}
-	skillIDs := map[string]bool{}
-	for _, p := range doc.Patterns {
-		skillIDs[p.ID] = true
+	for id := range deterministic {
+		if !goIDs[id] {
+			t.Errorf("SKILL.md marks %q as `check: deterministic` but no Go scanner check emits "+
+				"it — implement the check or change the marker to `check: llm`", id)
+		}
 	}
-	for _, c := range dockerfileChecks {
-		if !skillIDs[c.id] {
-			t.Errorf("dockerfile scanner emits %q but the container-security checklist YAML "+
-				"has no such entry — add a marker in SKILL.md (regenerate) or rename the Go id", c.id)
+	for id := range llm {
+		if goIDs[id] {
+			t.Errorf("SKILL.md marks %q as `check: llm` but a Go scanner check emits it — "+
+				"change the marker to `check: deterministic`", id)
 		}
 	}
 }

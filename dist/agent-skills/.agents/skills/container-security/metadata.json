@@ -17,7 +17,7 @@
     "python"
   ],
   "token_budget": {
-    "minimal": 1750,
+    "minimal": 1800,
     "compact": 2200,
     "full": 3500
   },

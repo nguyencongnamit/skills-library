@@ -644,6 +644,16 @@ var dockerfileChecks = []dockerfileCheck{
 		// package list).  Crude but covers the typical case.
 		pattern: regexp.MustCompile(`(?im)apt-get\s+install\s+(?:-[A-Za-z]+\s+)*[A-Za-z0-9][A-Za-z0-9._+-]*(?:\s+[A-Za-z0-9][A-Za-z0-9._+-]*)*\s*$`),
 	},
+	{
+		id:       "dkr-npm-install-not-ci",
+		severity: "medium",
+		title:    "Uses `npm install` instead of `npm ci` in a container build",
+		fix:      "Use `npm ci` (or `pnpm/yarn install --frozen-lockfile`) for a reproducible, lockfile-faithful install.",
+		// `npm/pnpm/yarn install` in a RUN. A `--frozen-lockfile` flag on
+		// the line clears the finding (handled in ScanDockerfile); plain
+		// `npm install` has no frozen equivalent (the fix is `npm ci`).
+		pattern: regexp.MustCompile(`(?im)\b(?:npm|pnpm|yarn)\s+install\b`),
+	},
 }
 
 // ScanDockerfile runs the inline dockerfileChecks against filePath
@@ -723,6 +733,11 @@ func (l *Library) ScanDockerfile(filePath string) (*ScanDockerfileResult, error)
 						continue
 					}
 				}
+			}
+			// `pnpm/yarn install --frozen-lockfile` is the correct,
+			// reproducible form — don't flag it as npm-install-not-ci.
+			if c.id == "dkr-npm-install-not-ci" && strings.Contains(line, "--frozen-lockfile") {
+				continue
 			}
 			out.Findings = append(out.Findings, DockerfileFinding{
 				RuleID:     c.id,
@@ -816,6 +831,21 @@ func (l *Library) ScanDockerfile(filePath string) (*ScanDockerfileResult, error)
 				Snippet:    snippet,
 			})
 			flagged[key("dkr-pinned-base-digest")] = true
+		}
+		// Final stage sets no USER at all → implicit root. The regex
+		// rule dkr-non-root-user only catches an explicit `USER root`;
+		// this AST check catches the (more common) total omission.
+		if strings.TrimSpace(final.FinalUser) == "" && !flagged[key("dkr-missing-user-directive")] {
+			out.Findings = append(out.Findings, DockerfileFinding{
+				RuleID:     "dkr-missing-user-directive",
+				Severity:   "critical",
+				Confidence: "confirmed",
+				Title:      "Final stage sets no USER — container runs as root by default",
+				Fix:        "Add `USER <non-root-uid>` (uid >= 10000) near the end of the final stage.",
+				Line:       final.Line,
+				Snippet:    snippet,
+			})
+			flagged[key("dkr-missing-user-directive")] = true
 		}
 	}
 	return out, nil
