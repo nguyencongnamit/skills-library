@@ -244,7 +244,7 @@ func TestLookupOSVPopulatesSeverityFromIndex(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	got := lib.lookupOSV("npm", "victim")
+	got := lib.lookupOSV("npm", "victim", "")
 	if len(got) != 1 {
 		t.Fatalf("lookupOSV: got %d entries, want 1", len(got))
 	}
@@ -254,7 +254,7 @@ func TestLookupOSVPopulatesSeverityFromIndex(t *testing.T) {
 	// And the lazy fall-through path: same advisory, no severity
 	// in the index entry, should be read from the record file and
 	// land on "critical".
-	got = lib.lookupOSV("npm", "victim-without-precomputed")
+	got = lib.lookupOSV("npm", "victim-without-precomputed", "")
 	if len(got) != 1 || got[0].Severity != "critical" {
 		t.Fatalf("lazy fall-through failed: got %+v", got)
 	}

@@ -113,6 +113,17 @@ type Library struct {
 	osvSeverityMu sync.Mutex
 	osvSeverity   map[string]string
 
+	// osvRecordMu protects osvRecord, which memoises the parsed
+	// `affected[]` section (package + version ranges) of each
+	// per-advisory OSV record file so version-range filtering in
+	// lookupOSV opens any given record at most once per process. The
+	// key is "<ecosystem>/<file>" matching the index entry's File
+	// field; a nil value means the record was unreadable or carried no
+	// affected ranges we can evaluate (the advisory then fails open —
+	// it is kept regardless of version).
+	osvRecordMu sync.Mutex
+	osvRecord   map[string][]osvAffected
+
 	// allowedRoots, when non-nil and non-empty, restricts ScanSecrets
 	// file_path inputs to paths under one of these absolute,
 	// symlink-resolved directories. The skills-mcp binary populates
@@ -263,6 +274,7 @@ func NewLibrary(root string, opts ...LibraryOption) (*Library, error) {
 		vulnCache:     map[string]*vulnFile{},
 		osvIndex:      map[string]*osvIndexFile{},
 		osvSeverity:   map[string]string{},
+		osvRecord:     map[string][]osvAffected{},
 		vulnSource:    SourceLocal,
 	}
 	for _, opt := range opts {
@@ -489,6 +501,15 @@ type OSVAdvisory struct {
 	Modified  string   `json:"modified,omitempty"`
 	Reference string   `json:"reference,omitempty"`
 	Severity  string   `json:"severity,omitempty"`
+	// VersionConfirmed is true when the resolved package version was
+	// checked against the advisory's affected ranges and found to be
+	// in range (so the finding is version-confirmed, not merely a
+	// package-name match). It is false both when the version was not
+	// in range — in which case the advisory is dropped before reaching
+	// a caller — and when the ranges could not be evaluated (no
+	// version supplied, unsupported ecosystem grammar, unreadable
+	// record), in which case the advisory is kept but unconfirmed.
+	VersionConfirmed bool `json:"version_confirmed,omitempty"`
 }
 
 // osvIndexEntry mirrors the per-package entries in
@@ -599,9 +620,9 @@ func (l *Library) fetchOSV(eco, pkg, version string) []OSVAdvisory {
 		if advs := l.fetchOSVExternal(eco, pkg, version); len(advs) > 0 {
 			return advs
 		}
-		return l.lookupOSV(eco, pkg)
+		return l.lookupOSV(eco, pkg, version)
 	}
-	return l.lookupOSV(eco, pkg)
+	return l.lookupOSV(eco, pkg, version)
 }
 
 // fetchOSVExternal queries api.osv.dev via l.osvClient with caching.
@@ -660,7 +681,17 @@ func (l *Library) loadOSVIndex(eco string) *osvIndexFile {
 // lookupOSV returns any cached OSV advisories that affect `pkg` in
 // the given ecosystem. Errors are swallowed (an unavailable cache
 // must not break LookupVulnerability).
-func (l *Library) lookupOSV(eco, pkg string) []OSVAdvisory {
+//
+// When `version` is non-empty, each candidate advisory's per-record
+// `affected[]` ranges are consulted: an advisory whose ranges are
+// evaluable and do NOT cover the version is dropped (e.g. requests
+// pinned to the fixed release is not flagged for the vulnerable
+// range), and one whose ranges DO cover it is marked
+// VersionConfirmed. Advisories whose ranges cannot be evaluated for
+// this ecosystem (unsupported grammar, unreadable record) fail open:
+// they are kept but left version-unconfirmed. An empty version keeps
+// the prior name-only behaviour.
+func (l *Library) lookupOSV(eco, pkg, version string) []OSVAdvisory {
 	idx := l.loadOSVIndex(eco)
 	if idx == nil {
 		return nil
@@ -671,16 +702,26 @@ func (l *Library) lookupOSV(eco, pkg string) []OSVAdvisory {
 	}
 	out := make([]OSVAdvisory, 0, len(entries))
 	for _, e := range entries {
-		adv := OSVAdvisory{
-			ID:        e.ID,
-			Package:   pkg,
-			Ecosystem: eco,
-			Aliases:   e.Aliases,
-			Summary:   e.Summary,
-			Reference: "https://osv.dev/vulnerability/" + e.ID,
-			Severity:  l.osvSeverityFor(eco, e),
+		status := osvUnknown
+		if strings.TrimSpace(version) != "" {
+			status = osvVersionAffected(eco, pkg, version, l.loadOSVAffected(eco, e.File))
+			if status == osvNotAffected {
+				// The resolved version is outside every evaluable
+				// affected range (typically the fixed release). Drop
+				// the advisory rather than emit a false positive.
+				continue
+			}
 		}
-		out = append(out, adv)
+		out = append(out, OSVAdvisory{
+			ID:               e.ID,
+			Package:          pkg,
+			Ecosystem:        eco,
+			Aliases:          e.Aliases,
+			Summary:          e.Summary,
+			Reference:        "https://osv.dev/vulnerability/" + e.ID,
+			Severity:         l.osvSeverityFor(eco, e),
+			VersionConfirmed: status == osvInRange,
+		})
 	}
 	return out
 }

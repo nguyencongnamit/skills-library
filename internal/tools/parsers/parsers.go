@@ -47,6 +47,7 @@ var ErrUnknownLockfile = errors.New("parsers: unrecognised lockfile format")
 // Recognised file names:
 //
 //   - package-lock.json, npm-shrinkwrap.json     -> npm
+//   - package.json                               -> npm (manifest)
 //   - yarn.lock                                  -> npm
 //   - pnpm-lock.yaml                             -> npm
 //   - requirements.txt, requirements-*.txt       -> pypi
@@ -66,6 +67,8 @@ func Parse(path string, body []byte) ([]Dependency, error) {
 	switch {
 	case base == "package-lock.json", base == "npm-shrinkwrap.json":
 		return parseNPMPackageLock(body)
+	case base == "package.json":
+		return parsePackageJSON(body)
 	case base == "yarn.lock":
 		return parseYarnLock(body)
 	case base == "pnpm-lock.yaml":
