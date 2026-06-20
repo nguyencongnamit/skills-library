@@ -17,7 +17,7 @@ token_budget:
   full: 2200
 rules_path: "rules/"
 related_skills: ["api-security", "auth-security", "logging-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP GraphQL Cheat Sheet"
   - "CWE-400: Uncontrolled Resource Consumption"
@@ -105,6 +105,29 @@ Apollo, several account-takeover-via-batching cases) all hinged on
 either missing field-level authorization or missing cost analysis.
 graphql-armor (Escape) and Apollo's built-in validation rules now
 provide off-the-shelf middleware for most of these — use them.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** POST directly to `/graphql`
+   (bypass your client — attackers do). For *introspection*: send `{ __schema {
+   types { name } } }`; a real hit returns the full type list (and GraphiQL/Sandbox
+   loads) — an FP returns a generic error or 400. For *DoS*: send a deeply-nested
+   recursive query (e.g. `user { friends { friends { friends { … } } } }` past your
+   depth limit) or one with 50+ aliases / a batch of many operations; real if it
+   hangs, spikes DB load, or amplifies — FP if rejected with a depth/complexity/alias
+   error. For *authz*: request a sensitive field as a low-priv user; real if it
+   returns data instead of `UNAUTHORIZED`.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   assert introspection is OFF in the prod config (`{ __schema }` → error, not schema);
+   assert a query exceeding the depth/complexity/alias limit is *rejected* before
+   execution; assert a sensitive field returns `UNAUTHORIZED` for an unauthorized
+   caller. Include a benign case that must still pass — a normal shallow query under
+   the limits returns data, and an authorized caller reads the field. Commit it to CI
+   so the guard can't be silently dropped in a later refactor.
 
 ## References
 

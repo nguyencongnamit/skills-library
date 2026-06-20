@@ -16,7 +16,7 @@ token_budget:
   full: 2200
 rules_path: "rules/"
 related_skills: ["api-security", "cors-security", "auth-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP WebSocket Security Cheat Sheet"
   - "RFC 6455 — The WebSocket Protocol"
@@ -116,6 +116,34 @@ The two recurring incident classes are:
 Both are simple fixes, but both are easy to forget when generating
 a quick chat / collab feature. This skill mirrors the OWASP cheat
 sheet plus the operational must-haves (heartbeats, backoff).
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the handshake and the first messages).** Replay the
+   WebSocket upgrade with a hostile context: send a foreign `Origin:
+   https://attacker.example` header (and the victim's session cookie if cookie
+   auth is in play), and separately try the upgrade with no token / an expired
+   token. Real if the socket reaches OPEN and starts streaming data — CSWSH is
+   confirmed when a cross-origin page can establish the connection and read the
+   user's stream; broken handshake-auth is confirmed when an unauthenticated
+   upgrade succeeds and only a later `auth`/`subscribe` message gates access. For
+   resource limits, hold one socket open and fire an oversized frame and a rapid
+   message burst — real if neither is rejected (no size cap, no per-connection
+   rate limit). A false positive: the upgrade is refused (4xx / close) for the
+   disallowed Origin and the missing/expired token, and oversized or floods are
+   dropped.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   assert a handshake carrying a disallowed `Origin` is rejected and one without a
+   valid token is rejected, while an allowlisted Origin + valid token connects;
+   assert a frame over the max size and a burst past the rate limit are closed/dropped,
+   and that each privileged message is re-authorized (a revoked/role-changed user is
+   denied) — plus a benign case: legitimate origin, valid token, normal-sized message
+   at normal cadence still succeeds. Commit it to CI so the guard can't be silently
+   dropped in a later refactor.
 
 ## References
 

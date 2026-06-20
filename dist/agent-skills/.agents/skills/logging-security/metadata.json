@@ -24,7 +24,7 @@
     "error-handling-security",
     "compliance-awareness"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Logging Cheat Sheet",
     "CWE-532 — Insertion of Sensitive Information into Log File",

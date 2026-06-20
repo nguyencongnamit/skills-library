@@ -23,7 +23,7 @@
     "frontend-security",
     "api-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP HTML5 Security Cheat Sheet — CORS",
     "CWE-942 — Permissive Cross-domain Policy with Untrusted Domains",

@@ -18,7 +18,7 @@
   "token_budget": {
     "minimal": 1800,
     "compact": 2500,
-    "full": 3000
+    "full": 3600
   },
   "rules_path": "rules/",
   "related_skills": [
@@ -27,7 +27,7 @@
     "auth-security",
     "supply-chain-security"
   ],
-  "last_updated": "2026-05-14",
+  "last_updated": "2026-06-20",
   "sources": [
     "Google Workspace Admin SDK security guidance",
     "Atlassian Cloud Security Best Practices",

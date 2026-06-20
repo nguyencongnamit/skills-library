@@ -15,10 +15,10 @@ languages: ["*"]
 token_budget:
   minimal: 1800
   compact: 2500
-  full: 3000
+  full: 3600
 rules_path: "rules/"
 related_skills: ["secret-detection", "iam-best-practices", "auth-security", "supply-chain-security"]
-last_updated: "2026-05-14"
+last_updated: "2026-06-20"
 sources:
   - "Google Workspace Admin SDK security guidance"
   - "Atlassian Cloud Security Best Practices"
@@ -190,6 +190,31 @@ do not generate "generic" SaaS detection logic that misses real
 attacks. They are also small enough that the compiled
 `SECURITY-SKILLS.md` distribution can carry them in the `full` tier
 without blowing the token budget.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe).** Pick the probe that matches the class:
+   *Cross-tenant IDOR* — authenticate as tenant A and request tenant B's resource id
+   (real if you get B's data back = broken tenant isolation; FP if scoped to the
+   caller's tenant). *Unverified webhook* — replay a forged Slack/HubSpot/Calendly
+   payload with a bad/absent signature or a stale timestamp (real if accepted; FP if
+   it's rejected before the body is parsed). *Over-broad OAuth/API-key scope* — diff
+   the granted scopes against the calls the code actually makes (real if it holds
+   `admin.directory.*` write / Salesforce `full` but only reads). *Trusted body
+   identity* — see if the handler trusts a payload `email`/`From` field instead of the
+   canonical server-side id. *Hard-coded token* — confirm the matched secret is live,
+   not a docs `EXAMPLE`/`sk_test_` placeholder.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   tenant A requesting tenant B's id → assert 403/404 and zero leaked rows, plus a
+   same-tenant request that still succeeds; forged/stale-signature webhook → rejected,
+   valid one → accepted; assert the integration requests only least-privilege scopes;
+   assert identity is resolved by canonical id, not body field; and that the secret
+   loads from the secrets manager, not source. Commit it so the guard can't be silently
+   dropped, and log the privileged action (bulk export, SCIM write) to an audit sink.
 
 ## References
 

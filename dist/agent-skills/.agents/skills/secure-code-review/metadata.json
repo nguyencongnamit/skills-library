@@ -25,7 +25,7 @@
     "secret-detection",
     "container-security"
   ],
-  "last_updated": "2026-06-06",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Top 10 2021",
     "CWE Top 25 2023",

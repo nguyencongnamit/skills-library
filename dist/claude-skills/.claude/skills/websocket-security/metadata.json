@@ -31,7 +31,7 @@
     "cors-security",
     "auth-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP WebSocket Security Cheat Sheet",
     "RFC 6455 — The WebSocket Protocol",

@@ -26,7 +26,7 @@
     "supply-chain-security",
     "deserialization-security"
   ],
-  "last_updated": "2026-06-04",
+  "last_updated": "2026-06-20",
   "sources": [
     "NIST AI 100-2 (Adversarial Machine Learning)",
     "MITRE ATLAS (Adversarial Threat Landscape for AI Systems)",

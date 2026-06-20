@@ -16,7 +16,7 @@ token_budget:
   full: 2000
 rules_path: "rules/"
 related_skills: ["frontend-security", "api-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP HTML5 Security Cheat Sheet — CORS"
   - "CWE-942 — Permissive Cross-domain Policy with Untrusted Domains"
@@ -88,6 +88,27 @@ to make credentialed cross-origin requests and read the response.
 
 This skill is short by design — the matrix of bad combinations is finite
 and the rules are blunt.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Replay a request to the endpoint
+   with a forged `Origin` header the allowlist should reject — `Origin: https://evil.example`,
+   then separately `Origin: null` — and send credentials (cookie or `Authorization`).
+   A real hit: the response echoes `Access-Control-Allow-Origin: https://evil.example`
+   (or `null`, or `*`) **together with** `Access-Control-Allow-Credentials: true`, meaning
+   the attacker's page can read the credentialed response. A false positive: the server
+   omits the ACAO header, returns a fixed trusted origin regardless of input, or sends
+   `*` with **no** credentials on a genuinely public endpoint — also watch for `*.example.com`
+   regexes that match attacker-controlled subdomains, and missing `Vary: Origin` on cached responses.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call): assert that
+   requests with `Origin: https://evil.example` and `Origin: null` yield no reflected ACAO (never
+   `*` paired with `Allow-Credentials: true`), while a known-good origin from the allowlist is
+   reflected as a single specific value with `Vary: Origin` present. Commit it to CI so the guard
+   can't be silently dropped in a later refactor.
 
 ## References
 

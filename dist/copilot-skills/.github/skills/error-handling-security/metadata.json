@@ -23,7 +23,7 @@
     "api-security",
     "logging-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Error Handling Cheat Sheet",
     "CWE-209 — Generation of Error Message Containing Sensitive Information",

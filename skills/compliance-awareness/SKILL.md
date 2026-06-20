@@ -16,7 +16,7 @@ token_budget:
   full: 2000
 rules_path: "frameworks/"
 related_skills: ["secure-code-review", "api-security"]
-last_updated: "2026-05-14"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Top 10 2021"
   - "CWE Top 25 2023"
@@ -65,6 +65,29 @@ Compliance frameworks (PCI DSS, HIPAA, SOC 2, ISO 27001, GDPR) prescribe control
 don't tell developers what code to write. This skill bridges the gap by attaching
 control-relevant guidance to AI generation steps, so the resulting code is
 audit-friendly by default.
+
+
+### Verify & lock (triaging a finding)
+
+A compliance gap flagged in review is a *candidate*, not a confirmed gap. Confirm the
+control is actually missing, remediate, then lock it so the control can't silently
+regress between audits.
+
+1. **Confirm the gap is real (map to the control + check for evidence).** Tie the
+   finding to a specific clause — SOC 2 CC-series, PCI DSS requirement, HIPAA Security
+   Rule safeguard, GDPR article — then check whether the technical evidence for that
+   control actually exists: encryption-at-rest flag enabled, audit logging on for the
+   security-relevant action, MFA enforced on the access path, PII/PHI classification
+   tags present, the data-retention/erasure job scheduled and running. Real gap if the
+   evidence is absent; false positive if a compensating control (tokenization service,
+   network segmentation, an existing managed-encryption layer) already satisfies the
+   clause.
+2. **Remediate, then lock with an automated control test** (unit *or* integration —
+   dev's call). Write a CI check that asserts the control's technical evidence as
+   compliance-as-code: the config flag is set, the audit-log entry is emitted for the
+   sensitive action, the classification comment/tag is present on the data-handling
+   module, the retention policy exists. Add a passing baseline and commit it, so the
+   control is verified continuously rather than rediscovered at the next audit.
 
 ## References
 

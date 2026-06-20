@@ -25,7 +25,7 @@
     "cors-security",
     "iac-security"
   ],
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP SSRF Prevention Cheat Sheet",
     "CWE-918: Server-Side Request Forgery",

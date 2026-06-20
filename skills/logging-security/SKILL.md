@@ -16,7 +16,7 @@ token_budget:
   full: 2400
 rules_path: "rules/"
 related_skills: ["secret-detection", "error-handling-security", "compliance-awareness"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Logging Cheat Sheet"
   - "CWE-532 — Insertion of Sensitive Information into Log File"
@@ -89,6 +89,28 @@ and ISO 27001 A.12.4.
 This skill is the partner to `secret-detection` (which scans source) and
 `error-handling-security` (which sanitizes the external response). Logs
 sit between the two and bleed both directions.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (exercise the path, then read the emitted log).** Drive the
+   code path with marked sensitive input — a known password, bearer token, API key,
+   SSN-like / full-PAN / email value — then grep the *actual* sink output (file,
+   stdout, shipper) for it. For log injection (CWE-117), send input carrying `\n`,
+   `\r`, CRLF, or ANSI escapes and check whether it forges a second log line or
+   spoofs fields. Also check the unhappy path: trigger an exception and inspect the
+   error/stack log, and confirm security events (login fail, password/role change,
+   data export) actually land. Real if the secret/PII appears verbatim, the forged
+   line lands, or the audit record is missing; FP if already redacted (`***`/hash),
+   the newline is escaped to one line, or it's a whitelisted safe ID (e.g. `req_`).
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   capture logger output in the test and assert the sensitive field is absent/redacted,
+   that CRLF-laced input collapses to a single escaped line, and that the expected
+   audit event is emitted — while a benign message still logs normally. Commit it so
+   the redactor, sanitizer, and audit call can't be silently dropped.
 
 ## References
 

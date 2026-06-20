@@ -18,7 +18,7 @@ token_budget:
   full: 3300
 rules_path: "checklists/"
 related_skills: ["frontend-security", "secret-detection", "auth-security", "container-security"]
-last_updated: "2026-06-10"
+last_updated: "2026-06-20"
 sources:
   - "Electron Security Checklist (official docs)"
   - "OWASP — Electron / desktop application security"
@@ -151,6 +151,34 @@ so server URLs must never load into a preload-bearing window, and server data is
 input to be validated, not trusted. The worst observed chain is the reverse of
 the obvious one: server-controlled content → a navigable preload window →
 `electronAPI` → local RCE.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit (electronegativity flag, a `webPreferences` line, a raw
+`exec`/`openExternal` call) is a *candidate*, not a confirmed bug. Confirm it,
+fix it, then lock it so it can't come back.
+
+1. **Confirm it's real (probe / inspect).** Load a test page in the *release*
+   build's renderer and try to reach Node: `window.require`, `window.process`,
+   `require('child_process').exec(...)`. Real if any resolve — `nodeIntegration:true`
+   or `contextIsolation:false`/`sandbox:false`. For an IPC/sink hit, drive the
+   exposed `electronAPI` function with hostile input (`../../etc/passwd`,
+   `a; id`, `file:///…`, a foreign host for token attach) and watch whether the
+   main process traverses/spawns/opens. For nav, attempt a `will-navigate` or
+   `window.open` to an external origin and see if it lands. FP if isolation +
+   sandbox are on and Node calls throw, the sink type-checks/allowlists and
+   rejects, the nav guard denies by default, or it's dev-only config / a
+   hard-coded `https:` constant / intentional `myapp://` OAuth with `state`/PKCE.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call). Assert the locked boundary: renderer cannot reach `require`/Node;
+   every `BrowserWindow` carries `nodeIntegration:false`, `contextIsolation:true`,
+   `sandbox:true`, `webSecurity:true`; IPC handlers reject traversal/injection/
+   foreign-host args; the nav guard denies an external origin and
+   `setWindowOpenHandler` returns deny; tokens go through `safeStorage` with no
+   `PLAINTEXT:` fallback. Add one benign in-app action (valid IPC call, allowed
+   `https:` open) that still works. Commit it so the guard can't be silently
+   dropped.
 
 ## References
 

@@ -17,7 +17,7 @@ token_budget:
   full: 2200
 rules_path: "rules/"
 related_skills: ["api-security", "ssrf-prevention", "container-security", "cors-security"]
-last_updated: "2026-06-03"
+last_updated: "2026-06-20"
 sources:
   - "OWASP File Upload Cheat Sheet"
   - "CWE-434: Unrestricted Upload of File with Dangerous Type"
@@ -120,6 +120,15 @@ neutralizes the polyglot's HTML execution. A virus scanner catches
 known malware. Re-encoding strips weird codec payloads. Each defense
 is a layer; missing one layer turns most uploads from "stored data"
 into "stored RCE."
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect endpoint).** POST a payload the allowlist should reject and watch where it lands: a `shell.php`/`shell.jsp` with a real magic-byte mismatch, an `image/png` content-type wrapping HTML/SVG-with-`<script>`, or a filename like `../../shell.php`. Real if the upload is accepted *and* the stored object is reachable from an executable/same-origin path, the traversal escapes the upload dir, or the SVG/HTML renders script when fetched. False positive if magic bytes are verified server-side, the name is replaced with a UUID, and the file serves from a separate sandboxed domain as `attachment` — the probe is rejected or served inert.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call): feed the validator the disallowed cases and assert each is rejected — `.php`/`.jsp`/`.svg`/`.html` extensions, spoofed `Content-Type` whose magic bytes don't match, oversize body past the limit, and a `../../` / NUL / reserved-name filename (assert the on-disk key is a sanitized UUID, never the input). Then assert a benign `image/png` with valid magic bytes still uploads and serves. Commit it to CI so the guard can't be silently dropped in a later refactor.
 
 ## References
 

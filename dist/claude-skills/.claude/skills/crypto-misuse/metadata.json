@@ -24,7 +24,7 @@
     "auth-security",
     "protocol-security"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "NIST SP 800-131A Rev. 2",
     "NIST SP 800-57 Part 1 Rev. 5",
