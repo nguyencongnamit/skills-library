@@ -114,10 +114,20 @@ func parsePoetryLock(body []byte) ([]Dependency, error) {
 // comments are stripped before parsing.
 var requirementsLine = regexp.MustCompile(`^([A-Za-z0-9_][A-Za-z0-9_.\-]*)\s*(===?|@)\s*([^\s;]+)`)
 
-// parseRequirementsTxt reads pip's requirements.txt format. Only
-// lines with a concrete `==`, `===`, or `@ <url>` pin are emitted —
-// loose ranges (`>=1.2`) cannot be turned into an installed version
-// without resolving against PyPI, which is out of scope here.
+// requirementsNameOnly matches the package name of a loose requirement
+// (`numpy>=1.24`, `requests[security]~=2.0`, or a bare `Pillow`). The
+// trailing assertion requires the name to be followed by a PEP 440
+// version operator, an extras bracket, or end-of-line, so a stray URL
+// or option line is not mistaken for a package name.
+var requirementsNameOnly = regexp.MustCompile(`^([A-Za-z0-9_][A-Za-z0-9_.\-]*)(?:\[[^\]]*\])?\s*(?:[<>=!~]|$)`)
+
+// parseRequirementsTxt reads pip's requirements.txt format. A concrete
+// `==`, `===`, or `@ <url>` pin is emitted with its version. A loose
+// range (`>=1.2`) or a bare name cannot be resolved to an installed
+// version, but the NAME is still emitted (with an empty version) so the
+// curated malicious-package and typosquat checks run on it — catching a
+// hostile dependency declared without an exact pin, mirroring the
+// package.json manifest parser.
 func parseRequirementsTxt(body []byte) ([]Dependency, error) {
 	scanner := bufio.NewScanner(bytes.NewReader(body))
 	scanner.Buffer(make([]byte, 64*1024), 1<<20)
@@ -140,18 +150,25 @@ func parseRequirementsTxt(body []byte) ([]Dependency, error) {
 		if line == "" || strings.HasPrefix(line, "#") || strings.HasPrefix(line, "-") {
 			continue
 		}
-		m := requirementsLine.FindStringSubmatch(line)
-		if m == nil {
+		if m := requirementsLine.FindStringSubmatch(line); m != nil {
+			ver := strings.Trim(strings.TrimSpace(m[3]), "\"")
+			out = append(out, Dependency{
+				Name:      m[1],
+				Version:   ver,
+				Ecosystem: "pypi",
+				Source:    line,
+			})
 			continue
 		}
-		ver := strings.TrimSpace(m[3])
-		ver = strings.Trim(ver, "\"")
-		out = append(out, Dependency{
-			Name:      m[1],
-			Version:   ver,
-			Ecosystem: "pypi",
-			Source:    line,
-		})
+		// Loose range / bare name: emit the name with no version so the
+		// name-based curated checks still run.
+		if nm := requirementsNameOnly.FindStringSubmatch(line); nm != nil {
+			out = append(out, Dependency{
+				Name:      nm[1],
+				Ecosystem: "pypi",
+				Source:    line,
+			})
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("pypi: scan requirements.txt: %w", err)

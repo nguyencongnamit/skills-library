@@ -109,3 +109,39 @@ func TestNewParsersMalformed(t *testing.T) {
 		t.Errorf("pubspec.lock garbage: deps=%v err=%v", deps, err)
 	}
 }
+
+// TestParseRequirementsRangesEmitNames covers the gap where a loosely
+// pinned (or bare) pip requirement was dropped entirely: the NAME is now
+// emitted (empty version) so the curated malicious/typosquat checks run,
+// mirroring the package.json manifest behaviour. URL/option lines must
+// not be mistaken for package names.
+func TestParseRequirementsRangesEmitNames(t *testing.T) {
+	body := []byte(`numpy>=1.24
+Pillow>=10.0
+requests[security]~=2.0
+flask==3.0.0
+django < 5
+# a comment
+-r other-requirements.txt
+--hash=sha256:deadbeef
+https://example.com/pkg-1.0.whl
+barepkg
+`)
+	deps, err := Parse("requirements.txt", body)
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	assertContains(t, deps,
+		"numpy@/pypi",      // range -> name, empty version
+		"Pillow@/pypi",     // range
+		"requests@/pypi",   // extras stripped
+		"django@/pypi",     // space before operator
+		"flask@3.0.0/pypi", // exact pin keeps version
+		"barepkg@/pypi",    // bare name
+	)
+	for _, d := range deps {
+		if d.Name == "https" || d.Name == "r" || d.Name == "" {
+			t.Errorf("URL/option line emitted as a package: %+v", d)
+		}
+	}
+}

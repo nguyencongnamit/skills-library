@@ -217,10 +217,14 @@ flask===2.0.0
 		"requests@2.31.0/pypi",
 		"Django@4.2.7/pypi",
 		"flask@2.0.0/pypi",
+		// A loose range now emits the NAME (empty version) so the curated
+		// malicious/typosquat checks still run; see
+		// TestParseRequirementsRangesEmitNames for the full coverage.
+		"not-a-pin@/pypi",
 	)
 	for _, d := range got {
-		if d.Name == "not-a-pin" {
-			t.Fatalf("loose range should not be emitted: %+v", d)
+		if d.Name == "not-a-pin" && d.Version != "" {
+			t.Fatalf("loose range must not invent a version: %+v", d)
 		}
 	}
 }
