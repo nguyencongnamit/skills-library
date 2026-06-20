@@ -7,12 +7,12 @@
     {
       "rule": "gha-default-permissions-read",
       "ecosystem": "github-actions",
-      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+      "source": "skills/cicd-security/SKILL.md"
     },
     {
       "rule": "gha-no-curl-pipe-bash",
       "ecosystem": "github-actions",
-      "source": "skills/cicd-security/checklists/github_actions_hardening.yaml"
+      "source": "skills/cicd-security/SKILL.md"
     }
   ]
 }

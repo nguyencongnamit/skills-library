@@ -3,6 +3,7 @@ package tools
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -512,38 +513,79 @@ func TestWalkScanFiles(t *testing.T) {
 	}
 }
 
-// TestDockerfileRuleIDsTraceToSkill is the drift guard: every rule the
-// dockerfile scanner can emit MUST have a matching entry in the
-// container-security skill's checklist YAML (dkr-* id). This keeps the
-// gate's findings traceable to documented skill knowledge — if someone
-// adds a Go check without a skill entry (or renames one), this fails.
-// (GitHub Actions has an analogous but trickier AST/regex overlap that
-// is tracked separately for the YAML-rule migration.)
-func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
+// patternMarkerRe extracts the inline `<!-- pattern: { ... } -->` HTML
+// markers from a SKILL.md body. FindAll (not FindString) so a bullet
+// carrying more than one marker is fully captured.
+var patternMarkerRe = regexp.MustCompile(`<!--\s*pattern\s*:\s*(\{[^}]*\})\s*-->`)
+
+// assertScannerContract is the drift guard binding a scanner to its
+// single source of truth, SKILL.md. The checklist YAML is gone; the
+// contract lives in the skill's `<!-- pattern: { id, check } -->`
+// markers (id filtered by idPrefix):
+//
+//   - check: deterministic  → a Go scanner check MUST emit this id
+//   - check: llm            → the agent reasons it from SKILL.md; no Go check
+//
+// It enforces the bijection both ways (every Go check has a
+// deterministic marker, every deterministic marker has a Go check) and
+// that no llm-marked pattern is silently enforced by Go.
+func assertScannerContract(t *testing.T, skillRel, idPrefix string, goIDs map[string]bool) {
+	t.Helper()
 	root := repoRoot(t)
-	data, err := os.ReadFile(filepath.Join(root,
-		"skills", "container-security", "checklists", "dockerfile_hardening.yaml"))
+	data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(skillRel)))
 	if err != nil {
 		t.Fatal(err)
 	}
-	var doc struct {
-		Patterns []struct {
-			ID string `yaml:"id"`
-		} `yaml:"patterns"`
-	}
-	if err := yaml.Unmarshal(data, &doc); err != nil {
-		t.Fatal(err)
-	}
-	skillIDs := map[string]bool{}
-	for _, p := range doc.Patterns {
-		skillIDs[p.ID] = true
-	}
-	for _, c := range dockerfileChecks {
-		if !skillIDs[c.id] {
-			t.Errorf("dockerfile scanner emits %q but the container-security checklist YAML "+
-				"has no such entry — add a marker in SKILL.md (regenerate) or rename the Go id", c.id)
+	deterministic := map[string]bool{}
+	llm := map[string]bool{}
+	for _, m := range patternMarkerRe.FindAllStringSubmatch(string(data), -1) {
+		var p struct {
+			ID    string `yaml:"id"`
+			Check string `yaml:"check"`
+		}
+		if err := yaml.Unmarshal([]byte(m[1]), &p); err != nil {
+			t.Fatalf("invalid pattern marker %q: %v", m[1], err)
+		}
+		if !strings.HasPrefix(p.ID, idPrefix) {
+			continue
+		}
+		switch p.Check {
+		case "deterministic":
+			deterministic[p.ID] = true
+		case "llm":
+			llm[p.ID] = true
+		case "":
+			t.Errorf("marker %q has no check: field (want deterministic|llm)", p.ID)
+		default:
+			t.Errorf("marker %q has unknown check %q (want deterministic|llm)", p.ID, p.Check)
 		}
 	}
+	for id := range goIDs {
+		if !deterministic[id] {
+			t.Errorf("scanner emits %q but %s has no `check: deterministic` marker for it — "+
+				"add the marker or rename the Go id", id, skillRel)
+		}
+	}
+	for id := range deterministic {
+		if !goIDs[id] {
+			t.Errorf("%s marks %q as `check: deterministic` but no Go scanner check emits it — "+
+				"implement the check or change the marker to `check: llm`", skillRel, id)
+		}
+	}
+	for id := range llm {
+		if goIDs[id] {
+			t.Errorf("%s marks %q as `check: llm` but a Go scanner check emits it — "+
+				"change the marker to `check: deterministic`", skillRel, id)
+		}
+	}
+}
+
+func TestDockerfileRuleIDsTraceToSkill(t *testing.T) {
+	assertScannerContract(t, "skills/container-security/SKILL.md", "dkr-", DockerfileRuleIDs())
+}
+
+func TestGitHubActionsRuleIDsTraceToSkill(t *testing.T) {
+	assertScannerContract(t, "skills/cicd-security/SKILL.md", "gha-", GitHubActionsRuleIDs())
 }
 
 // TestBlankYAMLComments locks in the comment-blanking lexer that stops a

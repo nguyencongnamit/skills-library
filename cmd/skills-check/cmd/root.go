@@ -25,6 +25,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(initCmd())
 	root.AddCommand(updateCmd())
 	root.AddCommand(validateCmd())
+	root.AddCommand(coverageCmd())
 	root.AddCommand(listCmd())
 	root.AddCommand(regenerateCmd())
 	root.AddCommand(generateNativeCmd())

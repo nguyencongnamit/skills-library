@@ -2,7 +2,7 @@
 # moved by the action's owner, so a compromised maintainer (or a
 # supply-chain attack like the one against 'tj-actions/changed-files'
 # in 2025) can swap the underlying code without changing the ref.
-# See skills/cicd-security/checklists/github_actions_hardening.yaml
+# See skills/cicd-security/SKILL.md
 # rule 'pinned-sha' and https://github.com/step-security/secure-repo
 # for the broader threat model.
 name: CI

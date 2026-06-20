@@ -409,12 +409,28 @@ func (s *Skill) ExtractWithHeading(tier Tier) string {
 	return b.String()
 }
 
+// patternMarkerStrip removes the build-time `<!-- pattern: { ... } -->`
+// markers from a rendered bullet. Those markers are the scanner
+// contract consumed by derive-checklists and the gate's trace test
+// (which read the raw SKILL.md); an agent loading the rendered skill
+// never needs to see them or pay tokens for them.
+var patternMarkerStrip = regexp.MustCompile(`\s*<!--\s*pattern\s*:\s*\{[^}]*\}\s*-->`)
+
+// StripBodyMarkers removes the build-time pattern markers from a single
+// body bullet. Exposed so the compiler can render marker-free dist
+// output that matches what Extract already counts; derive-checklists and
+// the gate's trace test read the raw SKILL.md and are unaffected.
+func StripBodyMarkers(line string) string {
+	return strings.TrimSpace(patternMarkerStrip.ReplaceAllString(line, ""))
+}
+
 func writeBullets(b *strings.Builder, label string, items []string) {
 	if len(items) == 0 {
 		return
 	}
 	fmt.Fprintf(b, "### %s\n", label)
 	for _, item := range items {
+		item = strings.TrimSpace(patternMarkerStrip.ReplaceAllString(item, ""))
 		fmt.Fprintf(b, "- %s\n", item)
 	}
 	b.WriteString("\n")

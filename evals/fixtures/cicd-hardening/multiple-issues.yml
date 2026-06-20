@@ -6,7 +6,7 @@
 #   1. no top-level `permissions:` block
 #       -> gha-default-permissions-read
 #   2. action pinned by tag rather than SHA
-#       -> gha-ast-unpinned-action (AST)
+#       -> gha-pin-actions-by-sha (AST)
 #       (the checklist rule gha-pin-actions-by-sha is intentionally
 #        absent from expected_findings: its `(?!...)` negative
 #        lookahead is unsupported by Go's RE2 engine, so the rule
@@ -16,7 +16,7 @@
 #   4. attacker-controllable issue-comment body interpolated into
 #      a shell command
 #       -> gha-no-untrusted-script-injection (regex) +
-#          gha-ast-expression-injection (AST)
+#          gha-no-untrusted-script-injection (AST)
 on:
   issue_comment:
     types: [created]

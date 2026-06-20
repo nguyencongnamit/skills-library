@@ -164,9 +164,12 @@ _Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm char
 
 **Always:**
 - Use **multi-stage builds**: separate builder/test stages from the final runtime image so build toolchains and source aren't shipped. The last stage should be `FROM distroless`, `FROM scratch`, `FROM alpine:<digest>`, or another minimal base — pinned by SHA256 digest, not just tag.
-- Run as a non-root user: `USER <uid>` (numeric UID >= 10000 for K8s `runAsNonRoot` policies to be enforceable). Set USER explicitly on the **final stage** — omitting USER entirely leaves the container running as root by default, which is the same as `USER root`. <!-- pattern: { id: dkr-missing-user-directive, severity: critical, cwe: 250, framework: dockerfile_hardening } -->
-- Use **`npm ci`** (and equivalents `pnpm install --frozen-lockfile`, `yarn install --frozen-lockfile`) in container builds, not `npm install`. `npm install` mutates the lockfile and resolves versions per-build, producing non-deterministic images that drift from the lockfile. <!-- pattern: { id: dkr-npm-install-not-ci, severity: medium, framework: dockerfile_hardening } -->
+- Run as a non-root user: `USER <uid>` (numeric UID >= 10000 for K8s `runAsNonRoot` policies to be enforceable). Set USER explicitly on the **final stage** — omitting USER entirely leaves the container running as root by default, which is the same as `USER root`.
+- Use **`npm ci`** (and equivalents `pnpm install --frozen-lockfile`, `yarn install --frozen-lockfile`) in container builds, not `npm install`. `npm install` mutates the lockfile and resolves versions per-build, producing non-deterministic images that drift from the lockfile.
 - Add a `.dockerignore` excluding `.git`, `node_modules`, `.env`, `*.pem`, `*.key`, `target/`, `.terraform/`, `dist/`, `coverage/`.
+- Enable **BuildKit** (`DOCKER_BUILDKIT=1` or `# syntax=docker/dockerfile:1`) for `--mount=type=secret` support and better cache isolation.
+- Emit an **SBOM** (`docker buildx --sbom=true` / `syft`) and attach it to the image so downstream scanners can audit the dependency set.
+- Pin **apt** packages and clean lists in the same layer: `apt-get install -y --no-install-recommends pkg=1.2.3 && rm -rf /var/lib/apt/lists/*`. Unpinned installs make image contents non-reproducible.
 - Set explicit `HEALTHCHECK` for long-running services and matching `livenessProbe` / `readinessProbe` / `startupProbe` in K8s.
 - Set resource `requests` and `limits` on every container (CPU and memory).
 - Drop all Linux capabilities then add back only what's needed: `securityContext.capabilities.drop: [ALL]`.
@@ -179,13 +182,14 @@ _Hardening rules for Dockerfile, OCI images, Kubernetes manifests, and Helm char
 
 **Never:**
 - Run containers as root or with `privileged: true` / `allowPrivilegeEscalation: true` outside of explicit, audited system pods (e.g., CNI plugins).
-- Use **end-of-life base images**. As of mid-2026 this includes `node:< 18`, `python:< 3.10`, `alpine:< 3.17`, `debian:< 11 (bullseye)`, `ubuntu:< 20.04`, `centos:*`, `ruby:< 3.1`, and any non-LTS Node/Python release. EOL images stop receiving security patches; a maintained image with no public CVEs is still safer than an EOL one. Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar. <!-- pattern: { id: dkr-eol-base-image, severity: critical, cwe: 1104, framework: dockerfile_hardening } -->
+- Use **end-of-life base images**. As of mid-2026 this includes `node:< 18`, `python:< 3.10`, `alpine:< 3.17`, `debian:< 11 (bullseye)`, `ubuntu:< 20.04`, `centos:*`, `ruby:< 3.1`, and any non-LTS Node/Python release. EOL images stop receiving security patches; a maintained image with no public CVEs is still safer than an EOL one. Pin via `endoflife.date/<runtime>` if the runtime is unfamiliar.
 - Mount the host docker socket (`/var/run/docker.sock`) inside an application container. It's effectively root on the host.
 - Expose the container **daemon API over the network** (`tcp://…:2375`, or `:2376` even with TLS) to clients or apps. The daemon API is root-on-host: whoever reaches it runs arbitrary privileged containers and mounts the host filesystem. (A desktop/CLI app talking straight to a remote daemon is the same anti-pattern as a mounted `docker.sock`, just over TCP.)
 - Ship a **single shared client credential** (one mTLS cert/key, token, or kubeconfig bundled into every copy of a distributed app) to reach that daemon or cluster. Every install holds the same key — trivially extracted from the app bundle — so it grants every user identical access and cannot be revoked per-user. Issue per-user / per-session, short-lived, scoped credentials.
 - Run a tenant's container `privileged` on a host shared with other tenants, or attach tenant containers to a **shared external bridge network** — the first gives container-escape → co-tenant takeover, the second gives cross-tenant L3 reachability.
 - Embed secrets in image layers via `ENV`, `ARG`, `COPY`, or by `echo`-ing them to a file. Even if `--squash`'d, BuildKit cache and registry layers leak.
-- Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs. <!-- pattern: { id: dkr-explicit-latest-tag, severity: high, framework: dockerfile_hardening } -->
+- Run `curl … | sh` or `wget -O- … | sh` in a `RUN` — piping an unverified remote script to a shell is arbitrary remote code at build time. Download, verify a pinned SHA-256, then execute.
+- Use `latest`, `stable`, `slim`, or unversioned tags as the final image base — builds become non-reproducible and quietly pick up CVEs.
 - Use `ADD <url>` to fetch remote resources during build (use `curl --fail` with a checksum verify and `RUN` instead, or vendor the artifact).
 - Disable `automountServiceAccountToken` when the workload needs the K8s API, but DO disable it (`automountServiceAccountToken: false`) when it doesn't.
 - Use `hostNetwork: true`, `hostPID: true`, or `hostIPC: true` for application pods.

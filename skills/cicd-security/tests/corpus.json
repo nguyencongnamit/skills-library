@@ -9,7 +9,7 @@
       "filename": ".github/workflows/pwn.yml",
       "text": "name: pr\non: pull_request_target\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@8edcb1bdb4e25140b69c05f6e2a13fe90568de4a\n        with:\n          ref: ${{ github.event.pull_request.head.sha }}\n      - run: npm install && npm test\n",
       "expected": "detect",
-      "expected_rule": "gha-ast-pwn-request",
+      "expected_rule": "gha-pr-target-no-untrusted-checkout",
       "reason": "pull_request_target + checkout of attacker-controlled head = classic pwn request"
     },
     {
@@ -25,7 +25,7 @@
       "filename": ".github/workflows/unpinned.yml",
       "text": "name: ci\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: read\n    steps:\n      - uses: actions/checkout@main\n      - run: echo ok\n",
       "expected": "detect",
-      "expected_rule": "gha-ast-unpinned-action",
+      "expected_rule": "gha-pin-actions-by-sha",
       "reason": "mutable ref instead of a commit SHA pin"
     },
     {

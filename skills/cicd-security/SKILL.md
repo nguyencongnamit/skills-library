@@ -17,7 +17,7 @@ token_budget:
   full: 2200
 rules_path: "checklists/"
 related_skills: ["supply-chain-security", "secret-detection", "container-security"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "OpenSSF Scorecard — Pinned-Dependencies / Token-Permissions"
   - "SLSA v1.0 Build Track"
@@ -39,25 +39,31 @@ external_tools:
   not by tag — tags can be re-pushed. Same applies to GitLab CI `include:`
   references and reusable workflows. Renovate / Dependabot can keep the
   SHA pins fresh.
+  <!-- pattern: { id: gha-pin-actions-by-sha, severity: high, check: deterministic } -->
 - Declare `permissions:` at the workflow or job level and default to
   `contents: read` only. Grant additional scopes (`id-token: write`,
   `packages: write`, etc.) job-by-job, never workflow-wide.
+  <!-- pattern: { id: gha-default-permissions-read, severity: high, check: deterministic } -->
 - Use **OIDC** (`id-token: write` + cloud provider trust policy) for
   short-lived cloud credentials. Never store long-lived AWS / GCP / Azure
   keys as GitHub Secrets.
+  <!-- pattern: { id: gha-oidc-cloud-credentials, severity: high, check: deterministic } -->
 - Treat `pull_request_target`, `workflow_run`, and any `pull_request` job
   that uses `actions/checkout` with `ref: ${{ github.event.pull_request.head.ref }}`
   as **trusted-context-on-untrusted-code**. Either don't run them, or run
   with no secrets and no write tokens.
+  <!-- pattern: { id: gha-pr-target-no-untrusted-checkout, severity: critical, check: deterministic } -->
 - Echo every untrusted expression (`${{ github.event.* }}`) through an
   environment variable first; never interpolate it directly into `run:`
   body — that's the canonical GitHub Actions script-injection sink.
+  <!-- pattern: { id: gha-no-untrusted-script-injection, severity: critical, check: deterministic } -->
 - Sign release artifacts (Sigstore / cosign) and publish SLSA provenance
   attestations. Verify provenance in any consumer pipeline that pulls the
   artifact.
 - Set `runs-on` to a hardened runner image and pin the runner version.
   Audit-mode StepSecurity Harden-Runner (or equivalent egress firewall)
   for any workflow handling secrets is recommended.
+  <!-- pattern: { id: gha-harden-runner, severity: medium, check: llm } -->
 - Treat `npm install`, `pip install`, `go install`, `cargo install`, and
   `docker pull` invoked in CI as untrusted code execution. Run with
   `--ignore-scripts` (npm/yarn), pinned lockfiles, registry allowlists,
@@ -73,6 +79,7 @@ external_tools:
   attacker for ~10 weeks because thousands of pipelines ran
   `bash <(curl https://codecov.io/bash)`. Always download, checksum,
   then execute.
+  <!-- pattern: { id: gha-no-curl-pipe-bash, severity: critical, check: deterministic } -->
 - Echo secrets to logs, even on failure. Use `::add-mask::` for any
   computed-at-runtime secret, and double-check with the GitHub
   workflow-log search.
@@ -82,9 +89,11 @@ external_tools:
 - Cache mutable state (e.g. `~/.npm`, `~/.cargo`, `~/.gradle`) keyed only
   on `os`. A cache hit cross-job is a cross-tenant attack surface — key
   on a lockfile hash and scope to the workflow ref.
+  <!-- pattern: { id: gha-cache-key-scope, severity: medium, check: deterministic } -->
 - Trust artifact downloads from arbitrary workflow runs without verifying
   the source workflow + commit SHA. Build-cache poisoning works through
   unscoped artifact reuse.
+  <!-- pattern: { id: gha-artifact-verify-source, severity: medium, check: deterministic } -->
 - Store secrets in repository variables (`vars.*`) — they are plaintext
   to anyone with read access. Only `secrets.*` are gated by the secret
   scanning + scope rules.
@@ -122,7 +131,6 @@ reinvents most often.
 
 ## References
 
-- `checklists/github_actions_hardening.yaml`
 - `checklists/gitlab_ci_hardening.yaml`
 - [OpenSSF Scorecard](https://github.com/ossf/scorecard).
 - [SLSA v1.0 Build Track](https://slsa.dev/spec/v1.0/levels).
