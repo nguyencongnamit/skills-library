@@ -16,7 +16,7 @@ token_budget:
   full: 1800
 rules_path: "rules/"
 related_skills: ["llm-app-security", "secret-detection", "supply-chain-security", "deserialization-security"]
-last_updated: "2026-06-04"
+last_updated: "2026-06-20"
 sources:
   - "NIST AI 100-2 (Adversarial Machine Learning)"
   - "MITRE ATLAS (Adversarial Threat Landscape for AI Systems)"
@@ -72,6 +72,30 @@ from, and what sensitive data they carry.
 For securing an application *feature* that calls an LLM with prompts — prompt
 injection, output handling, RAG context segregation, tool allowlists — see the
 **`llm-app-security`** skill.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe / inspect the artifact).** A model loaded via
+   `pickle`/`joblib`/`dill`/`torch.load` (without `weights_only=True`) executes
+   arbitrary code on load. Confirm by loading a crafted artifact whose
+   `__reduce__` touches a canary (writes a sentinel file / sets an env var) — if
+   the canary fires during `load`, the path is exploitable. For provenance,
+   inspect the artifact's recorded source, author, and hash/signature against the
+   pinned manifest. Real if code runs on load, or if the artifact has no
+   verifiable lineage (unknown source, unpinned version, missing/failed
+   signature). FP if it loads via safetensors / `weights_only=True`, or is a
+   trusted pre-pub `.pt` slated for safetensors conversion.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call). Assert the loader rejects a canary-pickle payload (raises, canary never
+   fires) and accepts only safetensors / `weights_only` tensors; assert an
+   artifact with a missing or mismatched hash/signature is refused while a
+   pinned, verified checkpoint still loads. For data paths, assert ingestion
+   strips known PII/secret patterns. Commit it so the guard can't be silently
+   dropped.
 
 ## References
 

@@ -16,7 +16,7 @@ token_budget:
   full: 2200
 rules_path: "rules/"
 related_skills: ["api-security", "crypto-misuse", "supply-chain-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Deserialization Cheat Sheet"
   - "CWE-502: Deserialization of Untrusted Data"
@@ -113,6 +113,30 @@ The fix is not to filter — it is to use a format that doesn't permit
 arbitrary class instantiation in the first place. Most modern services
 ship signed JWTs / JSON over mTLS. Where a polymorphic format is
 unavoidable, type-allowlist + HMAC are non-negotiable.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Feed the deserializer a crafted
+   payload whose gadget fires a *benign canary* — e.g. a pickle/PHP object whose
+   `__reduce__`/`__wakeup`/`__destruct` (or a Java `readObject` / SnakeYAML
+   `!!javax...` / .NET gadget) touches a marker file or sleeps a fixed interval.
+   Send it through the actual sink (`pickle.loads`, `yaml.load`, `ObjectInputStream`,
+   `unserialize`, `BinaryFormatter`, `Marshal.load`). **Real** if the canary fires
+   (file appears, request hangs) — arbitrary class instantiation is reachable.
+   **False positive** if the path is HMAC-gated before deserialize, uses a
+   SafeLoader/`weights_only=True`/strict type-allowlist, or only loads repo-shipped
+   build fixtures (per KNOWN FALSE POSITIVES).
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   swap to a non-polymorphic/schema-validated format, or a safe loader plus type
+   allowlist (`SafeConstructor`, `PolymorphicTypeValidator`, `weights_only=True`) and
+   HMAC-verify before any decode. Assert the **canary payload is rejected** (raises /
+   returns no object, canary never fires) **and** a **legitimate payload still loads**
+   into the expected type. Commit it to CI so the guard can't be silently dropped in a
+   later refactor.
 
 ## References
 

@@ -24,7 +24,7 @@
     "secret-detection",
     "supply-chain-security"
   ],
-  "last_updated": "2026-05-12",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Top 10 2021 — A06: Vulnerable and Outdated Components",
     "CWE-1104: Use of Unmaintained Third Party Components",

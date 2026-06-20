@@ -14,11 +14,11 @@ languages: ["*"]
 token_budget:
   minimal: 800
   compact: 1300
-  full: 2000
+  full: 2600
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -114,6 +114,31 @@ AWS AppSync (`da2-`), AWS MWS (`amzn.mws.`), GitHub App Installation (`ghs_`),
 GitHub Refresh (`ghr_`), Stripe Public Live (`pk_live_`), Mailgun (`key-`),
 Mailchimp (32-hex + `-usN`), Dropbox short-lived (`sl.`), and Discord bot.
 Each carries its upstream URL in the `references:` field as evidence.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (live secret vs. placeholder).** Most hits are dummies:
+   documented examples (`AKIAIOSFODNN7EXAMPLE`), strings with `example`/`test`/
+   `placeholder`/`changeme`/`XXX`, CSS hex (`#deadbeef`), commit SHAs, or RFC JWT
+   samples. A real secret matches the provider's prefix/format AND clears the entropy
+   floor. To confirm it's *live* (not already rotated), do a READ-ONLY check where the
+   provider offers one — token-introspection or a whoami/`GET /user`-style call (e.g.
+   GitHub `GET /user`, AWS `sts get-caller-identity`). NEVER make a write/destructive
+   call. Real if the provider says the credential is valid; FP if it's a fixture or
+   the provider rejects it. Genuine FPs go in the `exclusions:` block of
+   `secret_detection.yaml` so the pattern stops re-flagging them.
+2. **Fix (ROTATE first — git history retains it), then lock.** Removing the line or
+   `git rm` does NOT remediate: the secret lives in history and is already compromised.
+   Rotate/revoke the credential at the provider first, move the new value to an env var
+   or secret manager, then purge history if warranted. Lock it: add a pre-commit hook
+   plus a CI secret-scan gate (`secure-code gate` / gitleaks over dir + git history)
+   that fails the build on that pattern, and mask values in CI logs
+   (`::add-mask::`). Assert a clean file passes and a planted fake secret is caught,
+   then commit the gate so it can't be reintroduced.
 
 ## References
 

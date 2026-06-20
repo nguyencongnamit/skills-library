@@ -18,7 +18,7 @@ token_budget:
 rules_path: "rules/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "secret-detection", "container-security"]
-last_updated: "2026-06-10"
+last_updated: "2026-06-20"
 sources:
   - "Alex Birsan, Dependency Confusion (2021)"
   - "OpenSSF Best Practices for OSS Developers"
@@ -96,6 +96,30 @@ channel is a supply chain in miniature. If the publish endpoint lacks auth/role
 gating, or the client runs the downloaded artifact without verifying a signature
 or checksum, an attacker who can write one release achieves code execution on
 every client at once — the desktop-app equivalent of dependency confusion.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (inspect).** Resolve, don't guess. For a **known-CVE dep**,
+   read the *resolved lockfile* (not the manifest range) and confirm the installed
+   version falls in the vulnerable range — patched-in-lockfile is an FP. For a
+   **typosquat**, diff the name against the intended package (Levenshtein ≤ 2:
+   `axois`/`axios`) and inspect its install scripts (`postinstall`, `setup.py`,
+   `build.rs`) in a sandbox before running anything. For **dependency confusion**,
+   confirm the internal-namespace package (`@yourco/*`) actually resolved from the
+   public registry, not your internal one. Check the registry's repo URL matches the
+   real source. FP if it's a legit `-fork`, a known canary/beta, or a correctly
+   scoped internal package.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   pin the exact version *and* registry URL in the lockfile, then add a CI gate that
+   fails the build if the bad package/version reappears — a deny-list/allow-list, a
+   scoped `.npmrc`/`pip.conf` install check, or a `secure-code gate` step — and assert
+   a clean lockfile still passes. For your own release channel, gate publish on auth +
+   release-manager role and verify a signature/pinned checksum before clients execute.
+   Commit it so the guard can't be silently dropped.
 
 ## References
 

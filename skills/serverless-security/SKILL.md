@@ -16,7 +16,7 @@ token_budget:
   full: 2200
 rules_path: "checklists/"
 related_skills: ["iac-security", "api-security", "secret-detection"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP Serverless Top 10"
   - "AWS Well-Architected: Security Pillar — Lambda"
@@ -88,6 +88,30 @@ concurrency to run up your bill).
 
 AI assistants tend to generate Lambdas with `*:*` IAM, environment-variable
 secrets, and no event validation. This skill is the counterweight.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe / inspect).** Pick the check that matches the
+   class. *Event injection / missing validation:* invoke the handler with a
+   crafted event (poison SQS message, hostile S3 object key, attacker-shaped
+   API-GW body) and see if the untrusted field reaches a sink (DB query, shell,
+   downstream call) unvalidated — real if it lands, FP if a schema rejects it
+   first. *Over-privileged role:* read the function's execution-role policy or
+   run the IAM simulator — real on `*:*`, `iam:*`, or wildcard `PassRole`, FP if
+   already scoped to the exact actions/resources used. *Secrets in env:* dump the
+   function config — real if a credential sits in plaintext env vars, FP if it's
+   a Secrets-Manager/Key-Vault reference. *Unrestricted egress / denial-of-wallet
+   / open URL:* check for no VPC + open security group, missing reserved
+   concurrency, or `AUTH_TYPE=NONE` — confirm against intended behavior.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call): unit-invoke the handler with the malicious event and assert it's
+   rejected/sanitized, plus a benign event that succeeds; and/or a policy test
+   asserting the role is least-privilege (no wildcards) and secrets resolve from
+   the manager, not env. Commit it so the guard can't be silently dropped.
 
 ## References
 

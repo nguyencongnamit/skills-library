@@ -29,7 +29,7 @@
     "api-security",
     "secret-detection"
   ],
-  "last_updated": "2026-05-13",
+  "last_updated": "2026-06-20",
   "sources": [
     "OWASP Serverless Top 10",
     "AWS Well-Architected: Security Pillar — Lambda",

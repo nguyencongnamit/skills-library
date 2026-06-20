@@ -17,7 +17,7 @@ token_budget:
   full: 2400
 rules_path: "rules/"
 related_skills: ["auth-security", "iac-security", "secret-detection"]
-last_updated: "2026-06-06"
+last_updated: "2026-06-20"
 sources:
   - "NIST SP 800-53 Rev. 5 (AC-2, AC-3, AC-6, AC-17, IA-2, IA-5)"
   - "NIST SP 800-63B (Authenticator Assurance)"
@@ -136,6 +136,32 @@ The high-leverage controls are:
 
 This skill enforces those controls when AI assistants generate IAM
 policies, trust documents, or CI/CD identities.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (simulate, don't eyeball).** A wildcard in JSON isn't
+   proof — what the *effective* policy resolves to is. Run the provider's policy
+   evaluator: `aws iam simulate-principal-policy` (or GCP Policy Troubleshooter,
+   Azure `az role assignment list`) for the flagged action against a concrete
+   resource — `iam:PassRole`, `iam:CreateAccessKey`/`AttachUserPolicy` (priv-esc),
+   `*:*`, `s3:*` on `*`, or a cross-account `sts:AssumeRole`. Or, in a sandbox,
+   assume the role and attempt the dangerous action. Real if the result is
+   ALLOWED; FP if a permission boundary, SCP, or `Condition` already denies it
+   (or it's an account-scoped read like `ec2:DescribeRegions` that ignores ARNs).
+   For credentials/MFA, check the live fact: key age & last-used
+   (`aws iam get-access-key-last-used`), and whether `aws:MultiFactorAuthPresent`
+   is actually enforced — not just toggled in the directory.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   pin the action and `Resource` ARN, add the missing `ExternalId`/MFA/expiry
+   condition, or swap the long-lived key for a workload identity. Then add a
+   policy unit test (or CI check on the policy JSON) asserting the simulator
+   DENIES the dangerous action *and* ALLOWS the workload's legitimate one, plus a
+   lint that fails on `Action:"*"`+`Resource:"*"`, `PassRole` on `*`, or trust
+   without `ExternalId`. Commit it so the guard can't be silently dropped.
 
 ## References
 

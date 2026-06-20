@@ -28,7 +28,7 @@
     "auth-security",
     "container-security"
   ],
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-06-20",
   "sources": [
     "Electron Security Checklist (official docs)",
     "OWASP — Electron / desktop application security",

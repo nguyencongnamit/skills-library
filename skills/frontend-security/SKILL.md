@@ -16,7 +16,7 @@ token_budget:
   full: 2800
 rules_path: "rules/"
 related_skills: ["cors-security", "auth-security", "logging-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP XSS Prevention Cheat Sheet"
   - "OWASP Content Security Policy Cheat Sheet"
@@ -87,6 +87,30 @@ question from runtime audit to type system.
 
 AI-generated frontends commonly reach for `innerHTML` and `dangerouslySetInnerHTML`
 because they're shorter; this skill is the counterweight.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect sink).** Drive the value into the sink the
+   finding names and check whether it actually *executes*. For XSS (reflected/stored/DOM,
+   `dangerouslySetInnerHTML`/`v-html`/`innerHTML`/`document.write`), load the page in a
+   headless browser, feed a live payload (`<img src=x onerror=...>`, `"><script>...`,
+   or `javascript:` in an `href`/`src`), and confirm a callback fires (alert/DOM
+   mutation/network beacon). Execution = real; output that comes back HTML-escaped or
+   stripped by the sanitizer = FP. For a missing/weak header (CSP with `'unsafe-inline'`,
+   absent `frame-ancestors`/SRI/iframe `sandbox`, `target="_blank"` without `rel`), fetch
+   the live response and assert the header/attribute is genuinely absent or permissive —
+   not set by a proxy/CDN one layer up.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   render or submit the payload and assert it appears escaped in the DOM with no script
+   execution, while a benign value still renders normally; for header findings, assert the
+   response carries the strict directive (no `'unsafe-inline'`, `frame-ancestors 'none'`,
+   `integrity=`/`sandbox=` present). Unit level asserts escaped output; integration/
+   headless-browser level asserts the payload never executes. Commit it to CI so the guard
+   can't be silently dropped in a later refactor.
 
 ## References
 

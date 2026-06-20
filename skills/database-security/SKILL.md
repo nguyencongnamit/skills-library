@@ -17,7 +17,7 @@ token_budget:
   full: 2500
 rules_path: "rules/"
 related_skills: ["secret-detection", "api-security", "logging-security"]
-last_updated: "2026-05-13"
+last_updated: "2026-06-20"
 sources:
   - "OWASP SQL Injection Prevention Cheat Sheet"
   - "OWASP Database Security Cheat Sheet"
@@ -89,6 +89,31 @@ columns, dynamic filters, and pagination.
 
 This skill pairs naturally with `api-security` (which guards the route) and
 `secret-detection` (which guards the connection string).
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit (raw query string-building, an ORM `.raw()`/`text()` with
+interpolation, a superuser connection string) is a *candidate*, not a confirmed
+bug. Confirm it, fix it, then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Send injection payloads
+   through the exact field that reaches the sink — a quote-breaker like
+   `' OR '1'='1` or `'; DROP--` for auth/filter params, and a time-based
+   `' OR pg_sleep(5)--` (Postgres) / `' OR SLEEP(5)--` (MySQL) / `'+sleep(5)+'`
+   (NoSQL `$where`) when output is hidden. A real hit = auth bypass, extra/all
+   rows returned, a SQL error echoed, or a ~5s delay. False positive = input is
+   already bound via a parameter marker (Django/SQLAlchemy `%s` placeholders are
+   safe), or the interpolated token is an allowlisted identifier, not a value.
+   Also confirm privilege findings: connect as the app user and try a
+   `DELETE`/`DROP`/DDL it shouldn't have — a real hit succeeds.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's
+   call): assert the injection payload yields a *secure* outcome — zero rows /
+   auth denied / no delay / a parameterized query object, not a built string —
+   while a benign value (a real username, a normal id) still returns its correct
+   single row. For least-privilege, assert the app user is denied the
+   destructive grant. Commit it to CI so the guard can't be silently dropped in
+   a later refactor.
 
 ## References
 

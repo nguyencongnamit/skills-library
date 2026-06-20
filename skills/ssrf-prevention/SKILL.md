@@ -17,7 +17,7 @@ token_budget:
   full: 2600
 rules_path: "rules/"
 related_skills: ["api-security", "cors-security", "iac-security"]
-last_updated: "2026-06-10"
+last_updated: "2026-06-20"
 sources:
   - "OWASP SSRF Prevention Cheat Sheet"
   - "CWE-918: Server-Side Request Forgery"
@@ -117,6 +117,25 @@ This skill emphasizes the DNS-rebinding and redirect-bypass classes
 because those are where AI-generated URL validators most often fail —
 the obvious 169.254.169.254 block is easy to add, but the
 allow-only-after-resolve-and-pin pattern requires more thought.
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (probe the suspect input).** Point the URL parameter at:
+   cloud metadata (`http://169.254.169.254/latest/meta-data/`), an internal
+   service (`http://127.0.0.1:6379`, `http://localhost:22`), and a redirect
+   that 302s to an internal IP (rebind/redirect bypass). Real if the server
+   dereferences it — internal data comes back, or your out-of-band listener
+   fires. False positive if the input is already allowlist-constrained or never
+   fetched.
+2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+   unit — feed those internal/metadata URLs to the validator and assert
+   rejected, feed an allowlisted URL and assert accepted; integration — POST the
+   internal URL to the endpoint and assert 4xx **and** that no outbound request
+   to the internal host was made (stub the dialer). Commit it to CI so the guard
+   can't be silently dropped in a later refactor.
 
 ## References
 

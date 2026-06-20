@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -248,13 +249,19 @@ func TestValidateUnwrapsAccumulatedValidateErrors(t *testing.T) {
 	for find, replace := range map[string]string{
 		`title: "API Security"`: `title: ""`,
 		`description: "Apply OWASP API Top 10 patterns to authentication, authorization, and input validation"`: `description: ""`,
-		`last_updated: "2026-06-10"`: `last_updated: ""`,
 	} {
 		next := strings.Replace(body, find, replace, 1)
 		if next == body {
 			t.Fatalf("setup: failed to swap %q in api-security SKILL.md", find)
 		}
 		body = next
+	}
+	// last_updated carries a date that gets bumped over time — blank it
+	// regardless of the current value rather than hard-coding the date.
+	if next := regexp.MustCompile(`last_updated: "[^"]*"`).ReplaceAllString(body, `last_updated: ""`); next != body {
+		body = next
+	} else {
+		t.Fatal("setup: failed to blank last_updated in api-security SKILL.md")
 	}
 	if err := os.WriteFile(skillPath, []byte(body), 0o644); err != nil {
 		t.Fatal(err)
