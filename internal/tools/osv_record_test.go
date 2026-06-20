@@ -174,3 +174,24 @@ func TestOSVExplicitVersionsList(t *testing.T) {
 		t.Errorf("version absent from enumeration must be dropped: got %+v", got)
 	}
 }
+
+// TestLoadOSVAffectedRejectsPathEscape hardens the OSV record reader:
+// an index entry whose "file" carries a path separator or ".." must be
+// refused rather than read from outside the ecosystem directory.
+func TestLoadOSVAffectedRejectsPathEscape(t *testing.T) {
+	lib := newOSVTestLibrary(t)
+	for _, bad := range []string{
+		"../../../../etc/passwd",
+		"sub/dir/x.json",
+		`..\..\windows`,
+		"a/../../b.json",
+	} {
+		if got := lib.loadOSVAffected("pypi", bad); got != nil {
+			t.Errorf("loadOSVAffected(%q) = %v; want nil (path escape must be refused)", bad, got)
+		}
+	}
+	// A legitimate bare filename still loads.
+	if got := lib.loadOSVAffected("pypi", "GHSA-req.json"); got == nil {
+		t.Error("loadOSVAffected on a valid bare filename returned nil")
+	}
+}
