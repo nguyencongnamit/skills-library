@@ -49,6 +49,110 @@ can attach to an upstream issue/PR for review into the central database.`,
 	c.AddCommand(contributeSubmitCmd())
 	c.AddCommand(contributeKeygenCmd())
 	c.AddCommand(contributeVerifyCmd())
+	c.AddCommand(contributeImportCmd())
+	return c
+}
+
+// verifyCandidate checks a candidate's embedded signatures and returns
+// the resolved key id. It is the shared core of `verify` and the
+// pre-merge check in `import`. A candidate with no embedded public key
+// is reported as unsigned (keyID "").
+func verifyCandidate(cand candidateFile) (keyID string, err error) {
+	if cand.PublicKeyB64 == "" {
+		return "", nil // unsigned
+	}
+	pubRaw, derr := base64.StdEncoding.DecodeString(cand.PublicKeyB64)
+	if derr != nil || len(pubRaw) != ed25519.PublicKeySize {
+		return "", fmt.Errorf("candidate public key is malformed")
+	}
+	pub := ed25519.PublicKey(pubRaw)
+	declaredID := keyIDFor(pub)
+	if cand.PublicKeyID != "" && cand.PublicKeyID != declaredID {
+		return "", fmt.Errorf("candidate public_key_id %q does not match its embedded key (%q)", cand.PublicKeyID, declaredID)
+	}
+	for _, p := range cand.Packages {
+		if p.Signature == "" {
+			return "", fmt.Errorf("rule %s (%s) is unsigned in a signed candidate", p.Name, p.Ecosystem)
+		}
+		raw, derr := base64.StdEncoding.DecodeString(strings.TrimPrefix(p.Signature, manifest.SignaturePrefix))
+		if derr != nil || !ed25519.Verify(pub, overlaySigningBytes(p), raw) {
+			return "", fmt.Errorf("rule %s (%s) signature is INVALID", p.Name, p.Ecosystem)
+		}
+	}
+	return declaredID, nil
+}
+
+// contributeImportCmd merges a shared candidate file into the local
+// overlay — the receiving end of submit -> verify -> import. A signed
+// candidate must verify before any rule is adopted; an unsigned one is
+// refused unless --allow-unsigned is given, so provenance is the
+// default. This is what lets a finding travel from one developer's
+// machine to another's gate without going through the central pipeline.
+func contributeImportCmd() *cobra.Command {
+	var dir string
+	var allowUnsigned bool
+	c := &cobra.Command{
+		Use:   "import <candidate.json>",
+		Short: "Merge a shared candidate file into the local overlay (verifies signatures first)",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			body, err := os.ReadFile(args[0])
+			if err != nil {
+				return err
+			}
+			var cand candidateFile
+			if err := json.Unmarshal(body, &cand); err != nil {
+				return fmt.Errorf("parse candidate: %w", err)
+			}
+			if len(cand.Packages) == 0 {
+				return fmt.Errorf("candidate has no rules to import")
+			}
+			keyID, err := verifyCandidate(cand)
+			if err != nil {
+				return fmt.Errorf("refusing to import: %w", err)
+			}
+			if keyID == "" && !allowUnsigned {
+				return fmt.Errorf("candidate is unsigned; re-run with --allow-unsigned to import without provenance")
+			}
+			path, err := overlayPathFor(dir)
+			if err != nil {
+				return err
+			}
+			of, err := loadOverlay(path)
+			if err != nil {
+				return err
+			}
+			added, updated := 0, 0
+			for _, p := range cand.Packages {
+				replaced := false
+				for i, ex := range of.MaliciousPackages {
+					if strings.EqualFold(ex.Name, p.Name) && strings.EqualFold(ex.Ecosystem, p.Ecosystem) {
+						of.MaliciousPackages[i] = p
+						replaced = true
+						updated++
+						break
+					}
+				}
+				if !replaced {
+					of.MaliciousPackages = append(of.MaliciousPackages, p)
+					added++
+				}
+			}
+			if err := saveOverlay(path, of); err != nil {
+				return err
+			}
+			prov := "unsigned"
+			if keyID != "" {
+				prov = "verified, key " + keyID
+			}
+			fmt.Fprintf(cmd.OutOrStdout(),
+				"Imported %d rule(s) (%d new, %d updated, %s) into %s\nThe gate will enforce them on its next run.\n",
+				added+updated, added, updated, prov, path)
+			return nil
+		},
+	}
+	c.Flags().StringVar(&dir, "dir", "", "project directory (default: cwd)")
+	c.Flags().BoolVar(&allowUnsigned, "allow-unsigned", false, "import a candidate that carries no signature/provenance")
 	return c
 }
 
