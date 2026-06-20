@@ -372,6 +372,38 @@ jobs:
             echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Stamp Homebrew formula
+        # Make `brew install namncqualgo/tap/skills-check` real: fill the
+        # formula template's version + per-arch SHA-256 from the binaries we
+        # just built, and publish the stamped formula as the `skills-check.rb`
+        # release asset. The formula's `url` lines interpolate `v#{version}`,
+        # so setting the version resolves them to this release's download URLs.
+        # The tap repo itself is updated by the release manager (or a
+        # tap-token-gated step) by copying this asset — see the formula header.
+        shell: bash
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          da=$(sha256sum release/skills-check-darwin-arm64 | awk '{print $1}')
+          dx=$(sha256sum release/skills-check-darwin-amd64 | awk '{print $1}')
+          la=$(sha256sum release/skills-check-linux-arm64  | awk '{print $1}')
+          lx=$(sha256sum release/skills-check-linux-amd64  | awk '{print $1}')
+          sed \
+            -e "s/^  version \"0.0.0\"/  version \"${version}\"/" \
+            -e "s/REPLACE_WITH_DARWIN_ARM64_SHA256/${da}/" \
+            -e "s/REPLACE_WITH_DARWIN_AMD64_SHA256/${dx}/" \
+            -e "s/REPLACE_WITH_LINUX_ARM64_SHA256/${la}/" \
+            -e "s/REPLACE_WITH_LINUX_AMD64_SHA256/${lx}/" \
+            packaging/homebrew/skills-check.rb > release/skills-check.rb
+          if grep -q "REPLACE_WITH\|0.0.0" release/skills-check.rb; then
+            echo "::error::Homebrew formula was not fully stamped (a placeholder or 0.0.0 remains)."
+            exit 1
+          fi
+          echo "Stamped Homebrew formula for ${version}:"
+          grep -E '  version|sha256' release/skills-check.rb
+
       - name: Publish GitHub Release (draft)
         # The release is created as a DRAFT so that consumers cannot
         # download it via `skills-check update` (which follows the
