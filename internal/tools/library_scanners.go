@@ -166,7 +166,12 @@ func (l *Library) ScanDependencies(filePath string) (*ScanDependenciesResult, er
 			// gate can choose to drop the floor by one notch if it
 			// wants curated-only enforcement.
 			conf := "confirmed"
-			if strings.TrimSpace(m.Source) == "ossf-malicious-packages" {
+			switch strings.TrimSpace(m.Source) {
+			case "ossf-malicious-packages":
+				conf = "high"
+			case OverlaySource:
+				// User-asserted via the local contribution overlay — a
+				// real, enforced block, but not centrally reviewed canon.
 				conf = "high"
 			}
 			out.Findings = append(out.Findings, DependencyFinding{
@@ -1141,6 +1146,11 @@ var gateNoiseDirs = map[string]bool{
 	"dist": true, "build": true, "target": true,
 	".next": true, ".nuxt": true, ".idea": true, ".vscode": true,
 	".terraform": true, ".gradle": true, ".mvn": true,
+	// vibe-guard's own config dir: the contribution overlay holds
+	// base64 Ed25519 signatures that would otherwise trip the secret
+	// scanner's entropy check on a `gate <dir>` walk — a self-inflicted
+	// finding on our own metadata. It is consumed as config, not scanned.
+	".skills-check": true,
 }
 
 // WalkScanFiles walks root recursively and returns the regular text

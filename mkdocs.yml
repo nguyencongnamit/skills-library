@@ -84,5 +84,7 @@ nav:
     - Install on Linux: install-linux.md
     - Install on Windows: install-windows.md
     - Air-gapped Install: air-gapped-install.md
+  - Contribute:
+    - Contribute a Finding (LEARN loop): contribute.md
   - Admin:
     - Team Rollout: admin-team-rollout.md

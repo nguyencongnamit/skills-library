@@ -124,6 +124,15 @@ type Library struct {
 	osvRecordMu sync.Mutex
 	osvRecord   map[string][]osvAffected
 
+	// overlayPaths are the local contribution-overlay files consulted
+	// (in order, later wins on collision) alongside the curated
+	// malicious-packages DB. NewLibrary seeds these with the
+	// project-local .skills-check/overlay.json (relative to the process
+	// working directory) and the user-global overlay under the cache
+	// root; WithOverlayPaths overrides them (used by tests and by
+	// callers that scan a directory other than cwd).
+	overlayPaths []string
+
 	// allowedRoots, when non-nil and non-empty, restricts ScanSecrets
 	// file_path inputs to paths under one of these absolute,
 	// symlink-resolved directories. The skills-mcp binary populates
@@ -276,11 +285,38 @@ func NewLibrary(root string, opts ...LibraryOption) (*Library, error) {
 		osvSeverity:   map[string]string{},
 		osvRecord:     map[string][]osvAffected{},
 		vulnSource:    SourceLocal,
+		overlayPaths:  defaultOverlayPaths(),
 	}
 	for _, opt := range opts {
 		opt(l)
 	}
 	return l, nil
+}
+
+// WithOverlayPaths overrides the contribution-overlay files the Library
+// consults. Paths are read in order and later files win on a
+// (name, ecosystem) collision. Passing no paths disables the overlay.
+// The CLI uses this to point the overlay at the directory being scanned
+// rather than the process working directory; tests use it to supply a
+// fixture overlay.
+func WithOverlayPaths(paths ...string) LibraryOption {
+	return func(l *Library) { l.overlayPaths = paths }
+}
+
+// defaultOverlayPaths returns the overlay files probed when no explicit
+// WithOverlayPaths is supplied: the project-local
+// .skills-check/overlay.json relative to the process working directory,
+// then the user-global overlay beside the OSV cache root. Missing files
+// are silently ignored at load time.
+func defaultOverlayPaths() []string {
+	var paths []string
+	if wd, err := os.Getwd(); err == nil && wd != "" {
+		paths = append(paths, filepath.Join(wd, ".skills-check", "overlay.json"))
+	}
+	if root := defaultUserCacheRoot(); root != "" {
+		paths = append(paths, filepath.Join(root, "overlay.json"))
+	}
+	return paths
 }
 
 // defaultUserCacheRoot returns the OSV user-cache root the Library
@@ -568,6 +604,17 @@ func (l *Library) LookupVulnerability(pkg, ecosystem, version string) (*LookupVu
 			ent.Ecosystem = e
 			out.Matches = append(out.Matches, ent)
 		}
+	}
+
+	// Local contribution overlay (the LEARN loop's private half): rules
+	// a developer recorded with `skills-check contribute` block here
+	// exactly like a curated row, so a freshly-flagged package fails the
+	// gate immediately without waiting for the central pipeline. The
+	// overlay is consulted once (not per-ecosystem) because its entries
+	// already carry their own ecosystem; overlayMatches applies the same
+	// version-range filtering as the curated DB.
+	for _, ent := range l.overlayMatches(ecosystem, pkg, version) {
+		out.Matches = append(out.Matches, ent)
 	}
 
 	tf, err := l.loadTyposquats()

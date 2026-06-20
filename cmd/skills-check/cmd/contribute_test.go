@@ -1,0 +1,162 @@
+package cmd
+
+import (
+	"bytes"
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/namncqualgo/skills-library/internal/tools"
+)
+
+// runContribute executes `contribute <args...>` against a fresh command
+// tree and returns stdout plus any error.
+func runContribute(t *testing.T, args ...string) (string, error) {
+	t.Helper()
+	root := Root()
+	var buf bytes.Buffer
+	root.SetOut(&buf)
+	root.SetErr(&buf)
+	root.SetArgs(append([]string{"contribute"}, args...))
+	err := root.Execute()
+	return buf.String(), err
+}
+
+// TestContributeAddListRemove exercises the local-overlay lifecycle and
+// asserts the written file is a valid overlay the Library can enforce.
+func TestContributeAddListRemove(t *testing.T) {
+	dir := t.TempDir()
+
+	out, err := runContribute(t, "add", "--dir", dir, "-p", "evil-pkg", "-e", "npm", "--reason", "beacons to evil.example")
+	if err != nil {
+		t.Fatalf("add: %v (%s)", err, out)
+	}
+	if !strings.Contains(out, "Added evil-pkg") {
+		t.Errorf("add output missing confirmation: %s", out)
+	}
+
+	// The overlay file must parse and enforce.
+	overlayPath := filepath.Join(dir, ".skills-check", "overlay.json")
+	body, err := os.ReadFile(overlayPath)
+	if err != nil {
+		t.Fatalf("overlay not written: %v", err)
+	}
+	var of tools.OverlayFile
+	if err := json.Unmarshal(body, &of); err != nil {
+		t.Fatalf("overlay invalid JSON: %v", err)
+	}
+	if len(of.MaliciousPackages) != 1 || of.MaliciousPackages[0].Name != "evil-pkg" {
+		t.Fatalf("overlay content wrong: %+v", of.MaliciousPackages)
+	}
+	// Default severity must be gate-blocking.
+	if of.MaliciousPackages[0].Severity != "high" {
+		t.Errorf("default severity = %q, want high", of.MaliciousPackages[0].Severity)
+	}
+
+	// Adding the same (name, ecosystem) again updates in place.
+	if _, err := runContribute(t, "add", "--dir", dir, "-p", "evil-pkg", "-e", "npm", "--severity", "critical", "--reason", "updated"); err != nil {
+		t.Fatalf("update: %v", err)
+	}
+	body, _ = os.ReadFile(overlayPath)
+	json.Unmarshal(body, &of)
+	if len(of.MaliciousPackages) != 1 {
+		t.Errorf("upsert duplicated entry: %d rows", len(of.MaliciousPackages))
+	}
+	if of.MaliciousPackages[0].Severity != "critical" {
+		t.Errorf("update did not take: severity %q", of.MaliciousPackages[0].Severity)
+	}
+
+	// list shows it.
+	out, err = runContribute(t, "list", "--dir", dir)
+	if err != nil || !strings.Contains(out, "evil-pkg") {
+		t.Errorf("list: err=%v out=%s", err, out)
+	}
+
+	// remove deletes it.
+	if _, err := runContribute(t, "remove", "--dir", dir, "-p", "evil-pkg", "-e", "npm"); err != nil {
+		t.Fatalf("remove: %v", err)
+	}
+	body, _ = os.ReadFile(overlayPath)
+	of = tools.OverlayFile{}
+	json.Unmarshal(body, &of)
+	if len(of.MaliciousPackages) != 0 {
+		t.Errorf("remove left %d rows", len(of.MaliciousPackages))
+	}
+}
+
+// TestContributeEnforcedByLibrary confirms the file written by
+// `contribute add` is actually enforced when a Library points at it —
+// the end-to-end LEARN guarantee.
+func TestContributeEnforcedByLibrary(t *testing.T) {
+	dir := t.TempDir()
+	if _, err := runContribute(t, "add", "--dir", dir, "-p", "malware", "-e", "npm", "--severity", "critical", "--reason", "x"); err != nil {
+		t.Fatal(err)
+	}
+	overlayPath := filepath.Join(dir, ".skills-check", "overlay.json")
+
+	// Minimal library root for enforcement.
+	libRoot := t.TempDir()
+	os.MkdirAll(filepath.Join(libRoot, "skills"), 0o755)
+	os.MkdirAll(filepath.Join(libRoot, "vulnerabilities", "supply-chain", "malicious-packages"), 0o755)
+	os.WriteFile(filepath.Join(libRoot, "vulnerabilities", "supply-chain", "malicious-packages", "npm.json"), []byte(`{"ecosystem":"npm","entries":[]}`), 0o644)
+	lib, err := tools.NewLibrary(libRoot, tools.WithOverlayPaths(overlayPath))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := lib.LookupVulnerability("malware", "npm", "1.0.0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(res.Matches) != 1 || res.Matches[0].Source != tools.OverlaySource {
+		t.Fatalf("contributed rule not enforced: %+v", res.Matches)
+	}
+}
+
+// TestContributeSignSubmitVerify covers the signed half of the loop:
+// keygen, signed add, signed submit, verify (valid), and tamper
+// detection.
+func TestContributeSignSubmitVerify(t *testing.T) {
+	dir := t.TempDir()
+	keyPath := filepath.Join(dir, "key.pem")
+
+	if _, err := runContribute(t, "keygen", "--out", keyPath); err != nil {
+		t.Fatalf("keygen: %v", err)
+	}
+	if fi, err := os.Stat(keyPath); err != nil || fi.Mode().Perm() != 0o600 {
+		t.Fatalf("key perms wrong: %v mode=%v", err, fi.Mode().Perm())
+	}
+
+	if _, err := runContribute(t, "add", "--dir", dir, "-p", "evil", "-e", "npm", "--reason", "x", "--key", keyPath); err != nil {
+		t.Fatalf("signed add: %v", err)
+	}
+	candPath := filepath.Join(dir, "cand.json")
+	if _, err := runContribute(t, "submit", "--dir", dir, "--key", keyPath, "--out", candPath); err != nil {
+		t.Fatalf("submit: %v", err)
+	}
+
+	out, err := runContribute(t, "verify", candPath)
+	if err != nil {
+		t.Fatalf("verify valid candidate failed: %v (%s)", err, out)
+	}
+	if !strings.Contains(out, "signature valid") {
+		t.Errorf("verify output unexpected: %s", out)
+	}
+
+	// Tamper: flip the package name; the signature (which binds the
+	// name) must now fail.
+	body, _ := os.ReadFile(candPath)
+	tampered := strings.Replace(string(body), `"evil"`, `"evil-renamed"`, 1)
+	os.WriteFile(candPath, []byte(tampered), 0o644)
+	if _, err := runContribute(t, "verify", candPath); err == nil {
+		t.Error("verify accepted a tampered candidate; want failure")
+	}
+}
+
+// TestContributeAddRequiresPackage guards the required-flag validation.
+func TestContributeAddRequiresPackage(t *testing.T) {
+	if _, err := runContribute(t, "add", "--dir", t.TempDir(), "-e", "npm"); err == nil {
+		t.Error("add without --package should error")
+	}
+}
