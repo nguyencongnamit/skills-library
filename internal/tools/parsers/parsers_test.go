@@ -144,6 +144,62 @@ packages:
 	)
 }
 
+// TestParsePnpmLockV9 covers the lockfileVersion 9 format, whose
+// `packages:` keys are quoted `'name@version':` with no leading slash —
+// a shape the v5–8 `/name@version:` regex missed entirely, so modern
+// pnpm projects parsed zero dependencies (found by dogfooding).
+func TestParsePnpmLockV9(t *testing.T) {
+	body := []byte(`lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+
+importers:
+  .:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
+packages:
+
+  '@acemir/cssom@0.9.31':
+    resolution: {integrity: sha512-ZnR3GSaH==}
+
+  '@alloc/quick-lru@5.2.0':
+    resolution: {integrity: sha512-UrcABB==}
+    engines: {node: '>=10'}
+
+  'typescript@5.9.3':
+    resolution: {integrity: sha512-typescript==}
+    engines: {node: '>=14.17'}
+
+snapshots:
+
+  '@acemir/cssom@0.9.31': {}
+`)
+	got, err := Parse("pnpm-lock.yaml", body)
+	if err != nil {
+		t.Fatalf("Parse v9: %v", err)
+	}
+	assertContains(t, got,
+		"@acemir/cssom@0.9.31/npm",
+		"@alloc/quick-lru@5.2.0/npm",
+		"typescript@5.9.3/npm",
+	)
+	// The snapshots: section must not double-count (dedupe handles the
+	// repeat, but the block boundary should also already exclude it).
+	count := 0
+	for _, d := range got {
+		if d.Name == "@acemir/cssom" {
+			count++
+		}
+	}
+	if count != 1 {
+		t.Errorf("@acemir/cssom counted %d times, want 1", count)
+	}
+}
+
 func TestParseRequirementsTxt(t *testing.T) {
 	body := []byte(`# top-level deps
 requests==2.31.0 --hash=sha256:dead # comment
