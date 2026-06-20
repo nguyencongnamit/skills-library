@@ -7850,8 +7850,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/docker.json",
-      "sha256": "91469ad21ec14c77cd0c21ce86f48229b285303d6b4e205be1e6d7cc2559229f",
-      "size": 8496,
+      "sha256": "6f051273d236d7f1cb6ed93a240a7358582a082239d42fd876d057658cd6da06",
+      "size": 9600,
       "action": "unchanged"
     },
     {
@@ -7868,8 +7868,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/maven.json",
-      "sha256": "686aabd8a82cff021f371493aef0a58723791808d326e189188cd4779a7e36aa",
-      "size": 8949,
+      "sha256": "9deafe2edecb6e1b15aac6f1f7d9bf65db1e4b47e7e564c3ab25ad40809387ae",
+      "size": 11764,
       "action": "unchanged"
     },
     {

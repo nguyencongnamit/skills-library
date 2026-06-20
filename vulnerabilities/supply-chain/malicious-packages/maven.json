@@ -1,18 +1,18 @@
 {
   "schema_version": "1.0",
   "ecosystem": "maven",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "description": "Documented malicious or vulnerable Maven Central packages and namespace incidents. Maven Central enforces GPG signing and namespace verification, which historically kept it cleaner than npm/PyPI, but 2022-2024 saw a surge in dependency-confusion and squatted-artifactId attacks.",
   "entries": [
     {
-      "name": "com.github.codingandcoding:malicious-packages-wave",
+      "name": "sonatype-maven-2023-742-malicious-wave",
       "versions_affected": [
-        "various"
+        "multiple"
       ],
       "type": "malicious_code",
       "severity": "critical",
       "discovered": "2023-09-26",
-      "description": "Sonatype found 742 malicious Maven packages in a single week (Sep 2023). Most used Gradle `build()` hooks or Maven `plugin` lifecycle to drop Java info-stealers into ~/.m2 caches.",
+      "description": "Campaign summary (not a single installable coordinate): Sonatype found 742 malicious Maven packages in one week (Sep 2023), most using Gradle build() hooks or the Maven plugin lifecycle to drop Java info-stealers into ~/.m2 caches. Tracked here as a cluster; individual coordinates were short-lived.",
       "references": [
         "https://blog.sonatype.com/npm-and-maven-see-wave-of-malicious-packages",
         "https://www.sonatype.com/blog/sonatype-discovers-742-malicious-packages-on-maven-central"
@@ -159,7 +159,7 @@
       "type": "typosquat",
       "severity": "critical",
       "discovered": "2025-12-25",
-      "description": "Typosquat of the ubiquitous Jackson JSON library (legitimate groupId com.fasterxml.jackson.core) using a namespace-prefix swap to org.fasterxml.jackson.core — mirroring a lookalike domain fasterxml.org (vs the real fasterxml.com) registered 2025-12-17. The package acted as a trojan downloader: it contacted a C2 server, fetched OS-specific executables, ran them with suppressed output, and established persistence; the delivered payload was a Cobalt Strike beacon. Removed from Maven Central within ~1.5 hours of reporting (Aikido Security, 2025-12-25).",
+      "description": "Typosquat of the ubiquitous Jackson JSON library (legitimate groupId com.fasterxml.jackson.core) using a namespace-prefix swap to org.fasterxml.jackson.core \u2014 mirroring a lookalike domain fasterxml.org (vs the real fasterxml.com) registered 2025-12-17. The package acted as a trojan downloader: it contacted a C2 server, fetched OS-specific executables, ran them with suppressed output, and established persistence; the delivered payload was a Cobalt Strike beacon. Removed from Maven Central within ~1.5 hours of reporting (Aikido Security, 2025-12-25).",
       "references": [
         "https://www.aikido.dev/blog/maven-central-jackson-typosquatting-malware",
         "https://www.esecurityplanet.com/threats/malicious-jackson-lookalike-library-slips-into-maven-central/"
@@ -208,6 +208,64 @@
         "Spring4Shell era"
       ],
       "attack_type": "typosquat"
+    },
+    {
+      "name": "com.github.codingandcoding:maven-compiler-plugin",
+      "versions_affected": [
+        "3.9.0"
+      ],
+      "type": "backdoor",
+      "severity": "critical",
+      "discovered": "2021-01-07",
+      "description": "Brandjacking typosquat of the legitimate Apache maven-compiler-plugin. Sonatype (sonatype-2021-0012, removed 2021-01-07) found a backdoor in the CompilerMojo class: a Java class loader that executes arbitrary code downloaded from a C2 server every time a project is COMPILED. The com.github.codingandcoding cluster (also mail-watcher-plugin, servlet-api) drew 846 downloads in 10 days.",
+      "references": [
+        "https://www.sonatype.com/blog/malware-removed-from-maven-central"
+      ],
+      "indicators": [
+        "groupId com.github.codingandcoding (brandjacking, not the real vendor namespace)",
+        "backdoor activates at build/compile or request time",
+        "fetches/executes code from a C2 server"
+      ],
+      "attack_type": "backdoor"
+    },
+    {
+      "name": "com.github.codingandcoding:mail-watcher-plugin",
+      "versions_affected": [
+        "1.16",
+        "1.17"
+      ],
+      "type": "backdoor",
+      "severity": "critical",
+      "discovered": "2021-01-07",
+      "description": "Brandjacking typosquat of a Jenkins mail-watcher plugin (sonatype-2021-0013, Sonatype 2021-01-07). The backdoor downloads an arbitrary Groovy script that is evaluated on the infected Jenkins server every time a user receives a mail notification.",
+      "references": [
+        "https://www.sonatype.com/blog/malware-removed-from-maven-central"
+      ],
+      "indicators": [
+        "groupId com.github.codingandcoding (brandjacking, not the real vendor namespace)",
+        "backdoor activates at build/compile or request time",
+        "fetches/executes code from a C2 server"
+      ],
+      "attack_type": "backdoor"
+    },
+    {
+      "name": "com.github.codingandcoding:servlet-api",
+      "versions_affected": [
+        "3.2.0"
+      ],
+      "type": "backdoor",
+      "severity": "critical",
+      "discovered": "2021-01-07",
+      "description": "Brandjacking typosquat of the javax servlet-api (sonatype-2021-0014, Sonatype 2021-01-07). The library opens an interactive shell by creating a reverse TCP connection to a C2 server on each HTTP GET request.",
+      "references": [
+        "https://www.sonatype.com/blog/malware-removed-from-maven-central"
+      ],
+      "indicators": [
+        "groupId com.github.codingandcoding (brandjacking, not the real vendor namespace)",
+        "backdoor activates at build/compile or request time",
+        "fetches/executes code from a C2 server"
+      ],
+      "attack_type": "backdoor"
     }
   ],
   "sources": {
