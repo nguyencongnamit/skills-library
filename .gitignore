@@ -14,6 +14,7 @@ Thumbs.db
 # Local agent context (not published)
 /CLAUDE.md
 /TARGET-STATE.md
+/V2-CRUCIBLE-PLAN.md
 
 # Local config (private-repo)
 .skills-check.yaml
