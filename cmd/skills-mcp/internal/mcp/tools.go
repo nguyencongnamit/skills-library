@@ -152,7 +152,7 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "scan_dependencies",
-			"description": "Parse a project lockfile or manifest at file_path and run every dependency against the malicious-packages database, the typosquat database, and the CVE-pattern list. Recognises package-lock.json, npm-shrinkwrap.json, yarn.lock, pnpm-lock.yaml, requirements.txt, Pipfile.lock, poetry.lock, go.sum, Cargo.lock, pom.xml, gradle.lockfile / build.gradle.lockfile, packages.lock.json, *.csproj / *.fsproj / *.vbproj, and Gemfile.lock. Subject to --allowed-roots and the sensitive-directory deny-list. Pass `format`=\"sarif\" for SARIF 2.1.0 output suitable for GitHub Advanced Security ingest.",
+			"description": "Parse a project lockfile or manifest at file_path and run every dependency against the malicious-packages database, the typosquat database, and the CVE-pattern list. Recognises package-lock.json, npm-shrinkwrap.json, yarn.lock, pnpm-lock.yaml, requirements.txt, Pipfile.lock, poetry.lock, go.sum, Cargo.lock, pom.xml, gradle.lockfile / build.gradle.lockfile, packages.lock.json, *.csproj / *.fsproj / *.vbproj, Gemfile.lock, composer.lock, Package.resolved, and pubspec.lock. Subject to --allowed-roots and the sensitive-directory deny-list. Pass `format`=\"sarif\" for SARIF 2.1.0 output suitable for GitHub Advanced Security ingest.",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{
