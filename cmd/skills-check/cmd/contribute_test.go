@@ -160,3 +160,58 @@ func TestContributeAddRequiresPackage(t *testing.T) {
 		t.Error("add without --package should error")
 	}
 }
+
+// TestContributeImportRoundTrip covers the receiving end of the sharing
+// loop: a signed candidate produced on one machine imports into another
+// machine's overlay and is enforced; unsigned and tampered candidates
+// are refused.
+func TestContributeImportRoundTrip(t *testing.T) {
+	send := t.TempDir()
+	keyPath := filepath.Join(send, "key.pem")
+	if _, err := runContribute(t, "keygen", "--out", keyPath); err != nil {
+		t.Fatalf("keygen: %v", err)
+	}
+	if _, err := runContribute(t, "add", "--dir", send, "-p", "shared-evil", "-e", "npm", "--reason", "x", "--key", keyPath); err != nil {
+		t.Fatalf("signed add: %v", err)
+	}
+	signed := filepath.Join(send, "signed.json")
+	if _, err := runContribute(t, "submit", "--dir", send, "--key", keyPath, "--out", signed); err != nil {
+		t.Fatalf("submit signed: %v", err)
+	}
+	unsigned := filepath.Join(send, "unsigned.json")
+	if _, err := runContribute(t, "submit", "--dir", send, "--out", unsigned); err != nil {
+		t.Fatalf("submit unsigned: %v", err)
+	}
+
+	adopt := t.TempDir()
+
+	// Signed candidate imports and is enforced.
+	out, err := runContribute(t, "import", signed, "--dir", adopt)
+	if err != nil {
+		t.Fatalf("import signed: %v (%s)", err, out)
+	}
+	overlayPath := filepath.Join(adopt, ".skills-check", "overlay.json")
+	body, _ := os.ReadFile(overlayPath)
+	var of tools.OverlayFile
+	json.Unmarshal(body, &of)
+	if len(of.MaliciousPackages) != 1 || of.MaliciousPackages[0].Name != "shared-evil" {
+		t.Fatalf("imported overlay wrong: %+v", of.MaliciousPackages)
+	}
+
+	// Unsigned candidate is refused without the opt-in flag, accepted with it.
+	adopt2 := t.TempDir()
+	if _, err := runContribute(t, "import", unsigned, "--dir", adopt2); err == nil {
+		t.Error("unsigned candidate should be refused without --allow-unsigned")
+	}
+	if _, err := runContribute(t, "import", unsigned, "--dir", adopt2, "--allow-unsigned"); err != nil {
+		t.Errorf("unsigned import with --allow-unsigned should succeed: %v", err)
+	}
+
+	// Tampered signed candidate is refused.
+	tampered := filepath.Join(send, "tampered.json")
+	b, _ := os.ReadFile(signed)
+	os.WriteFile(tampered, []byte(strings.Replace(string(b), `"shared-evil"`, `"shared-evil2"`, 1)), 0o644)
+	if _, err := runContribute(t, "import", tampered, "--dir", t.TempDir()); err == nil {
+		t.Error("tampered candidate should be refused")
+	}
+}

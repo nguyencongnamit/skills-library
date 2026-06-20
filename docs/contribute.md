@@ -103,6 +103,24 @@ skills-check contribute verify candidate.json
 The signature binds the package coordinates, severity, and description, so any
 tampering with the candidate fails verification.
 
+## Adopt a candidate someone shared with you
+
+The receiving end of the loop: merge a candidate into your own overlay so your
+gate enforces it. A signed candidate must verify before any rule is adopted; an
+unsigned one is refused unless you opt in, so provenance is the default.
+
+```bash
+skills-check contribute import candidate.json
+#   Imported 1 rule(s) (1 new, 0 updated, verified, key vibe-guard-contrib-…)
+
+# An unsigned candidate is refused unless you explicitly accept the risk:
+skills-check contribute import candidate.json --allow-unsigned
+```
+
+That is the full peer-to-peer path — `submit` on one machine, `verify` to
+review, `import` to adopt — letting a finding travel from one developer's gate
+to another's without waiting on the central pipeline.
+
 ## What is free, and what is not
 
 The personal and candidate halves above are fully open source — a single team
