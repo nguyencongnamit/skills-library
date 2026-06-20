@@ -13,6 +13,7 @@ Thumbs.db
 
 # Local agent context (not published)
 /CLAUDE.md
+/TARGET-STATE.md
 
 # Local config (private-repo)
 .skills-check.yaml

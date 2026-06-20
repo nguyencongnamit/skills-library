@@ -104,7 +104,15 @@ python3 evals/benchmarks/scanner-eval.py \
 cat evals/baselines/scanner-eval-static.md
 
 echo
-echo "==> 5. live-model eval pipeline (keyless self-check)"
+echo "==> 5. generation-corpus oracle validation (keyless)"
+# Static check of the generation fixtures: every code-generation fixture has a
+# sibling expected.json with a valid ground_truth, compilable regex signals, a
+# real declared skill, AND its own documented insecure/secure snippets score
+# correctly under the deterministic classifier (guards against oracle drift).
+python3 evals/benchmarks/llm-eval.py --validate-fixtures
+
+echo
+echo "==> 6. live-model eval pipeline (keyless self-check)"
 # The LLM-tier baselines (no-instructions/minimal-skill/full-mcp) are
 # bring-your-own-key and NOT run here. But the prevention-lift pipeline
 # itself — fixture loading, tier execution, response classification, and
