@@ -177,7 +177,9 @@
     },
     {
       "name": "github.com/belatedplanet/hypert",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -192,7 +194,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/config-loader",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -207,7 +211,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-envconfig",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -222,7 +228,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-metrics-sdk",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -237,7 +245,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-retryablehttp",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -252,7 +262,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-stdlib-ext",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -267,7 +279,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-stdlog",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -282,7 +296,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/go-weather-sdk",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -297,7 +313,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/grpc-client",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -312,7 +330,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/log-core",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -327,7 +347,9 @@
     },
     {
       "name": "github.com/BufferZoneCorp/net-helper",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2026-05-13",
@@ -342,7 +364,9 @@
     },
     {
       "name": "github.com/ornatedoctrin/layout",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -357,7 +381,9 @@
     },
     {
       "name": "github.com/shadowybulk/hypert",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -372,7 +398,9 @@
     },
     {
       "name": "github.com/shallowmulti/hypert",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -387,7 +415,9 @@
     },
     {
       "name": "github.com/thankfulmai/hypert",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -402,7 +432,9 @@
     },
     {
       "name": "github.com/utilizedsun/layout",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
@@ -417,7 +449,9 @@
     },
     {
       "name": "github.com/vainreboot/layout",
-      "versions_affected": [],
+      "versions_affected": [
+        "*"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",

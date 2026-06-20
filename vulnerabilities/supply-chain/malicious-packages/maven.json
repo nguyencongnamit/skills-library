@@ -59,7 +59,9 @@
     },
     {
       "name": "io.github.leetcrunch:scribejava-core",
-      "versions_affected": [],
+      "versions_affected": [
+        "8.3.5"
+      ],
       "type": "malicious_code",
       "severity": "high",
       "discovered": "2025-03-19",
