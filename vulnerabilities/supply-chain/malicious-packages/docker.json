@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "docker",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "description": "Documented malicious or compromised Docker Hub images and container supply-chain incidents. Major themes: cryptominer images, typosquats of official images, TeamTNT-era credential-stealer images, and shared-cache layer poisoning.",
   "entries": [
     {
@@ -170,6 +170,29 @@
         "XMRig cryptominer"
       ],
       "attack_type": "cryptomining"
+    },
+    {
+      "name": "dero-miner-container-worm",
+      "versions_affected": [
+        "multiple"
+      ],
+      "type": "cryptominer",
+      "severity": "high",
+      "discovered": "2025-05-21",
+      "description": "Kaspersky (Securelist) documented a self-spreading Dero cryptocurrency miner that propagates through Docker daemons exposing the API on port 2375. After compromising a host it runs two UPX-packed Go binaries masquerading as legitimate software: 'nginx' (a propagation/persistence module that uses masscan to find more exposed 2375 endpoints and spawns new ubuntu:18.04 containers with --restart always) and 'cloud' (the Dero miner). It needs no central C2, making the worm resilient; the same wallet/node infrastructure was reused from 2023-2024 Kubernetes cryptojacking campaigns.",
+      "references": [
+        "https://securelist.com/dero-miner-infects-containers-through-docker-api/116546/",
+        "https://thehackernews.com/2025/05/new-self-spreading-malware-infects.html"
+      ],
+      "indicators": [
+        "Docker API exposed on port 2375",
+        "UPX-packed Go binaries at /usr/bin/nginx and /usr/bin/cloud",
+        "masscan -p 2375 scanning for new victims",
+        "containers spawned with 'ubuntu:18.04 /bin/bash' and --restart always",
+        "C2/update domains d.windowsupdatesupport[.]link and h.windowsupdatesupport[.]link",
+        "Dero wallet dero1qyy8xjrdjcn2dvr6pwe40jrl3evv9vam6tpx537vux60xxkx6hs7zqgde993y"
+      ],
+      "attack_type": "cryptominer"
     }
   ]
 }

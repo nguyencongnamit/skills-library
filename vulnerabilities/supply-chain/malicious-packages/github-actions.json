@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "github-actions",
-  "last_updated": "2026-05-13T00:00:00Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "description": "Documented compromises of GitHub Actions, classes of weak action-usage patterns, and CI/CD pipeline supply-chain incidents.",
   "entries": [
     {
@@ -159,6 +159,27 @@
         "artifact provenance"
       ],
       "attack_type": "design_pattern_weakness"
+    },
+    {
+      "name": "shai-hulud-workflow-injection",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "build_pipeline_compromise",
+      "severity": "critical",
+      "discovered": "2025-09-15",
+      "description": "The self-replicating 'Shai-Hulud' npm worm (first wave Sept 2025, ~500 packages removed by GitHub incl. @ctrl/tinycolor and CrowdStrike-owned packages; 'Shai-Hulud 2.0' Nov 2025 affected 25,000+ repositories across ~350 users) abuses stolen GitHub tokens to write a malicious GitHub Actions workflow into every accessible repository for persistence and secret theft. The injected workflow (observed file names shai-hulud-workflow.yml and discussion.yaml) runs on push, uses the legitimate TruffleHog scanner to harvest secrets (.npmrc npm tokens, GitHub PATs, AWS/GCP/Azure keys), and publishes them to attacker-created public 'Shai-Hulud' repositories.",
+      "references": [
+        "https://unit42.paloaltonetworks.com/npm-supply-chain-attack/",
+        "https://www.wiz.io/blog/shai-hulud-npm-supply-chain-attack"
+      ],
+      "indicators": [
+        "unexpected workflow file shai-hulud-workflow.yml or discussion.yaml added under .github/workflows",
+        "workflow invokes TruffleHog to scan for secrets",
+        "workflow triggers on push and POSTs secrets to an external endpoint",
+        "creation of a public repository named 'Shai-Hulud'"
+      ],
+      "attack_type": "build_pipeline_compromise"
     }
   ]
 }

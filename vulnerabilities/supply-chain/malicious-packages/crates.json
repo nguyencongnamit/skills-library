@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "crates",
-  "last_updated": "2026-06-21T00:00:00Z",
+  "last_updated": "2026-06-21T12:00:00Z",
   "entries": [
     {
       "name": "actix_web_extras",
@@ -331,6 +331,55 @@
         "metadata mimics legitimate package description"
       ],
       "attack_type": "typosquat"
+    },
+    {
+      "name": "finch-rust",
+      "versions_affected": [
+        "0.6.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-05",
+      "description": "Socket disclosed a malicious crate 'finch-rust' (v0.6.2) by threat actor 'faceless' (GitHub face-lessssss) impersonating the legitimate bioinformatics tool 'finch' (60k+ downloads). It acts as a loader via an unpinned dependency on the credential-stealing crate 'sha-rust' (sha-rust = \"0.1\"), so it auto-resolves to whatever malicious version is latest. The payload reads .env, config.toml and id.json files for API keys, database URLs, auth tokens and crypto keys and POSTs them (with username + IP gathered via a UDP-socket trick) to rust-docs-build[.]vercel[.]app/api/v1.",
+      "references": [
+        "https://socket.dev/blog/malicious-crate-mimicking-finch-exfiltrates-credentials",
+        "https://advisories.gitlab.com/pkg/cargo/finch_cli_rust"
+      ],
+      "indicators": [
+        "unpinned dependency 'sha-rust = \"0.1\"' in Cargo.toml",
+        "reads .env, config.toml, id.json for secrets",
+        "exfiltrates to rust-docs-build[.]vercel[.]app/api/v1",
+        "typosquat/impersonation of the 'finch' crate",
+        "published by crates.io alias 'faceless'"
+      ],
+      "attack_type": "embedded_malicious_code"
+    },
+    {
+      "name": "sha-rust",
+      "versions_affected": [
+        "0.1.0",
+        "0.1.1",
+        "0.1.2",
+        "0.1.3",
+        "0.1.4",
+        "0.1.5",
+        "0.1.6",
+        "0.1.7"
+      ],
+      "type": "data_exfiltration",
+      "severity": "high",
+      "discovered": "2025-12-05",
+      "description": "Credential-stealing crate pulled in as an unpinned transitive dependency by the malicious loader 'finch-rust' (Socket, Dec 2025; threat actor 'faceless'). Across 8 rapid versions (0.1.0-0.1.7 in ~2 weeks) it scanned for .env / config.toml / id.json secrets (API keys, DB URLs, auth tokens, crypto keys) and exfiltrated them with host metadata to rust-docs-build[.]vercel[.]app/api/v1. The unpinned 'sha-rust = \"0.1\"' constraint let the attacker push evolved payloads to existing victims without any change to finch-rust.",
+      "references": [
+        "https://socket.dev/blog/malicious-crate-mimicking-finch-exfiltrates-credentials"
+      ],
+      "indicators": [
+        "8 versions published in ~2 weeks",
+        "reads .env, config.toml, id.json",
+        "exfiltrates to rust-docs-build[.]vercel[.]app",
+        "delivered via an unpinned dependency from finch-rust"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
