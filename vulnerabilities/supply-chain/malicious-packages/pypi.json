@@ -4742,6 +4742,90 @@
         "exfiltrates SSH keys, crypto wallet keystores, AWS/GitHub creds, browser data"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "solana-cli-py",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Part of the JFrog-disclosed 'Solana FakeFix' campaign (2026-06-11): ~25 npm/PyPI packages impersonating Solana developer tooling (@solana/web3.js, @solana/spl-token) and luring developers with fake 'stable/fixed/patched/LTS' builds. On install/import it steals Solana keypairs (~/.config/solana/id.json), SSH keys (~/.ssh/id_rsa), AWS credentials (~/.aws/credentials), source-control tokens, and .env secrets (vars named KEY/SECRET/MNEMONIC/TOKEN).",
+      "references": [
+        "https://research.jfrog.com/post/solana-fakefix/",
+        "https://cybersecuritynews.com/solana-fakefix-campaign-uses-25-malicious-npm-and-pypi-packages/"
+      ],
+      "indicators": [
+        "Solana FakeFix campaign (JFrog, 2026-06-11)",
+        "impersonates @solana/web3.js or @solana/spl-token",
+        "reads ~/.config/solana/id.json, ~/.ssh/id_rsa, ~/.aws/credentials, .env",
+        "exfiltrates Solana keypairs, SSH/AWS/SCM tokens"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "solana-web3",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Part of the JFrog-disclosed 'Solana FakeFix' campaign (2026-06-11): ~25 npm/PyPI packages impersonating Solana developer tooling (@solana/web3.js, @solana/spl-token) and luring developers with fake 'stable/fixed/patched/LTS' builds. On install/import it steals Solana keypairs (~/.config/solana/id.json), SSH keys (~/.ssh/id_rsa), AWS credentials (~/.aws/credentials), source-control tokens, and .env secrets (vars named KEY/SECRET/MNEMONIC/TOKEN).",
+      "references": [
+        "https://research.jfrog.com/post/solana-fakefix/",
+        "https://cybersecuritynews.com/solana-fakefix-campaign-uses-25-malicious-npm-and-pypi-packages/"
+      ],
+      "indicators": [
+        "Solana FakeFix campaign (JFrog, 2026-06-11)",
+        "impersonates @solana/web3.js or @solana/spl-token",
+        "reads ~/.config/solana/id.json, ~/.ssh/id_rsa, ~/.aws/credentials, .env",
+        "exfiltrates Solana keypairs, SSH/AWS/SCM tokens"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "solana-web3-py",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Part of the JFrog-disclosed 'Solana FakeFix' campaign (2026-06-11): ~25 npm/PyPI packages impersonating Solana developer tooling (@solana/web3.js, @solana/spl-token) and luring developers with fake 'stable/fixed/patched/LTS' builds. On install/import it steals Solana keypairs (~/.config/solana/id.json), SSH keys (~/.ssh/id_rsa), AWS credentials (~/.aws/credentials), source-control tokens, and .env secrets (vars named KEY/SECRET/MNEMONIC/TOKEN).",
+      "references": [
+        "https://research.jfrog.com/post/solana-fakefix/",
+        "https://cybersecuritynews.com/solana-fakefix-campaign-uses-25-malicious-npm-and-pypi-packages/"
+      ],
+      "indicators": [
+        "Solana FakeFix campaign (JFrog, 2026-06-11)",
+        "impersonates @solana/web3.js or @solana/spl-token",
+        "reads ~/.config/solana/id.json, ~/.ssh/id_rsa, ~/.aws/credentials, .env",
+        "exfiltrates Solana keypairs, SSH/AWS/SCM tokens"
+      ],
+      "attack_type": "typosquat"
+    },
+    {
+      "name": "spl-token-py",
+      "versions_affected": [
+        "*"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-11",
+      "description": "Part of the JFrog-disclosed 'Solana FakeFix' campaign (2026-06-11): ~25 npm/PyPI packages impersonating Solana developer tooling (@solana/web3.js, @solana/spl-token) and luring developers with fake 'stable/fixed/patched/LTS' builds. On install/import it steals Solana keypairs (~/.config/solana/id.json), SSH keys (~/.ssh/id_rsa), AWS credentials (~/.aws/credentials), source-control tokens, and .env secrets (vars named KEY/SECRET/MNEMONIC/TOKEN).",
+      "references": [
+        "https://research.jfrog.com/post/solana-fakefix/",
+        "https://cybersecuritynews.com/solana-fakefix-campaign-uses-25-malicious-npm-and-pypi-packages/"
+      ],
+      "indicators": [
+        "Solana FakeFix campaign (JFrog, 2026-06-11)",
+        "impersonates @solana/web3.js or @solana/spl-token",
+        "reads ~/.config/solana/id.json, ~/.ssh/id_rsa, ~/.aws/credentials, .env",
+        "exfiltrates Solana keypairs, SSH/AWS/SCM tokens"
+      ],
+      "attack_type": "typosquat"
     }
   ],
   "sources": {
