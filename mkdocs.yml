@@ -84,6 +84,17 @@ nav:
     - Install on Linux: install-linux.md
     - Install on Windows: install-windows.md
     - Air-gapped Install: air-gapped-install.md
+  - Guides:
+    - Choose your path: guides/index.md
+    - Evaluator / New: guides/evaluator.md
+    - Developer: guides/developer.md
+    - DevOps / Platform: guides/devops.md
+    - Security / AppSec: guides/security.md
+    - Contributor: guides/contributor.md
+  - Concepts:
+    - Why SecureVibe: concepts/why.md
+    - What makes it different: concepts/features.md
+    - Architecture: concepts/architecture.md
   - Contribute:
     - Contribute a Finding (LEARN loop): contribute.md
   - Admin:
