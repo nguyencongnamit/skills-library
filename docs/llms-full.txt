@@ -136,10 +136,10 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <span class="ss-card-body"><span class="ss-card-title">CVE Patterns</span>
 <span class="ss-card-desc">58 code-relevant CVE detection patterns — what the diff looks like, not just which version is bad.</span></span>
 </a>
-<a class="ss-card" data-pkg="supply" href="https://github.com/namncqualgo/skills-library/tree/main/vulnerabilities/supply-chain">
+<a class="ss-card" data-pkg="supply" href="threat-intel/">
 <span class="ss-card-icon">📦</span>
 <span class="ss-card-body"><span class="ss-card-title">Supply-Chain Intel</span>
-<span class="ss-card-desc">9 ecosystems: npm, pypi, cargo, gem, go, nuget, maven, GitHub Actions, Docker. Malicious-package corpus + typosquats.</span></span>
+<span class="ss-card-desc">2,022 web-cited malicious-package entries across 10 ecosystems + typosquats. Browse the curated canon →</span></span>
 </a>
 <a class="ss-card" data-pkg="secrets" href="https://github.com/namncqualgo/skills-library/tree/main/skills/secret-detection">
 <span class="ss-card-icon">🔐</span>

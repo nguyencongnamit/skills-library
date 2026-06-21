@@ -85,6 +85,10 @@ docs-serve: ## Live-reload docs preview on http://127.0.0.1:8000
 	DYLD_FALLBACK_LIBRARY_PATH=$(CAIRO_LIB):$$DYLD_FALLBACK_LIBRARY_PATH \
 		$(VENV)/bin/mkdocs serve
 
+.PHONY: threat-data
+threat-data: ## Regenerate the docs Threat-Intel dataset from the curated DB
+	python3 scripts/gen-threat-data.py
+
 .PHONY: wasm
 wasm: ## Build the in-browser playground WASM (real scanners, embedded data)
 	@echo "populating wasm/embed/ from the real data tree..."
