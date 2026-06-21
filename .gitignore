@@ -42,6 +42,7 @@ sdk/typescript/dist/
 /_site/
 /site/
 /.cache/
+/wasm/embed/
 /.branchguard/
 /graphify-out/
 

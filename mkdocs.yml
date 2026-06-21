@@ -90,8 +90,12 @@ extra:
 extra_css:
   - stylesheets/custom.css
 
+extra_javascript:
+  - assets/js/ai-actions.js
+
 nav:
   - Home: index.md
+  - Playground: playground.md
   - Get Started:
     - Quick Start: quickstart.md
     - Install on macOS: install-macos.md
@@ -120,4 +124,5 @@ nav:
     - Contribute a Finding (LEARN loop): contribute.md
   - Admin:
     - Team Rollout: admin-team-rollout.md
+  - Changelog: changelog.md
   - FAQ: faq.md

@@ -85,6 +85,21 @@ docs-serve: ## Live-reload docs preview on http://127.0.0.1:8000
 	DYLD_FALLBACK_LIBRARY_PATH=$(CAIRO_LIB):$$DYLD_FALLBACK_LIBRARY_PATH \
 		$(VENV)/bin/mkdocs serve
 
+.PHONY: wasm
+wasm: ## Build the in-browser playground WASM (real scanners, embedded data)
+	@echo "populating wasm/embed/ from the real data tree..."
+	rm -rf wasm/embed
+	mkdir -p wasm/embed/vulnerabilities/supply-chain/malicious-packages \
+	         wasm/embed/vulnerabilities/supply-chain/typosquat-db \
+	         wasm/embed/skills/secret-detection/checklists
+	cp vulnerabilities/supply-chain/malicious-packages/*.json wasm/embed/vulnerabilities/supply-chain/malicious-packages/
+	cp vulnerabilities/supply-chain/typosquat-db/known_typosquats.json wasm/embed/vulnerabilities/supply-chain/typosquat-db/
+	cp skills/secret-detection/checklists/secret_detection.yaml wasm/embed/skills/secret-detection/checklists/
+	mkdir -p docs/assets/playground
+	GOOS=js GOARCH=wasm $(GO) build -trimpath -ldflags "$(LDFLAGS)" -o docs/assets/playground/skills.wasm ./wasm
+	cp "$$($(GO) env GOROOT)/lib/wasm/wasm_exec.js" docs/assets/playground/wasm_exec.js
+	@ls -lh docs/assets/playground/skills.wasm | awk '{print "  built docs/assets/playground/skills.wasm ("$$5")"}'
+
 .PHONY: demo-gif
 demo-gif: $(SKILLS_CHECK) ## Re-record the hero terminal demo (needs vhs)
 	@command -v vhs >/dev/null || { echo "vhs not installed: brew install vhs"; exit 1; }

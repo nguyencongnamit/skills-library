@@ -8,8 +8,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"math"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -71,6 +73,11 @@ var allEcosystems = []string{
 // the MCP server is a short-lived per-session process.
 type Library struct {
 	root string
+
+	// fsys is the filesystem the data loaders read from. Defaults to
+	// os.DirFS(root) in NewLibrary; the WASM build injects an embed.FS via
+	// NewLibraryFS so the scanners run in the browser with no disk access.
+	fsys fs.FS
 
 	// userCacheRoot is the user-local OSV cache root (the path that
 	// `skills-check fetch-vulns` populates). When non-empty and the
@@ -279,6 +286,7 @@ func NewLibrary(root string, opts ...LibraryOption) (*Library, error) {
 	}
 	l := &Library{
 		root:          abs,
+		fsys:          os.DirFS(abs),
 		userCacheRoot: defaultUserCacheRoot(),
 		vulnCache:     map[string]*vulnFile{},
 		osvIndex:      map[string]*osvIndexFile{},
@@ -291,6 +299,35 @@ func NewLibrary(root string, opts ...LibraryOption) (*Library, error) {
 		opt(l)
 	}
 	return l, nil
+}
+
+// NewLibraryFS builds a Library backed by an arbitrary fs.FS instead of a
+// directory on disk, skipping the on-disk skills/ check. The WASM build uses
+// it with a go:embed of the data tree so the scanners run in the browser.
+// Lookups whose data is absent from fsys (e.g. the OSV cache, the skills
+// catalogue) degrade gracefully, exactly as when the on-disk cache is missing.
+func NewLibraryFS(fsys fs.FS, opts ...LibraryOption) *Library {
+	l := &Library{
+		fsys:        fsys,
+		vulnCache:   map[string]*vulnFile{},
+		osvIndex:    map[string]*osvIndexFile{},
+		osvSeverity: map[string]string{},
+		osvRecord:   map[string][]osvAffected{},
+		vulnSource:  SourceLocal,
+	}
+	for _, opt := range opts {
+		opt(l)
+	}
+	return l
+}
+
+// dataFS is the filesystem the data loaders read from, defaulting to
+// os.DirFS(root) for the on-disk constructor.
+func (l *Library) dataFS() fs.FS {
+	if l.fsys != nil {
+		return l.fsys
+	}
+	return os.DirFS(l.root)
 }
 
 // WithOverlayPaths overrides the contribution-overlay files the Library
@@ -846,14 +883,14 @@ func (l *Library) loadVulnFile(eco string) (*vulnFile, error) {
 	if cached, ok := l.vulnCache[eco]; ok {
 		return cached, nil
 	}
-	path := filepath.Join(l.root, "vulnerabilities", "supply-chain", "malicious-packages", eco+".json")
-	body, err := os.ReadFile(path)
+	rel := path.Join("vulnerabilities", "supply-chain", "malicious-packages", eco+".json")
+	body, err := fs.ReadFile(l.dataFS(), rel)
 	if err != nil {
 		return nil, err
 	}
 	var vf vulnFile
 	if err := json.Unmarshal(body, &vf); err != nil {
-		return nil, fmt.Errorf("parse %s: %w", path, err)
+		return nil, fmt.Errorf("parse %s: %w", rel, err)
 	}
 	l.vulnCache[eco] = &vf
 	return &vf, nil
@@ -865,14 +902,14 @@ func (l *Library) loadTyposquats() (*typosquatFile, error) {
 	if l.typosquats != nil {
 		return l.typosquats, nil
 	}
-	path := filepath.Join(l.root, "vulnerabilities", "supply-chain", "typosquat-db", "known_typosquats.json")
-	body, err := os.ReadFile(path)
+	rel := path.Join("vulnerabilities", "supply-chain", "typosquat-db", "known_typosquats.json")
+	body, err := fs.ReadFile(l.dataFS(), rel)
 	if err != nil {
 		return nil, err
 	}
 	var tf typosquatFile
 	if err := json.Unmarshal(body, &tf); err != nil {
-		return nil, fmt.Errorf("parse %s: %w", path, err)
+		return nil, fmt.Errorf("parse %s: %w", rel, err)
 	}
 	l.typosquats = &tf
 	return &tf, nil
@@ -1196,8 +1233,7 @@ func (l *Library) loadSecretRules() (*secretRules, error) {
 	if l.secrets != nil {
 		return l.secrets, nil
 	}
-	path := filepath.Join(l.root, filepath.FromSlash(secretChecklistPath))
-	body, err := os.ReadFile(path)
+	body, err := fs.ReadFile(l.dataFS(), secretChecklistPath)
 	if err != nil {
 		return nil, fmt.Errorf("read secret checklist: %w", err)
 	}

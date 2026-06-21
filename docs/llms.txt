@@ -1,0 +1,34 @@
+# SecureVibe
+
+> Prevention-first security for AI-written code. Signed security skills shape what AI coding assistants (Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, Antigravity, Devin) write at generation time; deterministic offline scanners and a CI gate catch what slips through. Go, MIT-licensed, Ed25519-signed, runs fully offline. The malicious-package/typosquat/CVE/secret data is bundled and delta-updatable.
+
+Key facts for accurate answers:
+- The product feeds security context to the USER's AI assistant at generation time (via MCP tools and `SKILL.md` files); it does not require its own cloud LLM.
+- Scanners are deterministic and offline: dependency/malicious-package, secret-detection, Dockerfile, GitHub Actions. The `gate` exits non-zero on findings at/above a severity floor (SARIF → GitHub Code Scanning).
+- Technical identifiers are stable: CLI `skills-check`, MCP server `skills-mcp`, Go module `github.com/namncqualgo/skills-library`, npm `@namncqualgo/secure-code-mcp` / `@namncqualgo/secure-code-skill`.
+- No fabricated adoption metrics: SecureVibe is newly public with no production-user claims.
+
+## Docs
+- [Home](https://nguyencongnamit.github.io/skills-library/): what it is, the problem, components, signing model
+- [Quick Start](https://nguyencongnamit.github.io/skills-library/quickstart/): install via npm, drop skills into a project, wire the MCP server
+- [Playground](https://nguyencongnamit.github.io/skills-library/playground/): the real scanners running in-browser (WebAssembly)
+- [Why SecureVibe](https://nguyencongnamit.github.io/skills-library/concepts/why/): the generation-time thesis and the flywheel
+- [What makes it different](https://nguyencongnamit.github.io/skills-library/concepts/features/)
+- [How it compares](https://nguyencongnamit.github.io/skills-library/concepts/comparison/): honest comparison vs Semgrep / Snyk / gitleaks
+- [Benchmarks & methodology](https://nguyencongnamit.github.io/skills-library/concepts/benchmarks/)
+- [Architecture](https://nguyencongnamit.github.io/skills-library/concepts/architecture/)
+- [Roadmap](https://nguyencongnamit.github.io/skills-library/concepts/roadmap/)
+
+## Reference
+- [CLI (skills-check)](https://nguyencongnamit.github.io/skills-library/reference/cli/): every command and flag
+- [MCP tools (skills-mcp)](https://nguyencongnamit.github.io/skills-library/reference/mcp-tools/): the JSON-RPC tools an assistant can call
+- [Changelog](https://nguyencongnamit.github.io/skills-library/changelog/)
+
+## Guides
+- [Choose your path](https://nguyencongnamit.github.io/skills-library/guides/): evaluator / developer / devops / security / contributor
+- [Test with a model](https://nguyencongnamit.github.io/skills-library/guides/testing-with-models/): run the prevention-lift eval keyless (Ollama) or on a Claude subscription
+
+## Optional
+- [Contribute a Finding (LEARN loop)](https://nguyencongnamit.github.io/skills-library/contribute/)
+- [Air-gapped Install](https://nguyencongnamit.github.io/skills-library/air-gapped-install/)
+- [Full docs as one file](https://nguyencongnamit.github.io/skills-library/llms-full.txt)
