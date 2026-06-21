@@ -1,7 +1,7 @@
 # Manifest signing procedure
 
 This document describes the out-of-band signing step required to authenticate
-**secure-code** releases. The Ed25519 private key **never** enters CI; signing
+**SecureVibe** releases. The Ed25519 private key **never** enters CI; signing
 happens offline on a hardware-backed device.
 
 ## Rationale

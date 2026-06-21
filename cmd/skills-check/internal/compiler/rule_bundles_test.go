@@ -53,7 +53,7 @@ func TestDevinBundleFormat(t *testing.T) {
 		if !strings.Contains(fm, "trigger:") {
 			t.Errorf("%s: devin rule missing trigger frontmatter:\n%s", id, firstLines(dvn, 5))
 		}
-		if !strings.Contains(dvn, "secure-code rule for Devin") {
+		if !strings.Contains(dvn, "SecureVibe rule for Devin") {
 			t.Errorf("%s: devin rule missing Devin-branded banner:\n%s", id, firstLines(dvn, 3))
 		}
 	}

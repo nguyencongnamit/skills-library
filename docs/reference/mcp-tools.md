@@ -234,7 +234,7 @@ Returns one or more Sigma-format detection rules from the rules directory.
 
 ### `list_external_tools`
 
-Lists the industry-standard external CLIs that secure-code skills recommend (from each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's `PATH`.
+Lists the industry-standard external CLIs that SecureVibe skills recommend (from each skill's `external_tools` frontmatter), each marked with whether its binary is installed on the current host's `PATH`.
 
 This is **discovery only** — the server never runs these tools. Use it to decide which external scanner to run (e.g. `gitleaks dir` for whole-repo / git-history secret scanning, `hadolint <file>` for Dockerfile linting), then run the chosen one yourself. The built-in MCP scanners remain the offline default. No parameters.
 

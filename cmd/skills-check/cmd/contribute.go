@@ -354,7 +354,7 @@ func overlaySigningBytes(p tools.OverlayPackage) []byte {
 // signed entry records WHICH key signed it without embedding the key.
 func keyIDFor(pub ed25519.PublicKey) string {
 	sum := sha256.Sum256(pub)
-	return "vibe-guard-contrib-" + base64.RawURLEncoding.EncodeToString(sum[:6])
+	return "securevibe-contrib-" + base64.RawURLEncoding.EncodeToString(sum[:6])
 }
 
 // signOverlayEntry signs p in place with the key at keyPath.
@@ -597,7 +597,7 @@ centrally-signed database.`,
 			}
 			cand := candidateFile{
 				SchemaVersion: "1.0",
-				Kind:          "vibe-guard-contribution-candidate",
+				Kind:          "securevibe-contribution-candidate",
 				GeneratedBy:   "skills-check contribute submit",
 				GeneratedAt:   time.Now().UTC().Format(time.RFC3339),
 				Packages:      append([]tools.OverlayPackage(nil), pkgs...),

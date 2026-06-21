@@ -1,4 +1,4 @@
-# secure-code — APT and YUM release repository
+# SecureVibe — APT and YUM release repository
 
 This directory holds the tooling that turns the per-release `.deb` and `.rpm`
 artifacts (built by `packaging/linux/`) into APT and YUM repositories hosted on
@@ -7,7 +7,7 @@ GitHub Pages.
 > Repository paths (`namncqualgo.github.io/skills-library/{apt,yum}`),
 > repository identifiers (`skills-library`), and the YUM `name=Skills
 > Library` display label are stable hosting identifiers and are not renamed
-> when the project's brand changed to **secure-code**.
+> when the project's brand changed to **SecureVibe**.
 
 Users install with:
 

@@ -1,4 +1,4 @@
-# secure-code pre-commit hooks.
+# SecureVibe pre-commit hooks.
 #
 # Add to your .pre-commit-config.yaml:
 #
@@ -16,7 +16,7 @@
 # meets the severity floor. Override the floor with `args: ["--severity-floor",
 # "critical"]` in your config.
 - id: secure-code-gate
-  name: secure-code gate
+  name: SecureVibe gate
   description: Fail on secrets, vulnerable dependencies, and Dockerfile / GitHub Actions issues at or above a severity floor.
   entry: secure-code-check gate
   language: node

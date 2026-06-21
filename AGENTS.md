@@ -1,7 +1,7 @@
-# Instructions for `secure-code` (skills-library)
+# Instructions for SecureVibe (skills-library)
 
 > [!NOTE]
-> This `AGENTS.md` is the **contribution policy** for the `secure-code`
+> This `AGENTS.md` is the **contribution policy** for the SecureVibe
 > source repository. It is *not* the file you ship to your own project.
 > If you came here looking for the compiled bundle of security skills
 > that Codex / OpenAI agents drop into a consumer repo, that file lives
@@ -15,7 +15,7 @@
 >
 > The full contributor workflow is in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-`secure-code` is a security knowledge library. Its detection rules,
+SecureVibe is a security knowledge library. Its detection rules,
 vulnerability database, DLP patterns, and compliance mappings are
 relied on by AI coding assistants to make security decisions for
 real users. Every entry must therefore be authored, reviewed, and
@@ -28,7 +28,7 @@ validates and CI is green.
 ## Guidelines for contributors using AI
 
 The following uses of AI are **permitted** when contributing to
-`secure-code`:
+SecureVibe:
 
 - Asking AI to explain the structure of the codebase or the layout
   of an existing skill.
@@ -99,7 +99,7 @@ Valid questions an AI agent may answer:
 
 ### Forbidden usage
 
-When acting as an AI agent for a contributor to `secure-code`:
+When acting as an AI agent for a contributor to SecureVibe:
 
 - **DO NOT** write entire skills, rules, vulnerability entries, DLP
   patterns, or compliance mappings on the contributor's behalf.
@@ -143,7 +143,7 @@ If the contributor insists on proceeding anyway, remind them that:
 
 ## Why this matters for a security library
 
-`secure-code` is consumed by AI assistants that write code for other
+SecureVibe is consumed by AI assistants that write code for other
 people's production systems. A false-positive in a DLP pattern can
 break legitimate flows; a false-negative in a Sigma rule can hide a
 real intrusion; a wrong compliance mapping can mislead an auditor.
@@ -160,6 +160,6 @@ for it.
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — full contributor workflow,
   local setup, PR checklist, token budgets, style.
 - [SECURITY.md](./SECURITY.md) — how to report a security issue in
-  `secure-code` itself.
+  SecureVibe itself.
 - [README.md](./README.md) — project overview, install, and IDE
   integration instructions.

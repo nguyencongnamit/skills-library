@@ -1,4 +1,4 @@
-name: secure-code gate
+name: SecureVibe gate
 description: Fail the build on secrets, vulnerable dependencies, and Dockerfile / GitHub Actions issues at or above a severity floor.
 branding:
   icon: shield
@@ -35,7 +35,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Run secure-code gate
+    - name: Run SecureVibe gate
       id: gate
       shell: bash
       # Inputs flow through env: and are referenced as "$VARS" rather than
@@ -95,5 +95,5 @@ runs:
         SEVERITY_FLOOR: ${{ inputs.severity-floor }}
         EXIT_CODE: ${{ steps.gate.outputs.exit-code }}
       run: |
-        echo "secure-code gate: findings at or above '$SEVERITY_FLOOR' (exit $EXIT_CODE). See the Security tab / PR annotations." >&2
+        echo "SecureVibe gate: findings at or above '$SEVERITY_FLOOR' (exit $EXIT_CODE). See the Security tab / PR annotations." >&2
         exit 1

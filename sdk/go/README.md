@@ -1,6 +1,6 @@
-# secure-code — Go SDK
+# SecureVibe — Go SDK
 
-`skillslib` is the public Go SDK for **secure-code** (Go module path
+`skillslib` is the public Go SDK for **SecureVibe** (Go module path
 `github.com/namncqualgo/skills-library`).
 
 It is a thin re-export of `internal/skill` so downstream Go programs can load

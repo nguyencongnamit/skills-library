@@ -1,6 +1,6 @@
 name: npm publish
 
-# Publishes the secure-code MCP server to npm as:
+# Publishes the SecureVibe MCP server to npm as:
 #   @namncqualgo/secure-code-mcp                      (launcher + library data)
 #   @namncqualgo/secure-code-mcp-<os>-<arch>  x5      (per-platform binaries)
 #

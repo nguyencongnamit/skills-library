@@ -1,6 +1,6 @@
-# secure-code — Architecture
+# SecureVibe — Architecture
 
-This document describes the runtime architecture of the **secure-code** project
+This document describes the runtime architecture of the **SecureVibe** project
 (Go module path [`github.com/namncqualgo/skills-library`](https://github.com/namncqualgo/skills-library);
 CLI binary `skills-check`). The Go module path and CLI binary name (`skills-check`)
 are stable technical identifiers.
@@ -9,7 +9,7 @@ are stable technical identifiers.
 
 ```mermaid
 graph TD
-    subgraph "secure-code Repository"
+    subgraph "SecureVibe Repository"
         A["skills/<br/>SKILL.md manifests"] --> D["dist/ compiler"]
         B["vulnerabilities/<br/>Supply chain DB"] --> D
         C["rules/<br/>Sigma detection rules"] --> D
@@ -32,7 +32,7 @@ graph TD
         O --> P["skills-check CLI<br/>(Go binary)"]
         P --> Q["Delta download<br/>changed files only"]
         Q --> R["Verify signature<br/>+ checksums"]
-        R --> S["Update local<br/>secure-code/"]
+        R --> S["Update local<br/>skills-library/"]
         S --> D
     end
 
@@ -257,7 +257,7 @@ can be built against different signing keys for staging versus production.
 
 ## MCP Server Architecture (`skills-mcp`)
 
-`skills-mcp` is a second Go binary that exposes secure-code to AI tools
+`skills-mcp` is a second Go binary that exposes SecureVibe to AI tools
 speaking the Model Context Protocol. It runs as a short-lived child process
 spawned by the AI client and talks to it over stdio.
 
@@ -417,7 +417,7 @@ Token counts are computed at compile time so authors get fast feedback.
 
 ## Security of the Library Itself
 
-secure-code is itself a piece of security tooling. Its supply chain must be
+SecureVibe is itself a piece of security tooling. Its supply chain must be
 defended.
 
 - **All releases are Ed25519-signed.** The signing key is hardware-backed (YubiKey)

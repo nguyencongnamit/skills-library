@@ -1,6 +1,6 @@
-# secure-code — Design Document
+# SecureVibe — Design Document
 
-This document describes the design and scope of **secure-code**, a security
+This document describes the design and scope of **SecureVibe**, a security
 knowledge framework for AI-assisted coding maintained by
 [ShieldNet360](https://www.shieldnet360.com) and released under the
 [MIT license](./LICENSE). The Go module path is `github.com/namncqualgo/skills-library`
@@ -40,7 +40,7 @@ Every existing answer to this question is one of three flavors:
 3. **Infrastructure-heavy** — requires servers, agents, and IT involvement before any
    developer benefits.
 
-secure-code exists to solve this gap with an MIT-licensed, file-based,
+SecureVibe exists to solve this gap with an MIT-licensed, file-based,
 offline-capable library that any developer can drop into their IDE in under five
 minutes.
 
@@ -235,7 +235,7 @@ The vulnerability database is opinionated about what it covers and what it does 
 - **Binary vulnerability scanning** — defer to Trivy / Grype.
 - **Container image vulnerability scanning** — defer to Trivy / Grype.
 
-secure-code is intentionally narrow: it covers the **supply-chain attack surface
+SecureVibe is intentionally narrow: it covers the **supply-chain attack surface
 that AI coding tools introduce** and nothing else. Trying to be a general CVE
 database would be a strategic mistake.
 
@@ -261,11 +261,11 @@ verifies the resulting file is within budget and fails the build if it isn't.
 
 ## Scope Boundaries — What This Does NOT Deliver
 
-- **Runtime application security** (WAF, RASP). secure-code is a *development-time*
+- **Runtime application security** (WAF, RASP). SecureVibe is a *development-time*
   tool. Runtime defense is a different category entirely.
-- **SAST / DAST scanning.** Complementary, not replacement. secure-code shifts
+- **SAST / DAST scanning.** Complementary, not replacement. SecureVibe shifts
   guidance *into* the AI generation step; SAST runs *after*. Both should run.
-- **Real-time CVE monitoring / alerting.** That is an ops tool. secure-code
+- **Real-time CVE monitoring / alerting.** That is an ops tool. SecureVibe
   distributes structured knowledge; it does not page humans at 3am.
 - **Proprietary rule content.** Everything is MIT-licensed. If a rule is too sensitive
   to publish, it does not belong here.

@@ -229,7 +229,7 @@ func renderStatus(w interface{ Write([]byte) (int, error) }, rep statusReport) {
 		}
 		return fmt.Sprintf("%d days old", d)
 	}
-	fmt.Fprintf(w, "vibe-guard library status\n")
+	fmt.Fprintf(w, "SecureVibe library status\n")
 	fmt.Fprintf(w, "  version            %s", rep.LibraryVersion)
 	if rep.LibraryReleasedAt != "" {
 		fmt.Fprintf(w, "  (released %s, %s)", shortDate(rep.LibraryReleasedAt), ageStr(rep.LibraryAgeDays))

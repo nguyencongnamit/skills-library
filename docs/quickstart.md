@@ -1,6 +1,6 @@
 # Quick Start
 
-Get secure-code into a project in minutes. The easiest path is npm; building from source is for contributors.
+Get SecureVibe into a project in minutes. The easiest path is npm; building from source is for contributors.
 
 !!! note "Prerequisites"
     - **Node.js 18+** for the npm path (recommended), or **Go 1.22+** to build from source
@@ -56,7 +56,7 @@ Or hand-edit your client's MCP config:
 }
 ```
 
-After restarting your client, ask the assistant something like *"scan this Dockerfile for hardening issues"* or *"is `event-stream@3.3.6` known malicious?"* — it'll route through the secure-code tools.
+After restarting your client, ask the assistant something like *"scan this Dockerfile for hardening issues"* or *"is `event-stream@3.3.6` known malicious?"* — it'll route through the SecureVibe tools.
 
 ## 4. Try a single tool call directly
 

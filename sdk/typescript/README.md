@@ -1,7 +1,7 @@
-# secure-code — TypeScript SDK
+# SecureVibe — TypeScript SDK
 
 `skillslib` is a thin TypeScript loader and validator for the SKILL.md
-format used by **secure-code**. (The published npm package name remains
+format used by **SecureVibe**. (The published npm package name remains
 `@skills-library/skillslib` for backwards compatibility.)
 
 ## Install

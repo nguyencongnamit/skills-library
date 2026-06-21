@@ -227,7 +227,7 @@ func TestManifestVerifyUnsignedPolicy(t *testing.T) {
 // the legacy monolithic output. Asserts the boolean is plumbed through:
 //
 //  1. fullInline=false yields the minimal renderer's signature header
-//     (`AGENTS.md — secure-code skills (minimal)`).
+//     (`AGENTS.md — SecureVibe skills (minimal)`).
 //  2. fullInline=true yields the legacy renderer's signature header
 //     (`Skills Library — AGENTS.md (Codex / OpenAI agents)`).
 //
@@ -281,7 +281,7 @@ Tiny body sufficient to exercise the regenerate pipeline.
 	if err != nil {
 		t.Fatalf("read minimal AGENTS.md: %v", err)
 	}
-	if !strings.Contains(string(minimal), "AGENTS.md \u2014 secure-code skills (minimal)") {
+	if !strings.Contains(string(minimal), "AGENTS.md \u2014 SecureVibe skills (minimal)") {
 		t.Errorf("minimal output missing minimal-renderer header; got:\n%s", minimal)
 	}
 
@@ -297,7 +297,7 @@ Tiny body sufficient to exercise the regenerate pipeline.
 	if !strings.Contains(string(full), "Skills Library \u2014 AGENTS.md (Codex / OpenAI agents)") {
 		t.Errorf("full-inline output missing legacy-renderer header; got:\n%s", full)
 	}
-	if strings.Contains(string(full), "AGENTS.md \u2014 secure-code skills (minimal)") {
+	if strings.Contains(string(full), "AGENTS.md \u2014 SecureVibe skills (minimal)") {
 		t.Errorf("full-inline output should not carry the minimal-renderer header; got:\n%s", full)
 	}
 }

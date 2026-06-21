@@ -1,7 +1,7 @@
-# secure-code — macOS .pkg installer
+# SecureVibe — macOS .pkg installer
 
 Build a macOS installer package for the `skills-check` CLI (part of
-**secure-code**) using `pkgbuild` + `productbuild` from Xcode Command
+**SecureVibe**) using `pkgbuild` + `productbuild` from Xcode Command
 Line Tools.
 
 ## Quick Start

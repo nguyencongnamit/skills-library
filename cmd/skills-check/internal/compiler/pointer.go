@@ -44,7 +44,7 @@ func RenderPointer(spec PointerSpec, skills []*skill.Skill) string {
 
 	// Header — names the file so an LLM that ingests it knows
 	// which surface it is reading.
-	fmt.Fprintf(&b, "# %s — secure-code skills (minimal)\n\n", spec.OutputFile)
+	fmt.Fprintf(&b, "# %s — SecureVibe skills (minimal)\n\n", spec.OutputFile)
 
 	// Generator banner. We always emit the banner as markdown
 	// prose; the CommentPrefix is only honoured for the

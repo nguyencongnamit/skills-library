@@ -25,7 +25,7 @@
     "dependency-audit",
     "supply-chain-security"
   ],
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-21",
   "sources": [
     "OWASP Secrets Management Cheat Sheet",
     "CWE-798: Use of Hard-coded Credentials",

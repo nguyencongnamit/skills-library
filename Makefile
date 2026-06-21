@@ -1,4 +1,4 @@
-# Makefile for secure-code (github.com/namncqualgo/skills-library)
+# Makefile for SecureVibe (github.com/namncqualgo/skills-library)
 #
 # Thin wrappers around the commands documented in CONTRIBUTING.md so the
 # build / test / validate flow is one `make <target>` away. The Go

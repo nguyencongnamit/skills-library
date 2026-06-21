@@ -1,10 +1,10 @@
-# Contributing to secure-code
+# Contributing to SecureVibe
 
-Thanks for your interest in contributing to **secure-code**. This document
+Thanks for your interest in contributing to **SecureVibe**. This document
 describes the kinds of changes we welcome, the local workflow, and the rules
 that keep the project's data and tooling trustworthy.
 
-secure-code is released under the [MIT license](./LICENSE) and maintained by
+SecureVibe is released under the [MIT license](./LICENSE) and maintained by
 [ShieldNet360](https://www.shieldnet360.com).
 
 > [!IMPORTANT]
@@ -25,7 +25,7 @@ secure-code is released under the [MIT license](./LICENSE) and maintained by
 | **Detection rule** | `rules/{cloud,endpoint,container,saas}/<platform>/<name>.yml` | Follow the Sigma format. Include `schema_version: "1.0"` so the validator picks it up. |
 | **Compliance mapping** | `skills/compliance-awareness/frameworks/{cwe,owasp}_mapping.yaml` or `compliance/*_mapping.yaml` | Every skill ID must be present in both `cwe_mapping.yaml` and `owasp_mapping.yaml`. |
 | **CLI / SDK / compiler code** | `cmd/skills-check/`, `cmd/skills-mcp/`, `internal/`, `sdk/{go,python,typescript}/` | Add or update Go tests (`*_test.go`) for behaviour changes. |
-| **Docs** | `*.md` files at the repo root, in `docs/`, in `skills/*/`, or in `packaging/*/` | Prose changes are welcome — keep the brand `secure-code` and preserve technical identifiers (`skills-check`, the Go module path). |
+| **Docs** | `*.md` files at the repo root, in `docs/`, in `skills/*/`, or in `packaging/*/` | Prose changes are welcome — keep the brand SecureVibe and preserve technical identifiers (`skills-check`, the Go module path). |
 
 ## Local setup
 
@@ -128,7 +128,7 @@ The skill frontmatter is the single source of truth. Two consumers read it:
 2. The `list_external_tools` MCP tool reports each declared tool plus
    whether its binary resolves on the host's PATH (`installed: true/false`).
 
-secure-code only *discovers* these tools — it never executes them. The agent
+SecureVibe only *discovers* these tools — it never executes them. The agent
 runs the chosen tool itself via the shell. There is no marker schema, no
 registry, and no in-process execution to maintain.
 
@@ -150,7 +150,7 @@ than enlarging the existing tier.
 
 ## Style
 
-- **Brand:** the project is **secure-code**. The Go module path remains
+- **Brand:** the project is **SecureVibe**. The Go module path remains
   `github.com/namncqualgo/skills-library` and the CLI binary remains
   `skills-check` — these are stable technical identifiers. Use the brand name
   in prose, the technical identifiers in code/import paths.
@@ -162,7 +162,7 @@ than enlarging the existing tier.
 ## Reporting a security issue
 
 Please **do not** open a public issue for a security vulnerability in
-secure-code itself. Follow the process in [SECURITY.md](./SECURITY.md).
+SecureVibe itself. Follow the process in [SECURITY.md](./SECURITY.md).
 
 ## Code of conduct
 

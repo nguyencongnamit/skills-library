@@ -18,7 +18,7 @@ token_budget:
 rules_path: "checklists/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "supply-chain-security"]
-last_updated: "2026-06-20"
+last_updated: "2026-06-21"
 sources:
   - "OWASP Secrets Management Cheat Sheet"
   - "CWE-798: Use of Hard-coded Credentials"
@@ -135,7 +135,7 @@ then lock it so it can't come back.
    `git rm` does NOT remediate: the secret lives in history and is already compromised.
    Rotate/revoke the credential at the provider first, move the new value to an env var
    or secret manager, then purge history if warranted. Lock it: add a pre-commit hook
-   plus a CI secret-scan gate (`secure-code gate` / gitleaks over dir + git history)
+   plus a CI secret-scan gate (`SecureVibe gate` / gitleaks over dir + git history)
    that fails the build on that pattern, and mask values in CI logs
    (`::add-mask::`). Assert a clean file passes and a planted fake secret is caught,
    then commit the gate so it can't be reintroduced.

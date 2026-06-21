@@ -1,6 +1,6 @@
 # Security Policy
 
-**secure-code** is itself a piece of security tooling. Its data and binary
+**SecureVibe** is itself a piece of security tooling. Its data and binary
 distribution are signed, reproducibly built, and meant to be safe to embed in
 commercial products under the [MIT license](./LICENSE).
 
@@ -78,4 +78,4 @@ Published security advisories are listed at:
 
 Researchers and contributors who responsibly disclose security issues are
 credited in the relevant release notes and advisory pages. Thank you in
-advance for helping keep secure-code trustworthy.
+advance for helping keep SecureVibe trustworthy.

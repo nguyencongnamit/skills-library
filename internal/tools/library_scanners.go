@@ -1,5 +1,5 @@
 // Package tools — project-scoped scanners introduced in v3 of the MCP
-// server (Priority 3 of the secure-code rollout). The handlers in
+// server (Priority 3 of the SecureVibe rollout). The handlers in
 // this file extend the dependency / DLP coverage from "answer a
 // single question about a single package or string" to "scan a
 // project artifact (lockfile, workflow, Dockerfile) and return every
@@ -1270,7 +1270,7 @@ var gateNoiseDirs = map[string]bool{
 	"dist": true, "build": true, "target": true,
 	".next": true, ".nuxt": true, ".idea": true, ".vscode": true,
 	".terraform": true, ".gradle": true, ".mvn": true,
-	// vibe-guard's own config dir: the contribution overlay holds
+	// SecureVibe's own config dir: the contribution overlay holds
 	// base64 Ed25519 signatures that would otherwise trip the secret
 	// scanner's entropy check on a `gate <dir>` walk — a self-inflicted
 	// finding on our own metadata. It is consumed as config, not scanned.

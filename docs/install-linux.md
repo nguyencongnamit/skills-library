@@ -1,4 +1,4 @@
-# Install secure-code on Linux
+# Install SecureVibe on Linux
 
 The `skills-check` CLI is a statically linked Go binary with no runtime
 dependencies, so any glibc or musl Linux distribution can run it.
@@ -6,7 +6,7 @@ dependencies, so any glibc or musl Linux distribution can run it.
 > The CLI binary name (`skills-check`) and the hosted APT/YUM repository
 > paths (under `namncqualgo.github.io/skills-library/`) are stable technical
 > identifiers and are not renamed when the project's brand changed to
-> **secure-code**.
+> **SecureVibe**.
 
 ## APT (Debian / Ubuntu)
 

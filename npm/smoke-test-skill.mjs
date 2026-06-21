@@ -4,7 +4,7 @@
 //   2. `init` into a temp dir -> assert .claude/skills/<id>/SKILL.md appear
 //      and carry Claude Code frontmatter (name:)
 //   3. `connect-mcp` with no Claude CLI -> asserts it prints the exact
-//      `claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp` fallback
+//      `claude mcp add SecureVibe -- npx -y @namncqualgo/secure-code-mcp` fallback
 //
 // Usage: node npm/smoke-test-skill.mjs
 
@@ -39,7 +39,7 @@ async function main() {
     { tool: 'cursor', check: '.cursor/rules/container-security.mdc', needle: /^globs:/m },
     { tool: 'devin', check: '.devin/rules/secret-detection.md', needle: /^trigger:\s*model_decision/m },
     { tool: 'copilot', check: '.github/instructions/cicd-security.instructions.md', needle: /^applyTo:/m },
-    { tool: 'cline', check: '.clinerules', needle: /secure-code|secret/i },
+    { tool: 'cline', check: '.clinerules', needle: /SecureVibe|secret/i },
   ];
   for (const c of cases) {
     const proj = path.join(work, 'proj-' + c.tool);
@@ -59,12 +59,12 @@ async function main() {
   console.log('[3/3] connect-mcp fallback (no Claude CLI)');
   r = spawnSync(process.execPath, [cli, 'connect-mcp'], { encoding: 'utf8', env: { ...process.env, PATH: '/nonexistent' } });
   const text = (r.stdout || '') + (r.stderr || '');
-  if (!text.includes('claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp')) {
+  if (!text.includes('claude mcp add SecureVibe -- npx -y @namncqualgo/secure-code-mcp')) {
     die(`connect-mcp fallback did not print the expected command. Got:\n${text}`);
   }
 
   await fs.rm(work, { recursive: true, force: true });
-  console.log(`smoke-test-skill: PASS — init works for ${cases.length} tools (scoped + pointer); connect-mcp resolves the secure-code MCP`);
+  console.log(`smoke-test-skill: PASS — init works for ${cases.length} tools (scoped + pointer); connect-mcp resolves the SecureVibe MCP`);
 }
 
 main().catch((e) => die(e.message));

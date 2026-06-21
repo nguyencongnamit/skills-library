@@ -29,7 +29,7 @@ type ListExternalToolsResult struct {
 // skill frontmatter (the single source of truth) and reports, per tool,
 // whether its binary is on PATH. This is discovery only: the agent uses
 // the result to decide which tool to run, then runs it itself via the
-// shell — secure-code does not execute external binaries.
+// shell — SecureVibe does not execute external binaries.
 //
 // Tools are de-duplicated by name (first skill to declare it wins,
 // ordered by skill id) and returned sorted with installed tools first,

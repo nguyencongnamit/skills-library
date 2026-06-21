@@ -149,7 +149,7 @@ then lock it so it can't come back.
    long-lived cloud key sits in Secrets where OIDC should be. Real if
    reproducible; FP if already SHA-pinned, read-scoped, or no-secrets context.
 2. **Fix, then lock with a regression test** (CI policy gate, dev's call): add an
-   actionlint + secure-code step (or OpenSSF Scorecard / Renovate SHA-pin) to the
+   actionlint + SecureVibe step (or OpenSSF Scorecard / Renovate SHA-pin) to the
    pipeline that fails on a floating tag, a missing top-level `permissions: read`,
    a `curl | bash`, or a pwn-request checkout — plus one benign workflow that
    passes the gate. Commit it so the guard can't be silently dropped.

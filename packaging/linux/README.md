@@ -1,7 +1,7 @@
-# secure-code — Linux packaging
+# SecureVibe — Linux packaging
 
 Builds Debian (`.deb`) and RPM (`.rpm`) packages of the `skills-check` CLI
-(part of **secure-code**) using [nfpm](https://nfpm.goreleaser.com/).
+(part of **SecureVibe**) using [nfpm](https://nfpm.goreleaser.com/).
 
 ## Prerequisites
 

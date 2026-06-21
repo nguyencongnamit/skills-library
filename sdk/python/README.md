@@ -1,6 +1,6 @@
-# secure-code — Python SDK
+# SecureVibe — Python SDK
 
-`skillslib` is a thin Python loader and validator for the **secure-code**
+`skillslib` is a thin Python loader and validator for the **SecureVibe**
 SKILL.md format.
 
 ## Install

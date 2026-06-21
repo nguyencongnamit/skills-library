@@ -228,7 +228,7 @@ func (s *Server) dispatch(req *request) *response {
 		// newer-spec fields is a protocol violation even though most
 		// clients tolerate unknown fields.
 		if negotiated >= protocolVersionWithTitle {
-			serverInfo["title"] = "secure-code skills MCP server"
+			serverInfo["title"] = "SecureVibe skills MCP server"
 		}
 		result := map[string]interface{}{
 			"protocolVersion": negotiated,
@@ -241,7 +241,7 @@ func (s *Server) dispatch(req *request) *response {
 		// won't recognise it and we shouldn't claim to speak their
 		// version while emitting it.
 		if negotiated >= protocolVersionWithInstructions {
-			result["instructions"] = "Use the secure-code skills before generating or reviewing security-sensitive code. For dependencies call check_dependency / check_typosquat / lookup_vulnerability; for secrets call scan_secrets or check_secret_pattern; for detection logic call get_sigma_rule; to map findings to compliance call map_compliance_control; to fetch a curated skill call get_skill / search_skills. Use version_status to confirm the data version and signature state before relying on results."
+			result["instructions"] = "Use the SecureVibe skills before generating or reviewing security-sensitive code. For dependencies call check_dependency / check_typosquat / lookup_vulnerability; for secrets call scan_secrets or check_secret_pattern; for detection logic call get_sigma_rule; to map findings to compliance call map_compliance_control; to fetch a curated skill call get_skill / search_skills. Use version_status to confirm the data version and signature state before relying on results."
 		}
 		return successResponse(req.ID, result)
 	case "tools/list":

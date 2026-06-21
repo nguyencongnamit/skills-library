@@ -1,6 +1,6 @@
-# secure-code — Windows MSI installer
+# SecureVibe — Windows MSI installer
 
-Build a Windows `.msi` for the `skills-check` CLI (part of **secure-code**)
+Build a Windows `.msi` for the `skills-check` CLI (part of **SecureVibe**)
 using the [WiX Toolset](https://wixtoolset.org/) v4+.
 
 ## Prerequisites

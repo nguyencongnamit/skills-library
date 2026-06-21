@@ -107,7 +107,7 @@ async function main() {
     await writeJson(path.join(pkgDir, 'package.json'), {
       name: `${SCOPE}/${MAIN}-${p.node}`,
       version,
-      description: `secure-code MCP server + CLI binaries for ${p.node}.`,
+      description: `SecureVibe MCP server + CLI binaries for ${p.node}.`,
       license: 'Apache-2.0',
       repository: { type: 'git', url: 'git+https://github.com/namncqualgo/skills-library.git' },
       os: [p.os],

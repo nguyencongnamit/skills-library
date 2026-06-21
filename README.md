@@ -201,10 +201,10 @@ tool:
 
 ```bash
 # Option 1: Copy the universal skill loader
-cp secure-code/dist/CLAUDE.md /your-project/CLAUDE.md
+cp skills-library/dist/CLAUDE.md /your-project/CLAUDE.md
 
 # Option 2: Symlink for auto-updates
-ln -s /path/to/secure-code/dist/CLAUDE.md /your-project/CLAUDE.md
+ln -s /path/to/skills-library/dist/CLAUDE.md /your-project/CLAUDE.md
 
 # Option 3: Generate a project-specific CLAUDE.md
 skills-check init --tool claude --skills secret-detection,dependency-audit,secure-code-review
@@ -213,7 +213,7 @@ skills-check init --tool claude --skills secret-detection,dependency-audit,secur
 ### Cursor (`.cursorrules`)
 
 ```bash
-cp secure-code/dist/.cursorrules /your-project/.cursorrules
+cp skills-library/dist/.cursorrules /your-project/.cursorrules
 # or
 skills-check init --tool cursor --skills secret-detection,dependency-audit
 ```
@@ -221,37 +221,37 @@ skills-check init --tool cursor --skills secret-detection,dependency-audit
 ### GitHub Copilot (`.github/copilot-instructions.md`)
 
 ```bash
-cp secure-code/dist/copilot-instructions.md /your-project/.github/copilot-instructions.md
+cp skills-library/dist/copilot-instructions.md /your-project/.github/copilot-instructions.md
 ```
 
 ### Codex / OpenAI (`AGENTS.md`)
 
 ```bash
-cp secure-code/dist/AGENTS.md /your-project/AGENTS.md
+cp skills-library/dist/AGENTS.md /your-project/AGENTS.md
 ```
 
 ### Windsurf (`.windsurfrules`)
 
 ```bash
-cp secure-code/dist/.windsurfrules /your-project/.windsurfrules
+cp skills-library/dist/.windsurfrules /your-project/.windsurfrules
 ```
 
 ### Devin (`devin.md`)
 
 ```bash
-cp secure-code/dist/devin.md /your-project/devin.md
+cp skills-library/dist/devin.md /your-project/devin.md
 ```
 
 ### Cline / OpenCode (`.clinerules`)
 
 ```bash
-cp secure-code/dist/.clinerules /your-project/.clinerules
+cp skills-library/dist/.clinerules /your-project/.clinerules
 ```
 
 ### Universal (any tool that reads project-root markdown)
 
 ```bash
-cp secure-code/dist/SECURITY-SKILLS.md /your-project/SECURITY-SKILLS.md
+cp skills-library/dist/SECURITY-SKILLS.md /your-project/SECURITY-SKILLS.md
 ```
 
 ## CLI install and routine updates
@@ -296,8 +296,8 @@ skills-check status --fail-if-stale      # exit 1 when the data is >30 days old 
 skills-check status --max-age-days 14    # custom freshness budget
 
 # Use a custom source (HTTP URL, local directory, or tarball)
-skills-check update --source https://cdn.example.com/secure-code/
-skills-check update --source /mnt/airgap/secure-code-v2.tar.gz
+skills-check update --source https://cdn.example.com/skills-library/
+skills-check update --source /mnt/airgap/skills-library-v2.tar.gz
 ```
 
 ### Scheduled updates
@@ -316,7 +316,7 @@ hundredth recurring check.
 ### Manual / Git-based
 
 ```bash
-cd /path/to/secure-code
+cd /path/to/skills-library
 git pull origin main
 skills-check regenerate    # rebuild dist/ files from the latest skills
 ```
@@ -388,7 +388,7 @@ Select your tier with `skills-check init --budget compact`. Compact is the defau
 ## Project layout
 
 ```
-secure-code/
+skills-library/
 ├── README.md  PROPOSAL.md  ARCHITECTURE.md  SIGNING.md  LICENSE
 ├── skills/                              # 29 skill definitions (the core product)
 │   ├── secret-detection/                #   74 DLP patterns + exclusions + test corpus
@@ -531,7 +531,7 @@ short-lived child process spoken to over stdio:
 
 ```bash
 go build -o skills-mcp ./cmd/skills-mcp
-skills-mcp --path /path/to/secure-code
+skills-mcp --path /path/to/skills-library
 ```
 
 The server registers fifteen tools on `tools/list`:
@@ -653,7 +653,7 @@ with an error, so a misconfigured gate fails loudly rather than silently
 passing:
 
 ```bash
-export SKILLS_LIBRARY_PATH=/opt/secure-code   # data tree, set once
+export SKILLS_LIBRARY_PATH=/opt/skills-library   # data tree, set once
 skills-check gate Dockerfile --severity-floor high
 ```
 

@@ -12,7 +12,7 @@ let output: vscode.OutputChannel;
 let status: vscode.StatusBarItem;
 let findingsProvider: FindingsProvider;
 
-const SOURCE = "secure-code";
+const SOURCE = "SecureVibe";
 
 export function activate(context: vscode.ExtensionContext): void {
   paths.init(context);
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext): void {
   status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
   status.command = "skillsLibrary.gate";
   status.text = "$(shield) Skills";
-  status.tooltip = "Run the secure-code gate on the workspace";
+  status.tooltip = "Run the SecureVibe gate on the workspace";
   status.show();
 
   findingsProvider = new FindingsProvider();
