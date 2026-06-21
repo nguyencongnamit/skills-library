@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "ead4ec3e7d916b8ef35f971efd1a7b4d12dce1cbdd45fb7dda246fafd667ecc3",
-      "size": 110557,
+      "sha256": "c6cbe01ed5ba7fdb666dcd7c23f96c14d310a598694f5d9f762718e73abcf33f",
+      "size": 110761,
       "action": "unchanged"
     },
     {
@@ -7874,8 +7874,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/npm.json",
-      "sha256": "a32f9d24bd7feea7eaaaf778f6d954e8878e1dd63b67459483c06c3a1a8b346b",
-      "size": 375150,
+      "sha256": "20d81277ee54521b804d5069ed5e42a0575e1bb9219e63387a289c4a8e21fdd9",
+      "size": 394235,
       "action": "unchanged"
     },
     {
@@ -7886,8 +7886,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/pypi.json",
-      "sha256": "e0e54338b488515c747cb89ee9d2b0c841f63864297cf414547aa86bfdd736c5",
-      "size": 161314,
+      "sha256": "e48a7678b3103d280e207c4d791c14e7e45db05f4c06cac945ff8a2229a66dc1",
+      "size": 166064,
       "action": "unchanged"
     },
     {
