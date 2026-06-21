@@ -59,5 +59,5 @@ to fetch from), so updates are operator-driven.
 
 `skills-check update --source ...` enforces the Ed25519 signature on
 `manifest.json` before any file is written. See
-[`SIGNING.md`](../SIGNING.md) for the public key rotation policy and the
+[`SIGNING.md`](https://github.com/nguyencongnamit/skills-library/blob/main/SIGNING.md) for the public key rotation policy and the
 out-of-band signing procedure.

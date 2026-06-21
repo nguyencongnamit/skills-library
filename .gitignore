@@ -43,3 +43,7 @@ sdk/typescript/dist/
 /site/
 /.branchguard/
 /graphify-out/
+
+# Local launch-prep: git-history email scrub (never committed)
+/.history-scrub/
+/HISTORY-SCRUB-PLAN.md

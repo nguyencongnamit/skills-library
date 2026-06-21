@@ -2,7 +2,7 @@
 
 The `skills-check` CLI runs on Windows 10 and newer (x64). The CLI binary is
 signed with Authenticode when the release secret is configured — see
-[`packaging/codesign/README.md`](../packaging/codesign/README.md).
+[`packaging/codesign/README.md`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/codesign/README.md).
 
 ## MSI installer
 
@@ -18,7 +18,7 @@ winget install namncqualgo.skills-check
 ```
 
 The manifest lives at
-[`packaging/winget/namncqualgo.skills-check.yaml`](../packaging/winget/namncqualgo.skills-check.yaml).
+[`packaging/winget/namncqualgo.skills-check.yaml`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/winget/namncqualgo.skills-check.yaml).
 
 ## Scoop
 
@@ -28,7 +28,7 @@ scoop install skills-check
 ```
 
 The bucket manifest lives at
-[`packaging/scoop/skills-check.json`](../packaging/scoop/skills-check.json).
+[`packaging/scoop/skills-check.json`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/scoop/skills-check.json).
 
 ## Go install
 

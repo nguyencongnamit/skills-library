@@ -10,7 +10,7 @@ brew tap namncqualgo/tap
 brew install skills-check
 ```
 
-The tap formula lives at [`packaging/homebrew/skills-check.rb`](../packaging/homebrew/skills-check.rb).
+The tap formula lives at [`packaging/homebrew/skills-check.rb`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/homebrew/skills-check.rb).
 
 ## Go install
 
@@ -28,8 +28,8 @@ and double-click to install. The package places the binary at
 `/usr/local/bin/skills-check`.
 
 Reproducible-build details and the signing model live in
-[`SIGNING.md`](../SIGNING.md) and
-[`packaging/codesign/README.md`](../packaging/codesign/README.md).
+[`SIGNING.md`](https://github.com/nguyencongnamit/skills-library/blob/main/SIGNING.md) and
+[`packaging/codesign/README.md`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/codesign/README.md).
 
 ## Verify
 

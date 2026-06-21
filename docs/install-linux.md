@@ -43,7 +43,7 @@ sudo rpm -i  skills-check-*.rpm      # RHEL / Fedora
 ```
 
 Reproducible-build / packaging details live in
-[`packaging/linux/README.md`](../packaging/linux/README.md).
+[`packaging/linux/README.md`](https://github.com/nguyencongnamit/skills-library/blob/main/packaging/linux/README.md).
 
 ## Go install
 

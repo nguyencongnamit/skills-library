@@ -60,5 +60,5 @@ The same approach works for any other IDE file the team standardizes on.
 ## 5. Audit
 
 Every developer runs `skills-check version` to print the embedded public
-key ID. Compare against [`SIGNING.md`](../SIGNING.md) to confirm everyone
+key ID. Compare against [`SIGNING.md`](https://github.com/nguyencongnamit/skills-library/blob/main/SIGNING.md) to confirm everyone
 is verifying against the same release key.
