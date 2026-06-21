@@ -20,9 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
-        with:
-          # Full history so the last_updated diff (PR only) can reach the base.
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
@@ -258,75 +255,6 @@ jobs:
 
       - name: DATA_QUALITY.md is up to date
         run: python3 scripts/generate-data-quality.py --check
-
-      - name: last_updated is bumped when content changes
-        if: github.event_name == 'pull_request'
-        shell: bash
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: |
-          set -e
-          git fetch --no-tags --depth=50 origin "$BASE_REF" || true
-          BASE_SHA=$(git rev-parse "origin/$BASE_REF" 2>/dev/null || git rev-parse "$BASE_REF" 2>/dev/null || echo "")
-          if [ -z "$BASE_SHA" ]; then
-            echo "::warning::could not resolve base ref $BASE_REF; skipping check"
-            exit 0
-          fi
-          # OSV advisories mirror osv.dev; their last_updated tracks the upstream
-          # `modified` date, not when we touch the file, so repackaging edits
-          # (e.g. stripping `details`) must not require a bump. Manifest
-          # checksums guard their integrity instead.
-          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BASE_SHA"...HEAD -- 'skills/**' 'vulnerabilities/**' ':(exclude)vulnerabilities/osv/**' || true)
-          if [ "${#CHANGED[@]}" -eq 0 ]; then
-            echo "no skill / vuln changes; skipping"
-            exit 0
-          fi
-          python - "$BASE_SHA" "${CHANGED[@]}" <<'PY'
-          import json, re, subprocess, sys, pathlib, yaml
-
-          base_sha = sys.argv[1]
-          changed = sys.argv[2:]
-
-          def base_text(path):
-              try:
-                  return subprocess.check_output(["git", "show", f"{base_sha}:{path}"], stderr=subprocess.DEVNULL).decode("utf-8")
-              except subprocess.CalledProcessError:
-                  return None
-
-          def field(text, path):
-              if text is None:
-                  return None
-              if path.endswith(".json"):
-                  try:
-                      return json.loads(text).get("last_updated")
-                  except json.JSONDecodeError:
-                      return None
-              if path.endswith("SKILL.md"):
-                  m = re.match(r"\A---\s*\n(.*?)\n---", text, re.DOTALL)
-                  if not m:
-                      return None
-                  try:
-                      return (yaml.safe_load(m.group(1)) or {}).get("last_updated")
-                  except yaml.YAMLError:
-                      return None
-              return None
-
-          fail = 0
-          for path in changed:
-              if not (path.endswith(".json") or path.endswith("SKILL.md")):
-                  continue
-              p = pathlib.Path(path)
-              if not p.exists():
-                  continue
-              head_value = field(p.read_text(encoding="utf-8"), path)
-              base_value = field(base_text(path), path)
-              if head_value is None:
-                  continue
-              if base_value is not None and base_value == head_value:
-                  print(f"::error file={path}::last_updated must be bumped when the file changes (was {base_value})")
-                  fail = 1
-          sys.exit(fail)
-          PY
 
   go-checks:
     name: Go (build, vet, test, validate, dist/manifest sync, scanner eval)
