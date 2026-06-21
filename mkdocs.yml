@@ -91,11 +91,19 @@ nav:
     - DevOps / Platform: guides/devops.md
     - Security / AppSec: guides/security.md
     - Contributor: guides/contributor.md
+    - Test with a model: guides/testing-with-models.md
   - Concepts:
     - Why SecureVibe: concepts/why.md
     - What makes it different: concepts/features.md
+    - How it compares: concepts/comparison.md
+    - Benchmarks & methodology: concepts/benchmarks.md
     - Architecture: concepts/architecture.md
+    - Roadmap: concepts/roadmap.md
+  - Reference:
+    - CLI (skills-check): reference/cli.md
+    - MCP tools (skills-mcp): reference/mcp-tools.md
   - Contribute:
     - Contribute a Finding (LEARN loop): contribute.md
   - Admin:
     - Team Rollout: admin-team-rollout.md
+  - FAQ: faq.md
