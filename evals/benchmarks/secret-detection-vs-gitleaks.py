@@ -4,7 +4,7 @@
 Reads skills/secret-detection/tests/corpus.json (the source-of-truth
 fixture set) and evaluates two engines against it:
 
-  1. skills-library DLP patterns (the `type: secret_pattern` entries of
+  1. skills-library secret-detection patterns (the `type: secret_pattern` entries of
      skills/secret-detection/checklists/secret_detection.yaml), via the
      same regex+hotword logic the `skills-check test` runner uses.
   2. (optional) gitleaks v8 with its default ruleset — the most
@@ -58,7 +58,7 @@ from typing import Iterable
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 CORPUS = ROOT / "skills/secret-detection/tests/corpus.json"
-# DLP rules migrated from rules/dlp_patterns.json to a YAML checklist in
+# secret rules migrated from rules/dlp_patterns.json to a YAML checklist in
 # fccc44f (PR #7); mirror cmd/skills-check/cmd/test.go and read the
 # `type: secret_pattern` entries straight from the checklist so the two
 # stay in lockstep.
@@ -336,7 +336,7 @@ def main() -> int:
     lines.append(f"Corpus: `{CORPUS.relative_to(ROOT)}` ({len(fixtures)} fixtures: {tp} TP, {tn} TN)")
     lines.append("")
     lines.append(
-        "> **Honesty note.** The skills-library DLP rule set is *tuned*\n"
+        "> **Honesty note.** The skills-library secret rule set is *tuned*\n"
         "> against this corpus — perfect or near-perfect numbers here\n"
         "> only show the rules cover their own test bed, not that they\n"
         "> will generalize. The gitleaks column is the more interesting\n"
@@ -349,7 +349,7 @@ def main() -> int:
     lines.append("| engine | TP | FP | FN | TN | precision | recall | F1 |")
     lines.append("|---|---:|---:|---:|---:|---:|---:|---:|")
     lines.append(
-        "| skills-library DLP patterns | "
+        "| skills-library secret-detection patterns | "
         f"{skills_counts.tp} | {skills_counts.fp} | {skills_counts.fn} | {skills_counts.tn} | "
         f"{fmt_pct(skills_counts.precision)} | {fmt_pct(skills_counts.recall)} | "
         f"{fmt_pct(skills_counts.f1)} |"

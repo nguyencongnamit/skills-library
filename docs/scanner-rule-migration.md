@@ -102,7 +102,7 @@ checks:                       # or `patterns:` for dockerfile
 
 **derive-checklists coexistence:** it only touches bullets carrying an HTML
 marker and writes prose entries; hand-added entries with `type:`/`pattern:` are
-preserved (exactly how `secret_detection.yaml` keeps its DLP patterns alongside
+preserved (exactly how `secret_detection.yaml` keeps its secret-detection patterns alongside
 derive output). The `generated_from` files (e.g. `dockerfile_hardening.yaml`)
 already report "N from skill, M preserved" — the preserved set is where the
 machine rules live.

@@ -4,7 +4,7 @@
 [![Skills](https://img.shields.io/badge/skills-29-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
-[![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
+[![secret-detection patterns](https://img.shields.io/badge/Secret%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
 
 **SecureVibe** is a structured, machine-readable library of security skills and
@@ -391,7 +391,7 @@ Select your tier with `skills-check init --budget compact`. Compact is the defau
 skills-library/
 ├── README.md  PROPOSAL.md  ARCHITECTURE.md  SIGNING.md  LICENSE
 ├── skills/                              # 29 skill definitions (the core product)
-│   ├── secret-detection/                #   74 DLP patterns + exclusions + test corpus
+│   ├── secret-detection/                #   74 secret-detection patterns + exclusions + test corpus
 │   ├── dependency-audit/                #   known-malicious package corpus
 │   ├── supply-chain-security/           #   typosquat + dependency-confusion rules
 │   ├── secure-code-review/              #   OWASP Top 10 checklists + injection patterns
@@ -545,7 +545,7 @@ The server registers fifteen tools on `tools/list`:
 - `get_skill(skill_id, budget?)` — return the requested skill at the requested
   tier (`minimal` / `compact` / `full`).
 - `search_skills(query)` — substring match across skill metadata.
-- `scan_secrets(text | file_path, format?)` — DLP scan of inline text or a path
+- `scan_secrets(text | file_path, format?)` — secret scan of inline text or a path
   under the configured allowed roots; supports the `sarif` output format.
 - `check_dependency(package, version?, ecosystem, format?)` — check a dependency
   against the malicious-packages corpus, the typosquat DB, the CVE-pattern list,

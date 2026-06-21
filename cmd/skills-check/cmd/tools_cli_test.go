@@ -182,7 +182,7 @@ func TestLookupVulnerabilityEventStream(t *testing.T) {
 
 func TestScanSecretsOnFixture(t *testing.T) {
 	// Drop a temp file with one obvious Stripe key in it. The bundled
-	// DLP rules must catch it.
+	// secret rules must catch it.
 	tmp, err := os.CreateTemp(t.TempDir(), "secret-*.txt")
 	if err != nil {
 		t.Fatal(err)
@@ -204,7 +204,7 @@ func TestScanSecretsOnFixture(t *testing.T) {
 		t.Errorf("scan-secrets did not print matches header:\n%s", out)
 	}
 	// We don't assert on a specific rule name here because the exact
-	// DLP pattern label may evolve; the count just needs to be > 0.
+	// secret pattern label may evolve; the count just needs to be > 0.
 	if strings.Contains(out, "Matches: 0") {
 		t.Errorf("scan-secrets missed a Stripe live key in fixture:\n%s", out)
 	}
@@ -216,7 +216,7 @@ func TestScanSecretsOnFixture(t *testing.T) {
 // summary line rather than erroring on the directory itself.
 func TestScanSecretsDirectory(t *testing.T) {
 	dir := t.TempDir()
-	// A real-looking AKIA key the bundled DLP rules catch, in a nested
+	// A real-looking AKIA key the bundled secret rules catch, in a nested
 	// subdirectory to prove the walk recurses.
 	sub := filepath.Join(dir, "nested")
 	if err := os.MkdirAll(sub, 0o755); err != nil {

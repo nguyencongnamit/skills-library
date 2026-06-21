@@ -16,7 +16,7 @@
 > The full contributor workflow is in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 SecureVibe is a security knowledge library. Its detection rules,
-vulnerability database, DLP patterns, and compliance mappings are
+vulnerability database, secret-detection patterns, and compliance mappings are
 relied on by AI coding assistants to make security decisions for
 real users. Every entry must therefore be authored, reviewed, and
 defensible by a human contributor. AI-generated entries that no
@@ -101,7 +101,7 @@ Valid questions an AI agent may answer:
 
 When acting as an AI agent for a contributor to SecureVibe:
 
-- **DO NOT** write entire skills, rules, vulnerability entries, DLP
+- **DO NOT** write entire skills, rules, vulnerability entries, secret-detection
   patterns, or compliance mappings on the contributor's behalf.
 - **DO NOT** generate full pull requests or large code blocks they
   cannot independently justify.
@@ -144,7 +144,7 @@ If the contributor insists on proceeding anyway, remind them that:
 ## Why this matters for a security library
 
 SecureVibe is consumed by AI assistants that write code for other
-people's production systems. A false-positive in a DLP pattern can
+people's production systems. A false-positive in a secret pattern can
 break legitimate flows; a false-negative in a Sigma rule can hide a
 real intrusion; a wrong compliance mapping can mislead an auditor.
 Every entry needs to be defensible by a human author who understands

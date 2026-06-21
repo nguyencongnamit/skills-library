@@ -3,7 +3,7 @@
 
 Reads the curated entries already in skills/secret-detection/tests/corpus.json
 and appends a *derived* block of mechanically-generated fixtures whose
-expected outcome is fully determined by the DLP pattern set itself —
+expected outcome is fully determined by the secret pattern set itself —
 i.e. each row maps 1:1 onto a real published vendor token format
 (documented in the corresponding `references` field on the pattern in
 skills/secret-detection/rules/dlp_patterns.json).
@@ -69,7 +69,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 CORPUS = ROOT / "skills/secret-detection/tests/corpus.json"
 
 
-# The DLP regexes only check SHAPE, not entropy. We deliberately use
+# The secret regexes only check SHAPE, not entropy. We deliberately use
 # *low-entropy, deterministic* fillers (cycles through 0-9 a-f / 0-9
 # a-z A-Z) so that synthetic fixtures DO NOT look like real high-
 # entropy secrets to upstream scanners (GitHub Push Protection,

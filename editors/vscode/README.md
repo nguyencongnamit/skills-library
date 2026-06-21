@@ -9,7 +9,7 @@ detection engine to drift.
 
 - **Init Skills Config** — generate an IDE/agent rules file (`claude`, `cursor`,
   `copilot`, `codex`, `devin`, `cline`, `universal`) into the workspace.
-- **Scan Current File / Workspace for Secrets** — DLP-style credential, API key,
+- **Scan Current File / Workspace for Secrets** — Secret-detection credential, API key,
   token, and PEM detection.
 - **Scan Dependencies** — parse lockfiles and check every resolved package
   against the malicious-package, typosquat, CVE-pattern, and OSV databases.

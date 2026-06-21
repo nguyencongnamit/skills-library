@@ -352,8 +352,8 @@ func scanSecretsCmd() *cobra.Command {
 	var repoPath, format, report string
 	c := &cobra.Command{
 		Use:   "scan-secrets <file-or-dir>",
-		Short: "DLP-style scan of a file (or, recursively, a directory of text files) for credentials, API keys, tokens, and PEM material",
-		Long: `DLP-style scan of a file, or recursively of a directory of text
+		Short: "Secret-detection scan of a file (or, recursively, a directory of text files) for credentials, API keys, tokens, and PEM material",
+		Long: `Secret-detection scan of a file, or recursively of a directory of text
 files, for credentials, API keys, tokens, and PEM material.
 
 ` + reportHelpParagraph,

@@ -58,7 +58,7 @@ func toolDefinitions() []map[string]interface{} {
 		},
 		{
 			"name":        "scan_secrets",
-			"description": "Scan text or a local file for secrets and DLP patterns using the Skills Library secret-detection rules. Pass `text` for inline content or `file_path` for an absolute path on the host running the MCP server. When --allowed-roots is configured at startup, `file_path` must resolve to a location under one of those roots; sensitive system directories (~/.ssh, ~/.aws, ~/.gnupg, /etc/shadow, ...) are always denied. Pass `format`=\"sarif\" to receive a SARIF 2.1.0 log instead of the rich JSON shape. Returns structured matches with severity, location, score, entropy, and whether the match is a known false positive.",
+			"description": "Scan text or a local file for secrets using the Skills Library secret-detection rules. Pass `text` for inline content or `file_path` for an absolute path on the host running the MCP server. When --allowed-roots is configured at startup, `file_path` must resolve to a location under one of those roots; sensitive system directories (~/.ssh, ~/.aws, ~/.gnupg, /etc/shadow, ...) are always denied. Pass `format`=\"sarif\" to receive a SARIF 2.1.0 log instead of the rich JSON shape. Returns structured matches with severity, location, score, entropy, and whether the match is a known false positive.",
 			"inputSchema": map[string]interface{}{
 				"type": "object",
 				"properties": map[string]interface{}{

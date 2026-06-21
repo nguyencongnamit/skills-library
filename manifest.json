@@ -2420,14 +2420,14 @@
     },
     {
       "path": "skills/secret-detection/SKILL.md",
-      "sha256": "aaef84db6a08f0e89eb3b9d239b58404ca4407bdccd9c8f133c485670c1bdf1b",
-      "size": 8074,
+      "sha256": "88b5bf3f6ac32841661ae44822306a969f21f54b0f6efe1ddf1ce3d254e9d599",
+      "size": 8087,
       "action": "unchanged"
     },
     {
       "path": "skills/secret-detection/checklists/secret_detection.yaml",
-      "sha256": "bd91ab7b3b008c73d32a71fbc6fe7648d69b91d613fecd797e47f60eeccf59e4",
-      "size": 30423,
+      "sha256": "23272ec053749ba1f6f0f9b4aca6f32d2ccb3396b2f4afc3ca7e799cd55b4e09",
+      "size": 30439,
       "action": "unchanged"
     },
     {

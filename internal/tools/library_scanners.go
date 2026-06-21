@@ -1,6 +1,6 @@
 // Package tools — project-scoped scanners introduced in v3 of the MCP
 // server (Priority 3 of the SecureVibe rollout). The handlers in
-// this file extend the dependency / DLP coverage from "answer a
+// this file extend the dependency / secret coverage from "answer a
 // single question about a single package or string" to "scan a
 // project artifact (lockfile, workflow, Dockerfile) and return every
 // applicable finding". The shared output shape is SARIF 2.1.0 so the

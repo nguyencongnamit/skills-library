@@ -47,7 +47,7 @@ The server exposes 15 named tools, plus `policy_check` as a back-compat alias of
 | `check_dependency` | Check one package (and optional version) in one ecosystem before importing it. |
 | `check_typosquat` | Check whether a package name is a known typosquat or a squatted target. |
 | `lookup_vulnerability` | Look up a package in the supply-chain vulnerability database (malicious entries + typosquats). |
-| `scan_secrets` | Scan inline text or a local file for secrets and DLP patterns. |
+| `scan_secrets` | Scan inline text or a local file for secrets. |
 | `check_secret_pattern` | Run the secret-detection rules against a string and return matches. |
 | `scan_dockerfile` | Run a hardening pass over a Dockerfile. |
 | `scan_github_actions` | Run the CI/CD hardening checklist over a GitHub Actions workflow. |
@@ -121,7 +121,7 @@ Looks up a package in the supply-chain vulnerability database, returning malicio
 
 ### `scan_secrets`
 
-Scans text or a local file for secrets and DLP patterns and returns structured matches with severity, location, score, entropy, and whether each match is a known false positive.
+Scans text or a local file for secrets and returns structured matches with severity, location, score, entropy, and whether each match is a known false positive.
 
 | Parameter | Required | Description |
 | --- | --- | --- |

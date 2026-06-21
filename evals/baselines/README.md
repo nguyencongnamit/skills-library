@@ -176,6 +176,6 @@ from `--run` with an API key.
 ### Static placeholder
 
 `secret-detection-static.md` *is* committed: it's a tier-agnostic
-baseline computed by running the static DLP regex set against the
+baseline computed by running the static secret regex set against the
 source-of-truth corpus. The harness rewrites it on every run via
 `run-evals.sh`.

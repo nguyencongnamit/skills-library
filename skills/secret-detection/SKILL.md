@@ -142,7 +142,7 @@ then lock it so it can't come back.
 
 ## References
 
-- `checklists/secret_detection.yaml` — unified DLP rules: regex patterns
+- `checklists/secret_detection.yaml` — unified secret-detection rules: regex patterns
   (Aho-Corasick prefixes, hotwords, entropy thresholds) plus the
   `exclusions:` block for false-positive suppressions.
 - `tests/corpus.json` — test fixtures for validation.

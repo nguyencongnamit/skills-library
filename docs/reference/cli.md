@@ -31,7 +31,7 @@ The deterministic scanners and the CI gate. Detection is **narrow by design** �
 
 ### `scan-secrets`
 
-DLP-style scan of a file — or, recursively, a directory of text files — for credentials, API keys, tokens, and PEM material.
+Secret-detection scan of a file — or, recursively, a directory of text files — for credentials, API keys, tokens, and PEM material.
 
 ```text
 skills-check scan-secrets <file-or-dir> [flags]

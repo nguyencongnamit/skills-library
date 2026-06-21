@@ -47,7 +47,7 @@ Four scanners are **enforced** by the tooling. The 29 skills cover a broader set
 
 | Scanner | Command | What it catches |
 |---|---|---|
-| **Secrets** | `skills-check scan-secrets <path>` | Hardcoded API keys, tokens, and credentials via 74 secret/DLP detection patterns. |
+| **Secrets** | `skills-check scan-secrets <path>` | Hardcoded API keys, tokens, and credentials via 74 secret-detection patterns. |
 | **Dependencies** | `skills-check scan-dependencies <path>` | Malicious / typosquatted packages, plus CVE/OSV matches, via exact-match lookups against the curated DB (2,022 entries across 9 ecosystems) and 58 CVE code-patterns. |
 | **Dockerfile** | `skills-check scan-dockerfile <path>` | Container anti-patterns — root user, unpinned/`:latest` base images, and related least-privilege drift. |
 | **GitHub Actions** | `skills-check scan-github-actions <path>` | Unpinned actions, mutable refs, and insecure CI workflow configuration. |

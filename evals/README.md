@@ -1,7 +1,7 @@
 # `evals/` — Skills Library Evaluation Harness
 
 A reproducible harness for measuring whether the security skills,
-DLP patterns, vulnerability database, and MCP scanners actually help
+secret-detection patterns, vulnerability database, and MCP scanners actually help
 when wired into a coding agent. The harness is designed so an
 *outside* reviewer can clone this repo, run one command, and verify
 every claim the project makes about precision, recall, and coverage.
@@ -33,7 +33,7 @@ evals/
 
 | Category | Source-of-truth | Automated? | Baseline file |
 | --- | --- | --- | --- |
-| `secret-detection` (regex / DLP) | `skills/secret-detection/tests/corpus.json` | yes | `baselines/secret-detection-static.md` |
+| `secret-detection` (regex) | `skills/secret-detection/tests/corpus.json` | yes | `baselines/secret-detection-static.md` |
 | `dependency-choice` | `vulnerabilities/supply-chain/malicious-packages/*.json` + `typosquat-db/known_typosquats.json` | partial (the static check is via `scan_dependencies` — wire-up is documented in each fixture's `expected.json`) | n/a |
 | `cicd-hardening` | `skills/cicd-security/SKILL.md` | partial (driven by the P3 `scan_github_actions` MCP tool) | n/a |
 | `auth-patterns` | `skills/auth-security/rules/*.json` | manual review per fixture | n/a |

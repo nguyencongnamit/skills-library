@@ -959,7 +959,7 @@ type secretRules struct {
 // runtime Pattern entries; other types (e.g. checklist bullets
 // derived from SKILL.md markers via derive-checklists) are
 // ignored by the secret scanner and preserved for forward
-// compatibility — the same YAML file can host both DLP patterns
+// compatibility — the same YAML file can host both secret patterns
 // and prose checklist rules without forcing two files.
 //
 // `pattern` (not `regex`) carries the regex to match the existing
@@ -1125,7 +1125,7 @@ func shannonEntropy(s string) float64 {
 // always returns false.
 //
 // The search slice is text[start-window : end+window], so it includes
-// the matched bytes themselves. This is intentional: many DLP patterns
+// the matched bytes themselves. This is intentional: many secret patterns
 // (e.g. "Generic API Key") match assignment forms like `api_key=...`
 // where the hotword is embedded in the match. Stripping the match out
 // would force every such pattern to repeat the hotword as a separate

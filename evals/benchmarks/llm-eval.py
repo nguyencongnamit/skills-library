@@ -101,7 +101,7 @@ SKILL_BUNDLE_PATH = REPO_ROOT / "dist" / "SECURITY-SKILLS.md"
 TIERS = ("no-instructions", "minimal-skill", "full-mcp")
 
 # Fixture categories the LLM tier actually exercises. The
-# secret-detection category is excluded — it is a static regex / DLP
+# secret-detection category is excluded — it is a static regex / secret
 # evaluation handled by ``secret-detection-vs-gitleaks.py`` and does
 # not benefit from an LLM call.
 LLM_CATEGORIES = (

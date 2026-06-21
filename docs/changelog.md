@@ -59,7 +59,7 @@ notes on [GitHub Releases](https://github.com/nguyencongnamit/skills-library/rel
 - fix(check-dependency): stop appliance CVEs leaking onto code packages
 - refactor(skills): deprecate infrastructure-security, salvage unique rules
 - feat(secret-detection): import 9 patterns from secrets-patterns-db (Lane 1)
-- feat(secret-detection): migrate DLP rules to YAML checklist
+- feat(secret-detection): migrate secret rules to YAML checklist
 - feat(mcp): engine markers in SKILL.md + scan_dockerfile_engines discovery tool
 - feat(cli): expose the 8 skills-mcp tools as `skills-check` subcommands
 - feat(cli): add `skills-check derive-checklists` + first knowledge bullets in container-security

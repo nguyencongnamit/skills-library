@@ -236,7 +236,7 @@
 .ss-card[data-pkg="skills"]      { border-left: 3px solid #255FE5; }
 .ss-card[data-pkg="cve"]         { border-left: 3px solid #f97316; }
 .ss-card[data-pkg="supply"]      { border-left: 3px solid #a855f7; }
-.ss-card[data-pkg="dlp"]         { border-left: 3px solid #ef4444; }
+.ss-card[data-pkg="secrets"]         { border-left: 3px solid #ef4444; }
 .ss-card[data-pkg="signing"]     { border-left: 3px solid #14b8a6; }
 .ss-card[data-pkg="cli"]         { border-left: 3px solid #4d82ec; }
 .ss-card[data-pkg="compliance"]  { border-left: 3px solid #f59e0b; }
@@ -245,7 +245,7 @@
 .ss-card[data-pkg="skills"]      .ss-card-title { color: #255FE5; }
 .ss-card[data-pkg="cve"]         .ss-card-title { color: #ea580c; }
 .ss-card[data-pkg="supply"]      .ss-card-title { color: #9333ea; }
-.ss-card[data-pkg="dlp"]         .ss-card-title { color: #dc2626; }
+.ss-card[data-pkg="secrets"]         .ss-card-title { color: #dc2626; }
 .ss-card[data-pkg="signing"]     .ss-card-title { color: #0d9488; }
 .ss-card[data-pkg="cli"]         .ss-card-title { color: #2563eb; }
 .ss-card[data-pkg="compliance"]  .ss-card-title { color: #d97706; }
@@ -254,7 +254,7 @@
 [data-md-color-scheme="slate"] .ss-card[data-pkg="skills"]      .ss-card-title { color: #6f9bf2; }
 [data-md-color-scheme="slate"] .ss-card[data-pkg="cve"]         .ss-card-title { color: #fb923c; }
 [data-md-color-scheme="slate"] .ss-card[data-pkg="supply"]      .ss-card-title { color: #c084fc; }
-[data-md-color-scheme="slate"] .ss-card[data-pkg="dlp"]         .ss-card-title { color: #f87171; }
+[data-md-color-scheme="slate"] .ss-card[data-pkg="secrets"]         .ss-card-title { color: #f87171; }
 [data-md-color-scheme="slate"] .ss-card[data-pkg="signing"]     .ss-card-title { color: #2dd4bf; }
 [data-md-color-scheme="slate"] .ss-card[data-pkg="cli"]         .ss-card-title { color: #6f9bf2; }
 [data-md-color-scheme="slate"] .ss-card[data-pkg="compliance"]  .ss-card-title { color: #fbbf24; }
