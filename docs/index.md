@@ -21,6 +21,10 @@ Prevention-first security for AI-written code. Signed security skills shape what
   <img src="https://img.shields.io/badge/AI%20clients-8-16a34a" alt="AI clients">
 </div>
 
+<div class="ss-hero-demo">
+  <img src="assets/demo.gif" alt="secure-code-check gate catching a typosquatted dependency and leaked secrets before commit" loading="eager">
+</div>
+
 ```
 npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity-floor high
 ```

@@ -68,6 +68,32 @@ regenerate: $(SKILLS_CHECK) ## Re-render dist/ (commit any drift)
 .PHONY: check
 check: fmt-check vet test validate ## Run the local pre-PR gate
 
+# --- Docs site (mkdocs-material) --------------------------------------------
+# The `social` (OG-card) and `privacy` (font self-hosting) plugins need
+# CairoSVG, which dlopens libcairo from Homebrew — export the lib path so the
+# build finds it. VENV defaults to the in-repo .venv; override if elsewhere.
+VENV       ?= .venv
+CAIRO_LIB  ?= /opt/homebrew/lib
+
+.PHONY: docs
+docs: ## Build the docs site (social cards + self-hosted fonts), strict
+	DYLD_FALLBACK_LIBRARY_PATH=$(CAIRO_LIB):$$DYLD_FALLBACK_LIBRARY_PATH \
+		$(VENV)/bin/mkdocs build --strict
+
+.PHONY: docs-serve
+docs-serve: ## Live-reload docs preview on http://127.0.0.1:8000
+	DYLD_FALLBACK_LIBRARY_PATH=$(CAIRO_LIB):$$DYLD_FALLBACK_LIBRARY_PATH \
+		$(VENV)/bin/mkdocs serve
+
+.PHONY: demo-gif
+demo-gif: $(SKILLS_CHECK) ## Re-record the hero terminal demo (needs vhs)
+	@command -v vhs >/dev/null || { echo "vhs not installed: brew install vhs"; exit 1; }
+	rm -rf /tmp/sv-hero-demo && mkdir -p /tmp/sv-hero-demo/bin
+	cp $(SKILLS_CHECK) /tmp/sv-hero-demo/bin/secure-code-check
+	printf 'requests==2.31.0\ncolourama==0.4.6\n' > /tmp/sv-hero-demo/requirements.txt
+	printf 'GITHUB_TOKEN = "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789"\nSTRIPE_KEY = "sk_live_4eC39HqLyjWDarjtT1zdp7dcAbCdEfGhItuv"\n' > /tmp/sv-hero-demo/config.py
+	PATH="/tmp/sv-hero-demo/bin:$$PATH" vhs docs/assets/demo.tape
+
 .PHONY: clean
 clean: ## Remove built binaries
 	rm -f $(SKILLS_CHECK) $(SKILLS_MCP)

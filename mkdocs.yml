@@ -8,6 +8,9 @@ docs_dir: docs
 
 theme:
   name: material
+  custom_dir: docs/overrides
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
   palette:
     - scheme: default
       primary: indigo
@@ -32,17 +35,28 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.code.annotate
     - content.tabs.link
+    - content.action.edit
+    - content.action.view
     - toc.follow
+    - navigation.footer
     - header.autohide
   icon:
     repo: fontawesome/brands/github
+    edit: material/pencil
   font:
-    text: -apple-system, BlinkMacSystemFont, Inter, Segoe UI, system-ui, sans-serif
-    code: SF Mono, Menlo, JetBrains Mono, monospace
+    text: Inter
+    code: JetBrains Mono
 
 plugins:
   - search
+  - privacy
+  - social:
+      cards_layout_options:
+        background_color: "#0d1322"
+        color: "#ffffff"
+        font_family: Inter
 
 markdown_extensions:
   - admonition

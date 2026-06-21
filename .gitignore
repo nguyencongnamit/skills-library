@@ -41,6 +41,7 @@ sdk/typescript/dist/
 /.venv/
 /_site/
 /site/
+/.cache/
 /.branchguard/
 /graphify-out/
 

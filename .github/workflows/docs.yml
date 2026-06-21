@@ -35,11 +35,18 @@ jobs:
         with:
           python-version: '3.12'
 
+      # The `social` (OG cards) and `privacy` (self-hosted fonts) plugins render
+      # via CairoSVG, which needs libcairo + imaging system libraries.
+      - name: Install Cairo / imaging system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev pngquant
+
       - name: Install MkDocs Material
-        run: pip install mkdocs-material==9.7.6 pymdown-extensions
+        run: pip install mkdocs-material==9.7.6 pymdown-extensions pillow cairosvg
 
       - name: Build site
-        run: mkdocs build --config-file mkdocs.yml --site-dir _site
+        run: mkdocs build --strict --config-file mkdocs.yml --site-dir _site
 
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
