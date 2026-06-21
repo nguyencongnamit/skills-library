@@ -40,5 +40,6 @@ sdk/typescript/dist/
 # Local tooling / build outputs (never committed)
 /.venv/
 /_site/
+/site/
 /.branchguard/
 /graphify-out/

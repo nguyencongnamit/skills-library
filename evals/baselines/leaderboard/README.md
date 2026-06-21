@@ -1,6 +1,6 @@
 # Prevention-lift leaderboard
 
-Cross-model ranking of vibe-guard's **prevention-lift** — the absolute drop in a
+Cross-model ranking of SecureVibe's **prevention-lift** — the absolute drop in a
 model's insecure-output rate when the skills + `scan_input` tool are placed in
 its context. `LEADERBOARD.md` here is generated; do not hand-edit it.
 

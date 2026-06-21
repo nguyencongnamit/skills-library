@@ -269,7 +269,7 @@ jobs:
             echo "::notice::Tap formula already up to date for ${TAG}."
           else
             git -C "$tapdir" \
-              -c user.name="vibe-guard release bot" \
+              -c user.name="SecureVibe release bot" \
               -c user.email="release-bot@users.noreply.github.com" \
               commit -m "skills-check ${TAG}"
             git -C "$tapdir" push origin HEAD
