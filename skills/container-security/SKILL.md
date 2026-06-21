@@ -16,7 +16,7 @@ token_budget:
   full: 3500
 rules_path: "checklists/"
 related_skills: ["iac-security", "secret-detection", "iam-best-practices", "electron-security"]
-last_updated: "2026-06-20"
+last_updated: "2026-06-21"
 sources:
   - "CIS Docker Benchmark v1.6"
   - "CIS Kubernetes Benchmark v1.9"
@@ -177,6 +177,38 @@ tenant's escape compromises all of them. The container hardening flags
 (`privileged`, host namespaces, capabilities) matter most precisely where the
 blast radius is multi-tenant — isolate at the VM/kernel boundary, and never let
 a client touch the daemon directly.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit (hadolint, trivy, a flagged Dockerfile/manifest line) is a
+*candidate*, not a confirmed bug. Confirm it against the **built artifact**, fix
+it, then lock it so the regression can't sneak back through CI.
+
+1. **Confirm it's real (build & inspect, don't just read the Dockerfile).** Build
+   the image and interrogate the runtime, not the source text — many findings are
+   false until proven on the artifact:
+   - *Root user*: `docker inspect -f '{{.Config.User}}' img` empty or `0`/`root`,
+     or `docker run --rm img id` reports `uid=0`. Real if it runs as root; FP if
+     `USER` is a numeric UID >= 10000.
+   - *`:latest`/unpinned or EOL base*: check the final `FROM` resolves to a
+     mutable tag (`latest`, `slim`, `stable`) or an EOL runtime instead of a
+     `@sha256:` digest.
+   - *Secrets in layers*: `docker history --no-trunc img` (or `dive`) shows a
+     token in `ENV`/`ARG`/`COPY`. Present in any layer = real, even if `--squash`'d.
+   - *`curl … | sh`*: an unpinned remote script piped to a shell in a `RUN`.
+   - *Privileged / host namespaces*: `docker inspect` / pod spec shows
+     `privileged`, `allowPrivilegeEscalation`, mounted `docker.sock`,
+     `hostNetwork/PID/IPC`, or a writable root FS (`readOnlyRootFilesystem` unset).
+   FP if the artifact already shows the hardened property, or it's a documented
+   system-pod exception (CNI/CSI, debug pod).
+2. **Fix, then lock with a regression test** (a CI config-test — dev's call on
+   unit vs. integration). Assert the property on the built image, e.g. `docker
+   inspect`/`docker run id` shows non-root USER >= 10000, the final base is digest-
+   pinned and not EOL, `docker history` contains no secret, root FS is read-only,
+   and no `privileged`/host namespaces; add a benign baseline that passes. A
+   hadolint or `trivy image --exit-code 1` gate counts. Commit it to CI so the
+   guard can't be silently dropped.
 
 ## References
 
