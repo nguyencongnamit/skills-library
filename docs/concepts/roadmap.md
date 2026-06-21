@@ -14,8 +14,12 @@ flowchart LR
     L --> A["ANALYZE<br/>semantic"]
     A --> V["VERIFY<br/>proof"]
 
-    classDef shipped fill:#1b5e20,stroke:#2e7d32,color:#fff
-    classDef future fill:#424242,stroke:#616161,color:#bdbdbd
+    %% Stroke-only styling so the node labels keep the theme's default
+    %% (always-legible) text colour — Material overrides classDef `color`,
+    %% which made white-on-dark-fill labels unreadable. Shipped = bold green
+    %% outline; future = dashed grey outline.
+    classDef shipped stroke:#2e7d32,stroke-width:3px
+    classDef future stroke:#9e9e9e,stroke-width:2px,stroke-dasharray:6 4
     class P,D,E,L shipped
     class A,V future
 ```
