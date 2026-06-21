@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "c6cbe01ed5ba7fdb666dcd7c23f96c14d310a598694f5d9f762718e73abcf33f",
-      "size": 110761,
+      "sha256": "2efcd2a4055bd32a28fe6bab0979cc456d75b0cd85800ec8c8274471d6631086",
+      "size": 110562,
       "action": "unchanged"
     },
     {
@@ -7886,8 +7886,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/pypi.json",
-      "sha256": "e48a7678b3103d280e207c4d791c14e7e45db05f4c06cac945ff8a2229a66dc1",
-      "size": 166064,
+      "sha256": "227a8cf570a0365b6ce19f346a0596d95678cec8d9780d656d4ab8e02651d6cf",
+      "size": 168390,
       "action": "unchanged"
     },
     {

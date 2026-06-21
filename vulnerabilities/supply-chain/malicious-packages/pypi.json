@@ -4826,6 +4826,48 @@
         "exfiltrates Solana keypairs, SSH/AWS/SCM tokens"
       ],
       "attack_type": "typosquat"
+    },
+    {
+      "name": "guardrails-ai",
+      "versions_affected": [
+        "0.10.1"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-12",
+      "description": "Compromised in the 'Mini Shai-Hulud' self-propagating worm (TeamPCP, disclosed 2026-05-12; CVE-2026-45321) that hit 160+ npm/PyPI packages incl. TanStack, UiPath and Mistral AI. The worm steals developer and cloud credentials, self-propagates through the ecosystem, and can drop a persistent destructive daemon that wipes developer home directories. Only this version is malicious \u2014 upgrade to a clean release published after 2026-05-12.",
+      "references": [
+        "https://orca.security/resources/blog/tanstack-npm-supply-chain-worm/",
+        "https://www.tenable.com/blog/mini-shai-hulud-frequently-asked-questions"
+      ],
+      "indicators": [
+        "only version 0.10.1 is malicious (Mini Shai-Hulud / TeamPCP)",
+        "self-propagating worm; steals dev + cloud credentials",
+        "may drop a persistent daemon that wipes home directories",
+        "CVE-2026-45321"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "mistralai",
+      "versions_affected": [
+        "2.4.6"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-05-12",
+      "description": "Compromised in the 'Mini Shai-Hulud' self-propagating worm (TeamPCP, disclosed 2026-05-12; CVE-2026-45321) that hit 160+ npm/PyPI packages incl. TanStack, UiPath and Mistral AI. The worm steals developer and cloud credentials, self-propagates through the ecosystem, and can drop a persistent destructive daemon that wipes developer home directories. Only this version is malicious \u2014 upgrade to a clean release published after 2026-05-12.",
+      "references": [
+        "https://orca.security/resources/blog/tanstack-npm-supply-chain-worm/",
+        "https://www.tenable.com/blog/mini-shai-hulud-frequently-asked-questions"
+      ],
+      "indicators": [
+        "only version 2.4.6 is malicious (Mini Shai-Hulud / TeamPCP)",
+        "self-propagating worm; steals dev + cloud credentials",
+        "may drop a persistent daemon that wipes home directories",
+        "CVE-2026-45321"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
