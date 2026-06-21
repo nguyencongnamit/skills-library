@@ -4868,6 +4868,423 @@
         "CVE-2026-45321"
       ],
       "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "bramin",
+      "versions_affected": [
+        "0.0.2",
+        "0.0.3",
+        "0.0.4"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "cmd2func",
+      "versions_affected": [
+        "0.2.2",
+        "0.2.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "coolbox",
+      "versions_affected": [
+        "0.4.1",
+        "0.4.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "dynamo-release",
+      "versions_affected": [
+        "1.5.4"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "executor-engine",
+      "versions_affected": [
+        "0.3.4",
+        "0.3.5"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "executor-http",
+      "versions_affected": [
+        "0.1.3",
+        "0.1.4"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "funcdesc",
+      "versions_affected": [
+        "0.2.2",
+        "0.2.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "magique",
+      "versions_affected": [
+        "0.6.8",
+        "0.6.9"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "magique-ai",
+      "versions_affected": [
+        "0.4.4",
+        "0.4.5"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "mrbios",
+      "versions_affected": [
+        "0.1.1",
+        "0.1.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "napari-ufish",
+      "versions_affected": [
+        "0.0.2",
+        "0.0.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "nucbox",
+      "versions_affected": [
+        "0.1.2",
+        "0.1.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "okite",
+      "versions_affected": [
+        "0.0.7",
+        "0.0.8"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "pantheon-agents",
+      "versions_affected": [
+        "0.6.1",
+        "0.6.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "pantheon-toolsets",
+      "versions_affected": [
+        "0.5.5",
+        "0.5.6"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "spateo-release",
+      "versions_affected": [
+        "1.1.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "synago",
+      "versions_affected": [
+        "0.1.1",
+        "0.1.2"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "ufish",
+      "versions_affected": [
+        "0.1.2",
+        "0.1.3"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
+    },
+    {
+      "name": "uprobe",
+      "versions_affected": [
+        "0.1.3",
+        "0.1.4"
+      ],
+      "type": "embedded_malicious_code",
+      "severity": "critical",
+      "discovered": "2026-06-07",
+      "description": "Compromised in the 'Miasma' worm's Hades wave (2026-06-07): 19 PyPI packages (37 malicious wheels) that install a Python .pth startup hook so a Bun-powered JavaScript credential stealer runs on EVERY Python interpreter startup (persisting beyond the package itself). Part of the broader Miasma campaign Socket tracked across 448 npm+PyPI artifacts. Only the listed versions are malicious.",
+      "references": [
+        "https://phoenix.security/miasma-azure-hades-pypi-supply-chain-worm-2026/",
+        "https://thehackernews.com/2026/05/trapdoor-supply-chain-attack-spreads.html"
+      ],
+      "indicators": [
+        "Miasma worm Hades wave (2026-06-07)",
+        "installs a Python .pth startup hook (runs on every interpreter start)",
+        "Bun-powered JavaScript credential stealer",
+        "only the listed versions are malicious"
+      ],
+      "attack_type": "data_exfiltration"
     }
   ],
   "sources": {
