@@ -24,7 +24,6 @@ malicious-package DB, typosquat DB, and secret-detection rules are baked into th
 <select id="pg-dep-name">
 <option>requirements.txt</option>
 <option>package.json</option>
-<option>package-lock.json</option>
 <option>go.sum</option>
 <option>Cargo.lock</option>
 <option>composer.lock</option>
@@ -63,6 +62,18 @@ The engine here is identical — it just happens to run client-side.
 (function () {
   const base = "../assets/playground/";
   const status = document.getElementById("pg-status");
+
+  // Verified examples per filename — each parses and flags a real malicious
+  // package, so switching the filename always gives a working demo.
+  const EXAMPLES = {
+    "requirements.txt": "requests==2.31.0\ncolourama==0.4.6\n",
+    "package.json": '{\n  "dependencies": {\n    "express": "4.18.2",\n    "solana-web3-v1": "1.0.0"\n  }\n}\n',
+    "go.sum": "github.com/xinfeisoft/crypto v1.0.0 h1:abcdefghijklmnopqrstuvwxyz0123456789ABCD=\n",
+    "Cargo.lock": '[[package]]\nname = "sui-sdk-build-utils"\nversion = "1.0.0"\n',
+    "composer.lock": '{"packages":[{"name":"laravel-lang/lang","version":"1.0.0"}]}\n',
+    "Gemfile.lock": "GEM\n  specs:\n    rest-client (1.6.10)\n",
+    "pom.xml": '<project><dependencies>\n<dependency><groupId>org.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>1.0.0</version></dependency>\n</dependencies></project>\n'
+  };
   const sev = (s) => `<span class="pg-badge pg-${(s||'').toLowerCase()||'info'}">${(s||'finding').toUpperCase()}</span>`;
   const esc = (t) => (t||"").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
   const mask = (m) => !m ? "" : (m.length <= 10 ? m : m.slice(0,4) + "…" + m.slice(-4));
@@ -87,7 +98,14 @@ The engine here is identical — it just happens to run client-side.
 
   function renderDeps(json, box) {
     let r; try { r = JSON.parse(json); } catch { box.textContent = json; return; }
-    if (r.error) { box.innerHTML = `<div class="pg-row pg-err">${esc(r.error)}</div>`; return; }
+    if (r.error) {
+      const fname = document.getElementById("pg-dep-name").value;
+      const friendly = /parse|invalid|unrecognis|unrecogniz/i.test(r.error)
+        ? `That doesn't look like a valid <code>${esc(fname)}</code>. Paste content in that format, or pick the filename that matches what you pasted.`
+        : esc(r.error);
+      box.innerHTML = `<div class="pg-row pg-err">${friendly}</div>`;
+      return;
+    }
     const deps = r.deps || [];
     // A dep is DANGEROUS when it hits the malicious-package DB, an OSV advisory,
     // or is itself a known typosquat. Being the *target* of typosquats (others
@@ -124,10 +142,22 @@ The engine here is identical — it just happens to run client-side.
     box.innerHTML = html;
   }
 
+  // Switching the filename loads a matching, known-good example so the demo
+  // always parses (only when the box is empty or still holds another example).
+  const depName = document.getElementById("pg-dep-name"), depInput = document.getElementById("pg-dep-input");
+  const exampleValues = Object.keys(EXAMPLES).map(function (k) { return EXAMPLES[k]; });
+  depName.addEventListener("change", function () {
+    var cur = depInput.value.trim();
+    var isExample = cur === "" || exampleValues.some(function (v) { return v.trim() === cur; });
+    if (isExample && EXAMPLES[depName.value]) {
+      depInput.value = EXAMPLES[depName.value];
+      document.getElementById("pg-dep-out").innerHTML = "";
+    }
+  });
   document.getElementById("pg-dep-run").addEventListener("click", () => {
     const out = document.getElementById("pg-dep-out");
     if (!window.svScanDeps) { out.textContent = "engine not ready"; return; }
-    renderDeps(window.svScanDeps(document.getElementById("pg-dep-name").value, document.getElementById("pg-dep-input").value), out);
+    renderDeps(window.svScanDeps(depName.value, depInput.value), out);
   });
   document.getElementById("pg-sec-run").addEventListener("click", () => {
     const out = document.getElementById("pg-sec-out");

@@ -8,6 +8,8 @@
   function addActions() {
     var article = document.querySelector(".md-content__inner");
     if (!article) return;
+    // Skip the landing page (hero) — it's marketing, not a doc to copy for an LLM.
+    if (article.querySelector(".ss-hero")) return;
     var h1 = article.querySelector("h1");
     if (!h1 || article.querySelector(".ai-actions")) return;
 

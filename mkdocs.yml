@@ -96,9 +96,11 @@ extra_javascript:
 nav:
   - Home: index.md
   - Playground: playground.md
-  - Threat Intel: threat-intel.md
-  - Skills: skills.md
-  - Coverage: coverage.md
+  - Explore:
+    - Threat Intel: threat-intel.md
+    - Skills Catalogue: skills.md
+    - Compliance Coverage: compliance.md
+    - Coverage Dashboard: coverage.md
   - Get Started:
     - Quick Start: quickstart.md
     - Install on macOS: install-macos.md
@@ -115,7 +117,6 @@ nav:
     - Test with a model: guides/testing-with-models.md
   - Concepts:
     - Why SecureVibe: concepts/why.md
-    - Compliance coverage: compliance.md
     - What makes it different: concepts/features.md
     - How it compares: concepts/comparison.md
     - Benchmarks & methodology: concepts/benchmarks.md
@@ -124,9 +125,8 @@ nav:
   - Reference:
     - CLI (skills-check): reference/cli.md
     - MCP tools (skills-mcp): reference/mcp-tools.md
-  - Contribute:
-    - Contribute a Finding (LEARN loop): contribute.md
-  - Admin:
+  - Project:
+    - Contribute a Finding: contribute.md
     - Team Rollout: admin-team-rollout.md
-  - Changelog: changelog.md
-  - FAQ: faq.md
+    - Changelog: changelog.md
+    - FAQ: faq.md
