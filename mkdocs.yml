@@ -97,6 +97,8 @@ nav:
   - Home: index.md
   - Playground: playground.md
   - Threat Intel: threat-intel.md
+  - Skills: skills.md
+  - Coverage: coverage.md
   - Get Started:
     - Quick Start: quickstart.md
     - Install on macOS: install-macos.md
@@ -113,6 +115,7 @@ nav:
     - Test with a model: guides/testing-with-models.md
   - Concepts:
     - Why SecureVibe: concepts/why.md
+    - Compliance coverage: compliance.md
     - What makes it different: concepts/features.md
     - How it compares: concepts/comparison.md
     - Benchmarks & methodology: concepts/benchmarks.md

@@ -1,7 +1,6 @@
 # SecureVibe — full documentation
 
-Prevention-first security for AI-written code. This file concatenates the
-core docs for LLM ingestion. Source: https://nguyencongnamit.github.io/skills-library/
+Prevention-first security for AI-written code. This file concatenates the core docs for LLM ingestion. Source: https://nguyencongnamit.github.io/skills-library/
 
 
 ================================================================

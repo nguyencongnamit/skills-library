@@ -284,6 +284,57 @@
 .ti-pg:disabled { opacity: 0.4; cursor: not-allowed; }
 .ti-pginfo { font-size: 0.78rem; color: var(--ss-text-muted); }
 
+/* ─── Skills catalogue ─── */
+.sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; margin: 1rem 0; }
+.sk-card { display: block; border: 1px solid var(--ss-border); border-radius: 10px; padding: 0.9rem 1.05rem; background: var(--md-default-bg-color); text-decoration: none !important; color: inherit !important; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+.sk-card:hover { border-color: var(--md-accent-fg-color); box-shadow: 0 6px 18px rgba(37,95,229,0.12); transform: translateY(-2px); }
+.sk-top { display: flex; align-items: center; gap: 0.5rem; }
+.sk-title { font-weight: 700; font-size: 0.95rem; flex: 1; }
+.sk-desc { font-size: 0.8rem; color: var(--ss-text-muted); line-height: 1.5; margin-top: 0.4rem; }
+.sk-cwes { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.sk-cwe { font-size: 0.68rem; font-weight: 600; padding: 0.05rem 0.4rem; border-radius: 4px; background: rgba(168,85,247,0.12); color: #9333ea; }
+[data-md-color-scheme="slate"] .sk-cwe { color: #c084fc; }
+.sk-meta { margin-top: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; font-size: 0.72rem; color: var(--ss-text-muted); }
+.sk-meta code { font-size: 0.7rem; }
+
+/* ─── Compliance matrix ─── */
+.cp-fwhead { font-size: 0.85rem; color: var(--ss-text-muted); margin: 0.5rem 0 1rem; }
+.cp-list { margin: 0.5rem 0; }
+.cp-row { display: flex; gap: 0.9rem; padding: 0.7rem 0; border-top: 1px solid var(--ss-border); }
+.cp-cid { flex: 0 0 76px; font-weight: 700; font-size: 0.8rem; color: var(--md-primary-fg-color); font-variant-numeric: tabular-nums; }
+.cp-cbody { flex: 1; min-width: 0; }
+.cp-ctitle { font-weight: 600; font-size: 0.86rem; }
+.cp-cdesc { font-size: 0.78rem; color: var(--ss-text-muted); line-height: 1.5; margin: 0.2rem 0 0.45rem; }
+.cp-skills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.cp-skill { font-size: 0.72rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 5px; background: rgba(77,130,236,0.12); color: var(--md-primary-fg-color); text-decoration: none; }
+.cp-skill:hover { background: rgba(77,130,236,0.25); }
+.cp-gap { font-size: 0.72rem; color: var(--ss-text-muted); }
+
+/* ─── Coverage dashboard ─── */
+.cv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+.cv-card { border: 1px solid var(--ss-border); border-radius: 10px; padding: 1rem 1.15rem; background: var(--md-default-bg-color); }
+.cv-card h3 { margin: 0 0 0.75rem; font-size: 0.95rem; }
+.cv-bars { display: flex; flex-direction: column; gap: 0.4rem; }
+.cv-bar { display: grid; grid-template-columns: 130px 1fr 52px; align-items: center; gap: 0.5rem; font-size: 0.78rem; }
+.cv-lab { color: var(--ss-text-muted); text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-track { background: var(--ss-surface); border-radius: 5px; height: 16px; overflow: hidden; }
+.cv-fill { display: block; height: 100%; background: linear-gradient(90deg, #255FE5, #4d82ec); border-radius: 5px; }
+.cv-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* ─── Benchmark viz ─── */
+.bench-viz { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin: 1rem 0 0.5rem; }
+.bench-metric { border: 1px solid var(--ss-border); border-radius: 10px; padding: 0.9rem 1rem; background: var(--md-default-bg-color); }
+.bench-label { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.6rem; }
+.bench-hi { color: #ea580c; font-weight: 600; font-size: 0.72rem; }
+.bench-pair { display: grid; grid-template-columns: 72px 1fr 46px; align-items: center; gap: 0.5rem; margin: 0.3rem 0; font-size: 0.76rem; }
+.bench-name { color: var(--ss-text-muted); }
+.bench-track { background: var(--ss-surface); border-radius: 5px; height: 14px; overflow: hidden; }
+.bench-fill { display: block; height: 100%; border-radius: 5px; }
+.bench-fill.sv { background: linear-gradient(90deg, #255FE5, #4d82ec); }
+.bench-fill.gl { background: #9bb0d6; }
+.bench-num { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bench-caveat { font-size: 0.78rem; color: var(--ss-text-muted); margin: 0.25rem 0 1rem; }
+
 /* ─── AI page actions (Copy page / Open in Claude) ─── */
 .ai-actions { display: flex; gap: 0.5rem; margin: -0.25rem 0 1.25rem; flex-wrap: wrap; }
 .ai-action {

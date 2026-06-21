@@ -22,6 +22,28 @@ These benchmarks run the real scanners over a committed fixture corpus with a kn
 !!! note "What 100% means here"
     These are **prevention ground-truth on curated corpora** — "on the shapes we tested" — not a claim of universal detection. SecureVibe's detection is **narrow by design** (4 scanners; it is not a SAST replacement). The honest reading of the secret-scanner table below is not "we win" but **gitleaks' recall gap** — how much a strong general tool misses on the patterns SecureVibe was tuned to catch.
 
+### At a glance — secret scanner vs gitleaks
+
+<div class="bench-viz" markdown>
+<div class="bench-metric">
+  <div class="bench-label">Precision</div>
+  <div class="bench-pair"><span class="bench-name">SecureVibe</span><span class="bench-track"><span class="bench-fill sv" style="width:100%"></span></span><span class="bench-num">100%</span></div>
+  <div class="bench-pair"><span class="bench-name">gitleaks</span><span class="bench-track"><span class="bench-fill gl" style="width:92.4%"></span></span><span class="bench-num">92.4%</span></div>
+</div>
+<div class="bench-metric">
+  <div class="bench-label">Recall <span class="bench-hi">← the real gap</span></div>
+  <div class="bench-pair"><span class="bench-name">SecureVibe</span><span class="bench-track"><span class="bench-fill sv" style="width:100%"></span></span><span class="bench-num">100%</span></div>
+  <div class="bench-pair"><span class="bench-name">gitleaks</span><span class="bench-track"><span class="bench-fill gl" style="width:65.9%"></span></span><span class="bench-num">65.9%</span></div>
+</div>
+<div class="bench-metric">
+  <div class="bench-label">F1</div>
+  <div class="bench-pair"><span class="bench-name">SecureVibe</span><span class="bench-track"><span class="bench-fill sv" style="width:100%"></span></span><span class="bench-num">100%</span></div>
+  <div class="bench-pair"><span class="bench-name">gitleaks</span><span class="bench-track"><span class="bench-fill gl" style="width:76.9%"></span></span><span class="bench-num">76.9%</span></div>
+</div>
+</div>
+
+<p class="bench-caveat">On SecureVibe's own tuned secret corpus (129 TP / 0 FP / 0 FN). Read it as <strong>gitleaks' recall gap on the shapes we target</strong>, not "we beat gitleaks" — see the honesty note above.</p>
+
 ### Results
 
 | Benchmark | SecureVibe | Comparison | Corpus |

@@ -85,9 +85,20 @@ docs-serve: ## Live-reload docs preview on http://127.0.0.1:8000
 	DYLD_FALLBACK_LIBRARY_PATH=$(CAIRO_LIB):$$DYLD_FALLBACK_LIBRARY_PATH \
 		$(VENV)/bin/mkdocs serve
 
+.PHONY: docs-data
+docs-data: threat-data skills-data compliance-data ## Regenerate all docs datasets
+
 .PHONY: threat-data
 threat-data: ## Regenerate the docs Threat-Intel dataset from the curated DB
 	python3 scripts/gen-threat-data.py
+
+.PHONY: skills-data
+skills-data: ## Regenerate the docs Skills-catalogue dataset from skill frontmatter
+	python3 scripts/gen-skills-data.py
+
+.PHONY: compliance-data
+compliance-data: ## Regenerate the docs Compliance dataset from compliance/*.yaml
+	python3 scripts/gen-compliance-data.py
 
 .PHONY: wasm
 wasm: ## Build the in-browser playground WASM (real scanners, embedded data)
