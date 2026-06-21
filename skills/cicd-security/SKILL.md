@@ -17,7 +17,7 @@ token_budget:
   full: 2200
 rules_path: "checklists/"
 related_skills: ["supply-chain-security", "secret-detection", "container-security"]
-last_updated: "2026-06-20"
+last_updated: "2026-06-21"
 sources:
   - "OpenSSF Scorecard — Pinned-Dependencies / Token-Permissions"
   - "SLSA v1.0 Build Track"
@@ -128,6 +128,31 @@ This skill emphasizes the design-pattern weaknesses (pwn requests,
 script injection, curl-pipe-bash, floating tags, untrusted artifact
 download) because they are the patterns AI-generated workflow YAML
 reinvents most often.
+
+
+### Verify & lock (triaging a finding)
+
+A scanner/review hit is a *candidate*, not a confirmed bug. Confirm it, fix it,
+then lock it so it can't come back.
+
+1. **Confirm it's real (inspect config + reproduce behavior).** This is config-
+   and run-level, not a browser. For an *unpinned action*, `git ls-remote` the
+   referenced repo and confirm `@v1`/`@main` resolves to a mutable, re-pushable
+   tag (a 40-char SHA is already locked → FP). For a *pwn-request*
+   (`pull_request_target`/`workflow_run` + checkout of PR head with a write token
+   or secret), open a test PR from a throwaway fork and confirm attacker code
+   actually runs in the trusted context. For *script injection*, trace whether a
+   `${{ github.event.* }}` value reaches a `run:` body unquoted and echo a marker
+   to prove it executes. For *default-write perms*, inspect the run's
+   `GITHUB_TOKEN` permissions (no top-level `permissions:` → `write-all`). For
+   *curl|bash* / *OIDC*, confirm the installer is piped unverified, or that a
+   long-lived cloud key sits in Secrets where OIDC should be. Real if
+   reproducible; FP if already SHA-pinned, read-scoped, or no-secrets context.
+2. **Fix, then lock with a regression test** (CI policy gate, dev's call): add an
+   actionlint + secure-code step (or OpenSSF Scorecard / Renovate SHA-pin) to the
+   pipeline that fails on a floating tag, a missing top-level `permissions: read`,
+   a `curl | bash`, or a pwn-request checkout — plus one benign workflow that
+   passes the gate. Commit it so the guard can't be silently dropped.
 
 ## References
 

@@ -28,7 +28,7 @@
     "iam-best-practices",
     "electron-security"
   ],
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-21",
   "sources": [
     "CIS Docker Benchmark v1.6",
     "CIS Kubernetes Benchmark v1.9",

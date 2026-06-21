@@ -27,7 +27,7 @@
     "secret-detection",
     "container-security"
   ],
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-21",
   "sources": [
     "OpenSSF Scorecard — Pinned-Dependencies / Token-Permissions",
     "SLSA v1.0 Build Track",

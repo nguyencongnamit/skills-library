@@ -116,7 +116,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/cicd-security/metadata.json",
-      "sha256": "94d1f76f0720832bd3086a1aa0b46e2c8186572d58a5562882feab9c7bd61347",
+      "sha256": "65e5b8d14c0b83f31456baf214d100262e4b85e7b787cd440315b352526fb743",
       "size": 1165,
       "action": "unchanged"
     },
@@ -140,7 +140,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/container-security/metadata.json",
-      "sha256": "f7bfeb591e21493fdc066ab231e9500568bc25c7e66e5be0db269a2c72599098",
+      "sha256": "975b00aa63e6c4f15fbd65513d9e56256ca7d1c90e2c7ca84a4b7a839af2d87d",
       "size": 944,
       "action": "unchanged"
     },
@@ -464,7 +464,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/cicd-security/metadata.json",
-      "sha256": "94d1f76f0720832bd3086a1aa0b46e2c8186572d58a5562882feab9c7bd61347",
+      "sha256": "65e5b8d14c0b83f31456baf214d100262e4b85e7b787cd440315b352526fb743",
       "size": 1165,
       "action": "unchanged"
     },
@@ -488,7 +488,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/container-security/metadata.json",
-      "sha256": "f7bfeb591e21493fdc066ab231e9500568bc25c7e66e5be0db269a2c72599098",
+      "sha256": "975b00aa63e6c4f15fbd65513d9e56256ca7d1c90e2c7ca84a4b7a839af2d87d",
       "size": 944,
       "action": "unchanged"
     },
@@ -992,7 +992,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/cicd-security/metadata.json",
-      "sha256": "94d1f76f0720832bd3086a1aa0b46e2c8186572d58a5562882feab9c7bd61347",
+      "sha256": "65e5b8d14c0b83f31456baf214d100262e4b85e7b787cd440315b352526fb743",
       "size": 1165,
       "action": "unchanged"
     },
@@ -1016,7 +1016,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/container-security/metadata.json",
-      "sha256": "f7bfeb591e21493fdc066ab231e9500568bc25c7e66e5be0db269a2c72599098",
+      "sha256": "975b00aa63e6c4f15fbd65513d9e56256ca7d1c90e2c7ca84a4b7a839af2d87d",
       "size": 944,
       "action": "unchanged"
     },
@@ -1898,8 +1898,8 @@
     },
     {
       "path": "skills/cicd-security/SKILL.md",
-      "sha256": "94a8d592e6ea125c545cd2cdadaf91c6c8f82c9edf53fe5ae5eca84372cb5f58",
-      "size": 7320,
+      "sha256": "771ef4e472ad4f2410b92d61b364a41c9a3e758dae74e0496558d6ba84c6f9f0",
+      "size": 8885,
       "action": "unchanged"
     },
     {
@@ -1940,8 +1940,8 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "0f89a5acbb2af87f4db0e5aadc95cdb5da34594b14a44ea2c0e8081295ad7bf8",
-      "size": 11059,
+      "sha256": "dcb8c19c82f4e7f0cf6d361d68eedd29992e840c5228c0504d58697ddc7ea0c2",
+      "size": 13022,
       "action": "unchanged"
     },
     {
