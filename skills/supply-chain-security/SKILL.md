@@ -18,7 +18,7 @@ token_budget:
 rules_path: "rules/"
 tests_path: "tests/"
 related_skills: ["dependency-audit", "secret-detection", "container-security"]
-last_updated: "2026-06-20"
+last_updated: "2026-06-21"
 sources:
   - "Alex Birsan, Dependency Confusion (2021)"
   - "OpenSSF Best Practices for OSS Developers"
@@ -113,7 +113,7 @@ then lock it so it can't come back.
    public registry, not your internal one. Check the registry's repo URL matches the
    real source. FP if it's a legit `-fork`, a known canary/beta, or a correctly
    scoped internal package.
-2. **Fix, then lock with a regression test** (unit *or* integration — dev's call):
+2. **Fix, then lock by keeping the scanner gating CI** (the scan re-running *is* the regression guard):
    pin the exact version *and* registry URL in the lockfile, then add a CI gate that
    fails the build if the bad package/version reappears — a deny-list/allow-list, a
    scoped `.npmrc`/`pip.conf` install check, or a `secure-code gate` step — and assert

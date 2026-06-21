@@ -188,7 +188,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/dependency-audit/metadata.json",
-      "sha256": "d63eccd232a11ccf4a17d34281ad52f6fa82aa46545abd329e2deb565ad3f2d1",
+      "sha256": "feebadb98d23b1aa3ee51b21bc06017ae77081459cdf3e8a1299f36a88e8c1ef",
       "size": 942,
       "action": "unchanged"
     },
@@ -416,7 +416,7 @@
     },
     {
       "path": "dist/agent-skills/.agents/skills/supply-chain-security/metadata.json",
-      "sha256": "50354bebd08bdae25d2c3d55455ef506ffc24efed58c29e5286b0aa0c6f98926",
+      "sha256": "ac9b7c1e16bed255c7401fbdfa2476480f2ca6bfe3493ba9865d9ad57518e154",
       "size": 973,
       "action": "unchanged"
     },
@@ -536,7 +536,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/dependency-audit/metadata.json",
-      "sha256": "d63eccd232a11ccf4a17d34281ad52f6fa82aa46545abd329e2deb565ad3f2d1",
+      "sha256": "feebadb98d23b1aa3ee51b21bc06017ae77081459cdf3e8a1299f36a88e8c1ef",
       "size": 942,
       "action": "unchanged"
     },
@@ -764,7 +764,7 @@
     },
     {
       "path": "dist/claude-skills/.claude/skills/supply-chain-security/metadata.json",
-      "sha256": "50354bebd08bdae25d2c3d55455ef506ffc24efed58c29e5286b0aa0c6f98926",
+      "sha256": "ac9b7c1e16bed255c7401fbdfa2476480f2ca6bfe3493ba9865d9ad57518e154",
       "size": 973,
       "action": "unchanged"
     },
@@ -1064,7 +1064,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/dependency-audit/metadata.json",
-      "sha256": "d63eccd232a11ccf4a17d34281ad52f6fa82aa46545abd329e2deb565ad3f2d1",
+      "sha256": "feebadb98d23b1aa3ee51b21bc06017ae77081459cdf3e8a1299f36a88e8c1ef",
       "size": 942,
       "action": "unchanged"
     },
@@ -1292,7 +1292,7 @@
     },
     {
       "path": "dist/copilot-skills/.github/skills/supply-chain-security/metadata.json",
-      "sha256": "50354bebd08bdae25d2c3d55455ef506ffc24efed58c29e5286b0aa0c6f98926",
+      "sha256": "ac9b7c1e16bed255c7401fbdfa2476480f2ca6bfe3493ba9865d9ad57518e154",
       "size": 973,
       "action": "unchanged"
     },
@@ -1898,8 +1898,8 @@
     },
     {
       "path": "skills/cicd-security/SKILL.md",
-      "sha256": "771ef4e472ad4f2410b92d61b364a41c9a3e758dae74e0496558d6ba84c6f9f0",
-      "size": 8885,
+      "sha256": "d59a0230cb1c9d95485e0f15ebae4f9becb9895cb8502447358aacfd361424ac",
+      "size": 8895,
       "action": "unchanged"
     },
     {
@@ -1940,8 +1940,8 @@
     },
     {
       "path": "skills/container-security/SKILL.md",
-      "sha256": "dcb8c19c82f4e7f0cf6d361d68eedd29992e840c5228c0504d58697ddc7ea0c2",
-      "size": 13022,
+      "sha256": "0fe6596bbd23ee9ab5da4253f7ab301079f99fe4cf0e9109da3e7fb0335914c9",
+      "size": 13032,
       "action": "unchanged"
     },
     {
@@ -2024,8 +2024,8 @@
     },
     {
       "path": "skills/dependency-audit/SKILL.md",
-      "sha256": "67a27e2b9a9d4e521a04c715b5d0419da72e3c2b924c4cf653e214ab25244c8a",
-      "size": 5307,
+      "sha256": "9d74f0dc0288ef96c0e986d10cb1128b55055fc8087dab9696bf7a2f35c586a3",
+      "size": 5326,
       "action": "unchanged"
     },
     {
@@ -2510,8 +2510,8 @@
     },
     {
       "path": "skills/supply-chain-security/SKILL.md",
-      "sha256": "7ea403d01b093ec1007ca76d9e38b633c4299b38e463aa01c57ec42c7553dfad",
-      "size": 6852,
+      "sha256": "acc13fdd33b96e5fd8ea16725829667fd714c2b619ff0ed0257afb451974511a",
+      "size": 6871,
       "action": "unchanged"
     },
     {

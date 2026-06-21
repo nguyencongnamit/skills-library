@@ -17,7 +17,7 @@ token_budget:
   full: 1900
 rules_path: "rules/"
 related_skills: ["secret-detection", "supply-chain-security"]
-last_updated: "2026-06-20"
+last_updated: "2026-06-21"
 sources:
   - "OWASP Top 10 2021 — A06: Vulnerable and Outdated Components"
   - "CWE-1104: Use of Unmaintained Third Party Components"
@@ -89,7 +89,7 @@ then lock it so it can't come back.
    project — re-registered legacy names and owned `@yourco/*` namespaces are known FPs.
    Real if a runtime (or shipped) path resolves to a version in the vulnerable range, or the
    name matches a live malicious entry.
-2. **Fix, then lock with a regression test** (unit *or* integration — dev's call): upgrade to
+2. **Fix, then lock by keeping the scanner gating CI** (the scan re-running *is* the regression guard): upgrade to
    the patched version and pin it exactly in the lockfile; then add a CI `audit`/gate step
    (`npm audit`, `pip-audit`, `govulncheck`, `cargo audit`) that fails on that advisory id at
    the chosen severity floor, or a lockfile assertion that the resolved version is `>=` the

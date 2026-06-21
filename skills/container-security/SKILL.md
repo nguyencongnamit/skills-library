@@ -202,7 +202,7 @@ it, then lock it so the regression can't sneak back through CI.
      `hostNetwork/PID/IPC`, or a writable root FS (`readOnlyRootFilesystem` unset).
    FP if the artifact already shows the hardened property, or it's a documented
    system-pod exception (CNI/CSI, debug pod).
-2. **Fix, then lock with a regression test** (a CI config-test — dev's call on
+2. **Fix, then lock by keeping the scanner gating CI** (a CI config-test — dev's call on
    unit vs. integration). Assert the property on the built image, e.g. `docker
    inspect`/`docker run id` shows non-root USER >= 10000, the final base is digest-
    pinned and not EOL, `docker history` contains no secret, root FS is read-only,
