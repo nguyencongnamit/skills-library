@@ -9,7 +9,7 @@ next run. The rule never leaves your machine unless you explicitly choose to
 share it.
 
 This is the "left of the cursor, and now left of the *database*" half of
-vibe-guard: prevention that you can extend the moment you learn something,
+SecureVibe: prevention that you can extend the moment you learn something,
 without a round trip.
 
 ## The model
@@ -76,7 +76,7 @@ centrally-reviewed canon in every report.
 Signing needs an Ed25519 key. You don't need `openssl` — generate one:
 
 ```bash
-skills-check contribute keygen --out ~/.vibe-guard-contrib.pem
+skills-check contribute keygen --out ~/.securevibe-contrib.pem
 # Wrote private key (0600) + public key; prints the Key ID.
 ```
 
@@ -84,10 +84,10 @@ Then sign as you record, and export a portable candidate:
 
 ```bash
 skills-check contribute add -p evil-pkg -e npm \
-  --reason "..." --key ~/.vibe-guard-contrib.pem
+  --reason "..." --key ~/.securevibe-contrib.pem
 
 skills-check contribute submit \
-  --key ~/.vibe-guard-contrib.pem --out candidate.json
+  --key ~/.securevibe-contrib.pem --out candidate.json
 ```
 
 `candidate.json` carries each rule, a per-rule signature, and the embedded
@@ -97,7 +97,7 @@ anything:
 ```bash
 skills-check contribute verify candidate.json
 #   ✓ evil-pkg (npm): signature valid
-#   All 1 rule(s) verified against key vibe-guard-contrib-...
+#   All 1 rule(s) verified against key securevibe-contrib-...
 ```
 
 The signature binds the package coordinates, severity, and description, so any
@@ -111,7 +111,7 @@ unsigned one is refused unless you opt in, so provenance is the default.
 
 ```bash
 skills-check contribute import candidate.json
-#   Imported 1 rule(s) (1 new, 0 updated, verified, key vibe-guard-contrib-…)
+#   Imported 1 rule(s) (1 new, 0 updated, verified, key securevibe-contrib-…)
 
 # An unsigned candidate is refused unless you explicitly accept the risk:
 skills-check contribute import candidate.json --allow-unsigned
@@ -127,5 +127,5 @@ The personal and candidate halves above are fully open source — a single team
 gets a complete, self-contained workflow with no paywall, ever, on a security
 fix. The central verification pipeline (sandbox auto-reproduction, OSV
 cross-corroboration, dedup, and signing candidates into canon) and fleet-scale
-features (private registries, org policy, SLAs) are where vibe-guard Cloud
+features (private registries, org policy, SLAs) are where SecureVibe Cloud
 begins. The boundary is deliberate: crowdsource candidates, centralize trust.

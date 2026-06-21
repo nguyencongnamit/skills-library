@@ -1,13 +1,13 @@
-# secure-code
+# SecureVibe
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-28-blue)](#skill-catalogue)
+[![Skills](https://img.shields.io/badge/skills-29-blue)](#skill-catalogue)
 [![Vulnerabilities](https://img.shields.io/badge/CVE%20patterns-58-orange)](./vulnerabilities/cve/code-relevant/cve_patterns.json)
 [![Ecosystems](https://img.shields.io/badge/supply--chain%20ecosystems-9-purple)](./vulnerabilities/supply-chain/malicious-packages)
 [![DLP patterns](https://img.shields.io/badge/DLP%20patterns-74-red)](./skills/secret-detection/checklists/secret_detection.yaml)
 [![Platforms](https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green)](#platform-support)
 
-**secure-code** is a structured, machine-readable library of security skills and
+**SecureVibe** is a structured, machine-readable library of security skills and
 supply-chain vulnerability intelligence designed to be embedded directly into AI
 coding assistants — Claude Code, Cursor, GitHub Copilot, Codex, Windsurf,
 Cline / OpenCode, Antigravity, and Devin. It ships bundled rules offline and
@@ -21,7 +21,7 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 
 ## Table of contents
 
-- [Why secure-code](#why-secure-code)
+- [Why SecureVibe](#why-securevibe)
 - [What's inside](#whats-inside)
 - [Install & run](#install--run)
 - [Quick start — embed in your IDE](#quick-start--embed-in-your-ide)
@@ -46,7 +46,7 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 
 ---
 
-## Why secure-code
+## Why SecureVibe
 
 - **AI coding assistants don't ship with current security knowledge.** Training
   data is months or years stale: a package compromised yesterday is happily
@@ -57,11 +57,11 @@ the [MIT license](./LICENSE) — free to fork, embed, and ship in commercial pro
 - **No standardized way to inject security context** into AI tools today — every
   team writes its own `CLAUDE.md`, `.cursorrules`, or `copilot-instructions.md`,
   and most contain only style rules.
-- **Existing answers are proprietary, expensive, or infra-heavy.** secure-code is
+- **Existing answers are proprietary, expensive, or infra-heavy.** SecureVibe is
   MIT-licensed, runs entirely offline, and ships as plain files in a Git repo plus
   a single static Go binary.
 
-secure-code closes the loop by shipping security knowledge *at the point of code
+SecureVibe closes the loop by shipping security knowledge *at the point of code
 generation*, before the diff ever touches your repo.
 
 ## What's inside
@@ -79,7 +79,7 @@ generation*, before the diff ever touches your repo.
 
 ## Install & run
 
-There are three ways to use secure-code, depending on whether you want the
+There are three ways to use SecureVibe, depending on whether you want the
 **MCP server** (16 scanning tools, any agent), the **skills** (knowledge for
 Claude Code), or both. Pick one — they're independent.
 
@@ -99,12 +99,12 @@ runs it on demand):
 // Claude Code / Cursor / Windsurf / Cline … mcpServers block
 {
   "mcpServers": {
-    "secure-code": { "command": "npx", "args": ["-y", "@namncqualgo/secure-code-mcp"] }
+    "SecureVibe": { "command": "npx", "args": ["-y", "@namncqualgo/secure-code-mcp"] }
   }
 }
 ```
 
-Or, in Claude Code: `claude mcp add secure-code -- npx -y @namncqualgo/secure-code-mcp`
+Or, in Claude Code: `claude mcp add SecureVibe -- npx -y @namncqualgo/secure-code-mcp`
 
 **Skills** — install the native Claude Code skills into a project, then
 optionally wire up the MCP for active scanning:
@@ -174,7 +174,7 @@ Wire the local binary into an agent by absolute path:
 ```jsonc
 {
   "mcpServers": {
-    "secure-code": {
+    "SecureVibe": {
       "command": "/abs/path/skills-library/skills-mcp",
       "args": ["--path", "/abs/path/skills-library"]
     }
@@ -368,7 +368,7 @@ changes to skill content. Re-run weekly (or wire up the
 
 AI coding tools have finite context windows, and every byte of instructions you
 inject costs either tokens (for API tools) or working memory (for IDE tools).
-secure-code is designed around three principles:
+SecureVibe is designed around three principles:
 
 - **Skills are loaded on demand, not all at once.** The CLI lets you pick exactly
   which skills your project needs.
@@ -525,7 +525,7 @@ internal/skill/                # SKILL.md parser (shared by skills-check and ski
 
 ## MCP server
 
-`skills-mcp` exposes secure-code to AI tools that speak the
+`skills-mcp` exposes SecureVibe to AI tools that speak the
 [Model Context Protocol](https://modelcontextprotocol.io). It runs as a
 short-lived child process spoken to over stdio:
 
@@ -906,7 +906,7 @@ To report a security issue privately, see [SECURITY.md](./SECURITY.md).
 
 ## License and attribution
 
-secure-code is released under the [MIT License](./LICENSE).
+SecureVibe is released under the [MIT License](./LICENSE).
 
 > Copyright (c) 2024-2026 **ShieldNet360** — https://www.shieldnet360.com
 

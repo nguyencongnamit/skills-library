@@ -6,9 +6,9 @@ hide:
 
 <div class="ss-hero" markdown>
 
-# SkillShield
+# SecureVibe
 
-Structured security skills + supply-chain vulnerability intelligence for AI coding assistants — Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, Antigravity, Devin.
+Prevention-first security for AI-written code. Signed security skills shape what your assistant writes, deterministic scanners back it up, and a CI gate blocks what slips through — across Claude Code, Cursor, Copilot, Codex, Windsurf, Cline, Antigravity, and Devin.
 
 <div class="ss-hero-shields">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="MIT">
@@ -93,7 +93,7 @@ The data is bundled, so it runs fully offline.
 flowchart LR
     AI["🤖 AI coding<br/>assistant"] -->|reads at session start| DIST["dist/CLAUDE.md<br/>(or 7 other formats)"]
     AI -->|JSON-RPC on demand| MCP["skills-mcp<br/>server"]
-    subgraph LIB [" SkillShield library "]
+    subgraph LIB [" SecureVibe library "]
         direction TB
         SK["skills/<br/>29 SKILL.md"]
         VU["vulnerabilities/<br/>npm · pypi · cargo · gem · go ·<br/>nuget · maven · gh-actions · docker"]
