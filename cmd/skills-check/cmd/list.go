@@ -17,7 +17,7 @@ func listCmd() *cobra.Command {
 		Use:   "list",
 		Short: "List skills with category, severity, and token counts",
 		RunE: func(c *cobra.Command, args []string) error {
-			skills, err := skill.LoadAll(filepath.Join(path, "skills"))
+			skills, err := skill.LoadAll(filepath.Join(resolveLibraryRoot(path), "skills"))
 			if err != nil {
 				return err
 			}
@@ -42,7 +42,7 @@ func listCmd() *cobra.Command {
 			return w.Flush()
 		},
 	}
-	c.Flags().StringVar(&path, "path", ".", "library root")
+	c.Flags().StringVar(&path, "path", ".", "library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&category, "category", "", "filter by category")
 	return c
 }

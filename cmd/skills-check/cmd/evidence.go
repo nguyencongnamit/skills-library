@@ -101,7 +101,7 @@ records, access reviews, and so on.
 			fwSlug := strings.ToLower(framework)
 			fwSlug = strings.ReplaceAll(fwSlug, "-", "_")
 
-			lib, err := filepath.Abs(libraryPath)
+			lib, err := filepath.Abs(resolveLibraryRoot(libraryPath))
 			if err != nil {
 				return err
 			}
@@ -215,7 +215,7 @@ records, access reviews, and so on.
 		},
 	}
 
-	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root")
+	c.Flags().StringVar(&libraryPath, "library", ".", "Path to the skills library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&framework, "framework", "", "Compliance framework: SOC2|HIPAA|PCI-DSS")
 	c.Flags().StringVar(&format, "format", "json", "Output format: json|markdown")
 	c.Flags().StringVar(&outFile, "out", "", "Write report to this file; '-' or empty for stdout")

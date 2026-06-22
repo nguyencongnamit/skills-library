@@ -34,7 +34,7 @@ func manifestComputeCmd() *cobra.Command {
 		Use:   "compute",
 		Short: "Walk distributable roots and update manifest.json with real SHA-256 checksums",
 		RunE: func(c *cobra.Command, args []string) error {
-			root, err := filepath.Abs(path)
+			root, err := filepath.Abs(resolveLibraryRoot(path))
 			if err != nil {
 				return err
 			}
@@ -72,7 +72,7 @@ func manifestComputeCmd() *cobra.Command {
 			return nil
 		},
 	}
-	c.Flags().StringVar(&path, "path", ".", "library root")
+	c.Flags().StringVar(&path, "path", ".", "library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().BoolVar(&write, "write", false, "write updated manifest.json back to disk")
 	c.Flags().BoolVar(&prune, "prune", false, "drop manifest entries whose files no longer exist on disk")
 	return c
@@ -85,7 +85,7 @@ func manifestVerifyCmd() *cobra.Command {
 		Use:   "verify",
 		Short: "Verify manifest signature and per-file SHA-256 checksums",
 		RunE: func(c *cobra.Command, args []string) error {
-			root, err := filepath.Abs(path)
+			root, err := filepath.Abs(resolveLibraryRoot(path))
 			if err != nil {
 				return err
 			}
@@ -160,7 +160,7 @@ func manifestVerifyCmd() *cobra.Command {
 			return nil
 		},
 	}
-	c.Flags().StringVar(&path, "path", ".", "library root")
+	c.Flags().StringVar(&path, "path", ".", "library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&pubKeyPath, "public-key", "", "path to Ed25519 public key (default: embedded)")
 	c.Flags().BoolVar(&checksumsOnly, "checksums-only", false, "skip signature verification, only check SHA-256")
 	return c
@@ -172,7 +172,7 @@ func manifestSignCmd() *cobra.Command {
 		Use:   "sign",
 		Short: "Sign manifest.json with an Ed25519 private key",
 		RunE: func(c *cobra.Command, args []string) error {
-			root, err := filepath.Abs(path)
+			root, err := filepath.Abs(resolveLibraryRoot(path))
 			if err != nil {
 				return err
 			}
@@ -191,7 +191,7 @@ func manifestSignCmd() *cobra.Command {
 			return nil
 		},
 	}
-	c.Flags().StringVar(&path, "path", ".", "library root")
+	c.Flags().StringVar(&path, "path", ".", "library root (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	c.Flags().StringVar(&keyPath, "key", "", "path to Ed25519 private key (required)")
 	_ = c.MarkFlagRequired("key")
 	return c
