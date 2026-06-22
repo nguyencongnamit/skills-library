@@ -1440,3 +1440,71 @@ func TestCheckDependencyCVEVersionFilter(t *testing.T) {
 		t.Error("vulnerable next@15.1.6 should flag CVE-2025-29927")
 	}
 }
+
+// TestCheckDependencyNoSubstringFalsePositive locks the fix for the
+// description-substring blowup: a CVE pinned (via affected[]) to one
+// package must never surface for an unrelated package whose name is a
+// substring of the CVE prose. CVE-2025-29927's text contains "subrequest",
+// "send", "mishandled", and single letters, which previously flagged
+// request/send/sha/i/d/q from any npm lockfile.
+func TestCheckDependencyNoSubstringFalsePositive(t *testing.T) {
+	lib := newLibrary(t)
+	for _, pkg := range []struct{ name, version string }{
+		{"request", "2.88.0"}, // "request" ⊂ "subrequest"
+		{"send", "0.16.2"},    // "send" ⊂ "send a forged header"
+		{"sha", "2.0.1"},      // "sha" ⊂ "mishandled"
+		{"i", "0.3.6"},        // single letter
+		{"d", "0.1.1"},        // single letter
+		{"q", "1.5.1"},        // single letter
+	} {
+		res, err := lib.CheckDependency(pkg.name, pkg.version, "npm")
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, c := range res.CVEs {
+			if c.CVE == "CVE-2025-29927" {
+				t.Errorf("%s@%s must not flag CVE-2025-29927 (Next.js-only)", pkg.name, pkg.version)
+			}
+		}
+	}
+}
+
+func TestCVEAffectsPackage(t *testing.T) {
+	affected := []cveAffected{{Package: "next", Ecosystem: "npm"}}
+	if !cveAffectsPackage(affected, "npm", "next") {
+		t.Error("exact package+ecosystem should match")
+	}
+	if cveAffectsPackage(affected, "npm", "request") {
+		t.Error("different package in same ecosystem must NOT match")
+	}
+	if cveAffectsPackage(affected, "pypi", "next") {
+		t.Error("same package, different ecosystem must NOT match")
+	}
+	// Empty Package = ecosystem-wide; empty Ecosystem = any ecosystem.
+	if !cveAffectsPackage([]cveAffected{{Ecosystem: "npm"}}, "npm", "anything") {
+		t.Error("ecosystem-wide row should match any package in that ecosystem")
+	}
+	if !cveAffectsPackage([]cveAffected{{Package: "log4j-core"}}, "maven", "log4j-core") {
+		t.Error("row with empty ecosystem should match any ecosystem")
+	}
+}
+
+func TestContainsWord(t *testing.T) {
+	cases := []struct {
+		hay, needle string
+		want        bool
+	}{
+		{"x-middleware-subrequest header", "request", false}, // substring inside subrequest
+		{"attacker to send a forged header", "send", true},   // whole word
+		{"15.x mishandled the internal", "sha", false},       // inside mishandled
+		{"the lodash.merge prototype path", "lodash.merge", true},
+		{"uses apache commons text", "commons", true},
+		{"", "x", false},
+		{"abc", "", false},
+	}
+	for _, c := range cases {
+		if got := containsWord(c.hay, c.needle); got != c.want {
+			t.Errorf("containsWord(%q, %q) = %v, want %v", c.hay, c.needle, got, c.want)
+		}
+	}
+}

@@ -32,6 +32,7 @@ signed updates of vulnerability data and detection rules.`,
 	root.AddCommand(versionCmd())
 	root.AddCommand(manifestCmd())
 	root.AddCommand(schedulerCmd())
+	root.AddCommand(connectMCPCmd())
 	root.AddCommand(selfUpdateCmd())
 	root.AddCommand(newCmd())
 	root.AddCommand(testCmd())

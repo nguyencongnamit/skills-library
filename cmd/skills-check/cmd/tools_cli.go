@@ -790,7 +790,7 @@ unpinned actions, missing permissions, and credential exposure.
 // =============================================================================
 
 func policyCheckCmd() *cobra.Command {
-	var repoPath, severityFloor, format, sarifBase, report string
+	var repoPath, severityFloor, format, sarifBase, report, vulnSource string
 	c := &cobra.Command{
 		Use:     "gate <file-or-dir>...",
 		Aliases: []string{"policy-check"},
@@ -838,7 +838,7 @@ shell call from your pre-commit or CI step.
 			floor := severityFloor
 			failures, totalFindings := 0, 0
 			for _, file := range files {
-				lib, err := newLibraryForCmd(repoPath, "", file)
+				lib, err := newLibraryForCmd(repoPath, vulnSource, file)
 				if err != nil {
 					return err
 				}
@@ -930,6 +930,7 @@ shell call from your pre-commit or CI step.
 		"directory SARIF artifact URIs are made relative to (files outside it fall back to absolute file:// URIs); only used with --format sarif")
 	addFormatFlag(c, &format, true)
 	addReportFlag(c, &report)
+	addVulnSourceFlag(c, &vulnSource)
 	return c
 }
 

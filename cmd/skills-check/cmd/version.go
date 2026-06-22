@@ -20,7 +20,7 @@ func versionCmd() *cobra.Command {
 			fmt.Fprintf(out, "skills-check %s\n", CLIVersion)
 			libVersion := "unknown"
 			manifestKey := ""
-			if m, err := manifest.Load(filepath.Join(path, "manifest.json")); err == nil {
+			if m, err := manifest.Load(filepath.Join(resolveLibraryRoot(path), "manifest.json")); err == nil {
 				libVersion = m.Version
 				manifestKey = m.PublicKeyID
 			}
@@ -31,7 +31,7 @@ func versionCmd() *cobra.Command {
 			return nil
 		},
 	}
-	c.Flags().StringVar(&path, "path", ".", "library root containing manifest.json")
+	c.Flags().StringVar(&path, "path", ".", "library root containing manifest.json (default: $SKILLS_LIBRARY_PATH, else cwd)")
 	return c
 }
 
