@@ -247,24 +247,52 @@ func (l *Library) CheckDependency(pkg, version, ecosystem string) (*CheckDepende
 	if err == nil {
 		needle := strings.ToLower(pkg)
 		for _, entry := range cve.Entries {
+			// Tier 1 — entries that carry structured affected[] data are
+			// matched by exact package identity, never by description
+			// substring. The substring heuristic is dangerous for these:
+			// a CVE that pins next@npm would otherwise surface for any
+			// unrelated npm package whose name is a substring of the prose
+			// ("request" in "subrequest", single-letter names like "i"/"d",
+			// "sha" in "mishandled", "send" in "send a forged header").
+			if len(entry.Affected) > 0 {
+				if !cveAffectsPackage(entry.Affected, eco, pkg) {
+					continue
+				}
+				// Known resolved version outside every affected range
+				// (e.g. already upgraded past the fix) → not affected.
+				if version != "" && !cveVersionAffected(entry.Affected, eco, pkg, version) {
+					continue
+				}
+				out.CVEs = append(out.CVEs, CVEPatternMatch{
+					CVE:         entry.CVE,
+					Name:        entry.Name,
+					Severity:    entry.Severity,
+					Description: entry.Description,
+					Languages:   entry.Languages,
+					AttackType:  entry.AttackType,
+					References:  entry.References,
+				})
+				continue
+			}
+
+			// Tier 2 — legacy entries without affected[] keep the older
+			// "suggestive" heuristic, but tightened: a whole-word match of
+			// the package name (length >= 4) against the CVE name/description,
+			// still gated by ecosystem/language overlap. The word-boundary
+			// requirement and minimum length stop short or substring names
+			// from matching unrelated prose.
+			if len(needle) < 4 {
+				continue
+			}
 			hay := strings.ToLower(entry.Name + " " + entry.Description)
-			if !strings.Contains(hay, needle) {
+			if !containsWord(hay, needle) {
 				continue
 			}
-			// Filter by ecosystem/language overlap. Without this, a substring
+			// Filter by ecosystem/language overlap. Without this, a word
 			// match on the package name in an unrelated CVE description (e.g.
-			// "express" inside "OGNL expressions") surfaces CVEs from a
-			// different language family. See cveAppliesToEcosystem for the
-			// matching rules.
+			// "express" inside a Java OGNL advisory) surfaces CVEs from a
+			// different language family. See cveAppliesToEcosystem.
 			if !cveAppliesToEcosystem(entry.Languages, eco) {
-				continue
-			}
-			// When the entry pins concrete affected versions and we know
-			// the resolved version, drop the finding for a version outside
-			// every affected range (e.g. a package already upgraded past
-			// the fix). Entries without `affected` stay version-agnostic.
-			if version != "" && len(entry.Affected) > 0 &&
-				!cveVersionAffected(entry.Affected, eco, pkg, version) {
 				continue
 			}
 			out.CVEs = append(out.CVEs, CVEPatternMatch{
@@ -698,6 +726,55 @@ type cveAffected struct {
 	Package          string   `json:"package,omitempty"`
 	Ecosystem        string   `json:"ecosystem,omitempty"`
 	VersionsAffected []string `json:"versions_affected,omitempty"`
+}
+
+// cveAffectsPackage reports whether any affected row names this package in
+// this ecosystem. A row with an empty Package is an ecosystem-wide row and
+// matches any package; a row with an empty Ecosystem matches any ecosystem.
+// This is the authoritative package gate for CVE entries that carry
+// structured affected[] data — it replaces description-substring matching
+// for those entries, so a CVE pinned to one package never surfaces for an
+// unrelated package whose name happens to appear in the prose.
+func cveAffectsPackage(affected []cveAffected, eco, pkg string) bool {
+	for _, a := range affected {
+		if a.Ecosystem != "" && !strings.EqualFold(a.Ecosystem, eco) {
+			continue
+		}
+		if a.Package != "" && !strings.EqualFold(a.Package, pkg) {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+// containsWord reports whether needle appears in hay delimited by
+// non-alphanumeric boundaries (a whole-word match). It stops a substring
+// package name from matching unrelated prose — e.g. "request" inside
+// "subrequest" — in the legacy CVE substring-matching fallback. Boundaries
+// are checked only on the outer ends, so package names with internal
+// separators ("lodash.merge", "@scope/name") still match cleanly.
+func containsWord(hay, needle string) bool {
+	if needle == "" {
+		return false
+	}
+	isAlnum := func(b byte) bool {
+		return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9')
+	}
+	for from := 0; ; {
+		i := strings.Index(hay[from:], needle)
+		if i < 0 {
+			return false
+		}
+		i += from
+		beforeOK := i == 0 || !isAlnum(hay[i-1])
+		end := i + len(needle)
+		afterOK := end >= len(hay) || !isAlnum(hay[end])
+		if beforeOK && afterOK {
+			return true
+		}
+		from = i + 1
+	}
 }
 
 // cveVersionAffected reports whether (pkg@version, eco) is covered by any
