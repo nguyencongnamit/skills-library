@@ -92,6 +92,7 @@ extra_css:
 
 extra_javascript:
   - assets/js/ai-actions.js
+  - assets/js/home-stats.js
 
 nav:
   - Home: index.md
