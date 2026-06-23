@@ -59,6 +59,109 @@ SecureVibe plugs into a workflow through four distinct surfaces. The first two g
 
 The four scanners behind surfaces (c) and (d) are: **secrets**, **dependencies** (malicious / typosquat / CVE / OSV), **Dockerfile**, and **GitHub Actions**. Detection is **narrow by design** — this is not a general-purpose SAST and does not aim to find every vulnerability.
 
+## Where it intercepts
+
+This diagram shows **every point where SecureVibe hooks into the workflow and does its job** — from prompt to merge, plus the two loops that keep it fresh and growing. Hooks ① and ② act *before* code exists (gen-time, advisory); ③ and ④ re-check the artifact *after* (CI-time, deterministic, blocking); ⑤ and ⑥ feed the shared engine.
+
+```mermaid
+flowchart TB
+    DEV["Developer prompt"] --> AI["AI assistant"]
+
+    subgraph GENTIME["Gen-time · left of cursor — advisory, cannot block"]
+        AI
+        H1["① skills in context<br/>(init → rule bundle)"]
+        H2["② MCP scan tools<br/>(skills-mcp, in-loop)"]
+    end
+    AI -->|reads| H1
+    AI <-->|calls| H2
+
+    AI --> WT["Working tree"]
+    WT --> H3
+
+    subgraph CITIME["CI-time · right of cursor — deterministic, blocks"]
+        H3["③ pre-commit gate<br/>(staged diff)"]
+        H4["④ CI gate → SARIF<br/>(PR check, non-bypassable)"]
+    end
+    H3 --> H4 --> MERGE["Merge"]
+
+    ENG["Scanner engine<br/>4 scanners + signed DB"]
+    H2 -.same engine.- ENG
+    H3 -.same engine.- ENG
+    H4 -.same engine.- ENG
+
+    subgraph SUPPORT["Supporting loops — keep the engine fresh & growing"]
+        H5["⑤ fetch-vulns / update<br/>(Ed25519-signed)"]
+        H6["⑥ contribute → overlay<br/>(you → team → org)"]
+    end
+    H5 -.refreshes.-> ENG
+    H6 -.feeds known-bad.-> ENG
+    MERGE -.new finding.-> H6
+```
+
+Points ②, ③ and ④ run the **same scanner engine** against the **same signed database** — they look similar because they *are* the same detection logic. They differ only in **who triggers them, on what scope, and whether the verdict can be ignored**:
+
+| | ② MCP tool | ③ pre-commit | ④ CI gate |
+| --- | --- | --- | --- |
+| Triggered by | the model, voluntarily | git, on every commit | CI, on every push / PR |
+| When | before the code exists | after it's written | on the final diff |
+| Scope | one candidate dep / snippet | the staged diff | the whole change |
+| Authority | advisory — model may ignore | blocks the commit (`--no-verify` to skip) | fails the check, non-bypassable |
+| Self-corrects? | yes — model rewrites in-loop | no — blocks and reports | no — fails the build |
+
+!!! note "Why the overlap is deliberate"
+    Each layer assumes the previous one was skipped. ② is the cheapest fix — the model corrects itself before you ever see the bad line — but it only fires if the model *chooses* to call the tool and obeys the result, so it can be missed entirely (hand-written code, an assistant without the MCP server, or a model that simply didn't ask). ③ and ④ are the deterministic safety nets: they don't trust the model, they re-check the committed artifact, and they block. The same detection logic deployed at escalating authority is **defense in depth, not redundancy**.
+
+    This applies only to the **deterministic** classes — dependencies, secrets, Dockerfile, GitHub Actions. Anything in your own source (SQL injection, SSRF, weak crypto) is reachable **only** by point ① (the skills) and has **no deterministic backstop** downstream, by design.
+
+## The defense-in-depth funnel
+
+Tracing the *pool* of possible vulnerabilities through those hooks shows the system isn't one funnel but **two parallel lanes** with very different filtering — and being explicit about which is which is central to how SecureVibe describes itself.
+
+```mermaid
+flowchart TB
+    POOL["All vulnerabilities that could enter a change"]
+    POOL --> A["CLASS A — signatured<br/>(which artifact?)"]
+    POOL --> B["CLASS B — semantic<br/>(how you wrote it?)"]
+
+    subgraph LANEA["Lane A · 3 deterministic filters → near-zero"]
+        A --> A1["① skills — leaky reduce"]
+        A1 --> A2["② MCP tool — deterministic, voluntary"]
+        A2 --> A3["③ pre-commit — deterministic, blocks"]
+        A3 --> A4["④ CI gate — non-bypassable"]
+        A4 --> AR["Residual: coverage gaps only"]
+    end
+
+    subgraph LANEB["Lane B · one probabilistic filter, then pass-through"]
+        B --> B1["① skills — leaky reduce (the ONLY filter)"]
+        B1 --> B2["②③④ — no filter"]
+        B2 --> BR["Residual: ~10% insecure, ships unfiltered"]
+    end
+
+    FEED["⑤ fetch-vulns / update · ⑥ contribute → overlay"]
+    FEED -.adds signatures, shrinks.-> AR
+```
+
+The split is by **detectability**, not severity:
+
+- **Class A — signatured ("which artifact did you pull in?").** Malicious deps, typosquats, vulnerable deps (CVE / OSV), hardcoded secrets, Dockerfile and GitHub Actions misconfig. A signature exists, so the deterministic scanners can match it exactly.
+- **Class B — semantic ("how did you write your own code?").** SQL injection, SSRF, code-level RCE, XSS, weak crypto, broken authorization. No signature exists; only the gen-time skill influences it.
+
+| Filter | Lane A (signatured) | Lane B (semantic) |
+| --- | --- | --- |
+| ① skills (gen-time) | leaky reduce | **leaky reduce — the only filter** |
+| ② MCP tool | deterministic, voluntary, self-correcting | — none |
+| ③ pre-commit | deterministic, blocks | — none |
+| ④ CI gate | deterministic, non-bypassable | — none |
+| **End-state residual** | **coverage gaps only** (shrunk by ⑤ / ⑥) | **≈10% insecure** (single-model measured) |
+| Failure mode | a *missing* signature | a *missed* prevention |
+
+!!! warning "What the funnel means — read honestly"
+    **Lane A is the moat.** Three redundant deterministic filters (②③④) mean a *known*-bad artifact is essentially guaranteed to be stopped at commit or CI, at zero false positives — a leak at one stage is caught at the next. Its only escape is a vuln with **no signature yet**, which is why the product's Lane-A investment is **data freshness and the contribution flywheel** (⑤ / ⑥), not a detection-rate percentage.
+
+    **Lane B has no funnel** — one probabilistic gate at gen-time, then pass-through. Whatever the skill didn't prevent **ships**; the only lever is a better model or better skills (more lift at ①). Adding a deterministic Lane-B filter would mean becoming a general-purpose SAST, which SecureVibe deliberately is not.
+
+    The two claims must never be conflated: *"we block known-bad deterministically"* (Lane A, true) is a different statement from *"we prevent SQL injection"* (Lane B, probabilistic — a relative reduction, not elimination; see [Benchmarks](benchmarks.md)).
+
 ## The lifecycle
 
 The four stages map one-to-one onto components. (`ANALYZE` and `VERIFY` are future, demand-gated stages — they are not built today.)
