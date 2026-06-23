@@ -28,7 +28,7 @@ Four **deterministic** scanners:
 
 | Scanner | Catches |
 |---|---|
-| Secrets | Hardcoded keys, tokens, credentials (74 detection patterns) |
+| Secrets | Hardcoded keys, tokens, credentials (83 detection patterns) |
 | Dependencies | Malicious / typosquatted packages, known CVEs, OSV advisories |
 | Dockerfile | Insecure container build patterns |
 | GitHub Actions | Risky CI/CD workflow patterns |

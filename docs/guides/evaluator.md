@@ -101,7 +101,7 @@ Scanning secrets in config.env
 1 issue found (1 high)
 ```
 
-The secret scanner ships **74 secret-detection patterns**.
+The secret scanner ships **83 secret-detection patterns**.
 
 !!! tip "Tested edge"
     On SecureVibe's own tuned corpus, the secret scanner measured **100% precision / 100% recall** versus gitleaks at **92.4% / 65.9%** (76.9 F1) — **on the shapes we tested**. The honest signal there is gitleaks' *recall* gap on those shapes, not a universal claim that SecureVibe beats gitleaks everywhere.

@@ -16,7 +16,7 @@ Prevention-first security for AI-written code. Signed security skills shape what
   <img src="https://img.shields.io/badge/skills-29-blue" alt="Skills">
   <img src="https://img.shields.io/badge/CVE%20patterns-58-orange" alt="CVE patterns">
   <img src="https://img.shields.io/badge/supply--chain%20ecosystems-9-purple" alt="Supply-chain ecosystems">
-  <img src="https://img.shields.io/badge/Secret%20patterns-74-red" alt="secret-detection patterns">
+  <img src="https://img.shields.io/badge/Secret%20patterns-83-red" alt="secret-detection patterns">
   <img src="https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green" alt="Platforms">
   <img src="https://img.shields.io/badge/AI%20clients-8-16a34a" alt="AI clients">
 </div>
@@ -38,11 +38,12 @@ npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity
 </div>
 
 <div class="ss-stats">
-  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="skills">29</span><span class="ss-stat-label">Skills</span></div>
-  <div class="ss-stat"><span class="ss-stat-value">58</span><span class="ss-stat-label">CVE Patterns</span></div>
+  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="malicious">3,623</span><span class="ss-stat-label">Curated Entries</span></div>
   <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="ecosystems">10</span><span class="ss-stat-label">Supply-Chain Ecosystems</span></div>
-  <div class="ss-stat"><span class="ss-stat-value">74</span><span class="ss-stat-label">Secret Patterns</span></div>
-  <div class="ss-stat"><span class="ss-stat-value">8</span><span class="ss-stat-label">AI Client Integrations</span></div>
+  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="skills">29</span><span class="ss-stat-label">Skills</span></div>
+  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="cve">58</span><span class="ss-stat-label">CVE Patterns</span></div>
+  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="secret">83</span><span class="ss-stat-label">Secret Patterns</span></div>
+  <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="integrations">8</span><span class="ss-stat-label">AI Client Integrations</span></div>
 </div>
 
 </div>
@@ -102,7 +103,7 @@ flowchart LR
         SK["skills/<br/>29 SKILL.md"]
         VU["vulnerabilities/<br/>npm · pypi · cargo · gem · go ·<br/>nuget · maven · gh-actions · docker"]
         CV["CVE patterns<br/>58 code-relevant"]
-        SECRETS["Secret patterns<br/>74 detection rules"]
+        SECRETS["Secret patterns<br/>83 detection rules"]
         CO["compliance/<br/>SOC2 · HIPAA · PCI"]
     end
     DIST --> LIB
@@ -139,7 +140,7 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <a class="ss-card" data-pkg="secrets" href="https://github.com/namncqualgo/skills-library/tree/main/skills/secret-detection">
 <span class="ss-card-icon">🔐</span>
 <span class="ss-card-body"><span class="ss-card-title">Secret Patterns</span>
-<span class="ss-card-desc">74 secret-detection patterns optimised for AI-assistant context, with entropy and hotword-proximity scoring.</span></span>
+<span class="ss-card-desc" data-sv-card="secrets">83 secret-detection patterns optimised for AI-assistant context, with entropy and hotword-proximity scoring.</span></span>
 </a>
 <a class="ss-card" data-pkg="signing" href="https://github.com/namncqualgo/skills-library/blob/main/SIGNING.md">
 <span class="ss-card-icon">✍️</span>

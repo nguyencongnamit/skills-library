@@ -82,7 +82,7 @@ Crucially, **the defensible value accrues at "sign into canon"** — the signed,
 - **Freshness as a flow, not a snapshot** — a copied database is stale the day it is copied. The flywheel is the only way to keep the canon current.
 
 !!! note "The current canon"
-    Today the curated malicious-package database holds **3,623 web-cited entries across 10 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer, crates, docker, maven, go, and github-actions), alongside 27 Sigma rules, 74 secret-detection patterns, and 58 CVE code-patterns. These are the starting canon the flywheel is built to grow — not the ceiling.
+    Today the curated malicious-package database holds **3,623 web-cited entries across 10 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer, crates, docker, maven, go, and github-actions), alongside 27 Sigma rules, 83 secret-detection patterns, and 58 CVE code-patterns. These are the starting canon the flywheel is built to grow — not the ceiling.
 
 ## Open-core boundary
 
