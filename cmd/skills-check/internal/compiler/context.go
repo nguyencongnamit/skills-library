@@ -90,7 +90,18 @@ func loadVulnerabilitySummary(repoRoot string) (string, error) {
 		if si != sj {
 			return si < sj
 		}
-		return items[i].entry.Discovered > items[j].entry.Discovered
+		if items[i].entry.Discovered != items[j].entry.Discovered {
+			return items[i].entry.Discovered > items[j].entry.Discovered
+		}
+		// Deterministic tiebreak so the top-N summary is byte-identical
+		// across platforms — without it, sort.Slice leaves entries that
+		// share a severity and discovered date in an unstable order, and
+		// the top-8 cutoff would pick different ties on arm64 vs amd64,
+		// drifting dist/SECURITY-SKILLS.md between local and CI.
+		if items[i].ecosystem != items[j].ecosystem {
+			return items[i].ecosystem < items[j].ecosystem
+		}
+		return items[i].entry.Name < items[j].entry.Name
 	})
 
 	max := 8
