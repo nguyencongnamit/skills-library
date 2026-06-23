@@ -2,6 +2,7 @@
  * Adds a small toolbar under each page title:
  *   • Copy page  — copies the page's text to the clipboard (paste into any LLM)
  *   • Open in Claude — opens claude.ai with a prompt that references this page
+ *   • Open in Codex — opens ChatGPT/Codex with the same prompt
  * Hooks Material's `document$` observable so it survives instant navigation.
  */
 (function () {
@@ -28,17 +29,27 @@
       });
     });
 
+    var prompt = "I'm reading this SecureVibe documentation page: " + location.href +
+      "\n\nUsing it as context, help me with:";
+    var encoded = encodeURIComponent(prompt);
+
     var ask = document.createElement("a");
     ask.className = "ai-action";
     ask.target = "_blank";
     ask.rel = "noopener";
-    var prompt = "I'm reading this SecureVibe documentation page: " + location.href +
-      "\n\nUsing it as context, help me with:";
-    ask.href = "https://claude.ai/new?q=" + encodeURIComponent(prompt);
+    ask.href = "https://claude.ai/new?q=" + encoded;
     ask.textContent = "🤖 Open in Claude";
+
+    var codex = document.createElement("a");
+    codex.className = "ai-action";
+    codex.target = "_blank";
+    codex.rel = "noopener";
+    codex.href = "https://chatgpt.com/?q=" + encoded;
+    codex.textContent = "⚡ Open in Codex";
 
     bar.appendChild(copy);
     bar.appendChild(ask);
+    bar.appendChild(codex);
     h1.insertAdjacentElement("afterend", bar);
   }
 
