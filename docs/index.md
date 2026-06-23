@@ -13,9 +13,10 @@ Prevention-first security for AI-written code. Signed security skills shape what
 <div class="ss-hero-shields">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="MIT">
   <img src="https://img.shields.io/github/actions/workflow/status/namncqualgo/skills-library/validate.yml?branch=main&label=CI" alt="CI">
+  <img src="https://img.shields.io/github/last-commit/nguyencongnamit/skills-library?label=last%20update&color=brightgreen" alt="Last commit">
   <img src="https://img.shields.io/badge/skills-29-blue" alt="Skills">
   <img src="https://img.shields.io/badge/CVE%20patterns-58-orange" alt="CVE patterns">
-  <img src="https://img.shields.io/badge/supply--chain%20ecosystems-9-purple" alt="Supply-chain ecosystems">
+  <img src="https://img.shields.io/badge/supply--chain%20ecosystems-10-purple" alt="Supply-chain ecosystems">
   <img src="https://img.shields.io/badge/Secret%20patterns-83-red" alt="secret-detection patterns">
   <img src="https://img.shields.io/badge/platforms-win%20%7C%20mac%20%7C%20linux-green" alt="Platforms">
   <img src="https://img.shields.io/badge/AI%20clients-8-16a34a" alt="AI clients">
@@ -45,6 +46,8 @@ npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity
   <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="secret">83</span><span class="ss-stat-label">Secret Patterns</span></div>
   <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="integrations">8</span><span class="ss-stat-label">AI Client Integrations</span></div>
 </div>
+
+<p data-sv-freshness style="text-align:center;opacity:.66;font-size:.82em;margin:.5rem 0 0">Curated database refreshed 2026-06-23 · +1,601 entries in the last 30 days · OSSF malicious-packages @ 8c093db5</p>
 
 </div>
 
