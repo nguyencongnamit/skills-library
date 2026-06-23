@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "ecosystem": "rubygems",
-  "last_updated": "2026-05-14T16:01:45Z",
+  "last_updated": "2026-06-22T03:59:41Z",
   "description": "Documented malicious or compromised RubyGems packages. RubyGems supply-chain incidents 2019-2024 cover both maintainer-account compromise (rest-client, strong_password, bootstrap-sass) and namespace squatting / dependency confusion patterns.",
   "entries": [
     {
@@ -5304,14 +5304,2544 @@
       "attack_type": "embedded_malicious_code",
       "source": "ossf-malicious-packages",
       "osv_id": "MAL-2025-47816"
+    },
+    {
+      "name": "ActiveAdmin_Globalize3-inputs",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ActiveAdmin_Globalize3-inputs (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6453"
+    },
+    {
+      "name": "a15z8my-name",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in a15z8my-name (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6307"
+    },
+    {
+      "name": "ab_split",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ab_split (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6320"
+    },
+    {
+      "name": "acceptance-tests_support",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acceptance-tests_support (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6333"
+    },
+    {
+      "name": "ach-client",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ach-client (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6346"
+    },
+    {
+      "name": "acme_bleach",
+      "versions_affected": [
+        "0.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acme_bleach (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6349"
+    },
+    {
+      "name": "acpc-poker-match_state",
+      "versions_affected": [
+        "2.2.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acpc-poker-match_state (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6362"
+    },
+    {
+      "name": "act-blue_reporter",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in act-blue_reporter (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6375"
+    },
+    {
+      "name": "actions-run-service",
+      "versions_affected": [
+        "0.0.1.r2301dc6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in actions-run-service (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46891"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46891"
+    },
+    {
+      "name": "actionview-link-to_block",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in actionview-link-to_block (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6388"
+    },
+    {
+      "name": "active-explorer",
+      "versions_affected": [
+        "0.0.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-explorer (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6398"
+    },
+    {
+      "name": "active-merchant-mollie",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-merchant-mollie (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6401"
+    },
+    {
+      "name": "active-model_serializers-cancan",
+      "versions_affected": [
+        "0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-model_serializers-cancan (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6411"
+    },
+    {
+      "name": "active-model_serializers-matchers",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-model_serializers-matchers (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6414"
+    },
+    {
+      "name": "active-press",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-press (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6424"
+    },
+    {
+      "name": "active-pubsub",
+      "versions_affected": [
+        "0.0.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-pubsub (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6427"
+    },
+    {
+      "name": "active-record_lite",
+      "versions_affected": [
+        "0.3.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-record_lite (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6430"
+    },
+    {
+      "name": "active-search",
+      "versions_affected": [
+        "1.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-search (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6440"
+    },
+    {
+      "name": "active-subset_validator",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in active-subset_validator (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6443"
+    },
+    {
+      "name": "activemerchant-banklink",
+      "versions_affected": [
+        "0.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activemerchant-banklink (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6456"
+    },
+    {
+      "name": "activemodel_validators",
+      "versions_affected": [
+        "3.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activemodel_validators (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6466"
+    },
+    {
+      "name": "activerecord-globalize",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activerecord-globalize (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6469"
+    },
+    {
+      "name": "activerecord-pluck-in_batches",
+      "versions_affected": [
+        "0.2.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activerecord-pluck-in_batches (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6472"
+    },
+    {
+      "name": "activerecord_db-tools",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activerecord_db-tools (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6479"
+    },
+    {
+      "name": "activerecord_implicit-order",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activerecord_implicit-order (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6482"
+    },
+    {
+      "name": "activerecord_locking-symbolic",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in activerecord_locking-symbolic (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6485"
+    },
+    {
+      "name": "acts-as_explorable",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acts-as_explorable (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6491"
+    },
+    {
+      "name": "acts-as_keywordable",
+      "versions_affected": [
+        "0.0.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acts-as_keywordable (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6494"
+    },
+    {
+      "name": "acts-as_list_with_sti_support",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acts-as_list_with_sti_support (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6497"
+    },
+    {
+      "name": "acts-as_subscribable",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in acts-as_subscribable (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6504"
+    },
+    {
+      "name": "adapter_sqlite3",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in adapter_sqlite3 (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6507"
+    },
+    {
+      "name": "address-validate",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in address-validate (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6510"
+    },
+    {
+      "name": "adequate-serializer",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in adequate-serializer (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6513"
+    },
+    {
+      "name": "adn_cli",
+      "versions_affected": [
+        "0.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in adn_cli (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6520"
+    },
+    {
+      "name": "advisory_db_toolkit",
+      "versions_affected": [
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in advisory_db_toolkit (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46924"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46924"
+    },
+    {
+      "name": "ae-validates-timeliness",
+      "versions_affected": [
+        "4.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ae-validates-timeliness (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6525"
+    },
+    {
+      "name": "airbrake-notifying_threads",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in airbrake-notifying_threads (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6532"
+    },
+    {
+      "name": "airbrake-user_attributes",
+      "versions_affected": [
+        "0.1.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in airbrake-user_attributes (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6535"
+    },
+    {
+      "name": "airbrake_graylog2",
+      "versions_affected": [
+        "0.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in airbrake_graylog2 (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6538"
+    },
+    {
+      "name": "alchemy-pg-search",
+      "versions_affected": [
+        "1.2.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alchemy-pg-search (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6545"
+    },
+    {
+      "name": "alephant_publisher-queue",
+      "versions_affected": [
+        "2.6.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alephant_publisher-queue (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6548"
+    },
+    {
+      "name": "alerty-plugin-datadog-event",
+      "versions_affected": [
+        "0.1.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alerty-plugin-datadog-event (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6551"
+    },
+    {
+      "name": "alerty_plugin-mail",
+      "versions_affected": [
+        "0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alerty_plugin-mail (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6554"
+    },
+    {
+      "name": "ali-dayu",
+      "versions_affected": [
+        "0.1.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ali-dayu (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6558"
+    },
+    {
+      "name": "alias-helper",
+      "versions_affected": [
+        "0.1.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alias-helper (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6561"
+    },
+    {
+      "name": "alias-to_method",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in alias-to_method (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6564"
+    },
+    {
+      "name": "align_rest_api",
+      "versions_affected": [
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-06-01",
+      "description": "Malicious code in align_rest_api (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-5149"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-5149"
+    },
+    {
+      "name": "apigee-cli",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in apigee-cli (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6625"
+    },
+    {
+      "name": "apple-class_client",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in apple-class_client (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6638"
+    },
+    {
+      "name": "applied-css",
+      "versions_affected": [
+        "0.0.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in applied-css (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6651"
+    },
+    {
+      "name": "ar-json_serialize",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ar-json_serialize (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6663"
+    },
+    {
+      "name": "ar_find-in-batches-with-order",
+      "versions_affected": [
+        "0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ar_find-in-batches-with-order (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6666"
+    },
+    {
+      "name": "arel-search",
+      "versions_affected": [
+        "0.0.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in arel-search (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6679"
+    },
+    {
+      "name": "asciidoctor_pdf-linewrap-ja",
+      "versions_affected": [
+        "0.6.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in asciidoctor_pdf-linewrap-ja (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6692"
+    },
+    {
+      "name": "assets-live_compile",
+      "versions_affected": [
+        "0.2.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in assets-live_compile (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6705"
+    },
+    {
+      "name": "assets_publisher-for-hanami",
+      "versions_affected": [
+        "2.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in assets_publisher-for-hanami (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6708"
+    },
+    {
+      "name": "attr-searchable",
+      "versions_affected": [
+        "0.0.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in attr-searchable (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6717"
+    },
+    {
+      "name": "audio-mixer-sox",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in audio-mixer-sox (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6720"
+    },
+    {
+      "name": "auto-localize",
+      "versions_affected": [
+        "0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in auto-localize (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6728"
+    },
+    {
+      "name": "auto_deploy-test",
+      "versions_affected": [
+        "0.1.19"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in auto_deploy-test (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6731"
+    },
+    {
+      "name": "aws_logs",
+      "versions_affected": [
+        "0.3.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in aws_logs (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6741"
+    },
+    {
+      "name": "backbone_subroute-rails",
+      "versions_affected": [
+        "0.4.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in backbone_subroute-rails (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6744"
+    },
+    {
+      "name": "bankgiro-inbetalningar",
+      "versions_affected": [
+        "1.2.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in bankgiro-inbetalningar (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6746"
+    },
+    {
+      "name": "batch-insert",
+      "versions_affected": [
+        "1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in batch-insert (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6756"
+    },
+    {
+      "name": "batch_rails",
+      "versions_affected": [
+        "1.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in batch_rails (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6759"
+    },
+    {
+      "name": "beer-bash",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in beer-bash (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6769"
+    },
+    {
+      "name": "belong_plugin-rds-pgsql-log",
+      "versions_affected": [
+        "0.3.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in belong_plugin-rds-pgsql-log (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6772"
+    },
+    {
+      "name": "bitmovin_api",
+      "versions_affected": [
+        "0.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in bitmovin_api (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6782"
+    },
+    {
+      "name": "blacklight-advanced_search",
+      "versions_affected": [
+        "7.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in blacklight-advanced_search (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6783"
+    },
+    {
+      "name": "blinkman-twitter-search",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in blinkman-twitter-search (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6786"
+    },
+    {
+      "name": "branch-raker",
+      "versions_affected": [
+        "0.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in branch-raker (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6793"
+    },
+    {
+      "name": "bunto-test_plugin",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in bunto-test_plugin (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6796"
+    },
+    {
+      "name": "bvr-api",
+      "versions_affected": [
+        "0.3.12"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-04-24",
+      "description": "Malicious code in bvr-api (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-3295"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-3295"
+    },
+    {
+      "name": "capistrano-scm-git-with_submodule_and_resolv_symlinks",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in capistrano-scm-git-with_submodule_and_resolv_symlinks (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6805"
+    },
+    {
+      "name": "capistrano_airbrake",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in capistrano_airbrake (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6808"
+    },
+    {
+      "name": "capistrano_logs",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in capistrano_logs (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6811"
+    },
+    {
+      "name": "capistrano_telegram",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in capistrano_telegram (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6818"
+    },
+    {
+      "name": "cat_dog",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in cat_dog (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6821"
+    },
+    {
+      "name": "chalk-aws",
+      "versions_affected": [
+        "0.7.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-23",
+      "description": "Malicious code in chalk-aws (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-192895"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-192895"
+    },
+    {
+      "name": "chalk-henson",
+      "versions_affected": [
+        "0.3.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-23",
+      "description": "Malicious code in chalk-henson (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-192898"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-192898"
+    },
+    {
+      "name": "chatterbox-client",
+      "versions_affected": [
+        "2.4.1.48.ge07b52b"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in chatterbox-client (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46898"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46898"
+    },
+    {
+      "name": "chef_handler-datadog-demo",
+      "versions_affected": [
+        "0.2.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in chef_handler-datadog-demo (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6827"
+    },
+    {
+      "name": "cinch_weatherman",
+      "versions_affected": [
+        "1.0.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in cinch_weatherman (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6830"
+    },
+    {
+      "name": "codestats_metrics-reporter",
+      "versions_affected": [
+        "0.1.13"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in codestats_metrics-reporter (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6836"
+    },
+    {
+      "name": "commandsy_plugin",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in commandsy_plugin (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6839"
+    },
+    {
+      "name": "console_auth",
+      "versions_affected": [
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in console_auth (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46899"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46899"
+    },
+    {
+      "name": "curly-lib",
+      "versions_affected": [
+        "0.0.0",
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in curly-lib (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-6846"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6846"
+    },
+    {
+      "name": "cwlogs_s3",
+      "versions_affected": [
+        "0.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in cwlogs_s3 (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6849"
+    },
+    {
+      "name": "danger-ios-logs",
+      "versions_affected": [
+        "0.1.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in danger-ios-logs (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6852"
+    },
+    {
+      "name": "dark-sky_weather",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in dark-sky_weather (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6855"
+    },
+    {
+      "name": "datadog_notifications",
+      "versions_affected": [
+        "0.6.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in datadog_notifications (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6859"
+    },
+    {
+      "name": "dependency-graph-platform-proto",
+      "versions_affected": [
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in dependency-graph-platform-proto (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46901"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46901"
+    },
+    {
+      "name": "deriving-license",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in deriving-license (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6861"
+    },
+    {
+      "name": "diet_earthsmoke",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in diet_earthsmoke (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46903"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46903"
+    },
+    {
+      "name": "dog-biscuits",
+      "versions_affected": [
+        "0.5.9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in dog-biscuits (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6864"
+    },
+    {
+      "name": "doge-linguist",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in doge-linguist (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6867"
+    },
+    {
+      "name": "dot-rake_tasks_in_rails",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in dot-rake_tasks_in_rails (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6870"
+    },
+    {
+      "name": "dradis_ntospider",
+      "versions_affected": [
+        "3.15.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in dradis_ntospider (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6873"
+    },
+    {
+      "name": "driftwood-client",
+      "versions_affected": [
+        "0.0.1.r1319997b9"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in driftwood-client (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46905"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46905"
+    },
+    {
+      "name": "ebay-client",
+      "versions_affected": [
+        "0.3.1.1045"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ebay-client (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6879"
+    },
+    {
+      "name": "ebay_ysr",
+      "versions_affected": [
+        "0.1.8"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ebay_ysr (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6882"
+    },
+    {
+      "name": "egress",
+      "versions_affected": [
+        "1.68.g52b0cd0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in egress (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46906"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46906"
+    },
+    {
+      "name": "em_statsd-ruby",
+      "versions_affected": [
+        "1.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in em_statsd-ruby (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6887"
+    },
+    {
+      "name": "enpit-weather",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in enpit-weather (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6891"
+    },
+    {
+      "name": "evil_gem",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-06",
+      "description": "Malicious code in evil_gem (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2208"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2208"
+    },
+    {
+      "name": "fig-rake",
+      "versions_affected": [
+        "0.9.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in fig-rake (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6894"
+    },
+    {
+      "name": "first-gem_rakesh",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in first-gem_rakesh (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6895"
+    },
+    {
+      "name": "fluent-plugin-haproxy-stats",
+      "versions_affected": [
+        "0.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in fluent-plugin-haproxy-stats (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6898"
+    },
+    {
+      "name": "fluent_plugin-cloudwatch-logs",
+      "versions_affected": [
+        "0.8.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in fluent_plugin-cloudwatch-logs (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6901"
+    },
+    {
+      "name": "fluent_plugin-dogstatsd",
+      "versions_affected": [
+        "0.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in fluent_plugin-dogstatsd (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6904"
+    },
+    {
+      "name": "fluent_plugin-stats",
+      "versions_affected": [
+        "0.4.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in fluent_plugin-stats (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6907"
+    },
+    {
+      "name": "font_awesome-sass",
+      "versions_affected": [
+        "5.12.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in font_awesome-sass (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6914"
+    },
+    {
+      "name": "font_awesome-sassc",
+      "versions_affected": [
+        "4.7.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in font_awesome-sassc (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6917"
+    },
+    {
+      "name": "font_roboto-rails",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in font_roboto-rails (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6920"
+    },
+    {
+      "name": "galvinhsiu-active-cart",
+      "versions_affected": [
+        "0.0.20"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in galvinhsiu-active-cart (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6926"
+    },
+    {
+      "name": "gemnasium-gitlab-service",
+      "versions_affected": [
+        "0.3.0",
+        "0.2.1",
+        "0.6.0",
+        "7.0.3",
+        "0.2.5",
+        "0.1.0",
+        "0.2.2",
+        "0.1.2",
+        "0.2.6",
+        "7.0.0",
+        "0.2.4",
+        "0.2.3",
+        "0.1.1",
+        "7.0.1",
+        "6.0.7",
+        "8.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in gemnasium-gitlab-service (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-6929"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6929"
+    },
+    {
+      "name": "gimme-vins",
+      "versions_affected": [
+        "0.0.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in gimme-vins (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6932"
+    },
+    {
+      "name": "github_org-stats",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in github_org-stats (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6934"
+    },
+    {
+      "name": "gitlab-orchestrator",
+      "versions_affected": [
+        "99.99.9",
+        "99.99.10"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-16",
+      "description": "Malicious code in gitlab-orchestrator (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-2814"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2814"
+    },
+    {
+      "name": "google-apis-androidpublisher_v2",
+      "versions_affected": [
+        "0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-07-19",
+      "description": "Malicious code in google-apis-androidpublisher_v2 (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-1426"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1426"
+    },
+    {
+      "name": "hockeystick",
+      "versions_affected": [
+        "5.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-23",
+      "description": "Malicious code in hockeystick (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-192907"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-192907"
+    },
+    {
+      "name": "http-statsd",
+      "versions_affected": [
+        "0.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in http-statsd (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6945"
+    },
+    {
+      "name": "icaret",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-07-31",
+      "description": "Malicious code in icaret (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-6386"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-6386"
+    },
+    {
+      "name": "jenkins-statsd",
+      "versions_affected": [
+        "0.3.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in jenkins-statsd (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6950"
+    },
+    {
+      "name": "kaleido",
+      "versions_affected": [
+        "5000.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-18",
+      "description": "Malicious code in kaleido (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-1917"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-1917"
+    },
+    {
+      "name": "knot-activesupport-logger",
+      "versions_affected": [
+        "7.1.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-05-13",
+      "description": "Malicious code in knot-activesupport-logger (RubyGems)",
+      "references": [
+        "https://socket.dev/blog/malicious-ruby-gems-and-go-modules-steal-secrets-poison-ci"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-3630"
+    },
+    {
+      "name": "komojuu",
+      "versions_affected": [
+        "99.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-02-21",
+      "description": "Malicious code in komojuu (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-1508"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1508"
+    },
+    {
+      "name": "language-mixer",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in language-mixer (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6956"
+    },
+    {
+      "name": "lita_onewheel-beer-abvpub",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in lita_onewheel-beer-abvpub (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6959"
+    },
+    {
+      "name": "lita_onewheel-beer-upperlip",
+      "versions_affected": [
+        "0.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in lita_onewheel-beer-upperlip (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6969"
+    },
+    {
+      "name": "lita_telegram",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in lita_telegram (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6972"
+    },
+    {
+      "name": "logstash_2-output-rollbar",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in logstash_2-output-rollbar (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6982"
+    },
+    {
+      "name": "logstash_codec-cef",
+      "versions_affected": [
+        "2.1.3"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in logstash_codec-cef (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6985"
+    },
+    {
+      "name": "melio-platform-api-client",
+      "versions_affected": [
+        "5.0.0",
+        "3.0.1",
+        "3.1.1",
+        "3.1.2",
+        "3.1.4",
+        "4.4.4",
+        "4.4.5",
+        "4.4.6",
+        "5.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-28",
+      "description": "Malicious code in melio-platform-api-client (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-7834"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-7834"
+    },
+    {
+      "name": "modified_bayes",
+      "versions_affected": [
+        "10.1.0",
+        "13.1.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-05-04",
+      "description": "Malicious code in modified_bayes (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2023-1429"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-1429"
+    },
+    {
+      "name": "monolith-twirp-loops-core",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-27",
+      "description": "Malicious code in monolith-twirp-loops-core (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-2259"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2259"
+    },
+    {
+      "name": "monolith-twirp-merge-queue-go-mergequeueservice",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in monolith-twirp-merge-queue-go-mergequeueservice (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46932"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46932"
+    },
+    {
+      "name": "monolith-twirp-partitioning-pull_requests",
+      "versions_affected": [
+        "1.0.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-03-27",
+      "description": "Malicious code in monolith-twirp-partitioning-pull_requests (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-2267"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2267"
+    },
+    {
+      "name": "monolith-twirp-pullsd-authorization",
+      "versions_affected": [
+        "0.0.1",
+        "1.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-04-16",
+      "description": "Malicious code in monolith-twirp-pullsd-authorization (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2026-2815"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-2815"
+    },
+    {
+      "name": "monolith-twirp-support-helphub",
+      "versions_affected": [
+        "1.48.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in monolith-twirp-support-helphub (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46937"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46937"
+    },
+    {
+      "name": "monolith-twirp-webhooksubscriptions-subscriptions",
+      "versions_affected": [
+        "1.5.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in monolith-twirp-webhooksubscriptions-subscriptions (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46938"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46938"
+    },
+    {
+      "name": "nhtsa-vin",
+      "versions_affected": [
+        "0.0.8"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in nhtsa-vin (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-6996"
+    },
+    {
+      "name": "poc-by-shahwar",
+      "versions_affected": [
+        "0.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-03-06",
+      "description": "Malicious code in poc-by-shahwar (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-2209"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-2209"
+    },
+    {
+      "name": "ptrsec_rce_test",
+      "versions_affected": [
+        "0.0.5",
+        "0.0.1",
+        "0.0.3",
+        "0.0.2",
+        "0.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in ptrsec_rce_test (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-7005"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-7005"
+    },
+    {
+      "name": "resque-stuck_queue",
+      "versions_affected": [
+        "0.5.2"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in resque-stuck_queue (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-7012"
+    },
+    {
+      "name": "secret-scanning-proto",
+      "versions_affected": [
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-01",
+      "description": "Malicious code in secret-scanning-proto (RubyGems)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-46942"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-46942"
+    },
+    {
+      "name": "spider_src",
+      "versions_affected": [
+        "0.1.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in spider_src (RubyGems)",
+      "references": [
+        "https://blog.reversinglabs.com/blog/mining-for-malicious-ruby-gems"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-7030"
     }
   ],
   "sources": {
     "ossf-malicious-packages": {
       "url": "https://github.com/ossf/malicious-packages",
-      "commit": "aa66cb2d5ed2b95be1e33d08777b34264b5e0354",
-      "ingested_at": "2026-05-14T16:01:45Z",
-      "entries_from_source": 300
+      "commit": "8c4634bdf9c5475e7c265f8027f2c502a008a52b",
+      "ingested_at": "2026-06-22T03:59:41Z",
+      "entries_from_source": 447
     }
   }
 }
