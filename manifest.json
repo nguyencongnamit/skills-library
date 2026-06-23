@@ -80,8 +80,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "44f352cc9f19a002c1508ef196eefc364ac00ba15877936204e369b2f4d45e91",
-      "size": 110658,
+      "sha256": "1fdf5f4bf301f62ada1ca0f85ca8f1b34e2f52c922f16e1b9e1032dd5a867acc",
+      "size": 110654,
       "action": "unchanged"
     },
     {
@@ -7874,8 +7874,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/npm.json",
-      "sha256": "20d81277ee54521b804d5069ed5e42a0575e1bb9219e63387a289c4a8e21fdd9",
-      "size": 394235,
+      "sha256": "8942482b7b1ce0419eea843f8852ab990d67b18bf13ab4b2647a745e1c79cb1c",
+      "size": 961101,
       "action": "unchanged"
     },
     {
@@ -7886,14 +7886,14 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/pypi.json",
-      "sha256": "eb7ebee2c324d2346ed03f6a28126fa1d4dfbe7efdd9a0349f3715d247541cb8",
-      "size": 189890,
+      "sha256": "52d3528871c4843e4c84d2af65239cded84c179a383ec704d102ebb9bdb0a2a8",
+      "size": 362980,
       "action": "unchanged"
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/rubygems.json",
-      "sha256": "1ef814a3451f6ca0cfbb8bf5041d23f00d52c6e78f310f0d9fc750d255b81a9f",
-      "size": 162897,
+      "sha256": "27bb86d5e4237c2de151a18cd30755f388c0336d1b2497767d476e6a1a77ff20",
+      "size": 239700,
       "action": "unchanged"
     },
     {
@@ -7934,8 +7934,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/typosquat-db/known_typosquats.json",
-      "sha256": "0302d49ced100132b49a0c010d558505daf6a6aa89a15f65b1b416637ed798c4",
-      "size": 109272,
+      "sha256": "dd128ef9a159276ed9d775d9e8bd903736dc86588f87918106bff80e4bba2d3d",
+      "size": 121767,
       "action": "unchanged"
     }
   ]

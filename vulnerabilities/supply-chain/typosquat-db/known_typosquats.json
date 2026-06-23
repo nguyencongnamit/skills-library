@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-06-22T03:59:43Z",
+  "last_updated": "2026-06-23T00:00:00Z",
   "description": "Curated list of well-known typosquats across npm, PyPI, crates.io, and Go. Each entry maps a fake package (typosquat) to the legitimate target it imitates, with its Levenshtein distance and current status.",
   "references": [
     "https://blog.phylum.io/typosquatting-malware-found-in-rust-crate",
@@ -3862,6 +3862,36 @@
       ],
       "source": "ossf-malicious-packages-derived",
       "osv_id": "MAL-2024-6143"
+    },
+    {
+      "target": "next",
+      "typosquat": "arnext",
+      "ecosystem": "npm",
+      "levenshtein_distance": 2,
+      "status": "removed",
+      "discovered": "2026-05-26",
+      "references": [
+        "https://www.npmjs.com/package/arnext/v/0.1.5",
+        "http://www.ox.security/blog/ironworm-supply-chain-malware-hits-npm/",
+        "https://research.jfrog.com/post/iron-worm-shai-hulud-rustier-cousin/"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2026-4482"
+    },
+    {
+      "target": "anthropic",
+      "typosquat": "anthropy",
+      "ecosystem": "pypi",
+      "levenshtein_distance": 2,
+      "status": "removed",
+      "discovered": "2026-06-05",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/anthropy",
+        "https://pypi.org/project/anthropy/0.0.4/",
+        "https://github.com/ossf/malicious-packages"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2026-5273"
     }
   ],
   "sources": {
