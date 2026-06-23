@@ -91,7 +91,6 @@ extra_css:
   - stylesheets/custom.css
 
 extra_javascript:
-  - assets/js/ai-actions.js
   - assets/js/home-stats.js
 
 nav:

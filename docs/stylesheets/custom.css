@@ -367,17 +367,6 @@
 .bench-num { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 .bench-caveat { font-size: 0.78rem; color: var(--ss-text-muted); margin: 0.25rem 0 1rem; }
 
-/* ─── AI page actions (Copy page / Open in Claude) ─── */
-.ai-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin: -0.5rem 0 1.25rem; flex-wrap: wrap; }
-.ai-action {
-  display: inline-flex; align-items: center; gap: 0.3rem; cursor: pointer;
-  font-size: 0.72rem; font-weight: 600; text-decoration: none;
-  padding: 0.3rem 0.7rem; border-radius: 6px;
-  color: var(--ss-text-muted); background: var(--ss-surface);
-  border: 1px solid var(--ss-border); transition: border-color 0.15s, color 0.15s;
-}
-.ai-action:hover { border-color: var(--md-accent-fg-color); color: var(--md-primary-fg-color); }
-
 /* ─── Playground ─── */
 .pg-lede { font-size: 0.95rem; color: var(--ss-text-muted); max-width: 760px; }
 .pg-status {
