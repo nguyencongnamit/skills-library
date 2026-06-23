@@ -87,7 +87,7 @@ document$.subscribe(function () {
     var parts = ["Curated database refreshed " + nice];
     var growth = growthOverDays(snaps, 30);
     if (growth > 0) parts.push("+" + growth.toLocaleString("en-US") + " entries in the last 30 days");
-    if (f.ossf_commit) parts.push("OSSF malicious-packages @ " + f.ossf_commit);
+    if (f.ossf_commit) parts.push("OSSF malicious-packages @ " + f.ossf_commit);
     el.textContent = parts.join(" · ");
   }
 });

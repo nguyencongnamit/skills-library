@@ -138,11 +138,14 @@
 
 /* ─── Hero stats ─── */
 .ss-stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-items: center;
+  gap: 1.75rem 2.5rem;
   margin-top: 1.75rem;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .ss-stat {
   text-align: center;
@@ -410,6 +413,6 @@
 @media (max-width: 768px) {
   .ss-hero { padding: 2rem 1rem; }
   .ss-hero h1 { font-size: 1.7rem; }
-  .ss-stats { gap: 1.5rem; }
+  .ss-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; max-width: 420px; }
   .ss-stat-value { font-size: 1.4rem; }
 }
