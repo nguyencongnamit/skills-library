@@ -13,6 +13,24 @@
       "action": "unchanged"
     },
     {
+      "path": "compliance/iso_27001_mapping.yaml",
+      "sha256": "5c03bd29822b39de8b9488cf5b2f53f5c821b9fe5dba6527865cfb95967fd1ee",
+      "size": 5527,
+      "action": "added"
+    },
+    {
+      "path": "compliance/iso_27017_mapping.yaml",
+      "sha256": "77214c3d7ee219eb3c5298ab64d977fd77a185b7784d9bd85709295d72db368d",
+      "size": 2389,
+      "action": "added"
+    },
+    {
+      "path": "compliance/iso_42001_mapping.yaml",
+      "sha256": "b9d1cc17ce653a2b6854a028300b090494296f25e818218a3e26ffc59c51f044",
+      "size": 2812,
+      "action": "added"
+    },
+    {
       "path": "compliance/pci_dss_mapping.yaml",
       "sha256": "0ec365a11550963af0ba7817802ebf465da42f5e12d1eee8bfc0e30ea41d5ba5",
       "size": 3739,
