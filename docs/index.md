@@ -47,7 +47,7 @@ npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity
   <div class="ss-stat"><span class="ss-stat-value" data-sv-stat="integrations">8</span><span class="ss-stat-label">AI Client Integrations</span></div>
 </div>
 
-<p data-sv-freshness style="text-align:center;opacity:.66;font-size:.82em;margin:.5rem 0 0">Curated database refreshed 2026-06-23 · +1,601 entries in the last 30 days · OSSF malicious-packages @ 8c093db5</p>
+<p data-sv-freshness style="text-align:center;opacity:.66;font-size:.82em;margin:.5rem auto 0">Curated database refreshed 2026-06-23 · +1,601 entries in the last 30 days · OSSF malicious-packages @ 8c093db5</p>
 
 </div>
 
