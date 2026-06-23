@@ -1,8 +1,8 @@
 # Benchmarks & methodology
 
-How SecureVibe measures itself — what is reproducible and published, what is deliberately withheld, and why.
+How SecureVibe measures itself — what is reproducible, what is measured against a live model, and the honesty rules that govern every number on this page.
 
-SecureVibe runs two very different kinds of measurement, and it is careful never to mix them. One kind is deterministic, committed, and CI-gated — you can re-run it and get the same numbers byte-for-byte. The other measures how a live language model behaves with and without SecureVibe's skills in context; its methodology is built and shipped, but its headline number is **intentionally not published yet** because the default scorer has a known artifact. This page is honest about both.
+SecureVibe runs two very different kinds of measurement, and it is careful never to mix them. One kind is deterministic, committed, and CI-gated — you can re-run it and get the same numbers byte-for-byte. The other measures how a live language model behaves with and without SecureVibe's skills in context. For a long time we published **no** prevention-lift number because the default scorer had a known artifact; with the **LLM-judge** scorer that artifact is resolved, and this page now reports the first trustworthy figure — small, single-model, and stated with its caveats. This page is honest about both.
 
 ## Two kinds of measurement
 
@@ -10,10 +10,10 @@ SecureVibe runs two very different kinds of measurement, and it is careful never
 |---|---|---|
 | What it measures | Do the 4 scanners flag the right things on a known corpus? | Does putting skills in a model's context reduce its insecure output? |
 | Reproducible? | Yes — same input, same output, every run | No — depends on a stochastic model and the scorer |
-| Published numbers? | **Yes** (and CI-gated against drift) | **No** — methodology only, see below |
+| Published numbers? | **Yes** (and CI-gated against drift) | **Yes, with caveats** — judged result below: **+7.4 pts** skill-in-context, **+10.0 pts** with the scanner tool (single model, single run) |
 | Lives in | `evals/benchmarks/scanner-eval.py`, `secret-detection-vs-gitleaks.py` | `evals/benchmarks/llm-eval.py` |
 
-The rule of thumb: **only the deterministic numbers are quoted as results.** The prevention-lift work is described as a methodology and an honest open problem, never as a percentage.
+The rule of thumb: **the deterministic numbers are quoted as results; the prevention-lift number is quoted only with its full methodology and caveats** — never as a big marketing figure.
 
 ## Deterministic scanner benchmarks (reproducible)
 
@@ -108,16 +108,27 @@ The separate **False-Positive column** is the safeguard against a cheap win: a p
 
 The harness is provider-agnostic — local Ollama (keyless), `claude-cli` (runs on your Claude subscription, no API billing), API providers (`anthropic` / `openai`), and a deterministic `MockProvider` for CI — and ships a `--leaderboard` to rank models by full-mcp lift. Only real, complete runs are ranked; mock and partial runs are never faked into the board. The [Test with a model](../guides/testing-with-models.md) guide walks through running it yourself.
 
-## Why we don't publish a prevention-lift number (yet)
+## The measured prevention-lift: +7.4 points (judged)
 
-!!! warning "No prevention-lift percentage is published — by choice"
-    The default scorer is a **regex classifier**, and it has a known artifact that makes its aggregate untrustworthy. When skills succeed — when a model writes *secure* code **and explains the risk it avoided** — the explanation contains security vocabulary. A line like *"strip CR/LF to prevent log injection (CWE-117)"* is a sign the model did the right thing, but the regex matches the warning text and scores the secure answer as a vulnerability.
+For a long time this page published **no** prevention-lift number, and for a good reason. The default scorer was a **regex classifier** with a known artifact: when skills succeed — when a model writes *secure* code **and explains the risk it avoided** — the explanation contains security vocabulary. A line like *"strip CR/LF to prevent log injection (CWE-117)"* means the model did the right thing, but the regex matched the warning text and scored the secure answer as a vulnerability. The effect was perverse: more skills → more security commentary → more false flags, which could make a genuinely-improved model look *worse*. A four-model run confirmed it. Publishing a number from that scorer would have been misleading.
 
-    The effect is perverse: **more skills produce more security commentary, which produces more false flags**, which can make a genuinely-improved model look *worse* in the aggregate. A four-model run (Opus / Sonnet / Haiku / llama3.1) confirmed this directly. So the regex-scored aggregate is an **artifact, not a signal** — and publishing a number derived from it would be misleading.
+The fix was to replace the brittle regex with an **LLM judge** (`--judge`), which evaluates the *meaning* of the output instead of pattern-matching its words, and is not fooled by a model that correctly names the risk it avoided. With the judged re-run done, here is the first trustworthy result.
 
-The fix is to replace the brittle regex with an **LLM judge** (`--judge`), which evaluates the *meaning* of the output instead of pattern-matching its words, and is not fooled by a model that correctly names the risk it avoided. Until that judged re-run is done, **no headline prevention-lift figure ships anywhere** — in these docs, in the README, or in marketing.
+!!! success "Judged prevention-lift — Claude Haiku 4.5, LLM-judge scored"
+    | Tier | Insecure | Secure | False-positive | Insecure rate |
+    |---|---:|---:|---:|---:|
+    | no-instructions (bare model) | 14 | 66 | 30 | **17.5%** |
+    | minimal-skill (+ skill in context) | 8 | 71 | 31 | **10.1%** |
+    | full-mcp (scanner as a callable tool) | 6 | 74 | 30 | **7.5%** |
 
-We treat this withholding as a feature, not a gap. The methodology is real and the harness is in CI; the discipline is refusing to quote a number we know the current scorer distorts. If you see a prevention-lift percentage attributed to SecureVibe, it did not come from us.
+    **Prevention-lift = +7.4 percentage points** with the skill in context (17.5% → 10.1%), rising to **+10.0 points** when the scanner is also exposed as a callable tool (17.5% → 7.5% insecure) — about a **57% relative reduction** in insecure generations at the full tier.
+
+    The effect concentrates where it should: **code-generation fell from 14 to 7 insecure outputs (halved)** with the skill alone; one category (dependency-choice) regressed slightly (0 → 1); all others stayed at zero. Crucially, the **false-positive count stayed flat across every tier (30 → 31 → 30)** — the lift is *not* bought by a paranoid model crying wolf, which is exactly the failure mode the ground-truth scorer and the separate False-Positive column exist to catch. Each added layer (skill, then tool) lowers insecure output *without* raising false alarms.
+
+!!! warning "Read this number honestly — it is modest, and single-run"
+    This is **one model (Haiku 4.5), one run, N ≈ 80** scored non-clean fixtures, with one category regressing. It **directionally confirms** the modest "~+3 to +10 point" prevention thesis — it is **not** a big marketing number, and we will not inflate it. A second model and repeat runs will populate the [`--leaderboard`](../guides/testing-with-models.md). If you ever see a large prevention-lift percentage attributed to SecureVibe, it did **not** come from us.
+
+The judged run artifacts back this table at `evals/baselines/leaderboard/claude-haiku-max-judged/` (`prevention-lift.md` plus the per-tier JSONs). Regenerate the aggregate with `python3 evals/benchmarks/llm-eval.py --report --out-dir evals/baselines/leaderboard/claude-haiku-max-judged`.
 
 ## Run it yourself
 
