@@ -29106,14 +29106,3076 @@
       "attack_type": "embedded_malicious_code",
       "source": "ossf-malicious-packages",
       "osv_id": "MAL-2025-41030"
+    },
+    {
+      "name": "@malware-test-usage-civvy-aurum-narre/test-mlw3-usage-civvy-aurum-narre",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @malware-test-usage-civvy-aurum-narre/test-mlw3-usage-civvy-aurum-narre (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-9043"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-9043"
+    },
+    {
+      "name": "@santandergroup-uk/edgehome-components",
+      "versions_affected": [
+        "0.0.1-security",
+        "0.0.1",
+        "99.99.9",
+        "99.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2026-01-27",
+      "description": "Malicious code in @santandergroup-uk/edgehome-components (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-7w89-3478-9838"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2026-527",
+      "aliases": [
+        "GHSA-7w89-3478-9838"
+      ]
+    },
+    {
+      "name": "@teasource/rerum-consectetur-quod",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-05",
+      "description": "Malicious code in @teasource/rerum-consectetur-quod (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-42957"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-42957"
+    },
+    {
+      "name": "@walmart-dataventures/integrated-components",
+      "versions_affected": [
+        "1.0.1",
+        "2.0.1",
+        "1.3.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-05-08",
+      "description": "Malicious code in @walmart-dataventures/integrated-components (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-mj99-2cp7-mvgc"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-3701",
+      "aliases": [
+        "GHSA-mj99-2cp7-mvgc"
+      ]
+    },
+    {
+      "name": "@zalastax/nolb-_bes",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-_bes (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-9819"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-9819"
+    },
+    {
+      "name": "@zalastax/nolb-_snw",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-_snw (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-10437"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-10437"
+    },
+    {
+      "name": "@zalastax/nolb-autt",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-autt (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-10728"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-10728"
+    },
+    {
+      "name": "@zalastax/nolb-exp2",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-exp2 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-11370"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-11370"
+    },
+    {
+      "name": "@zalastax/nolb-googlej",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-googlej (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-11682"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-11682"
+    },
+    {
+      "name": "@zalastax/nolb-micre",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-micre (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-12313"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-12313"
+    },
+    {
+      "name": "@zalastax/nolb-node-red-contrib-d",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-node-red-contrib-d (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-12670"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-12670"
+    },
+    {
+      "name": "@zalastax/nolb-pary",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-05",
+      "description": "Malicious code in @zalastax/nolb-pary (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-43344"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-43344"
+    },
+    {
+      "name": "@zalastax/nolb-react-p5",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in @zalastax/nolb-react-p5 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-13708"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-13708"
+    },
+    {
+      "name": "@zitterorg/magni-fugit",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-07-04",
+      "description": "Malicious code in @zitterorg/magni-fugit (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-pfh5-w929-836f"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-7265",
+      "aliases": [
+        "GHSA-pfh5-w929-836f"
+      ]
+    },
+    {
+      "name": "abina-amiabu-agu",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in abina-amiabu-agu (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-151337"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-151337"
+    },
+    {
+      "name": "abtengggg-putri-tea",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in abtengggg-putri-tea (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-172706"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-172706"
+    },
+    {
+      "name": "ade-buburayam35-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-10",
+      "description": "Malicious code in ade-buburayam35-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-55055"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-55055"
+    },
+    {
+      "name": "ade-oncom17-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in ade-oncom17-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-76726"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-76726"
+    },
+    {
+      "name": "afdalhameed",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in afdalhameed (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-170678"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-170678"
+    },
+    {
+      "name": "agus-gandul79-ruro",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in agus-gandul79-ruro (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-99289"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-99289"
+    },
+    {
+      "name": "airmason-employee",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-05-08",
+      "description": "Malicious code in airmason-employee (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-3700"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-3700"
+    },
+    {
+      "name": "alright_goose_beige-96",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in alright_goose_beige-96 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-111654"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-111654"
+    },
+    {
+      "name": "amazing_boar_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in amazing_boar_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-61854"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-61854"
+    },
+    {
+      "name": "andi-oncom64-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-05",
+      "description": "Malicious code in andi-oncom64-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-43445"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-43445"
+    },
+    {
+      "name": "apasih-ledang-maanassa",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in apasih-ledang-maanassa (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-172079"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-172079"
+    },
+    {
+      "name": "apparent_silkworm_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in apparent_silkworm_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-83243"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-83243"
+    },
+    {
+      "name": "arif-poke82",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in arif-poke82 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-152795"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-152795"
+    },
+    {
+      "name": "avminah-fagiaas-fiomka",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in avminah-fagiaas-fiomka (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-153077"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-153077"
+    },
+    {
+      "name": "cattle_plum-52",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in cattle_plum-52 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-97642"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-97642"
+    },
+    {
+      "name": "creative_platypus_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in creative_platypus_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-125634"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-125634"
+    },
+    {
+      "name": "determined_quelea_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in determined_quelea_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-132689"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-132689"
+    },
+    {
+      "name": "dian-semur39-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in dian-semur39-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-77628"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-77628"
+    },
+    {
+      "name": "disturbed_puma_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in disturbed_puma_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-94072"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-94072"
+    },
+    {
+      "name": "dorado-gravitationalwave-neutronstar-galaxy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in dorado-gravitationalwave-neutronstar-galaxy (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-18647"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-18647"
+    },
+    {
+      "name": "dtdl-parser",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-06-20",
+      "description": "Malicious code in dtdl-parser (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-hpxv-h674-w4jg"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-2599",
+      "aliases": [
+        "GHSA-hpxv-h674-w4jg"
+      ]
+    },
+    {
+      "name": "efctqraxspudovmk",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in efctqraxspudovmk (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-19239"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-19239"
+    },
+    {
+      "name": "eka-kripik85-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-10",
+      "description": "Malicious code in eka-kripik85-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-55978"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-55978"
+    },
+    {
+      "name": "eko-ubi82-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in eko-ubi82-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-126131"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-126131"
+    },
+    {
+      "name": "elf-stats-sleighing-bow-514",
+      "versions_affected": [
+        "1.0.5",
+        "1.0.1",
+        "1.0.4",
+        "1.0.2",
+        "1.0.0",
+        "1.0.3",
+        "1.0.6"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-12-03",
+      "description": "Malicious code in elf-stats-sleighing-bow-514 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-191976"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191976"
+    },
+    {
+      "name": "environmental_grouse_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in environmental_grouse_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-119746"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-119746"
+    },
+    {
+      "name": "equinox-betelgeuse-postcss-loader-playwright",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in equinox-betelgeuse-postcss-loader-playwright (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-19736"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-19736"
+    },
+    {
+      "name": "erwin-kue51-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in erwin-kue51-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-85182"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-85182"
+    },
+    {
+      "name": "ethersjs",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-07-28",
+      "description": "Malicious code in ethersjs (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-2x3f-gcmx-g3m8"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-315",
+      "aliases": [
+        "GHSA-2x3f-gcmx-g3m8"
+      ]
+    },
+    {
+      "name": "everglow-asteroid-aht158-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in everglow-asteroid-aht158-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-19950"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-19950"
+    },
+    {
+      "name": "expressyession",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-08-19",
+      "description": "Malicious code in expressyession (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-7x5m-hg8c-qg98"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-2931",
+      "aliases": [
+        "GHSA-7x5m-hg8c-qg98"
+      ]
+    },
+    {
+      "name": "fadila-poke63",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in fadila-poke63 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-154940"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-154940"
+    },
+    {
+      "name": "fajar-kue27-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fajar-kue27-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-119945"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-119945"
+    },
+    {
+      "name": "fashionable_gull_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fashionable_gull_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-94449"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-94449"
+    },
+    {
+      "name": "fauzi-gado-gado75-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fauzi-gado-gado75-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-72922"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-72922"
+    },
+    {
+      "name": "fern-gorilla-mpy966-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in fern-gorilla-mpy966-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-20372"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-20372"
+    },
+    {
+      "name": "figures-upgrade-hermes-relay",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in figures-upgrade-hermes-relay (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-142484"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-142484"
+    },
+    {
+      "name": "fitri-gorengan57-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fitri-gorengan57-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-126563"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-126563"
+    },
+    {
+      "name": "fitri-rojak62-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fitri-rojak62-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-120099"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-120099"
+    },
+    {
+      "name": "flipcup",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in flipcup (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-20701"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-20701"
+    },
+    {
+      "name": "foolish_porcupine_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in foolish_porcupine_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-94566"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-94566"
+    },
+    {
+      "name": "fortunate_guppy_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in fortunate_guppy_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-85689"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-85689"
+    },
+    {
+      "name": "frau-hoster",
+      "versions_affected": [
+        ">=0.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-05-12",
+      "description": "Malicious code in frau-hoster (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-j4h4-9gx8-wh29"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-4079",
+      "aliases": [
+        "GHSA-j4h4-9gx8-wh29"
+      ]
+    },
+    {
+      "name": "galacticgenius",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in galacticgenius (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-171242"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-171242"
+    },
+    {
+      "name": "gd-gplus",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-06-20",
+      "description": "Malicious code in gd-gplus (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-8r2h-5q9p-79ch"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-3307",
+      "aliases": [
+        "GHSA-8r2h-5q9p-79ch"
+      ]
+    },
+    {
+      "name": "gita-bakso36-miaww",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in gita-bakso36-miaww (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-114239"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-114239"
+    },
+    {
+      "name": "gita-takokak74-miaww",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in gita-takokak74-miaww (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-114342"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-114342"
+    },
+    {
+      "name": "grunt-contrib-jscs",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-06-20",
+      "description": "Malicious code in grunt-contrib-jscs (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-2v7x-m7cj-pfw2"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-3473",
+      "aliases": [
+        "GHSA-2v7x-m7cj-pfw2"
+      ]
+    },
+    {
+      "name": "internal-lib-t1",
+      "versions_affected": [
+        "1.0.0",
+        "1.0.1",
+        "1.0.2",
+        "1.0.3",
+        "1.0.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-05-07",
+      "description": "Malicious code in internal-lib-t1 (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-pwc6-wfmf-5xpg",
+        "https://npmjs.com/package/internal-lib-t1",
+        "https://security.snyk.io/vuln/SNYK-JS-INTERNALLIBT1-10060258"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-3689",
+      "aliases": [
+        "GHSA-pwc6-wfmf-5xpg",
+        "SNYK-JS-INTERNALLIBT1-10060258"
+      ]
+    },
+    {
+      "name": "iwan-gaplek15-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in iwan-gaplek15-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-79069"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-79069"
+    },
+    {
+      "name": "jaja-martabak79-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in jaja-martabak79-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-120990"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-120990"
+    },
+    {
+      "name": "joni-bakso45-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in joni-bakso45-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-127787"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-127787"
+    },
+    {
+      "name": "judicial_constrictor_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in judicial_constrictor_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-79331"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-79331"
+    },
+    {
+      "name": "kapvino-soni-fvi",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in kapvino-soni-fvi (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-175426"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-175426"
+    },
+    {
+      "name": "kiki-mangut20-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in kiki-mangut20-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-121213"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-121213"
+    },
+    {
+      "name": "knoll-enjzc-bj10j-whisper-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in knoll-enjzc-bj10j-whisper-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-24701"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-24701"
+    },
+    {
+      "name": "kresna-ikan51-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in kresna-ikan51-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-134870"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-134870"
+    },
+    {
+      "name": "kupaio-ukutila-jokiloluana",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in kupaio-ukutila-jokiloluana (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-175779"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-175779"
+    },
+    {
+      "name": "kurniawan-oblok75-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in kurniawan-oblok75-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-87625"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-87625"
+    },
+    {
+      "name": "labyrinth-sapphire-byr950-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in labyrinth-sapphire-byr950-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-24877"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-24877"
+    },
+    {
+      "name": "laila-wajit76-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in laila-wajit76-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-121433"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-121433"
+    },
+    {
+      "name": "layla-poke53",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in layla-poke53 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-158039"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-158039"
+    },
+    {
+      "name": "liberal_crane_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in liberal_crane_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-105115"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-105115"
+    },
+    {
+      "name": "lina-soto51-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in lina-soto51-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-64054"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-64054"
+    },
+    {
+      "name": "lint-slidev-fork-nebula",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in lint-slidev-fork-nebula (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-25408"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-25408"
+    },
+    {
+      "name": "load-book-encrypt-deserialize-permission",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in load-book-encrypt-deserialize-permission (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-25468"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-25468"
+    },
+    {
+      "name": "lookingan-nalako64",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in lookingan-nalako64 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-158476"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-158476"
+    },
+    {
+      "name": "lookingan-namalaka23",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in lookingan-namalaka23 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-158833"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-158833"
+    },
+    {
+      "name": "lunar-india-4k0o",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in lunar-india-4k0o (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-25676"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-25676"
+    },
+    {
+      "name": "lutfi-mangut49-remi",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in lutfi-mangut49-remi (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-105412"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-105412"
+    },
+    {
+      "name": "mahesa-kolak100-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in mahesa-kolak100-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-74282"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-74282"
+    },
+    {
+      "name": "mahesa-tiwul70-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-10",
+      "description": "Malicious code in mahesa-tiwul70-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-53312"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-53312"
+    },
+    {
+      "name": "maman-jamblang40-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in maman-jamblang40-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-121718"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-121718"
+    },
+    {
+      "name": "maman-rujak49-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in maman-rujak49-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-88271"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-88271"
+    },
+    {
+      "name": "mangrove-quartz-pxt686-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in mangrove-quartz-pxt686-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-25890"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-25890"
+    },
+    {
+      "name": "mantu-nadas-kagak",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in mantu-nadas-kagak (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-159984"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-159984"
+    },
+    {
+      "name": "map-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in map-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-25910"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-25910"
+    },
+    {
+      "name": "materialize-superflare-altair-comet",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-05",
+      "description": "Malicious code in materialize-superflare-altair-comet (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-45130"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-45130"
+    },
+    {
+      "name": "maya-klentik85-ruro",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in maya-klentik85-ruro (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-105693"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-105693"
+    },
+    {
+      "name": "meaningful-black-clam",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in meaningful-black-clam (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-69338"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-69338"
+    },
+    {
+      "name": "melodic_stingray_coral-37",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in melodic_stingray_coral-37 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-112089"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-112089"
+    },
+    {
+      "name": "messi-turda-buysad",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in messi-turda-buysad (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-160372"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-160372"
+    },
+    {
+      "name": "miaedwards",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in miaedwards (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-171570"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-171570"
+    },
+    {
+      "name": "mighty_ocelot_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in mighty_ocelot_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-80011"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-80011"
+    },
+    {
+      "name": "miniby",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in miniby (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-26431"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-26431"
+    },
+    {
+      "name": "mitouko-on-lakoikk",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in mitouko-on-lakoikk (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-184068"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-184068"
+    },
+    {
+      "name": "mobilephr",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in mobilephr (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-26561"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-26561"
+    },
+    {
+      "name": "module-markdown-nightmare-deimos",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in module-markdown-nightmare-deimos (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-145109"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-145109"
+    },
+    {
+      "name": "mongoose-heka-vega-sequelize",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in mongoose-heka-vega-sequelize (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-145153"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-145153"
+    },
+    {
+      "name": "mourner",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-10-29",
+      "description": "Malicious code in mourner (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-82q7-45gf-42x7",
+        "https://www.koi.ai/blog/phantomraven-npm-malware-hidden-in-invisible-dependencies"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-49023",
+      "aliases": [
+        "GHSA-82q7-45gf-42x7"
+      ]
+    },
+    {
+      "name": "mui-css-minimizer-webpack-plugin-chariklo-nashira",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in mui-css-minimizer-webpack-plugin-chariklo-nashira (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-145198"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-145198"
+    },
+    {
+      "name": "mulyono-ketan66-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in mulyono-ketan66-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-88483"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-88483"
+    },
+    {
+      "name": "mulyono-tahu39-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in mulyono-tahu39-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-135641"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-135641"
+    },
+    {
+      "name": "my-archon",
+      "versions_affected": [
+        "1.1.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-02-23",
+      "description": "Malicious code in my-archon (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-r4x3-289c-h8jq"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1539",
+      "aliases": [
+        "GHSA-r4x3-289c-h8jq"
+      ]
+    },
+    {
+      "name": "nabila-poke12",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in nabila-poke12 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-161208"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-161208"
+    },
+    {
+      "name": "nabuf-otmbian-ifo",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in nabuf-otmbian-ifo (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-161538"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-161538"
+    },
+    {
+      "name": "nadia-keraktelor43-kyuki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-09-05",
+      "description": "Malicious code in nadia-keraktelor43-kyuki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-45258"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-45258"
+    },
+    {
+      "name": "nadia-serimuka6-ruro",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in nadia-serimuka6-ruro (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-106117"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-106117"
+    },
+    {
+      "name": "namase-namuda-bkau",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in namase-namuda-bkau (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-161868"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-161868"
+    },
+    {
+      "name": "nana-martabak75-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in nana-martabak75-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-80189"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-80189"
+    },
+    {
+      "name": "narrow_gopher_tomato-81",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in narrow_gopher_tomato-81 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-112117"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-112117"
+    },
+    {
+      "name": "native_yak_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in native_yak_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-115985"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-115985"
+    },
+    {
+      "name": "nebula-dactyl-meissa-postgres",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in nebula-dactyl-meissa-postgres (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-145339"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-145339"
+    },
+    {
+      "name": "neptunology-mensa-tectonophysics-less",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in neptunology-mensa-tectonophysics-less (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-27296"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-27296"
+    },
+    {
+      "name": "new_tricks_new-updated-psn_gift_generator_free_2023_no_human_today_ddrtf",
+      "versions_affected": [
+        "5.2.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in new_tricks_new-updated-psn_gift_generator_free_2023_no_human_today_ddrtf (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-2717"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-2717"
+    },
+    {
+      "name": "nhatcoder-fb-api",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-02-07",
+      "description": "Malicious code in nhatcoder-fb-api (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-hjcj-vwgh-8xrf"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-980",
+      "aliases": [
+        "GHSA-hjcj-vwgh-8xrf"
+      ]
+    },
+    {
+      "name": "nina-gado-gado26-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in nina-gado-gado26-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-80249"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-80249"
+    },
+    {
+      "name": "nina-rangi33-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in nina-rangi33-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-80279"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-80279"
+    },
+    {
+      "name": "noblox.js-proxy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-06-20",
+      "description": "Malicious code in noblox.js-proxy (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-hcgp-v652-8jh2"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-4874",
+      "aliases": [
+        "GHSA-hcgp-v652-8jh2"
+      ]
+    },
+    {
+      "name": "ogi-empal93-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in ogi-empal93-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-64622"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-64622"
+    },
+    {
+      "name": "openpass-sample-sites-piano-io",
+      "versions_affected": [
+        "2.0.1",
+        "2.0.5",
+        "2.0.7",
+        "2.1.0",
+        "2.1.3",
+        "2.1.4"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-12-06",
+      "description": "Malicious code in openpass-sample-sites-piano-io (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-wcc5-9jhg-gh4j"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-11214",
+      "aliases": [
+        "GHSA-wcc5-9jhg-gh4j"
+      ]
+    },
+    {
+      "name": "outer_warbler_dumbs",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in outer_warbler_dumbs (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-106833"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-106833"
+    },
+    {
+      "name": "patria-dradag35-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in patria-dradag35-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-74873"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-74873"
+    },
+    {
+      "name": "pelisplus-repelis-ver-creed-3-peliculas-completa-en-espanol-01",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in pelisplus-repelis-ver-creed-3-peliculas-completa-en-espanol-01 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-2859"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-2859"
+    },
+    {
+      "name": "pingboard",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in pingboard (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-29265"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-29265"
+    },
+    {
+      "name": "poliaoz-aiksgsdfo-ahksgasifdodan",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in poliaoz-aiksgsdfo-ahksgasifdodan (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-184819"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-184819"
+    },
+    {
+      "name": "possible_dormouse_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in possible_dormouse_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-116413"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-116413"
+    },
+    {
+      "name": "princess-teadev",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in princess-teadev (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-107273"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-107273"
+    },
+    {
+      "name": "procyon-parcel-ursa-cosmiconfig",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in procyon-parcel-ursa-cosmiconfig (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-29704"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-29704"
+    },
+    {
+      "name": "project-uwly5-whiskey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in project-uwly5-whiskey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-30584"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-30584"
+    },
+    {
+      "name": "pulsar-orbit-capella-indus",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in pulsar-orbit-capella-indus (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-146838"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-146838"
+    },
+    {
+      "name": "putra-gaplek42-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in putra-gaplek42-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-74923"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-74923"
+    },
+    {
+      "name": "putri-gembus25-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in putri-gembus25-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-74976"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-74976"
+    },
+    {
+      "name": "putri-lumpur47-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in putri-lumpur47-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-129560"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-129560"
+    },
+    {
+      "name": "qori-bika91-miaww",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in qori-bika91-miaww (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-116608"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-116608"
+    },
+    {
+      "name": "qori-oblok43-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in qori-oblok43-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-80876"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-80876"
+    },
+    {
+      "name": "querulous-sapphire-mouse",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in querulous-sapphire-mouse (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-138959"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-138959"
+    },
+    {
+      "name": "quiver-dogrx-ydr03-unity-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in quiver-dogrx-ydr03-unity-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-31419"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-31419"
+    },
+    {
+      "name": "react-bootstrap-magellan-xanthus-scorpius",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in react-bootstrap-magellan-xanthus-scorpius (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-147066"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-147066"
+    },
+    {
+      "name": "react-scrambled-text",
+      "versions_affected": [
+        "1.0.4",
+        "1.0.5"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-24",
+      "description": "Malicious code in react-scrambled-text (npm)",
+      "references": [
+        "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains",
+        "https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack",
+        "https://www.stepsecurity.io/blog/sha1-hulud-the-second-coming-zapier-ens-domains-and-other-prominent-npm-packages-compromised"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-191415",
+      "aliases": [
+        "GHSA-wpc4-3h4p-fwj5"
+      ]
+    },
+    {
+      "name": "reducal",
+      "versions_affected": [
+        "1.0.0"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-02-03",
+      "description": "Malicious code in reducal (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-cxp2-7q6c-5r9g",
+        "https://npmjs.com/package/reducal",
+        "https://security.snyk.io/vuln/SNYK-JS-REDUCAL-10006716"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-1229",
+      "aliases": [
+        "GHSA-cxp2-7q6c-5r9g",
+        "SNYK-JS-REDUCAL-10006716"
+      ]
+    },
+    {
+      "name": "regulus-acamar-dynamo-xanthus",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in regulus-acamar-dynamo-xanthus (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-147138"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-147138"
+    },
+    {
+      "name": "representative_scorpion_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in representative_scorpion_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-96302"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-96302"
+    },
+    {
+      "name": "respectable_salmon_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in respectable_salmon_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-116700"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-116700"
+    },
+    {
+      "name": "rickyjs",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-08-17",
+      "description": "Malicious code in rickyjs (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-c3cg-j4wm-jgmq"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-5789",
+      "aliases": [
+        "GHSA-c3cg-j4wm-jgmq"
+      ]
+    },
+    {
+      "name": "rifqi-lupis30-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in rifqi-lupis30-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-136647"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-136647"
+    },
+    {
+      "name": "rina-lapis92-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in rina-lapis92-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-81097"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-81097"
+    },
+    {
+      "name": "rina-tiwul89-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in rina-tiwul89-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-81123"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-81123"
+    },
+    {
+      "name": "rival-poke87",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in rival-poke87 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-165074"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-165074"
+    },
+    {
+      "name": "roasted_viper_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in roasted_viper_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-96389"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-96389"
+    },
+    {
+      "name": "ronaldowati-cir18",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in ronaldowati-cir18 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-165222"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-165222"
+    },
+    {
+      "name": "rudi-lontong59-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in rudi-lontong59-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123062"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123062"
+    },
+    {
+      "name": "rudi-ubi53-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in rudi-ubi53-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-65215"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-65215"
+    },
+    {
+      "name": "sadr-jest-await-elektra",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in sadr-jest-await-elektra (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-147563"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-147563"
+    },
+    {
+      "name": "sahufarf-satd-favafir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in sahufarf-satd-favafir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-178539"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-178539"
+    },
+    {
+      "name": "samehadaku-tuzss-ur7",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in samehadaku-tuzss-ur7 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-165744"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-165744"
+    },
+    {
+      "name": "sapling-output-plugin",
+      "versions_affected": [
+        "1.0.0",
+        "2.0.0",
+        "10.0.0",
+        "3.0.1"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in sapling-output-plugin (npm)",
+      "references": [
+        "https://security.snyk.io/vuln/SNYK-JS-SAPLINGOUTPUTPLUGIN-3336015"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-2983",
+      "aliases": [
+        "SNYK-JS-SAPLINGOUTPUTPLUGIN-3336015"
+      ]
+    },
+    {
+      "name": "sari-miebogor53-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in sari-miebogor53-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-130043"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-130043"
+    },
+    {
+      "name": "satisfactory_panther_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in satisfactory_panther_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-136871"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-136871"
+    },
+    {
+      "name": "sdfsfewetw1",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in sdfsfewetw1 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-32854"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-32854"
+    },
+    {
+      "name": "sinta-semur25-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in sinta-semur25-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-90585"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-90585"
+    },
+    {
+      "name": "tanabufir-softafai-dubuat",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in tanabufir-softafai-dubuat (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-178746"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-178746"
+    },
+    {
+      "name": "teate-thy-py-liba",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in teate-thy-py-liba (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-180075"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-180075"
+    },
+    {
+      "name": "test-mlw2-cores-blank-areas-blade",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in test-mlw2-cores-blank-areas-blade (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-35125"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-35125"
+    },
+    {
+      "name": "test-mlw2-saves-suety-widdy-lezzy",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in test-mlw2-saves-suety-widdy-lezzy (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-36174"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-36174"
+    },
+    {
+      "name": "thistle-dewdrop-myw796-project",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-08-14",
+      "description": "Malicious code in thistle-dewdrop-myw796-project (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-36822"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-36822"
+    },
+    {
+      "name": "tiny-red-chimpanzee",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in tiny-red-chimpanzee (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-71144"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-71144"
+    },
+    {
+      "name": "tool-stop-magellan-jekyll",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in tool-stop-magellan-jekyll (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-148755"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-148755"
+    },
+    {
+      "name": "tradeshift-ui-docs",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-01-11",
+      "description": "Malicious code in tradeshift-ui-docs (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-5hjm-3w85-667f"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-900",
+      "aliases": [
+        "GHSA-5hjm-3w85-667f"
+      ]
+    },
+    {
+      "name": "tuti-empal76-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in tuti-empal76-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123697"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123697"
+    },
+    {
+      "name": "tuti-rujak39-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in tuti-rujak39-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123728"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123728"
+    },
+    {
+      "name": "udin-kue78-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in udin-kue78-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-130744"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-130744"
+    },
+    {
+      "name": "ultimate_crab_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in ultimate_crab_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123774"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123774"
+    },
+    {
+      "name": "umi-ikan99-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in umi-ikan99-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-81870"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-81870"
+    },
+    {
+      "name": "underground_gazelle_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in underground_gazelle_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-65799"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-65799"
+    },
+    {
+      "name": "uniform_hare_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in uniform_hare_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-97137"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-97137"
+    },
+    {
+      "name": "updated-tricks-v-bucks-generator-free_2023-ed5t6",
+      "versions_affected": [
+        "5.2.7"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-06-25",
+      "description": "Malicious code in updated-tricks-v-bucks-generator-free_2023-ed5t6 (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2024-3593"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-3593"
+    },
+    {
+      "name": "upper_bobolink_z3n",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in upper_bobolink_z3n (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-130878"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-130878"
+    },
+    {
+      "name": "utomo-klentik6-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in utomo-klentik6-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123911"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123911"
+    },
+    {
+      "name": "utomo-semur35-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in utomo-semur35-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-123939"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-123939"
+    },
+    {
+      "name": "vera-kembang8-breki",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in vera-kembang8-breki (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-75961"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-75961"
+    },
+    {
+      "name": "vh3",
+      "versions_affected": [
+        "103.99.99"
+      ],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-01-30",
+      "description": "Malicious code in vh3 (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-j4vm-vjgv-vc5h"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-937",
+      "aliases": [
+        "GHSA-j4vm-vjgv-vc5h"
+      ]
+    },
+    {
+      "name": "vida-keripik64-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-10",
+      "description": "Malicious code in vida-keripik64-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-59290"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-59290"
+    },
+    {
+      "name": "vina-tahu61-sukiwir",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-10",
+      "description": "Malicious code in vina-tahu61-sukiwir (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-50681"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-50681"
+    },
+    {
+      "name": "vt-blockchain-bootcamp-starter-frontend",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2022-06-08",
+      "description": "Malicious code in vt-blockchain-bootcamp-starter-frontend (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-35wm-47x5-x658"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2022-6986",
+      "aliases": [
+        "GHSA-35wm-47x5-x658"
+      ]
+    },
+    {
+      "name": "wati-taiwan98-sluey",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in wati-taiwan98-sluey (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-66087"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-66087"
+    },
+    {
+      "name": "web3tool-eth-accounts",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2023-09-11",
+      "description": "Malicious code in web3tool-eth-accounts (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-3vq5-c2hf-q56j"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2023-8082",
+      "aliases": [
+        "GHSA-3vq5-c2hf-q56j"
+      ]
+    },
+    {
+      "name": "wibowo-enting67-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in wibowo-enting67-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-92211"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-92211"
+    },
+    {
+      "name": "wlwz-2312-2406",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2024-01-24",
+      "description": "Malicious code in wlwz-2312-2406 (npm)",
+      "references": [
+        "https://github.com/advisories/GHSA-cmg7-7979-3w4v"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2024-392",
+      "aliases": [
+        "GHSA-cmg7-7979-3w4v"
+      ]
+    },
+    {
+      "name": "writable-jabbah-elektra-rest",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-12",
+      "description": "Malicious code in writable-jabbah-elektra-rest (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-149570"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-149570"
+    },
+    {
+      "name": "yanti-brengkes26-riris",
+      "versions_affected": [],
+      "type": "malicious_code",
+      "severity": "high",
+      "discovered": "2025-11-11",
+      "description": "Malicious code in yanti-brengkes26-riris (npm)",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-131480"
+      ],
+      "indicators": [],
+      "attack_type": "embedded_malicious_code",
+      "source": "ossf-malicious-packages",
+      "osv_id": "MAL-2025-131480"
     }
   ],
   "sources": {
     "ossf-malicious-packages": {
       "url": "https://github.com/ossf/malicious-packages",
-      "commit": "8c093db56a57f9cfb37f6b377b690b13ae162ead",
+      "commit": "c8f6fab53c1e7c930e6e9d78e22213b3e629d0d1",
       "ingested_at": "2026-06-23T00:00:00Z",
-      "entries_from_source": 1745
+      "entries_from_source": 1940
     }
   }
 }

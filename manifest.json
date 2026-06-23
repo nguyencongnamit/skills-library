@@ -28,7 +28,7 @@
       "path": "compliance/iso_27701_mapping.yaml",
       "sha256": "b0957a8f6c3c0c11cb1c33b71b161988becc4dee77e24b9ed03bdd1cd55691be",
       "size": 2987,
-      "action": "added"
+      "action": "unchanged"
     },
     {
       "path": "compliance/iso_42001_mapping.yaml",
@@ -104,8 +104,8 @@
     },
     {
       "path": "dist/SECURITY-SKILLS.md",
-      "sha256": "1fdf5f4bf301f62ada1ca0f85ca8f1b34e2f52c922f16e1b9e1032dd5a867acc",
-      "size": 110654,
+      "sha256": "fef528631eadaaa0247a2fcc9bcf05dc93197c112b96915e50abf43b03ab75a4",
+      "size": 110774,
       "action": "unchanged"
     },
     {
@@ -7898,8 +7898,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/malicious-packages/npm.json",
-      "sha256": "8942482b7b1ce0419eea843f8852ab990d67b18bf13ab4b2647a745e1c79cb1c",
-      "size": 961101,
+      "sha256": "5cb9c3e598bbc555d0d2676b1054a1aa6f6bb7d27cbb6e8308b93afd5cc4cd34",
+      "size": 1057858,
       "action": "unchanged"
     },
     {
@@ -7958,8 +7958,8 @@
     },
     {
       "path": "vulnerabilities/supply-chain/typosquat-db/known_typosquats.json",
-      "sha256": "dd128ef9a159276ed9d775d9e8bd903736dc86588f87918106bff80e4bba2d3d",
-      "size": 121767,
+      "sha256": "4f7566ad46c780c65bd430c1b247fad004942b45313055c18a81588dff40e03b",
+      "size": 124857,
       "action": "unchanged"
     }
   ]

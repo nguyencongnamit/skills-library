@@ -3892,6 +3892,93 @@
       ],
       "source": "ossf-malicious-packages-derived",
       "osv_id": "MAL-2026-5273"
+    },
+    {
+      "target": "express",
+      "typosquat": "expressos",
+      "ecosystem": "npm",
+      "levenshtein_distance": 2,
+      "status": "removed",
+      "discovered": "2025-11-24",
+      "references": [
+        "https://github.com/advisories/GHSA-p3w8-q8jq-wf9v",
+        "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains",
+        "https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2025-190961"
+    },
+    {
+      "target": "react",
+      "typosquat": "reat",
+      "ecosystem": "npm",
+      "levenshtein_distance": 1,
+      "status": "removed",
+      "discovered": "2025-08-14",
+      "references": [
+        "https://osv.dev/vulnerability/MAL-2025-31896",
+        "https://github.com/ossf/malicious-packages"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2025-31896"
+    },
+    {
+      "target": "flask",
+      "typosquat": "flasl",
+      "ecosystem": "pypi",
+      "levenshtein_distance": 1,
+      "status": "removed",
+      "discovered": "2024-12-24",
+      "references": [
+        "https://www.virustotal.com/gui/file/0736a1f176f081a076b2cba3b54e1cb1462fe1a01be16144397bbc0d4739d01a",
+        "https://www.virustotal.com/gui/file/56ed3b8ca17b00ee8e7a1cb13298e5b12fd1771c24b33b9a84ba92b0610279e5",
+        "https://bad-packages.kam193.eu/pypi/package/flasl"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2025-926"
+    },
+    {
+      "target": "matplotlib",
+      "typosquat": "matpllotlib",
+      "ecosystem": "pypi",
+      "levenshtein_distance": 1,
+      "status": "removed",
+      "discovered": "2023-02-10",
+      "references": [
+        "https://medium.com/checkmarx-security/17-malicious-python-packages-targeting-selenium-users-to-steal-crypto-8d24628ec656",
+        "https://github.com/ossf/malicious-packages"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2023-1898"
+    },
+    {
+      "target": "pyjwt",
+      "typosquat": "pyjio",
+      "ecosystem": "pypi",
+      "levenshtein_distance": 2,
+      "status": "removed",
+      "discovered": "2023-10-02",
+      "references": [
+        "https://medium.com/checkmarx-security/attacker-hidden-in-plain-sight-for-nearly-six-months-targeting-python-developers-3712f0f107e0",
+        "https://checkmarx.com/blog/attacker-hidden-in-plain-sight-for-nearly-six-months-targeting-python-developers/",
+        "https://security.snyk.io/vuln/SNYK-PYTHON-PYJIO-6069620"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2023-8576"
+    },
+    {
+      "target": "tensorflow",
+      "typosquat": "tensorflows",
+      "ecosystem": "pypi",
+      "levenshtein_distance": 1,
+      "status": "removed",
+      "discovered": "2025-05-26",
+      "references": [
+        "https://bad-packages.kam193.eu/pypi/package/tensorflows",
+        "https://github.com/ossf/malicious-packages"
+      ],
+      "source": "ossf-malicious-packages-derived",
+      "osv_id": "MAL-2025-191891"
     }
   ],
   "sources": {
