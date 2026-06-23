@@ -12,10 +12,15 @@
 // Mirrors the client-side rendering used by Coverage / Threat-Intel. Hooks
 // Material's `document$` so it survives instant navigation.
 document$.subscribe(function () {
-  if (!document.querySelector("[data-sv-stat],[data-sv-card],[data-sv-freshness]")) return;
+  if (!document.querySelector("[data-sv-stat],[data-sv-card],[data-sv-freshness],[data-sv-frameworks]")) return;
 
   function dataURL(p) { return new URL(p, document.baseURI).href; }
   function getJSON(p) { return fetch(dataURL(p)).then(function (r) { return r.json(); }); }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
   function setStat(key, value) {
     var el = document.querySelector('[data-sv-stat="' + key + '"]');
     if (el && value != null) el.textContent = String(value);
@@ -61,6 +66,28 @@ document$.subscribe(function () {
       );
     }
     renderFreshness(d.freshness, hist.snapshots || []);
+  }).catch(function () { /* keep static fallback */ });
+
+  getJSON("assets/data/compliance.json").then(function (d) {
+    var fws = d.frameworks || [];
+    if (!fws.length) return;
+    var controls = d.control_count != null
+      ? d.control_count
+      : fws.reduce(function (n, f) { return n + (f.control_count || 0); }, 0);
+    setStat("frameworks", fws.length);
+    setStat("controls", controls);
+    var box = document.querySelector("[data-sv-frameworks]");
+    if (box) {
+      box.innerHTML = fws.map(function (f) {
+        return '<span class="ss-chip">' + esc(f.framework) + "</span>";
+      }).join("");
+    }
+    setCard(
+      "compliance",
+      "Live control → skill matrix across " + fws.length + " frameworks (" +
+        controls + " mapped controls): " +
+        fws.map(function (f) { return f.framework; }).join(", ") + ". Browse it →"
+    );
   }).catch(function () { /* keep static fallback */ });
 
   // Growth in the last `days` days: latest total minus the total as of the

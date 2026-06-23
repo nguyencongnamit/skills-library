@@ -155,10 +155,10 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <span class="ss-card-body"><span class="ss-card-title">CLI + MCP Server</span>
 <span class="ss-card-desc"><code>skills-check</code> Go binary for init / validate / update / regenerate / gate. <code>skills-mcp</code> exposes 16 JSON-RPC tools.</span></span>
 </a>
-<a class="ss-card" data-pkg="compliance" href="https://github.com/namncqualgo/skills-library/tree/main/compliance">
+<a class="ss-card" data-pkg="compliance" href="compliance/">
 <span class="ss-card-icon">📋</span>
-<span class="ss-card-body"><span class="ss-card-title">Compliance Evidence</span>
-<span class="ss-card-desc">Automated SOC 2 / HIPAA / PCI-DSS control coverage reports. <code>skills-check evidence --framework SOC2</code>.</span></span>
+<span class="ss-card-body"><span class="ss-card-title">Compliance Coverage</span>
+<span class="ss-card-desc" data-sv-card="compliance">Live control → skill matrix across SOC 2, HIPAA, PCI-DSS and ISO/IEC 27001 · 27701 · 27017 · 42001 (AI) — 81 mapped controls. <code>skills-check evidence --framework</code>.</span></span>
 </a>
 <a class="ss-card" data-pkg="enterprise" href="https://github.com/namncqualgo/skills-library/tree/main/profiles">
 <span class="ss-card-icon">🏢</span>
@@ -166,6 +166,26 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <span class="ss-card-desc">Locked policy bundles for managed deployments: financial-services, healthcare, government. <code>--profile</code> on init / regenerate.</span></span>
 </a>
 </div>
+</div>
+
+<div class="ss-section" markdown>
+
+## Compliance coverage
+
+<p class="ss-compliance-lead">Signed skills map to the controls you're audited against. <strong><span data-sv-stat="frameworks">7</span> frameworks · <span data-sv-stat="controls">81</span> mapped controls</strong> — <a href="compliance/">browse the live control&nbsp;→&nbsp;skill matrix →</a></p>
+
+<div class="ss-compliance-chips" data-sv-frameworks>
+  <span class="ss-chip">SOC 2</span>
+  <span class="ss-chip">HIPAA</span>
+  <span class="ss-chip">PCI-DSS</span>
+  <span class="ss-chip">ISO/IEC 27001</span>
+  <span class="ss-chip">ISO/IEC 27701</span>
+  <span class="ss-chip">ISO/IEC 27017</span>
+  <span class="ss-chip">ISO/IEC 42001</span>
+</div>
+
+<p class="ss-compliance-note">Honest scope: each mapping links SecureVibe's technical controls to the framework — it helps you implement and evidence those controls, it does not certify your ISMS / AIMS / PIMS programme.</p>
+
 </div>
 
 <div class="ss-section" markdown>

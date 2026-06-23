@@ -235,6 +235,35 @@
   display: block;
 }
 
+/* ─── Compliance band ─── */
+.ss-compliance-lead {
+  font-size: 0.95rem;
+  color: var(--ss-text);
+  margin: 0.9rem 0 0;
+}
+.ss-compliance-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1.1rem 0 0.9rem;
+}
+.ss-chip {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(37, 95, 229, 0.08);
+  color: var(--md-primary-fg-color);
+  border: 1px solid rgba(37, 95, 229, 0.22);
+  white-space: nowrap;
+}
+.ss-compliance-note {
+  font-size: 0.78rem;
+  color: var(--ss-text-muted);
+  margin: 0;
+}
+
 /* ─── Per-component card accent (left border + title color) ─── */
 .ss-card[data-pkg="skills"]      { border-left: 3px solid #255FE5; }
 .ss-card[data-pkg="cve"]         { border-left: 3px solid #f97316; }
