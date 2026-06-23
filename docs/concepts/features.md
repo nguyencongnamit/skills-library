@@ -36,7 +36,7 @@ flowchart LR
 
 ## 2. Zero-false-positive curated DB
 
-**What it is.** A curated malicious-package database of **2,022 entries across 9 ecosystems** (npm 688, nuget 608, pypi 309, rubygems 309, plus curated composer / crates / docker / maven / go / github-actions). Every curated entry is web-cited. Lookups are exact-match, so a hit means a *known* bad package — never a guess.
+**What it is.** A curated malicious-package database of **3,623 entries across 10 ecosystems** (npm 1833, pypi 618, nuget 608, rubygems 456, plus curated composer / crates / docker / maven / go / github-actions). Every curated entry is web-cited. Lookups are exact-match, so a hit means a *known* bad package — never a guess.
 
 **Why it matters.** Exact-match against a hand-verified list means **zero false positives**. The primary use is at generation time: "about to import this dependency?" — the assistant or the `scan-dependencies` scanner can check the name before the import lands. A curated, cited list is the data moat — it's defensible because it's verified, not scraped.
 

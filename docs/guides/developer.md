@@ -156,7 +156,7 @@ The server exposes **16 MCP tools**. The ones your assistant reaches for most of
 | `gate` | Runs the enforcing gate over a path | Before finalizing a change |
 
 !!! tip "Exact-match dependency lookups are zero-false-positive"
-    `scan_dependencies` is backed by a curated, web-cited malicious-package DB — **2,022 entries across 9 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer/crates/docker/maven/go/github-actions). Exact-match lookups don't false-positive, so the assistant can trust a "this package is malicious" answer.
+    `scan_dependencies` is backed by a curated, web-cited malicious-package DB — **3,623 entries across 10 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer/crates/docker/maven/go/github-actions). Exact-match lookups don't false-positive, so the assistant can trust a "this package is malicious" answer.
 
 ## Guard your commits locally
 

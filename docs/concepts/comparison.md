@@ -47,7 +47,7 @@ This is an honest, side-by-side view. SecureVibe's detection is **narrow by desi
 | **Gen-time prevention** (left of the cursor) | Yes — signed skills feed AI assistants so they write secure code as it's generated | No — they scan code that already exists |
 | **Deterministic CI gate** | Yes — `skills-check gate` exits non-zero above a severity floor, emits SARIF, auto-picks the scanner per file | Varies — most can fail CI; comparable in spirit |
 | **Secret detection** | Yes — 100% precision / 100% recall vs gitleaks 92.4% / 65.9% (76.9 F1) **on the shapes we tested** (SecureVibe's own tuned corpus); the honest signal is gitleaks' recall gap, not a universal win | Yes — gitleaks et al. are mature, broad secret scanners |
-| **Malicious-dependency DB** | Yes — curated 2,022 entries across 9 ecosystems, every entry web-cited; exact-match lookups = zero false positives | Yes — Snyk and others ship large vulnerability/SCA databases (far larger general CVE coverage) |
+| **Malicious-dependency DB** | Yes — curated 3,623 entries across 10 ecosystems, every entry web-cited; exact-match lookups = zero false positives | Yes — Snyk and others ship large vulnerability/SCA databases (far larger general CVE coverage) |
 | **General SAST breadth** | **No — narrow by design** (4 scanners: secrets, dependencies, Dockerfile, GitHub Actions). Not a SAST replacement | **Yes — much broader.** Semgrep/Snyk cover many languages and rule classes SecureVibe does not |
 | **Offline / no telemetry** | Yes — fully offline, no telemetry, no API key required | Varies — several have cloud/SaaS modes and telemetry |
 | **Signed releases** | Yes — Ed25519-signed releases; self-update verifies signature + SHA-256 checksums before atomic replace | Varies by vendor |

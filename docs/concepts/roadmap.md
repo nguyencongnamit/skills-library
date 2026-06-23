@@ -43,7 +43,7 @@ Everything below ships in the current release. It is fully offline, requires no 
 - **29 skills** — structured `SKILL.md` knowledge in 3 token tiers (minimal / compact / full) for feeding AI assistants at generation time.
 - **4 deterministic scanners** — secrets, dependencies (malicious / typosquat / CVE / OSV), Dockerfile, GitHub Actions. Narrow by design.
 - **16 MCP tools** — `scan_dependencies`, `scan_secrets`, `scan_dockerfile`, `scan_github_actions`, `lookup_vulnerability`, `check_secret_pattern`, `map_compliance_control`, `gate`, and more, exposed over stdio by `skills-mcp`.
-- **Curated malicious-package DB — 2,022 entries across 9 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer/crates/docker/maven/go/github-actions). Every curated entry is web-cited; exact-match lookups carry zero false positives. This is the data moat.
+- **Curated malicious-package DB — 3,623 entries across 10 ecosystems** (npm, nuget, pypi, rubygems, plus curated composer/crates/docker/maven/go/github-actions). Every curated entry is web-cited; exact-match lookups carry zero false positives. This is the data moat.
 - **The LEARN loop** — `contribute add` writes a signed local overlay that the gate enforces immediately; share it by committing (team) or peer-to-peer via signature-gated `submit`/`verify`/`import`.
 - **Signed self-update** — `self-update` fetches a signed release manifest, verifies the detached Ed25519 signature and SHA-256 checksums, then atomically replaces the binary.
 - **Compliance evidence** — control-coverage reports mapped to **SOC 2, PCI-DSS, and HIPAA**, with enterprise profiles for financial-services, government, and healthcare.

@@ -40,7 +40,7 @@ npx -p @namncqualgo/secure-code-mcp secure-code-check gate Dockerfile --severity
 <div class="ss-stats">
   <div class="ss-stat"><span class="ss-stat-value">29</span><span class="ss-stat-label">Skills</span></div>
   <div class="ss-stat"><span class="ss-stat-value">58</span><span class="ss-stat-label">CVE Patterns</span></div>
-  <div class="ss-stat"><span class="ss-stat-value">9</span><span class="ss-stat-label">Supply-Chain Ecosystems</span></div>
+  <div class="ss-stat"><span class="ss-stat-value">10</span><span class="ss-stat-label">Supply-Chain Ecosystems</span></div>
   <div class="ss-stat"><span class="ss-stat-value">74</span><span class="ss-stat-label">Secret Patterns</span></div>
   <div class="ss-stat"><span class="ss-stat-value">8</span><span class="ss-stat-label">AI Client Integrations</span></div>
 </div>
@@ -134,7 +134,7 @@ Every surface is optional. Drop a static `CLAUDE.md` for zero-config baseline co
 <a class="ss-card" data-pkg="supply" href="threat-intel/">
 <span class="ss-card-icon">📦</span>
 <span class="ss-card-body"><span class="ss-card-title">Supply-Chain Intel</span>
-<span class="ss-card-desc">2,022 web-cited malicious-package entries across 10 ecosystems + typosquats. Browse the curated canon →</span></span>
+<span class="ss-card-desc">3,623 web-cited malicious-package entries across 10 ecosystems + typosquats. Browse the curated canon →</span></span>
 </a>
 <a class="ss-card" data-pkg="secrets" href="https://github.com/namncqualgo/skills-library/tree/main/skills/secret-detection">
 <span class="ss-card-icon">🔐</span>

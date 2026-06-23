@@ -110,7 +110,7 @@ The top-level directories that matter for understanding the build:
 skills-library/
 ├── skills/                       # 29 security SKILL.md knowledge files (3 token tiers)
 ├── vulnerabilities/
-│   ├── supply-chain/             # curated malicious-package DB (2,022 entries, 9 ecosystems)
+│   ├── supply-chain/             # curated malicious-package DB (3,623 entries, 10 ecosystems)
 │   ├── cve/                      # 58 CVE code-patterns
 │   └── osv/                      # OSV-format vulnerability data
 ├── compliance/                   # SOC2 / HIPAA / PCI-DSS control mappings (*.yaml)

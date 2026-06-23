@@ -52,7 +52,7 @@ curl -fsSL https://raw.githubusercontent.com/nguyencongnamit/skills-library/main
 
 ### 2. Catch a malicious / typosquat dependency
 
-The dependency scanner checks against a curated malicious-package database of **2,022 web-cited entries across 9 ecosystems**. Exact-match lookups produce zero false positives — that is the data moat.
+The dependency scanner checks against a curated malicious-package database of **3,623 web-cited entries across 10 ecosystems**. Exact-match lookups produce zero false positives — that is the data moat.
 
 Create a `package.json` that references a known-bad package:
 
